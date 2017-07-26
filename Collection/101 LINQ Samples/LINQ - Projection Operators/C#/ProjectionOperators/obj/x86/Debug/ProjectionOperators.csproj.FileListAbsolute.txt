@@ -1,0 +1,11 @@
+C:\Users\v-damdec\Downloads\Archived Samples Gallery\CSharpSamples\Grouped LINQ Samples\LINQ over DataSets\ProjectionOperators\ProjectionOperators\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\v-damdec\Downloads\Archived Samples Gallery\CSharpSamples\Grouped LINQ Samples\LINQ over DataSets\ProjectionOperators\ProjectionOperators\bin\Debug\ProjectionOperators.exe
+C:\Users\v-damdec\Downloads\Archived Samples Gallery\CSharpSamples\Grouped LINQ Samples\LINQ over DataSets\ProjectionOperators\ProjectionOperators\bin\Debug\ProjectionOperators.pdb
+C:\Users\v-damdec\Downloads\Archived Samples Gallery\CSharpSamples\Grouped LINQ Samples\LINQ over DataSets\ProjectionOperators\ProjectionOperators\obj\x86\Debug\ProjectionOperators.exe
+C:\Users\v-damdec\Downloads\Archived Samples Gallery\CSharpSamples\Grouped LINQ Samples\LINQ over DataSets\ProjectionOperators\ProjectionOperators\obj\x86\Debug\ProjectionOperators.pdb
+C:\Users\v-damdec\Downloads\Archived Samples Gallery\CSharpSamples\Grouped LINQ Samples\LINQ over DataSets\ProjectionOperators\ProjectionOperators\bin\Debug\Customers.xml
+E:\SK ARUN\Dotnet\Learning\C#\101 LINQ Samples\LINQ - Projection Operators\C#\ProjectionOperators\bin\Debug\Customers.xml
+E:\SK ARUN\Dotnet\Learning\C#\101 LINQ Samples\LINQ - Projection Operators\C#\ProjectionOperators\bin\Debug\ProjectionOperators.exe
+E:\SK ARUN\Dotnet\Learning\C#\101 LINQ Samples\LINQ - Projection Operators\C#\ProjectionOperators\bin\Debug\ProjectionOperators.pdb
+E:\SK ARUN\Dotnet\Learning\C#\101 LINQ Samples\LINQ - Projection Operators\C#\ProjectionOperators\obj\x86\Debug\ProjectionOperators.exe
+E:\SK ARUN\Dotnet\Learning\C#\101 LINQ Samples\LINQ - Projection Operators\C#\ProjectionOperators\obj\x86\Debug\ProjectionOperators.pdb

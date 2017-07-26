@@ -1,0 +1,414 @@
+WCF
+----
+Top 10 WCF Interview Questions
+
+http://www.topwcftutorials.net/2012/06/wcf-top-10-interview-questions.html
+
+WCF Interview Questions – Part 1
+
+http://www.topwcftutorials.net/2012/08/wcf-faqs-part1.html
+
+WCF Self Hosting in a Console Application Simplified
+http://www.topwcftutorials.net/2014/05/wcf-self-hosting-console-application.html
+
+WCF Vs ASMX Web Services
+http://www.topwcftutorials.net/2012/06/wcf-vs-asmx-web-services.html
+
+3 Ways to generate proxy for WCF Service
+http://www.topwcftutorials.net/2014/06/3-ways-generate-proxy-wcf-service.html
+
+
+5 simple steps to create your first RESTful service
+
+http://www.topwcftutorials.net/2013/09/Simple-Steps-For-RESTful-Service.html
+
+
+Welcome to WCF Tutorial
+http://www.topwcftutorials.net/
+
+WCF Throttling
+
+https://www.codeproject.com/Articles/33362/WCF-Throttling
+
+
+
+
+HTML5
+Top 10 HTML5 Interview Questions
+http://www.webdevelopmenthelp.net/2013/04/html5-interview-questions.html
+
+
+
+Asp.net AJAX
+
+Top 10 ASP.NET AJAX Interview Questions
+
+http://www.webdevelopmenthelp.net/2014/04/asp-net-interview-questions-part5.html
+
+
+ASP.NET Interview Questions for Beginners and Professionals – Part 1
+http://www.webdevelopmenthelp.net/2014/03/asp-net-interview-questions-part1.html
+
+
+
+
+Top 10 ASP.NET MVC Interview Questions
+
+http://www.webdevelopmenthelp.net/2013/09/top-asp-net-mvc-interview-questions.html
+
+Difference betweeen ASP.NET WebForms and ASP.NET MVC
+http://www.webdevelopmenthelp.net/2013/10/difference-between-asp-net-webform-and-asp-net-mvc.html
+
+
+ASP.NET MVC Passing data from Controller to View
+http://www.webdevelopmenthelp.net/2014/06/asp-net-mvc-pass-data-controller-view.html
+
+ASP.NET MVC Shopping Cart with C#, EF, SQL Server-Part1
+http://www.webdevelopmenthelp.net/2016/10/asp-net-mvc-shopping-cart-part1.html5-interview-questions
+
+
+
+Top 10 ASP.NET Web API Interview Questions
+http://www.webdevelopmenthelp.net/2014/05/asp-net-web-api-interview-questions.html
+
+
+Top 5 New Features in ASP.NET Web API 2
+http://www.webdevelopmenthelp.net/2013/10/aspnet-webapi2-new-features.html
+
+A Practical Guide to ASP.NET Web API
+http://www.webdevelopmenthelp.net/2014/02/practical-guide-asp-net-web-api.html
+
+
+
+
+3 simple steps to create your first ASP.NET Web API services
+http://www.webdevelopmenthelp.net/2013/09/asp-web-api-service.html
+
+ASP.NET MVC3 Vs MVC4 Vs MVC5 Vs MVC6
+http://www.webdevelopmenthelp.net/2014/02/asp-net-mvc3-vs-mvc4-vs-mvc5.html
+
+
+What’s new in Entity Framework from beginning to EF7 – EF Core
+
+http://www.webdevelopmenthelp.net/2014/09/whats-new-in-entity-framework.html
+
+
+7 jQuery Code Snippets every web developer must have
+http://www.webdevelopmenthelp.net/2013/09/7-jquery-code-snippet.html
+
+Understanding ASP.NET MVC5 Model First Approach with EF6
+http://www.webdevelopmenthelp.net/2015/01/understanding-model-first-approach-aspnet-mvc5.html
+
+
+
+
+Best Resources for Web and Mobile Development
+http://www.webdevelopmenthelp.net/2016/04/best-resources-web-mobile-development.html#ASPCore
+
+
+
+
+[‎22-‎Feb-‎17 10:21 AM] Arunkumar Sampath: 
+http://www.isro.gov.in/careers 
+[‎22-‎Feb-‎17 11:35 AM] Kesavan Rajendran: 
+https://channel9.msdn.com/Forums/TechOff/A-simple-and-pure-C-implementation-of-the-good-old-linked-list
+[‎22-‎Feb-‎17 12:43 PM] Kesavan Rajendran: 
+http://codepattern.net/Blog/post/HCL-Interview-questions-on-WCF
+[‎22-‎Feb-‎17 2:06 PM] Kesavan Rajendran: 
+hi
+you there
+[‎22-‎Feb-‎17 5:09 PM] Kesavan Rajendran: 
+http://www.electrical4u.com/digital-electronics/
+[‎23-‎Feb-‎17 10:38 AM] Kesavan Rajendran: 
+https://docs.microsoft.com/en-us/aspnet/web-api/overview/security/forms-authentication
+
+
+
+Installing Ionic
+https://ionicframework.com/docs/v2/intro/installation/
+https://scotch.io/tutorials/build-a-mobile-app-with-angular-2-and-ionic-2
+
+http://www.cprogramming.com/tutorial/computersciencetheory/sortcomp.html
+
+http://igoro.com/archive/efficient-auto-complete-with-a-ternary-search-tree/
+
+Ang Js
+http://www.c-sharpcorner.com/UploadFile/65794e/web-api-with-angular-js/
+
+http://www.dotnetcurry.com/aspnet/1049/crud-database-aspnet-webapi-angularjs
+
+
+Sorting
+http://www.softwareandfinance.com/CSharp/QuickSort_Recursive.html
+
+wpf web api
+
+http://www.strathweb.com/2012/06/drag-and-drop-files-to-wpf-application-and-asynchronously-upload-to-asp-net-web-api/
+
+http://www.strathweb.com/2012/03/build-p2p-chat-application-with-wpf-and-asp-net-web-api/
+
+
+
+Js
+
+Closure
+https://veerasundar.com/blog/2013/08/javascript-closure-examples/
+
+https://developer.mozilla.org/en/docs/Web/JavaScript/Closures
+
+
+
+Good link to learn many useful logics
+http://me.dt.in.th/
+
+HeapSort Implementation Explanation
+http://me.dt.in.th/page/Quicksort/
+
+Sorting Array using ang.js
+http://plnkr.co/edit/gist:6743484?p=preview
+
+
+Codingeek - Data Structures Explanation
+http://www.codingeek.com/data-structure
+
+Codingeek - Algorithms Explanation
+http://www.codingeek.com/algorithms/
+
+Codingeek - Quick Sort Algorithm Explanation
+http://www.codingeek.com/algorithms/quick-sort-algorithm-explanation-implementation-and-complexity/
+
+http://quiz.geeksforgeeks.org/quick-sort/
+
+PSEUDOCODE OF QUICK SORT
+
+
+QUICK-SORT(A,start,end)
+    if start < end
+        pIndex = PARTITION(A,start,end)
+        QUICK-SORT(A,start,pIndex-1)
+        QUICK-SORT(A,pIndex+1,end)
+end func
+/*To sort an entire array A,
+the initial call is QUICK-SORT(A,0,A.length-1)*/
+ 
+//partitioning the array with respect to pivot.
+PARTITION(A,start,end)
+    pivot = A[end]
+    pIndex = start
+        for i = start to end-1
+           if A[i] < pivot
+               swap A[i] with A[pIndex]
+                pIndex=pIndex+1
+    swap A[pIndex] with A[end]
+   return pIndex
+end func
+
+Top Companies Interview Problems 
+
+http://www.practice.geeksforgeeks.org/tag-page.php?tag=Paytm&isCmp=1&level=0
+
+http://www.practice.geeksforgeeks.org/problem-page.php?pid=1680
+Ans:
+http://126kr.com/article/91bjfaupmbx
+Find duplicates under given constraints
+
+A sorted array contains 6 different numbers, only 1 number is repeated five times. So there are total 10 numbers in array. Find the duplicate numbers using two comparisons only.
+
+Examples:
+
+1
+2
+3
+4
+5
+Input: arr[] = {1, 1, 1, 1, 1, 5, 7, 10, 20, 30}
+Output: 1
+ 
+Input: arr[] = {1, 2, 3, 3, 3, 3, 3, 5, 9, 10}
+Output: 3
+Asked in Yahoo
+
+An important observation is, arr[4] or arr[5] is an occurrence of repeated element for sure. Below is C++ implementation based on this observation.
+
+// C++ program to find duplicate element under
+// given constraints.
+#include<bits/stdc++.h>
+using namespace std;
+ 
+// This function assumes array is sorted,  has
+// 10 elements,  there are totoal 6 different
+// elements and one element repeats 5 times.
+int findDuplicate(int a[])
+{
+    if (a[3] == a[4])
+        return a[3];
+    else if (a[4] == a[5])
+        return a[4];
+    else
+        return a[5];
+}
+ 
+// Driver code
+int main()
+{
+    int a[] = {1, 1, 1, 1, 1, 5, 7, 10, 20, 30};
+    cout << findDuplicate(a);
+    return 0;
+}
+Output:
+
+Exercise:Extend the above problem for an array with n different elements, size of array is 2*(n-1) and one element repeats (n-1) times.
+
+This article is contributed by Rakesh Kumar . If you like GeeksforGeeks and would like to contribute, you can also write an article using contribute.geeksforgeeks.org or mail your article to contribute@geeksforgeeks.org. See your article appearing on the GeeksforGeeks main page and help other Geeks.
+
+Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above.
+
+
+
+
+
+
+http://career.guru99.com/top-50-data-structure-interview-questions/
+
+http://www.crazyforcode.com/data-structure-interview-questions/
+
+http://www.geeksforgeeks.org/top-10-algorithms-in-interview-questions/
+
+
+JavaScript
+
+Classes ES5 and ES6
+Getter and Setter
+Closures
+
+Ang JS
+Directives
+$http
+$q
+promise
+When to use services and factories
+
+Diff between Ang1 and Ang2
+
+How to bootstrap in ang.js - different ways
+isolated scope
+transclude
+resolve
+
+C#
+MVC
+Design Patterns
+Web Api
+Linq
+SQL
+EF
+Jquery
+Ang Js
+Extention Methods
+
+
+Switch statement fallthrough in C#?
+freachable queue maintains references to
+static classes may be marked as partial
+rethrowing an exception why we do use throw
+finalizers are called when
+What is the significance of load factor in HashMap?
+	twice the current count
+Effect on performanace when you use dynamic invocation
+	
+extension can use this object?
+add elements to hashtable when load factor reached
+
+Searching in a DataStruture
+
+
+
+
+
+
+lock modes in sql server
+what to use dynamic sql
+temporary table name in sql server
+
+Why we need two trees, visual and logic tree
+What will happen if objects not collected in gc2
+Static class can be inherited from another class
+Partial methods possible?
+Partial classes can implement in two namespace?
+If we implement same name partial classes in two namespace will it be an issue
+Scope in extended methods
+nested classes in C#
+
+Named and Optional Parameters
+
+Tuple
+Parallel.ForEach
+
+
+C# 4.0 released with .NET 4 and VS2010 (April 2010). Major new features: late binding (dynamic), delegate and interface generic variance, more COM support, named arguments, tuple data type and optional parameters
+C# 5.0 released with .NET 4.5 and VS2012 (August 2012). Major features: async programming, caller info attributes. Breaking change: loop variable closure.
+C# 6.0 released with .NET 4.6 and VS2015 (July 2015). Implemented by Roslyn. Features: initializers for automatically implemented properties, using directives to import static members, exception filters, indexed members and element initializers, await in catch and finally, extension Add methods in collection initializers.
+C# 7.0 Major new features: tuples, ref locals and ref return, pattern matching (including pattern-based switch statements), inline out parameter declarations, local functions, binary literals, digit separators, and arbitrary async returns.
+
+
+covarients
+new features in .net framework
+new features in wpf in 4.0+
+Dispatcher in wpf
+Error Handling in wpf
+
+
+[‎17-‎Mar-‎17 5:53 PM] Kesavan Rajendran: 
+https://channel9.msdn.com/Forums/TechOff/A-simple-and-pure-C-implementation-of-the-good-old-linked-list
+
+http://www.geeksforgeeks.org/data-structures/
+
+
+Where can I find difficult algorithm/data structure problems?
+
+Sites that contain algorithmic question. These sites are useful if one has little preparation time (a few days to one or two weeks).
+
+List of Problems - Techie Delight
+Coderust 2.0: Faster Coding Interview Preparation using Visualizations
+http://courses.csail.mit.edu/iap...
+InterviewBit
+GeeksforGeeks - A computer science portal for geeks
+CS Academy
+http://www.qubeet.com/
+http://everything2.com/title/har...
+http://www.intertechtion.com/ans...
+http://algomuse.appspot.com/archive
+Interview Questions | CareerCup
+http://www.dsalgo.com/
+Coding Interview Questions
+We Help Coders Get Hired
+Data Structure - Assessment
+Sites that have online judges, and are useful for longer term growth (think 2 months or more):
+
+HackerRank - by Interviewstreet
+http://www.topcoder.com
+CS Academy...
+ (more)
+
+ 
+ 
+ 
+ 
+ Media Query CSS Responsive Design Example
+ 
+ https://www.w3schools.com/css/tryit.asp?filename=tryresponsive_mediaquery
+ 
+ Handling transactions in ADO.NET
+ http://www.c-sharpcorner.com/uploadfile/john_charles/using-transactions-in-ado-net/
+ 
+ http://www.c-sharpcorner.com/UploadFile/tirthacs/handling-concurrency-in-mvc-and-ef/
+ 
+ 
+ Heap VS Stack
+ 
+ http://www.c-sharpcorner.com/article/C-Sharp-heaping-vs-stacking-in-net-part-iii/
+ 
+ 
+ DataStruture Algorithms in JavaScript
+ 
+ https://github.com/loiane/javascript-datastructures-algorithms
