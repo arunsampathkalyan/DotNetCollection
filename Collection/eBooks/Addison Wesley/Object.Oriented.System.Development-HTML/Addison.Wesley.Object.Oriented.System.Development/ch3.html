@@ -1,0 +1,714 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Object Statics</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Object Statics">
+<meta name="keywords" value="ch3">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+
+<center><P><P></center>
+
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 3: Object Statics</h2>
+<UL>
+<LI> <A NAME=tex2html67 HREF="#SECTION00010000000000000000"> Instances</A>
+<LI> <A NAME=tex2html68 HREF="#SECTION00020000000000000000"> Classes</A>
+<LI> <A NAME=tex2html69 HREF="#SECTION00030000000000000000"> Attributes</A>
+<LI> <A NAME=tex2html70 HREF="#SECTION00040000000000000000"> Attribute Features</A>
+<LI> <A NAME=tex2html71 HREF="#SECTION00050000000000000000"> Constraints</A>
+<LI> <A NAME=tex2html72 HREF="#SECTION00060000000000000000"> Identifying Objects and Classes</A>
+<LI> <A NAME=tex2html73 HREF="#SECTION00070000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+<p>
+
+
+<center><H2><A NAME=SECTION00010000000000000000> Instances</A></H2></center>
+<P>
+In previous chapters, we have shown definitions of objects, but we do
+not expect that the reader has a ``gut level'' understanding of what
+they are beyond the things that are usually encountered in everyday
+life.  We surmise that everyone starts out this way.  Thus, an object
+can be your boyfriend, NYC, the Ferrari in the showroom which is
+beyond your means, the Taj Mahal, etc.  At the same time, objects can
+be non-tangible things (provided that someone wants to see it that
+way) such as a bank transaction, a newspaper story, a phone call, a
+rental car contract, a utility bill, an airline reservation, a bank
+account, etc.
+<P>
+Our graphical notation for a singular object is simply a dot. For
+example an instance of the class <em>
+Account</em>:<A NAME=11>&#160;</A><A NAME=12>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img1.gif"><P>
+<P>
+The heading of this section is ``instances'', not just ``objects''.
+We use the notion of an instance when we want to emphasize that an
+object is a ``member'' of a class.  In Chapter <A NAME=tex2html6 HREF="ch2.html">2</A>, we were
+already using the notion of instance in the context of ``... an
+instance of one class ...''  In most methods, each object is
+perceived as being a member of a certain <em> class</em>.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Classes</A></H2></center>
+<P>
+Sometimes we need to talk about a particular instance in our system model.
+For example, a bank may maintain some key ``system'' accounts.  We may want
+to describe a few special employees, e.g., the executive officers.  Usually,
+however, collections of objects, so-called classes <sup>1</sup> are described.
+<blockquote>
+Footnote <sup>1</sup>:<br>
+The notions of
+``type'' and ``class'' are sometimes distinguished in the implementation
+realm. A type<A NAME=21>&#160;</A> is the abstract characterization of a particular
+``family'' of objects, while a class is then the actual realization in
+a particular programming language of that type. We will uniformly use
+the term ``class''. Later in Part II we refer to directly implementable
+versions as ``concrete''.
+</blockquote>
+<P>
+A class stands for a family of objects that have something in common.
+A class is not to be equated with a set of objects, although at any
+moment we can consider the set of instances that belong to
+the class.  A class may be seen as what all these sets have in common.
+In technical terminology, a class stands for the <em> intension</em> of a
+particular characterization of entities, while the set of objects that
+conform to such a characterization in a certain period is known as
+the <em> extension</em> (see Carnap [<A HREF="#carnap">3</A>]).
+<P>
+Notationally, a rectangle surrounds the name of a class.  For example,
+the class <em> Account</em> is depicted as:<A NAME=26>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img2.gif"><P>
+<P>
+An object is an instance of at least one and at most one class.
+Certain methods allow an object to change, during its lifetime, the
+class of which it is an instance.  This freedom increases the
+expressive power of the analysis method.  But since most OO software
+development methods and languages do not support this feature, and
+since the effects of change may be described by other means, we
+refrain from this practice.
+<P>
+Individual objects are primarily characterized by an indication of
+which class they belong. For example:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img3.gif"><P>
+<P>
+The arrow between the instance and its class is called the
+ISA relationship. This is not the same as the class inheritance
+relationship discussed in Chapter <A NAME=tex2html11 HREF="ch7.html">7</A>.<A NAME=38>&#160;</A>
+<P>
+This instance characterization is insufficient.  At this stage, we do not
+have available the means, beyond naming, to distinguish multiple instances
+of the class <em> Account</em>.  In general, we avoid using names to describe
+individual objects, because usually objects do not have natural names.
+Just consider the examples given earlier -- a bank transaction, a
+newspaper story, a phone call, a rental car contract, a utility bill, and
+an airline reservation.  Instead, descriptions are used that somehow
+denote unique entities.  Attributes of objects will do the descriptive job.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Attributes</A></H2></center>
+<A NAME=41>&#160;</A><A NAME=42>&#160;</A>
+<P>
+Real-life entities are often described with words that indicate
+stable features.  Most physical objects have features such as shape,
+weight, color, and type of material.  People have features including date
+of birth, parents, name, and eye color.  A feature may be seen as a
+binary relation between a class and a certain domain.  Eye color
+for example, may be seen as a binary relation between the class of
+<em> Eye</em>s and an enumerated domain <em> {brown, blue, yellow,
+green, red}</em>.  A domain can be a class as well, for example, in
+the case of the features <em> parents, spouse, accountOwnedBy,</em> etc.
+<P>
+The applicability of certain features (i.e., the features themselves,
+not just their values) may change over time.  For example, frogs and
+butterflies go through some drastic changes in their lifetime.  We
+avoid this kind of flexibility.  Thus, a class is characterized by its
+set of defining features, or <em> attributes</em>.  This collection of
+features does not change. (We later present tricks for getting
+around this limitation.)
+<P>
+The notion of a (binary) relation crept into the previous discussion.
+The reader may wonder how we can discuss them here since we have
+relegated them to another model in our four-component view.  We make a
+distinction between attribute (binary) relationships that represent
+intrinsic, definitional properties of an object versus relationships
+that describe contingent, incidental connections between objects.
+Because we, as analysts, are in control, we can <em> prescribe</em> for an
+object what is definitional and what is incidental.  For example, in a
+particular system we may agree that for the class <em> Person</em> a <em>
+social-security-number</em> is a defining attribute while a <em> parent</em>
+feature is seen as an incidental relationship.  In another system, the
+reverse choices could be made.<A NAME=51>&#160;</A>
+<P>
+We illustrate the notation for attributes with a class <em> Account</em> that has:
+<UL><LI> attribute <em> accountNumber</em> of value domain <em>
+AccountNumber</em> and
+<P>
+<LI> attribute <em> currency</em> of value domain <em> Currency</em>.<A NAME=58>&#160;</A>
+</UL>
+<P>
+<P>
+A graphical notation for these attribute names<A NAME=60>&#160;</A> and
+attribute values is:<A NAME=61>&#160;</A><A NAME=62>&#160;</A>
+<P>
+<A NAME=63>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img4.gif"><P>
+<P>
+This representation indicates that <em> AccountNumber</em> is a ``data
+value'' domain and that <em> Currency</em> is a class.  It is debatable
+whether we should make such a distinction between values and objects.
+For instance, one can take the stance that integers, strings, and
+32-bit reals are all objects as well.  Although we will be very picky
+about the resulting distinctions in Part II, either way is fine with
+us.  We use the convention that unboxed value domains do not represent
+classes.  Consequently, if we change our mind and represent the <em>
+currency</em> attribute as a data value, we would unbox it.
+<P>
+<P>
+<H2><A NAME=SECTION00031000000000000000> Attributes of Instances</A></H2>
+<P>
+Attributes can be employed to describe an instance of a class by indicating
+how it ``scores'' with respect to the attributes.  In the following
+example, we depict a particular instance of the class <em> Account:</em>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img5.gif"><P>
+<P>
+Note that attribute names have been repeated in the instance.  An
+alternative approach would use graphic notation to link up the
+attributes of the instance with the attributes in the class, as in:
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Attribute Features</A></H2></center>
+<A NAME=124>&#160;</A>
+<P>
+We have attached attributes to objects.  The next step is to give, in
+a sense, attributes to attributes.  We will call them <em> features</em>
+to avoid too much confusion.
+<P>
+Two features of attributes have been
+encountered already, the attribute's relation name, which is sometimes
+called the <em> role</em> name,<A NAME=127>&#160;</A> and the
+value domain<A NAME=128>&#160;</A>.  Here we expand the features that can be
+associated with an attribute.  We should stress that using these
+features is optional and can be ignored in first rounds or even all
+together.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Defaults</A></H2>
+<A NAME=130>&#160;</A>
+<P>
+Sometimes it is useful to indicate a default initial value for an
+attribute.  A generous bank may, for example, give a surprised new customer
+an account with an initial balance of $10.  Since sheep are usually white,
+their color attribute can be given this default value.
+<P>
+A revised <em> Account</em> class includes a notation for indicating a
+default value of an attribute:<A NAME=132>&#160;</A><A NAME=133>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img7.gif"><P>
+<P>
+<H2><A NAME=SECTION00042000000000000000> Probability</A></H2>
+<A NAME=152>&#160;</A>
+<P>
+We may want to associate with an attribute our knowledge about the
+distribution of the values in the value domain.  (A default value need
+not correspond with the value that has the highest probability.)  As
+an example, consider the class <em> Human</em> with the attribute <em>
+age</em>.  The probability distribution corresponds here with a
+demographic profile.  A designer may want to exploit this information.
+<P>
+We avoid introducing special notation.  One option is to list
+<em> (value, probability)</em> pairs. For numerical domains, a probability
+distribution function may be specified.  Any other mathematical
+notation may be invoked as needed.
+<P>
+<H2><A NAME=SECTION00043000000000000000> Multiplicity</A></H2>
+<P>
+<A NAME=157>&#160;</A><A NAME=158>&#160;</A><A NAME=159>&#160;</A>
+<P>
+<A NAME=160>&#160;</A>
+<P>
+A <em> multiplicity</em> feature associates more than one
+value to an attribute.
+We use the notation <em> [N:M]</em>, where
+0 &lt;= <em> N</em> &lt;= <em> M</em>. <em> N</em> indicates the minimum number of values and
+<em> M</em> indicates the maximum number.
+A few conventions simplify the notation:
+<UL><LI> We usually abbreviate <em> [N:N]</em> as <em> [N]</em> to represent a
+    multiplicity of exactly <em> N</em>.
+<LI> We usually omit a multiplicity indicator when the
+    multiplicity is <em> [1]</em>.
+</UL>
+<P>
+For example, the class <em>
+Hand</em> might contain the attribute <em> finger</em> with a value
+domain of class <em> Finger</em> and a multiplicity constraint of [0:6].
+This requires an explanation indeed.  A hand remains a hand even when
+all the fingers have been amputated.  That explains the minimum 0.
+The 6 has been chosen because Anne Boleyn had a hand with six fingers.
+<P>
+This multiplicity notation is sometimes not expressive enough.
+Consider a family of vehicles where the number of wheels per vehicle
+is 3, 4, 6 or 10.  In general, a multiplicity indicator can be any
+arbitrarily complex description of a set of natural numbers.  Given
+this state of affairs, we omit additional notation beyond observing
+that predicate calculus provides formal precision and unbounded
+expressiveness.
+<P>
+<H4><A NAME=SECTION00043010000000000000> Optional Attributes.</A></H4>
+<A NAME=177>&#160;</A>
+Using a zero lower bound in the multiplicity feature of an attribute
+indicates that possession of the attribute is ``optional''. This
+allows instances that effectively do <em> not</em> have that attribute.
+This is a way around the limitation of freezing a collection of
+attributes for a class.
+<P>
+For example, a bank has branches, each having
+departments.<A NAME=179>&#160;</A> We assume that departments
+consist of a department head and subdepartments.  This creates a
+recursive structure that bottoms out by making subdepartments
+optional.  Thus, a nonmanagerial employee is a department head that
+does not supervise subdepartments.  For illustration, we restrict the
+branching ratio of departments to six:<A NAME=180>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img8.gif"><P><BR>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img9.gif"><P><H4><A NAME=SECTION00043020000000000000> Multiplicity default and probability.</A></H4>
+<P>
+Multiplicity indications may be dressed up with more knowledge if this
+information is beneficial for a design and/or implementation.  For
+example, a reasonable default multiplicity for the number of wheels of
+a car is four.  A probability distribution for the multiplicity
+feature denoting the number of children per parent might be obtained
+through an empirical sampling.
+<P>
+<H2><A NAME=SECTION00044000000000000000> Qualifiers</A></H2>
+<P>
+<A NAME=213>&#160;</A><A NAME=214>&#160;</A><A NAME=215>&#160;</A>
+<A NAME=216>&#160;</A>
+<A NAME=217>&#160;</A>
+<P>
+The range of an attribute value can be restricted in any of several
+senses.  We <em> always</em> fix an attribute to a particular domain.  The
+values of an attribute of an object must remain within the indicated
+domain throughout the lifetime of the object.  The domain for an
+attribute listed in a class may be narrowed down to only one possible
+value.  For example, the class <em> Albino</em> has for its <em> color</em>
+attribute the value <em> white</em>.  Intermediate domain restrictions
+that do not limit attributes to only one value may be expressed via
+constraints (see Section <A HREF="#secconstraints">5</A>).
+<P>
+Several other senses of restriction are common enough to group under
+broad categories, allowing simpler qualification:
+<P>
+<UL><LI> We may require that an attribute value for each instance of the
+        class to be <em> fixed</em> (immutable) when the object is created
+        and initialized. This value may differ across different
+        instances, but  it may not vary across time for any instance.
+        <em> Fixed</em>
+        attributes differentiate instances from peer objects that are
+        members of the same class.
+<P>
+ <LI> We may require that the value of an attribute be
+        <em> common</em> to all instances of a class, even without knowing
+        what that value should be. The common value may also
+        change across time.
+        For example, all instances of class <em> Account</em>
+        might need to record transactions using a <em> common</em> <em> LogFile</em>.
+        The exact file may change over time.
+<P>
+  <LI> The category of <em> unique</em> attributes is the extreme opposite of
+        <em> common</em>.  A <em> unique</em> attribute is one whose value differs for
+        each instance of a class. For example, the value of  attribute
+        <em> accntId</em> should be unique to each instance of class <em> Account</em>.
+<P>
+</UL>
+<P>
+Qualifiers including <em> fixed</em>, <em> common</em>, and <em> unique</em> may
+be annotated in any convenient fashion.  For example, the following
+class <em> Client</em> has a social security number attribute that is both
+unique for each instance and remains fixed over its lifetime:
+<P>
+<center><P><P>
+
+<H2><A NAME=SECTION00050000000000000000> Constraints</A></H2></center>
+<P>
+<A NAME=secconstraints>&#160;</A>
+<A NAME=256>&#160;</A><A NAME=257>&#160;</A>
+<A NAME=258>&#160;</A>
+<P>
+Constraints may be used to rule out certain attribute value
+combinations for all instances of a class.  Consider a <em>
+Department</em> that has the attributes <em> head</em> and <em> treasurer</em>,
+both having <em> Employee</em> as their value domain.  We may want to
+indicate that these positions cannot be filled by the same person.
+These kinds of constraints may be expressed in any convenient
+notation. For example:<BR>
+<em> not(head = treasurer)</em>.<BR>
+For clarity, attributes in such expressions may be qualified
+with <em> self</em>. We
+assume that every class supports by default an
+attribute <em> self</em> which refers for each object to itself:<BR>
+<em> not(self.head = self.treasurer)</em>.
+<P>
+Constraints can refer to other attribute features.  Consider, for example,
+a <em> Polygon</em> with attributes <em> angle</em> and <em> side</em>.  We
+certainly want to express that the multiplicity features of these
+attributes are the same.
+<P>
+A constraint can reach beyond the boundary of an object.  Assume a
+class <em> Person</em> with the attribute <em> spouse</em> having the <em>
+[0:1]</em> value domain <em> Person</em> and the attribute <em> sex</em> with the
+value domain [<em> male</em>, <em> female</em>].  We may want to
+express the following constraint (among
+others):<A NAME=279>&#160;</A>
+<P>
+<UL><LI> The spouse of a spouse is the original person:<BR>
+<em> self = self.spouse.spouse</em>.
+<P>
+<!--
+<LI> The sex of a person and the person's spouse are
+different:<BR>
+<em> not(self.sex = self.spouse.sex)</em>
+-->
+</UL>
+
+<P>
+Many constraints involving multiple objects are more easily and
+naturally expressed via relations.  We discuss relational
+constraints in Chapter <A NAME=tex2html45 HREF="ch4.html">4</A>.
+<P>
+<H2><A NAME=SECTION00051000000000000000> Derived Attributes</A></H2>
+<P>
+A special case of a constraint is an expression that describes an
+attribute functionally, in terms of one or more other attributes.
+<P>
+For example, consider a class <em> Person</em> with the attributes <em>
+dateOfBirth</em>, <em> dateOfMarriage</em> and <em> ageAtMarriage</em>. The <em>
+ageAtMarriage</em> attribute may be defined as a function of the other two.
+<P>
+Codependencies are possible as well.  A <em> Triangle</em> class with
+attributes <em> sideLength</em>, <em> angle</em>, <em> bisector</em>, <em>
+surfaceArea</em>, etc., will have constraints on each attribute that
+refer to the others.<A NAME=299>&#160;</A> For a different kind
+of example, consider the class <em> Account</em> with a multivalued
+
+<P>
+attribute <em> balance</em> and a multivalued attribute <em>
+transaction</em>.  We have the following codependencies:
+<P>
+<em> balance(n+1) = balance(n) + transaction(n),</em>
+<P>
+<em> transaction(n) = balance(n+1) - balance(n).</em>
+<P>
+<center><P><P>
+
+<H2><A NAME=SECTION00060000000000000000> Identifying Objects and Classes</A></H2></center>
+<A NAME=306>&#160;</A>
+<A NAME=secatmexpl3>&#160;</A>
+<P>
+In this section, we describe some preliminary issues in the
+identification of objects, or rather, their classes.  We cannot claim
+that a procedure exists that can be followed blindfolded. In fact,
+after developing further modeling apparatus, we devote much of
+Chapter <A NAME=tex2html48 HREF="ch12.html">12</A> to the further investigation of
+these identification, vocabulary, and process issues.
+<P>
+We focus here on elements of small and medium problems.  The OO
+paradigm induces a bottom-up way of modeling, designing, and
+subsequently implementing a system.  The atomicity of objects induced
+by encapsulation is the key cause. But analyzing a large system in a
+bottom-up fashion is out of the question.  A leveling technique is
+needed in order to tackle a large system in top-down mode, and is
+required anyway to preserve the hierarchies that are ``naturally''
+present in large man-made systems.  In this book, we use <em>
+ensembles</em><A NAME=311>&#160;</A> as a special kind of object that allows
+decomposition.  The treatment of ensembles is deferred to
+Chapter <A NAME=tex2html50 HREF="ch9.html">9</A>.
+<P>
+<H2><A NAME=SECTION00061000000000000000> Developing Vocabulary</A></H2>
+<A NAME=315>&#160;</A>
+<P>
+As a first approximation one can scrutinize the requirements document, if
+there is one, and consider the nouns, or better yet, the noun phrases in
+the document.  As an example we have put in <em> italics</em> the noun phrases
+of the running ATM example of Chapter <A NAME=tex2html52 HREF="ch1.html">1</A>:
+<P>
+<blockquote> We assume that <em> the American Bank (AB)</em> has partly decentralized
+account management.  <em> Every branch office</em> has <em> equipment</em> to
+maintain <em> the accounts of its clients</em>.  <em> All equipment</em> is
+networked together.  <em> Each ATM</em> is associated and connected with
+<em> the equipment of a particular branch office</em>.  <em> Clients</em> can
+have <em> checking, savings and line of credit accounts</em>, all
+conveniently interconnected.  <em> Clients</em> can obtain <em> cash</em> out
+of any of their <em> accounts</em>.  <em> A client</em> with <em> a personal
+identification number (PIN)</em> can use <em> an ATM</em> to transfer <em> funds</em> among
+<em> attached accounts</em>. <em> Daemons</em> can be set up that monitor
+<em> balance levels</em> and trigger <em> automatic fund transfers</em> when
+<em> specifiable conditions</em> are met and/or that initiate transfers
+periodically.  <em> Automatic periodic transfers to third party accounts</em>
+can be set up as well.
+<P>
+</blockquote>
+<P>
+We have to pick the winners from the collection of noun phrases:
+<UL><LI> the individual object <em> the American Bank</em>;
+<LI> the classes <em> branch office</em>, <em> account</em>, <em> client</em>, <em>
+equipment</em>;
+</UL>
+while avoiding the losers <em> balance level</em> and <em> specifiable
+condition</em>.
+<P>
+<H2><A NAME=SECTION00062000000000000000> Classes and Attributes</A></H2>
+<P>
+There is a great amount of freedom in refining vocabulary.  Iteration
+over the set of candidate classes helps weed it out.  The
+first round identifies classes only by their names.  Subsequent rounds
+refine and distinguish among class characterizations via attributes.
+(We postpone using inheritance to exploit commonalities among classes
+until Chapter <A NAME=tex2html53 HREF="ch7.html">7</A>.)
+<P>
+When two classes have identical attribute descriptions, they may be
+synonyms.  But having identical attribute names is not sufficient for
+two classes to be equal.  For example, the difference between the
+classes <em> Triangle</em> and <em> RightTriangle</em> resides in the latter
+having a constraint expressing that one of the angles is 90 degrees.
+Thus, attributes plus optional constraints compose class definitions.
+<P>
+<H3><A NAME=SECTION00062100000000000000> Classes versus Roles</A></H3>
+<P>
+Deciding when a notion is a class and when it is an attribute's role name
+can be puzzling.  In  [<A HREF="#brach2">2</A>], the following example is given with
+respect to <em> father</em>:
+<P>
+(1) Ron is a new father.
+<P>
+(2) Ron is the father of Rebecca.
+<P>
+In (1) father appears to be a class, while in (2) father acts like a
+role name of a (multivalued) attribute.  This example is typical.
+When a sentence with a questionable concept can be extended (as in
+``father <em> of</em> ...''), it is normally a relational attribute with
+a suppressed attribute value (see Chapter <A NAME=tex2html54 HREF="ch4.html">4</A>).
+<P>
+<H2><A NAME=SECTION00063000000000000000> Unique Versus Multiple Instances</A></H2>
+<A NAME=365>&#160;</A>
+<P>
+Novice OO analysts sometimes wonder whether OO methods are applicable
+because their application classes have only a single instance.  A
+notorious example is the car cruise control <A NAME=366>&#160;</A> system with unique instances <em> Speed Indicator,
+Desired Speed, Brake Pedal,</em> and <em> Carburetor</em> (see
+Chapter <A NAME=tex2html57 HREF="ch5.html">5</A>).<A NAME=371>&#160;</A>
+<P>
+Having classes with predominantly only one instance should not be a
+reason to abandon an OO approach.  Objects are encapsulated entities
+that improve conceptual, design, and implementation sanity.  In
+addition, reuse<A NAME=372>&#160;</A> of classes across application boundaries
+is more promising than non-OO concepts, design fragments, or code.
+<P>
+For example, our ``requirements document'' contains the AB bank as a
+unique entity:
+<A NAME=373>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img12.gif"><P>
+<P>
+<P>
+Also, the AB bank most likely needs  a unique entity that tells all interested
+parties in AB what the day's interest rate is.  This suggests the introduction
+of a unique instance of a class with attributes including <em>
+savingsAccountInterest</em>, <em> lineOfCreditInterest</em>, etc.
+<P>
+<H2><A NAME=SECTION00064000000000000000> Persistent Versus Transient Objects</A></H2>
+<P>
+<A NAME=396>&#160;</A> <A NAME=397>&#160;</A>
+<P>
+Objects need not exist very long in a system to still be full-fledged
+instances of full-fledged classes. For example, an analyst is free to
+construe <em> events</em> in the application domain as objects.  Thus we
+can make the pragmatic distinction between objects that denote (semi)
+persistent entities in an application domain versus objects that
+denote transient entities.  Being able to capture the proper details
+should be a guide for an analyst in choosing between persistent and
+transient objects.
+<P>
+For example, our requirements description refers to <em> transfer</em>s
+between two accounts (e.g., to transfer funds from a savings account
+to a checking account). A <em> Transfer</em> class describes the static
+dimension of such transient objects:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img13.gif"><P><H2><A NAME=SECTION00065000000000000000> Statics and Dynamics</A></H2>
+<P>
+Static considerations may be insufficient to differentiate classes.
+We can still have variations based on behavioral differences.  For
+example, one kind of calculator may support only addition and
+subtraction, while another one with the same attribute structure (at
+an appropriate abstraction level) also supports multiplication and
+division.  However, we are emphasizing for now class identification,
+and especially characterization, via the static features of the
+objects that constitute a class.
+<P>
+This may sound counterintuitive.  Some entities are easier to describe
+via their dynamic (potential) dimension.  For instance, a pilot is a
+person that can <em> fly</em> a plane.  Even so, remember that the static
+and dynamic dimensions of an entity are complementary notions that
+can add and build onto the other.  Change is perceived against a
+background of constancy.   Dually, constancy is merely the
+inability to perceive a slow rate of change.  In addition, our
+treatment of the static dimension of objects before addressing the
+dynamic dimension should not be seen as an imperative for the OO
+analysis <em> process</em>.
+<P>
+For example, an automated teller machine can be understood as a device
+that can support a range of financial transactions.  (The term <em>
+machine</em> in its name already emphasizes the dynamic aspect.)  However,
+it may still be described in terms of its static features.  The
+following first impression for class <em> ATM</em> (to be revised
+extensively in coming chapters) lists attributes indicating functional
+components of an ATM machine:<A NAME=422>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img14.gif"><P>
+<P>
+For a different kind of example, the following <em> TransferDaemon</em>
+class represents the static dimension of procedures that are run
+periodically to transfer an amount provided a condition is met.  For
+instance, such a procedure may automatically transfer money to a
+savings account when a checking account has too much money.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch3-img15.gif"><P>
+<P>
+The <em> TransferDaemon</em> class will be revisited in
+Chapter <A NAME=tex2html64 HREF="ch10.html">10</A> after we have developed behavior modeling.
+For now, we sketch out characterizations of the attributes that help
+to control dynamics:
+<P>
+<DL ><DT><em> TimeInterval</em>
+<DD> describes how often a transfer will be
+attempted.  Possible values can range from minutes (or perhaps even
+shorter) to months (or even longer).
+<P>
+<DT><em> AmountExpression</em>
+<DD> is any expression describing the
+amount to be transferred. This might just be a fixed sum.
+Alternatively, we can envision that the AB bank allows for amounts that are
+functions of certain parameters.  For example, to maintain a
+certain balance in the <em> from</em> account, it might take the form:<BR>
+<em> (the balance of the from account) -- (a fixed sum)</em>.
+<P>
+<DT><em> TransferBoolean</em>
+<DD> describes a truth-valued
+function to be used to block the transfer when certain conditions are not
+met.  For example, a value calculated by the function outlined in the
+previous attribute should not be too small, or one may want to constrain
+the maximum amount on the target account.
+<P>
+</DL>
+<center><P><P>
+
+<H2><A NAME=SECTION00070000000000000000> Summary</A></H2></center>
+<P>
+This chapter describes a (graphical) language to capture the static
+dimension of objects.  Attributes and attribute features are
+
+introduced.  Attributes are seen as special binary relations that help <em>
+define</em> a prototypical instance of a class.  This is in contrast to
+relations that reflect contingent connections between objects as
+induced by a particular target application.  Attribute features and
+constraints further describe and restrict attributes and their
+combinations. Generic classes capture parametric commonalities
+across families of classes.
+<P>
+We have illustrated the notions in this chapter with several examples
+from the ATM domain.  Most are first approximations, built upon in
+subsequent chapters.  For now, classes referred to but not expanded
+are left as exercises to the reader.
+<P>
+<H2><A NAME=SECTION00071000000000000000> Further Reading</A></H2>
+<P>
+Attributes are a keystone for our treatment. They play similar roles
+in most published OOA methods.  But at least two methods ignore them
+or even avoid them.  Booch [<A HREF="#boochbook">1</A>] downplays the importance
+of defining objects and classes through static aspects.  He
+characterizes objects by state, behavior and identity, in that order.
+Attributes are also avoided by Embley et al [<A HREF="#kurtz">4</A>].  They see an
+object as a node in a network of connections (relationships).  As a
+consequence they feel that the distinction between a relationship and
+an attribute is to be postponed to the design phase.
+<P>
+<H2><A NAME=SECTION00072000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Identify objects, introduce their classes, give attributes, their
+features and constraints as suggested by the following text:
+<P>
+Mr. White is married.  He teaches OO Software Engineering classes on
+Fridays.  He is a part-time member of the faculty at the CS Department of
+the All-Smart Institute.  His 23-year-old son John was enrolled in the OOA
+class that Mr. White taught in the previous semester.  John does not like
+broccoli.  Mrs. White uses a ten-speed for transportation to and from
+the campus (she teaches Philosophy at the same institute).  Class size is
+limited at the institute to 14 students.  The faculty at the institute,
+when seen as parents, have at most two children.  The sister of John has a
+boyfriend that is two years younger than she is and plays two different
+instruments.
+<P>
+<LI> A ``meta'' constraint on a class may express how many instances it
+can have in a particular target system.  As a special case, a constraint
+may express for a class that it has only <em> one</em> instance.  Would such a
+construct obviate the notion of an instance?  Consider the notions of the
+president of a company, New Year, the first day of the year, Washington,
+the capital of the United States, and the headquarters of a bank.
+<P>
+<LI> Describe a set of classes that represent entities in your kitchen.
+<P>
+</OL>
+<P>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=boochbook><STRONG>1</STRONG></A><DD>
+G. Booch.
+ <em> Object Oriented Design with Applications</em>.
+ Benjamin/Cummings, 1990.
+<P>
+<DT><A NAME=brach2><STRONG>2</STRONG></A><DD>
+R.J. et al Brachman.
+ Living with classic: When and how to use a kl-one-like language.
+ In John F. Sowa, editor, <em> Principles of Semantic Networks</em>.
+  Morgan Kaufmann, 1991.
+<P>
+<DT><A NAME=carnap><STRONG>3</STRONG></A><DD>
+R. Carnap.
+ <em> Meaning and Necessity</em>.
+ The University of Chicago Press, 1947.
+<P>
+<DT><A NAME=kurtz><STRONG>4</STRONG></A><DD>
+D.W. Embley, B. Kurtz, and S.N. Woodfield.
+ <em> Object-Oriented Systems Analysis</em>.
+ Yourdon Press/Prentice Hall, 1992.
+</DL>
+<P>
+
+<a href="ch4.html">Next: Chapter 4</a><p>
+
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed Jan 10 07:52:24 EST 1996</I>
+</ADDRESS>
+</BODY>

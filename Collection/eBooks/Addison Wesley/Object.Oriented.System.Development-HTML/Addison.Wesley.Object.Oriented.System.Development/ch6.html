@@ -1,0 +1,984 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Object Interaction</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Object Interaction">
+<meta name="keywords" value="ch6">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+<center><P><P></center>
+
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 6: Object Interaction</h2>
+<UL>
+<LI> <A NAME=tex2html64 HREF="#SECTION00010000000000000000"> Transitions</A>
+<LI> <A NAME=tex2html65 HREF="#SECTION00020000000000000000"> Sending and Receiving Events</A>
+<LI> <A NAME=tex2html66 HREF="#SECTION00030000000000000000"> Interaction Notations</A>
+<LI> <A NAME=tex2html67 HREF="#SECTION00040000000000000000"> Examples</A>
+<LI> <A NAME=tex2html68 HREF="#SECTION00050000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<P>
+<A NAME=9>&#160;</A>
+<A NAME=10>&#160;</A>
+<A NAME=11>&#160;</A>
+<A NAME=12>&#160;</A>
+<P>
+Object interaction patterns may be placed in two broad categories,
+differing with respect to the roles played by the participants:
+<UL><LI> An event producer object and one or more event consumer objects.
+<P>
+    Producer-consumer interaction involves only unidirectional
+    (``one-way'') communication.  Examples include a user selecting a menu
+    item, a buyer sending a purchase order to a supplier, and a report
+    generator sending a report to a printer.  An event may have multiple
+    consumers.  For example, a stock quotation service may broadcast stock
+    prices to all ``interested'' parties.
+<P>
+<LI> A client object and a server object.
+<P>
+    Client-server interaction involves bidirectional synchronized
+    communication. A client requests that an operation be performed by a
+    server, and waits for a reply.  Both the request and the reply may
+    contain other transmitted data.  This pattern is seen in common
+    ``service'' procedure or function invocations.
+</UL>
+<P>
+Bidirectional patterns are quite popular in OOA, in part because they
+readily map onto the object interaction mechanisms available in most
+OO programming languages.  This fact leads to a terminology mismatch.
+One might suspect that the ``message passing''<A NAME=15>&#160;</A>
+supported by OO programming languages would correspond to one-way
+asynchronous interaction.  This is <em> not</em> the case.  Instead, in
+languages such as <i> Smalltalk</i>, <i> C++</i>, etc., a ``message'' is a
+synchronized bidirectional procedure (or function) invocation.  To
+avoid such connotations, we often use the term ``event'' rather than
+``message'' to encompass either of these interaction styles and their
+variants.
+<P>
+<center><H2><A NAME=SECTION00010000000000000000> Transitions</A></H2></center>
+<P>
+<A NAME=20>&#160;</A>
+<P>
+We will look in more detail at transition descriptions discussed in
+the previous chapter, this time concentrating on the interactive
+aspects of the guard, action, and event components of our transition
+diagrams.  Transition notation concentrates on the behavioral
+properties of a single object.  It describes what an object expects
+from the context without specifying any particular context, and how an
+object contributes to the context.  It does this without any
+assumption about the context beyond the existence of event providers
+and event consumers.
+<P>
+For interactive transitions, we split the box holding the guard to
+separate a regular boolean condition and the dependency on an event.
+We leave the action box as is.  The box for an optional event can be
+utilized to describe values that are available to the members of the
+audience:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img1.gif"><P><H2><A NAME=SECTION00011000000000000000> Guard</A></H2>
+<P>
+A guard<A NAME=45>&#160;</A> may contain a condition referring to any or all of:
+<UL><LI> Attributes of <em> self</em>
+<LI> Attributes of other objects.
+<LI> A named event.
+<LI> Data associated with the event.
+</UL>
+<P>
+In the design phase, references to objects other than <em> self</em>
+within guards will necessitate construction of ``read-only'' attribute
+access operations and related processing that have no impact at the
+current level of description (see Chapter <A NAME=tex2html10 HREF="ch16.html">16</A>). In
+analysis, we freely list all required guard conditions without
+worrying about the underlying mechanics.
+<P>
+
+Firing a transition requires that the condition <em> and</em> the event, if
+specified, are satisfied.
+
+If the event does not entail data transfer, it is a pure
+trigger<A NAME=53>&#160;</A>, an ``invitation'' for the recipient to engage
+in a state transition.  A declarative description of such a trigger
+can rely on an invariant indicating that certain state combinations of
+objects are to be maintained.  For example, whether an engine is in
+the <em> off</em> or <em> on</em> state may be reflected by a particular
+indicator light.  Consequently, a state change of the engine must
+correspond with a state change of the indicator light.
+<P>
+An input event may contain other data (<em> in</em>) sent
+as ``arguments''.  A guard that depends on an external event may
+contain a <em> signature</em> description regarding the types of expected
+data, as well as any other constraints.  This data becomes available,
+of course, within the transition network of the recipient.  The
+properties and types of data produced by the originator of an event
+should satisfy expectations expressed by a guard of a recipient.
+<P>
+As an example, consider a transition that performs a mutation of the
+balance of an account.  The guard expects an input event that carries
+the amount <em> mut</em> to be added or subtracted.  This transition may
+insist, for example that a negative amount does not leave the balance
+negative.  Thus, this knowledge can be added to the event guard box:<BR>
+<em> balance + mut &gt;= 0</em>.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Action</A></H2>
+<P>
+An action<A NAME=63>&#160;</A> is a terminating activity that can affect
+local attributes.  Action components may be broken into
+two categories:
+<UL><LI> changes in attribute values, and
+  <LI> embedded client-server interactions that help the
+        object obtain the listed state transition.
+</UL>
+<P>
+For example, an <em> Account</em>  withdrawal transition may
+result in the adjustment of its <em> balance</em> attribute:<BR>
+<em> balance' = balance - mut</em>.<BR>
+The transition may also require interaction with another object to
+determine the kind of currency to be delivered to the customer.  We
+have no special notation for bidirectional interaction with a server
+out of the action box.  However, class interaction diagrams can
+provide more graphical detail about bidirectional interactions.
+<P>
+<H2><A NAME=SECTION00013000000000000000> Event</A></H2>
+<P>
+The creation of an event<A NAME=71>&#160;</A> is optional in a transition.
+When it is present, it has a name and a description of values
+(<em> out</em>) be passed on to the audience of the
+event.  The intended interpretation is that these events are issued
+<em> after</em> the listed transition actions have been completed.  The
+<em> reply</em> event in client-server interaction falls in this category.
+For example, an <em> Account</em> withdrawal transition may send the new
+<em> balance'</em> value as a reply value.  Other events may be included
+as well.  For example, the withdrawal transition may generate an event
+picked up by a transaction logging service.
+<P>
+Details about the audience for the event may or may not be available.
+If a class has a narrow purpose, it may be obvious which objects make
+up the audience, what their transitions are and what values are to be
+sent over.  For example, an ignition lock of a car should pass a
+turn-key event to the start engine.  Alternatively, we may know
+nothing about the audience.  For example, the recipient of a mouse
+event is any object to which the mouse is at that time attached.  To
+play it safe and have maximum flexibility, we minimize commitments
+about the audience.  We will later introduce a notation that captures
+communication partner information.  Since the audience may consist of
+multiple recipients, we cover not only point-to-point messaging, but
+also broadcasting.  This facilitates ``to whom it is concerned''
+interaction descriptions.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Sending and Receiving Events</A></H2></center>
+<P>
+<A NAME=79>&#160;</A>
+<P>
+The following table provides a pragmatic classification of transitions
+with respect to input and output events.  Most of the entries are
+self-explanatory.  The last row describes a transition that waits for
+an event, optionally receives data, performs an operation, and
+generates an event, again optionally passing data along to the
+audience of the second event.
+<P>
+
+<table border=5>
+<tr><td>
+<b>guard depends on event</b> </td><td> <b>transition creates event</b>   </td><td> <b>type of transition</b></td></tr><tr><td>
+
+no            </td><td> no            </td><td> internal transition </td></tr><tr><td>
+
+yes           </td><td> no            </td><td> input port </td></tr><tr><td>
+
+no            </td><td> yes           </td><td> output port </td></tr><tr><td>
+
+yes           </td><td> yes           </td><td> transducer </td></tr>
+</table>
+
+
+<P><H3><A NAME=SECTION00020100000000000000> Service Transitions</A></H3>
+<P>
+<A NAME=87>&#160;</A>
+<A NAME=88>&#160;</A>
+<A NAME=89>&#160;</A>
+<A NAME=90>&#160;</A>
+<P>
+A special form of transducer transition is common enough to single out
+for special treatment.  We use a special notation for <em> service
+transitions</em>, those that process ``services'' provided by one object
+to others. This notation represents the special features of service
+transitions:
+<OL><LI> The initial state is the same as the successor state.
+        Usually, we may label this as topmost state, ``<em> ready</em>''.
+<LI>  By convention, a service transition is invoked via
+    its transition name.  We use <em> service</em> as a stand-in for this
+    name in the guard box. It may also carry data describing the
+    nature of the service request.  The guard depends only on this
+    event, ensuring that the service is ``always'' available.
+<LI> The output <em> reply</em> event is directed toward the
+    originator of the input event. It may carry data representing
+    the results of the service.
+  <LI> This state -- transition combination is a complete
+    transition network (possibly in parallel with other transition
+    networks).
+</OL>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img3.gif"><P>
+<P>
+Observe the superficial structural similarity of a service transition and
+the emulated active states diagram given in Chapter <A NAME=tex2html19 HREF="ch5.html">5</A>.
+The difference is that the guard in an emulated active state refers to the
+attributes of the object, while a service transition refers to an outside
+invoking event.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Readiness</A></H2>
+<P>
+A transition ``fires up'' when an event specified in its guard occurs
+and other conditions in the guard are satisfied.  This raises the
+issue of what will happen when an event is generated, but a
+recipient cannot honor the corresponding transition because either it
+is in a state in which no corresponding guards are satisfied or it is
+busy in another transition.
+<P>
+Transitions may define the consequences of an object receiving each
+kind of event when it is not in a state that ordinarily handles it.
+For completeness, models should specify the effects of accepting each
+receivable event in each possible state.  Alternative transitions
+include the following.
+<P>
+<H4><A NAME=SECTION00021010000000000000> Inaction.</A></H4>
+ The event is ``intentionally'' ignored by the
+recipient.  A transition leading back to the originating state
+consumes the event without any other actions or consequences.  An
+example is a button mounted on a floor to be used for registering an
+elevator direction (up or down).  This button is associated with a
+state space having two states:
+<UL><LI> no request was received, the button lamp is <em> off</em>,
+<LI> a request was received, the button lamp is <em> on</em>.
+</UL>
+Pushing the button while the lamp is <em> on</em> generates an event that is
+ignored.
+<P>
+<H4><A NAME=SECTION00021020000000000000> Queuing.</A></H4>
+<A NAME=132>&#160;</A>
+The event is queued by the recipient.
+A transition leading back to the originating state contains an action
+placing the event on a queue.  An example is an elevator accepting
+floor button events specifying the floors to which it should arrive.
+These events may be queued and then serviced in some order.
+<P>
+Queueing implicitly assumes the existence of a state with an
+associated queue that contains those ``remembered'' events that cannot
+be honored right away.  The intended semantics is that when such a
+state is entered, its queue is investigated to verify whether a
+transition can be ``fired up''.  We leave the issue open how the queue
+is to be ordered and insist only that some commitment be made.
+<P>
+<H4><A NAME=SECTION00021030000000000000> Exception.</A></H4>
+<A NAME=134>&#160;</A><A NAME=135>&#160;</A>
+The event causes an error condition.
+A transition contains an action leading to an error state in the
+recipient, an error indicator event directed to the sender, and/or
+events directed to one or more other error handlers.
+<P>
+<H2><A NAME=SECTION00022000000000000000> Communication</A></H2>
+<P>
+<A NAME=137>&#160;</A>
+<P>
+Inaction, queuing, and exceptions do not address cases in which an
+event is issued to a recipient that is busy within another transition.
+Interpretations must reflect underlying assumptions about the nature
+of object communication.  Several are available.  While they may
+reflect vastly different assumptions, each may be employed to similar
+effect. Details do not impact the general form of analysis models.
+<P>
+<H4><A NAME=SECTION00022010000000000000> Asynchronous communication.</A></H4>
+<P>
+<A NAME=139>&#160;</A><A NAME=140>&#160;</A>
+We assume asynchronous communication by default.  A sender may always
+issue an event, regardless of the status of the recipient(s).
+Producer-consumer interaction involves one-way <em> send-and-forget</em>
+events, including those directed to multiple recipients.
+Client-server interaction still requires synchronized waiting by
+clients.  Asynchronous communication frameworks may be further
+categorized by their assumptions about the underlying media:
+<P>
+<A NAME=142>&#160;</A>
+<DL ><DT><b> Unbuffered:</b>
+<DD>
+     Any event that is not accepted in a timely manner is lost.
+  <DT><b> Buffered:</b>
+<DD>
+    The media holds events until receivers are able to accept them.
+<P>
+ </DL>
+<P>
+Additional refinements are possible. The media may ``spontaneously''
+lose events with some known probability, buffers may have known
+properties and limitations, etc.
+<P>
+In asynchronous systems, senders need not, and generally cannot
+distinguish situations in which events have not yet been received from
+those in which they have been received but then internally queued.
+Similarly, senders cannot distinguish event loss or recipient failure
+from other postponements.
+<P>
+<H4><A NAME=SECTION00022020000000000000> Synchronous communication.</A></H4>
+<A NAME=148>&#160;</A>
+Analysts may alternatively adopt synchronous communication
+assumptions.  Here, when a sender attempts to issue an event to a busy
+recipient, it is <em> blocked</em> waiting for the recipient to finish the
+current transition.  Applied to producer-consumer interaction, this
+corresponds to synchronous ``rendezvous'' interaction in which the
+producer waits for the consumer to be ready to accept the event, but
+does not wait for a reply.  This may in turn lead to a normal
+transition by the recipient or any of the above alternatives.  Applied
+to client-server interaction, synchronous communication corresponds to
+one part of the process in which the client waits for the server to
+issue a reply.
+<P>
+In this framework, asynchronous communication may be modeled via
+synchronous communication in which every sender-recipient pair is
+connected by one or more objects serving as communication buffers.
+Conversely, rendezvous interaction may be described in asynchronous
+frameworks via bidirectional communication idioms in which the recipient
+notifies the sender on receipt.
+<P>
+<H4><A NAME=SECTION00022030000000000000> Preemption.</A></H4>
+<A NAME=151>&#160;</A>
+Synchronous frameworks may include preemption requirements as
+well.  One may require that an event issued while a recipient is in
+the midst of another transition conceptually cause that transition to
+be ``terminated''.  Interruptible transitions may be modeled as
+variants of the emulated active states described in
+Chapter <A NAME=tex2html29 HREF="ch5.html">5</A>.  Preemptive events may be acted upon
+immediately, queued, ignored, or handled via exceptions.
+<P>
+Preemption significantly complicates models, so must be used with
+care. Modeling preemption requires that analysts break conceptually
+meaningful transitions into their finest granularity components, thus
+specifying all possible ``listening points'' during which objects may
+accept preemptive events.
+<P>
+<H2><A NAME=SECTION00023000000000000000> Interaction Protocols</A></H2>
+<P>
+<A NAME=155>&#160;</A>
+<P>
+One-way interaction may be construed as ``deeper'' than bidirectional
+interaction. A bidirectional interaction protocol may be decomposed
+into two one-way interactions.  Other protocols, including the
+following, may be constructed as well. (We postpone more precise
+descriptions of the underlying mechanics to Part II,
+Chapters <A NAME=tex2html31 HREF="ch20.html">20</A>-<A NAME=tex2html32 HREF="ch22.html">22</A>.)
+<P>
+<H4><A NAME=SECTION00023010000000000000> Acknowledgments.</A></H4>
+<A NAME=161>&#160;</A>
+A receiver of an asynchronous one-way message may send back an
+acknowledgment of receipt to the sender.  This sometimes assists
+timing analysis.  Without acknowledgment, the originator has ``no
+idea'' how much time it takes for the recipient to receive and act
+upon a message.  With an acknowledgment of reception, the originating
+object obtains insight in the triggering time (an upper bound) but its
+waiting time is unbounded in the absence of other knowledge.
+<P>
+<H4><A NAME=SECTION00023020000000000000> Callbacks.</A></H4>
+<A NAME=163>&#160;</A>
+Rather than issuing acknowledgments, event consumers may generate any
+kind of event that will be picked up by the original producer,
+including a ``reply'' of any sort.  These interaction schemes are
+usually termed <em> callbacks</em>, since a receiver ``calls back'' the
+sender by issuing an appropriate event.  Refinements of this explicit
+request-reply pattern form the ``syntactic sugar'' needed to express
+synchronized bidirectional interaction in terms of one-way interaction.
+<P>
+<H4><A NAME=SECTION00023030000000000000> Forwarding.</A></H4>
+<A NAME=166>&#160;</A><A NAME=167>&#160;</A>
+One object may serve as an event mediator for several others,
+accepting and forwarding requests on their behalf.  Examples include
+task delegations <sup>1</sup> in which a ``manager'' object
+breaks up tasks into pieces (each perhaps requiring special
+capabilities) and distributes these subtasks to ``worker'' objects.
+In bidirectional versions, the mediator may also forward back a reply
+from a worker to the client. These patterns are described in more
+detail in Chapter <A NAME=tex2html39 HREF="ch9.html">9</A>.
+
+<blockquote>
+ <sup>1</sup>Footnote:<br>
+We use the term ``delegation'' in an
+intentionally looser sense than sometimes seen in the OO literature.
+We use it to refer to interactions with objects that somehow help the
+host perform a particular service or responsibility. We discuss other
+variants in Chapter <A NAME=tex2html35 HREF="ch22.html">22</A>.
+</blockquote>
+<P>
+<H4><A NAME=SECTION00023040000000000000> Multicast.</A></H4>
+<A NAME=173>&#160;</A>
+A producer may issue an event received by each member of a certain
+<em> SET</em> or other collection. Bidirectional forms include those in
+which the sender collects replies from any, some, or all recipients.
+<P>
+<H4><A NAME=SECTION00023050000000000000> Time-outs.</A></H4>
+<P>
+Any object engaged in a synchronized interaction may include time-outs
+that cause it to stop waiting for a reply, acknowledgment, or other
+event.  Time-outs may be specified using the concepts and notations of
+Chapter  <A HREF="ch11.html">11</A>.
+<P>
+<H4><A NAME=SECTION00023060000000000000> Self-interaction.</A></H4>
+<A NAME=178>&#160;</A>
+A producer object may generate an event for which it just so happens
+to later serve as the consumer.  This is only as useful and common as
+mailing oneself a letter.
+<P>
+We avoid client-server self-interaction. An object cannot
+simultaneously wait for and perform a service or transition, since
+this would entail being in two states at once. In contrast, many
+programming languages support (possibly indirect) recursive self
+invocations by ``suspending'' one operation in order to perform
+another, ultimately ``unwinding'' back. Remember though, that analysis
+objects are autonomous computational entities.  At a declarative
+level, recursive transitions raise the same questions discussed with
+respect to active states in Chapter <A NAME=tex2html42 HREF="ch5.html">5</A>.  Any usage
+invites clarification.  For example, if one wishes to describe objects
+supporting some form of suspension, the corresponding transition
+machinery must be described. Since recursive invocation plays
+essentially no role in modeling and problem characterization, we will
+not do so.  However, in Chapter <A NAME=tex2html43 HREF="ch19.html">19</A> we describe
+design-level recursion of ``local'' computations that implement
+analysis-level <em> action</em>s.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Interaction Notations</A></H2></center>
+<A NAME=185>&#160;</A>
+<A NAME=secobjintdia>&#160;</A>
+<P>
+Transition network notations describe the behavior of a prototypical
+element of a class independently of the role that the instances of the
+class will play in a particular target system. In this section, we
+describe notations that indicate the dynamics among partners in an
+interaction.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Interaction Diagrams</A></H2>
+<P>
+Interaction diagrams are directed graphs with classes as nodes and
+interaction connections as vertices.  The classes belong to a
+particular application (or a generic framework).  A connection from
+the class <em> A</em> to the class <em> B</em> means that instances of class <em> A</em> may
+communicate in the indicated fashion with instances of class <em> B</em>.
+<P>
+We have two different kinds of connections.  Synchronized
+bidirectional arcs connect a client class and a server class:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img4.gif"><P>
+<P>
+Asynchronous one-way arcs connect an event producer class and event
+consumer class:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img5.gif"><P>
+<P>
+Other line styles and conventions could be introduced to abbreviate
+variant interaction protocols including those described in the
+previous section.
+<P>
+An interaction diagram may also include a ``stepping stone'' marker
+that glues together different views of an interaction. These may be
+used to resolve event name mismatches between producers and consumers,
+as well as to accommodate multiple producers and/or consumers. For
+example:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img6.gif"><P>
+<P>
+Stepping-stone ovals may be eliminated by resolving event name
+mismatches within the associated classes and specifically directing
+events to particular recipients.  However, it is preferable to instead
+interpret them as design-level requirements, obligating designers to
+install mechanisms that instantiate the indicated connections.  This
+provides flexibility in how designs may support object interaction
+without requiring analysts to commit to particular mechanisms.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Acquaintance Relations</A></H2>
+<P>
+Interaction diagrams describe the nature of interaction among
+instances of different classes, but they do not indicate the precise
+identities of the partners of any given interaction.  This knowledge
+is generally not available when a class is defined.  There are two
+reasons for this.  First, an interaction partner may be different for
+each instance of the class. The class cannot ``hard-wire'' the
+knowledge.  Second, we normally want to define a class in a generic
+fashion so that it can be used in multiple, open-ended contexts.
+<P>
+Thus, when a class is defined we <em> should</em> not know what the
+communication partners are for the instances.  Instead, we should
+specify only the ``contract''<A NAME=226>&#160;</A> for
+bidirectional interactions, or the ``obligations'' and the
+``expectations'' for one-way interactions.  Any communication partner
+satisfying these constraints will do.
+<P>
+This position is argued forcefully by Sullivan and Notkin [<A HREF="#sullivan">13</A>]:
+<P>
+<blockquote>
+In dynamic modeling ... object-oriented analysis generally fails to
+externalize representations of behavioral relationships, instead casting
+them in terms of direct communications among the related classes.  This
+produces exactly the intertwining of definitions that externalizing
+architectural relationships was intended to avoid. ...
+<P>
+We show that implicit invocation is the dual of explicit method invocation
+and that adding an implicit invocation mechanism makes it possible to
+externalize behavioral relationships.
+</blockquote>
+<P>
+A generic solution for introducing partnership information is to
+establish an <em> acquaintance</em>
+relationship<A NAME=231>&#160;</A><A NAME=232>&#160;</A>
+that relates clients, servers, and services for bidirectional
+interaction and producers, consumers, and transitions for one-way
+interaction.  For example, an acquaintance relation may describe those
+objects involved in withdrawals:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img7.gif"><P>
+<P>
+Generally, every interaction diagram may be associated with an
+acquaintance relation describing those partners from each of the
+classes that communicate in the indicated manner.  Conversely, a
+single acquaintance relation may cover several kinds of interaction
+among the listed participants.
+<P>
+Acquaintance relations may be annotated and used in the same way as
+any other relation.  For example, cardinalities may be added to
+indicate that each sender may interact with multiple recipients.
+Parametric instances of the relation may be employed to describe
+interaction constraints among attributes of a class.
+<P>
+Listing partnerships via acquaintance relations normally provides
+sufficient information for designers to arrange that the appropriate
+interactions occur (see Chapters <A NAME=tex2html48 HREF="ch16.html">16</A>
+and <A NAME=tex2html49 HREF="ch18.html">18</A>). Alternatively, when appropriate and
+desirable, these matters may be spelled out within analysis models.
+<P>
+For example, interaction partners may possess attributes referring to
+the appropriate acquaintance relationship.  A client-server
+partnership can determine the partner of such an attribute.  An event
+generator can similarly determine the audience for the event.
+Updating this relationship in the action part of a transition can
+reflect either changing the server in a client-server partnership or
+the modification of the audience for an event generator.
+<P>
+There are many simpler special cases. For example, this information
+may be recorded as attributes inside clients (or event generators)
+only. The identities of new partners may be transmitted as event input
+and output data.  Also we may know all about a particular object's
+servers and/or audience at the time it is created.  If so, we may
+introduce <em> fixed</em> attributes at class definition time, to be set
+upon initialization.
+<P>
+<H2><A NAME=SECTION00033000000000000000> Interfaces and Signatures</A></H2>
+<A NAME=250>&#160;</A>
+<A NAME=251>&#160;</A>
+<P>
+Design and implementation level object-oriented notations collect the
+names and data associated with events, forming <em> interfaces</em>
+describing the input and output capabilities of the instances of each
+class. <em> Signatures</em> listing the names of all receivable events and
+the domains of associated arguments and results facilitate a form of
+partial verification.  Signature verification for an interaction
+consists in showing that the client indeed sends the right kinds of arguments
+and can handle the reply. This may be performed without having to look
+inside a design or implementation.
+<P>
+Signature verification alone is <em> not</em> sufficient to demonstrate
+correctness.  For example, integer addition has the same signature as
+integer multiplication, but when an addition is demanded by a client a
+multiplication offered by a server would be incorrect.
+More complete interface characterizations require that client and
+server expectations be matched via semantic descriptions, as shown in
+the examples in Section <A HREF="#secinteractexamples">4</A>.
+<P>
+Of course our examples are quite small.  In practice, full-blown
+theorem proving may be required to verify the correctness of
+interactions.  Still, while many people believe that formal techniques
+cannot be applied in practice because current deductive machinery is
+not powerful enough, we believe instead that a key problem is the
+unavailability of solidified annotation languages and the
+unavailability of sizable collections of knowledge formulated in such
+annotation languages to analysts, designers and implementors.
+<P>
+The story becomes more complicated when asynchronous one-way interaction is
+considered.  Signature characterizations are again insufficient.  But
+adding semantic characterizations, as for the synchronized case, is
+still not enough.  We have to ascertain, among other things, that a
+recipient obtains the correct one in a series of events generated by
+an event producer; see [<A HREF="#champvpa">8</A>,<A HREF="#fagin">9</A>,<A HREF="#apt">2</A>].
+<P>
+Interface descriptions play a more central role in the design phase
+than in analysis.  We postpone the introduction of interfaces and
+signature-based methods to Part II of this book.  However, if desired,
+interface descriptions may be constructed as summary models in
+analysis.  The design notation presented in Part II includes
+constructs useful in signature verification and related efforts.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Examples</A></H2></center>
+<P>
+<A NAME=secinteractexamples>&#160;</A>
+<P>
+<A NAME=259>&#160;</A>
+<P>
+We revisit the refrigerator example briefly introduced in
+Chapter <A NAME=tex2html53 HREF="ch5.html">5</A>.  The top half of the network belongs to
+the engine of the refrigerator.  The bottom half describes whether the
+door is open or closed:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img8.gif"><P>
+<P>
+We will add the requirement that the motor will go in the <em> off</em>
+state as a side effect of the <em> openDoor</em> transition, provided the
+motor is in the <em> on</em> state.  We will expand the relevant
+transitions of the door and the motor.  Since both of them are
+generic, we are not able to express the requested causal connection.
+That is not surprising after all.  Why would a door know anything
+about motors?  Why would we ``hard-wire'' a dependence of a motor's
+behavior on changes in a door?
+<P>
+The <em> openDoor</em> transition for the door may be described by
+elaborating its guards, actions, and events.  Because a door can always
+be opened when it is closed, the condition for the transition is just
+<em> TRUE</em>. However, someone has to open the door. The transition
+requires an external event, <em> OpenDoor</em>, that does not
+carry any other associated data.  There are no required actions
+associated with the transition, but the event <em> DoorOpens</em> must be
+generated before entering the <em> Open</em> state.  Again, this event
+carries no data.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img9.gif"><P>
+<P>
+We proceed with the similar transition for the motor.<A NAME=314>&#160;</A>
+The relevant part of this transition is the guard in which we see the
+dependency on an event <em> haltMotor</em>:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img10.gif"><P>
+<P>
+The motor may simply ignore a <em> haltMotor</em> event when it is already
+off:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img11.gif"><P>
+<P>
+Observe that the names of the events generated by the door and
+expected by the motor do not match up.  We may ``glue'' them together
+using interaction diagrams.
+<P>
+We can hook up the event generated when the door opens with the event
+expected by the motor to stop when it is running.  For illustration,
+we also extend the example with a temperature sensor that generates an
+event <em> TmpLow</em> when the temperature drops below a certain
+threshold.  Thus we have effectively modeled a disjunction of events
+that can cause the motor to
+halt:<A NAME=364>&#160;</A><A NAME=365>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img12.gif"><P><H2><A NAME=SECTION00041000000000000000> ATM</A></H2>
+<P>
+<A NAME=secobjintatmexm>&#160;</A>
+<A NAME=386>&#160;</A>
+<P>
+We revisit a fragment of the ATM transition network from
+Chapter <A NAME=tex2html58 HREF="ch5.html">5</A>:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img13.gif"><P>
+<P>
+<P>
+<P>
+In Chapter <A NAME=tex2html59 HREF="ch5.html">5</A> we described the transition:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img14.gif"><P>
+<P>
+Reconsider how the ATM object may obtain the PIN data.  The original
+<em> Read PIN</em> transition induces the ``magical'' function GetPIN to
+obtain the PIN data.  We will be more realistic here.  Our ATM object
+is the overall controller for the physical ATM.  We assume that we
+have similar control objects for physical subsystems such as the CRT
+output, the keyboard, the card reader, the bill dispenser, etc.
+<P>
+Let <em> atmInput</em> be the intermediary object between the physical
+keyboard subsystem and our ATM control object.  A synchronous
+interaction to obtain the PIN data can be achieved by replacing GetPIN
+by GetPIN(<em> atmInput</em>).  We assume then that the <em> atmInput</em> has
+a service transition called GetPIN which in its action part produces
+either the expected PIN number collected from the keyboard (in some
+agreed representation) or the information that the Cancel button was
+activated.
+<P>
+Alternatively, we can establish an asynchronous connection.  We assume then
+that the <em> atmInput</em> object has a transition Provide-user-input, which
+sends its data via an event Keyb-in that carries the data obtained from the
+keyboard (ignoring time-outs):
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img15.gif"><P>
+<P>
+Subsequently, this event can be picked up by the <em> ATM</em> via the transition:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img16.gif"><P>
+<P>
+In order for this work, we still have to ``glue together'' the event
+producers view with the event consumers view in an interaction diagram:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img17.gif"><P>
+<P>
+We can increase our confidence that two communication partners have been
+plugged together correctly by describing from both ends what is produced
+and what is expected.
+As a first approximation (ignoring event sequencing)
+we get for the event producer:<BR>
+<em> 4-digit-number(Out') or Out' = ``cancel''</em><BR>
+and for the event consumer:<BR>
+<em> 4-digit-number(PINInfo') or PINInfo' = ``cancel''</em>.<BR>
+Thus, we have a good match indeed.
+<P>
+<H3><A NAME=SECTION00041100000000000000> Client-Server Interactions</A></H3>
+<P>
+We continue with an example connecting two classes in a
+client-server relationship.  We assume that an ATM class has a
+transition named <em> PINCheck</em>.  This transition has in its action
+box an invocation of an Authenticator server.  A card code and
+user-provided PIN are sent to the Authenticator possessing a
+service transition named <em> CheckPin</em>.  This server will reply with
+<em> yes</em> or <em> no</em> depending on whether the correct PIN has been
+provided.<A NAME=504>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img18.gif"><P>
+<P>
+This diagram gives us confidence that the requested service formulated
+by the client transition corresponds with the functionality offered by
+the server transition.
+<P>
+This confidence may be strengthened by specifying the domains of the
+exchanged data.  For example, the two input arguments could be passed
+along as strings of digits of a certain length. The output could be a
+boolean value in any agreed on notation.
+<P>
+We can be even more precise when both interaction parties more fully
+specify what they expect and what they can offer. We may then verify
+that these descriptions match up.  For example, the client could
+expect that the reply value, which it refers to as <em> out</em>,
+satisfies:
+<P>
+<em> out = Encrypt(cardId, userPin)</em>,
+<P>
+where <em> Encrypt</em> stands for a particular one-way algorithm.  Similarly, the
+server may offer to return:
+<P>
+<em> reply = Encrypt(idOfCard, PIN)</em>.
+<P>
+This would settle the matter; expectations and obligations do indeed
+match.  Observe that for this to succeed both parties have to agree
+on a common annotation vocabulary.
+<P>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00050000000000000000> Summary</A></H2></center>
+<A NAME=521>&#160;</A>
+<P>
+In one-way interactions, a producer generates events that are picked
+up by one or more event consumers.  In synchronized bidirectional
+interaction, the client waits for the server to reply to a request.
+There are additionally three strategies for dealing with the situation
+in which a recipient of an event cannot handle it right away, ignoring
+the event, queuing it, or raising an exception.  Many variant
+communication and interaction protocols exist.
+<P>
+Interaction diagrams are useful in the construction of a target model.
+Strict encapsulation means that we do not have to conform to
+incidental naming conventions of services and/or events.  Thus we
+employ ``glue'' conventions to bridge mismatches between clients and
+consumers and between event producers and event consumers.
+<P>
+Knowledge of the actual partners in any interaction need not, and
+normally should not be known when a class is created.  Acquaintance
+relations may be used to describe these partners.  Verification of
+interaction specifications may be performed by analyzing the
+expectations and offerings of each participant.
+<P>
+While we have employed a purely declarative framework, we have by now
+defined the semantics of an abstract object computational model that
+may be exploited in design.  The following figure summarizes some
+highlights of a ``typical'' object using a partly <em> ad hoc</em>
+notation.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch6-img19.gif"><P>
+<A NAME=insideobjpic>&#160;</A>
+<P>
+<H2><A NAME=SECTION00051000000000000000> Further Reading</A></H2>
+<P>
+Alternative views on behavior specification may be obtained by
+abstracting away from the OO perspective.  Davis [<A HREF="#davis">5</A>] surveys
+techniques for representing behavioral requirements. These include
+finite state machines; StateCharts [<A HREF="#harel">10</A>,<A HREF="#harel2">11</A>]; Petri nets;
+decision tables and trees; PDL (Programming Design Language), also
+known as structured English and pseudocode; REVS (Requirements
+Engineering Validation System) [<A HREF="#dav77">7</A>,<A HREF="#bel76">3</A>,<A HREF="#alf77">1</A>], an approach
+for ``stimulus rich'' applications; RLP (Requirements Language
+Processor)[<A HREF="#dav78">6</A>,<A HREF="#dav79a">4</A>], an approach emphasizing the use of
+typical dialogs or stimulus-response sequences; SDL (Specification and
+Design Language) [<A HREF="#roc82">12</A>], a graphical language supporting the
+primitives state, stimulus, response, task, and decision; and PAISley
+(Process-oriented, Applicative, and Interpretable Specification
+Language) [<A HREF="#zav81">15</A>,<A HREF="#zav82">14</A>], an executable language for describing
+embedded systems.
+<P>
+At the very least, we may conclude that the quest for a proper behavior
+specification is not a recent enterprise.  The main twist that OO provides
+is the decomposition of a system description in weakly dependent entities
+that interact according to compatible protocols.
+<P>
+<H2><A NAME=SECTION00052000000000000000> Exercises</A></H2>
+<P>
+<OL><LI>  Classify the following as asynchronous, synchronous, both, or neither:
+<OL><LI> Interactions between the cogwheels in a gearbox.
+<LI> Interactions between people in a conversation.
+<LI> Interaction between a typist and the keyboard.
+<LI> Interactions between a citizen and the state regarding tax
+    payments.
+<LI> The flows of liquids in a system of reservoirs, sinks, pressure
+regulators, valves, junctions, pumps, etc.
+</OL>
+<P>
+<LI>  Model the interaction protocols of a business telephone system
+    you know, perhaps including:
+<OL><LI> Dialing.
+<LI> Call forwarding.
+<LI> Voice mail.
+<LI> Automatic callbacks.
+<LI> Holding.
+<LI> Conference calls.
+</OL>
+<P>
+<LI> Consider an elevator. (a)
+Model the interactions between buttons on floors, buttons in the
+elevator, the elevator controller, etc.  (b) Add multiple elevators.
+<P>
+<LI> Reconsider the refrigerator with a motor, a temperature
+sensor, and a door.  The motor turns on and off primarily as prescribed
+by the temperature sensor.  However the motor also halts when the door
+is opened and restarts when the door is closed, provided that it is
+supposed to run according to the temperature sensor.  Describe the
+classes of all relevant entities, and give the transition networks.
+Try introducing a motor controller object.
+<P>
+<LI> Consider a situation in which a tap is used to fill a bucket.  Can you
+describe this setting with objects?  In particular, can you model the
+changing water level in the bucket?  If not, why not?  If so, sketch the
+object interactions.
+<P>
+</OL>
+<P>
+
+<P>
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=alf77><STRONG>1</STRONG></A><DD>
+M.W. Alford.
+ A requirements engineering methodology for real-time processing
+  requirements.
+ <em> IEEE Transactions on Software Engineering</em>, SE-3(1), January
+  1977.
+<P>
+<DT><A NAME=apt><STRONG>2</STRONG></A><DD>
+K. Apt and E. Olderog.
+ <em> Verification of Sequential and Concurrent Programs</em>.
+ Springer-Verlag, 1991.
+<P>
+<DT><A NAME=bel76><STRONG>3</STRONG></A><DD>
+T.E. Bell and D.C. Bixler.
+ A flow-oriented requirements statement language.
+ In <em> Symposium on Computer Software Engineering</em>. Polytechnic
+  Press, 1976.
+<P>
+<DT><A NAME=dav79a><STRONG>4</STRONG></A><DD>
+A.M. Davis.
+ Rlp: An automated tool for the processing of requirements.
+ In <em> IEEE COMPSAC '79</em>. IEEE, 1979.
+<P>
+<DT><A NAME=davis><STRONG>5</STRONG></A><DD>
+A.M. Davis.
+ <em> Software Requirements, Analysis and Specification</em>.
+ Prentice-Hall, 1990.
+<P>
+<DT><A NAME=dav78><STRONG>6</STRONG></A><DD>
+A.M. Davis and W. Rataj.
+ Requirements language processing for the effective testing of
+  real-time software.
+ <em> ACM Software Engineering Notes</em>, November 1978.
+<P>
+<DT><A NAME=dav77><STRONG>7</STRONG></A><DD>
+C. Davis and C. Vick.
+ The software development system.
+ <em> IEEE Transactions on Software Engineering</em>, SE-3(1), January
+  1977.
+<P>
+<DT><A NAME=champvpa><STRONG>8</STRONG></A><DD>
+D. de Champeaux.
+ Verification of some parallel algorithms.
+ In <em> 7th Annual Pacific Northwest Software Quality Conference</em>,
+  1989.
+<P>
+<DT><A NAME=fagin><STRONG>9</STRONG></A><DD>
+R. Fagin, J.Y. Halpern, and M.Y. Vardi.
+ What can machines know? on the properties of knowledge in distributed
+  systems.
+ <em> JACM</em>, 39(2), April 1992.
+<P>
+<DT><A NAME=harel><STRONG>10</STRONG></A><DD>
+D. Harel.
+ Statecharts: A visual formalism for complex systems.
+ <em> Science of Computer Programming</em>, 8, 1987.
+<P>
+<DT><A NAME=harel2><STRONG>11</STRONG></A><DD>
+D. Harel.
+ On visual formalisms.
+ <em> Communications of the ACM</em>, May 1988.
+<P>
+<DT><A NAME=roc82><STRONG>12</STRONG></A><DD>
+A. Rockstrom and R. Saracco.
+ Sdl-ccitt specification and description language.
+ <em> IEEE Transactions on Communications</em>, 30(6), June 1982.
+<P>
+<DT><A NAME=sullivan><STRONG>13</STRONG></A><DD>
+K.J. Sullivan and D. Notkin.
+ Behavioral relationships in object-oriented analysis.
+ Technical Report 91-09-03, Department of Computer Science and
+  Engineering, University of Washington, September 1991.
+<P>
+<DT><A NAME=zav82><STRONG>14</STRONG></A><DD>
+P. Zave.
+ An operational approach to requirements specification for embedded
+  systems.
+ <em> IEEE Transactions on Software Engineering</em>, May 1982.
+<P>
+<DT><A NAME=zav81><STRONG>15</STRONG></A><DD>
+P. Zave and R.T. Yeh.
+ Executable requirements for embedded systems.
+ In <em> Fifth IEEE International Conference on Software Engineering</em>.
+  IEEE Computer Society Press, 1981.
+</DL>
+<P>
+
+<a href="ch7.html">Next: Chapter 7</a>
+
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed Jan 10 07:53:34 EST 1996</I>
+</ADDRESS>
+</BODY>

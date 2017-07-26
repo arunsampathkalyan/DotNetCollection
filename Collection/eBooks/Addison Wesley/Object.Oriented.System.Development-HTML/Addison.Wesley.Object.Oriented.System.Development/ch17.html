@@ -1,0 +1,1949 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Attributes in Design</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Attributes in Design">
+<meta name="keywords" value="ch17">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 17: Attributes in Design</h2>
+<UL>
+<LI> <A NAME=tex2html177 HREF="#SECTION00010000000000000000"> Defining Attributes</A>
+<LI> <A NAME=tex2html178 HREF="#SECTION00020000000000000000"> Concrete Attributes</A>
+<LI> <A NAME=tex2html179 HREF="#SECTION00030000000000000000"> Views</A>
+<LI> <A NAME=tex2html180 HREF="#SECTION00040000000000000000"> Exports</A>
+<LI> <A NAME=tex2html181 HREF="#SECTION00050000000000000000"> Composition and Inheritance</A>
+<LI> <A NAME=tex2html182 HREF="#SECTION00060000000000000000"> Summary</A>
+<LI> <A NAME=tex2html183 HREF="#SECTION00070000000000000000">References</A>
+</UL>
+</td><tr></table>
+
+<P>
+<A NAME=9>&#160;</A>
+<P>
+This chapter further details mechanisms for declaratively and
+computationally describing attributes, concentrating mainly on
+scalable in-the-small methods and concerns. We start by distinguishing
+types, qualifiers, and constraints within the context of <i> ODL</i>
+(feel free to skim these sections), and then discuss some
+strategies for designing concrete classes that meet these declarative
+constraints.
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Defining Attributes</A></H2></center>
+<P>
+<H2><A NAME=SECTION00011000000000000000> Value Types</A></H2>
+<A NAME=13>&#160;</A><A NAME=14>&#160;</A><A NAME=15>&#160;</A>
+<P>
+One way to conceptualize a value is as ``anything that may be passed
+along a wire''. Actual objects are not values. Computers cannot be
+squeezed through wires. However, descriptions of objects <em>
+are</em> values.
+<P>
+You can assume the existence of any set of value types you
+like. <sup>1</sup>  We will
+use only a small number of value types, and thus maintain some contact
+with things that can be easily supported across a wide range of
+languages, tools, and systems.  We restrict all low-level dependencies
+to the interpretation of state values within messages.  (In
+
+heterogeneous distributed systems, these assumptions might be supported
+through the use of tools that interconvert message formats.)  With
+only a bit of awkwardness, all <em> class</em> designs can be made
+independent of such details.<A NAME=20>&#160;</A>
+<P>
+<blockquote>
+ <sup>1</sup>Footnote:<br>
+Including no types at all other than those describing
+links. See Chapter <A NAME=tex2html4 HREF="ch20.html">20</A> for the mechanics.
+</blockquote>
+
+We predefine types <tt> bool</tt>, <tt> int</tt>, <tt> real</tt>, <tt> char</tt>, <tt>
+time</tt>, <tt> blob</tt>.  The types of object links are also values.
+``Void'', written as ``<tt> ()</tt>'' and perhaps best pronounced as
+``synch'', is a reply type describing bidirectional operations that do
+not bear results.  (We will also introduce <em> named</em> synchronization
+replies in Chapter <A NAME=tex2html10 HREF="ch20.html">20</A>.) We distinguish a <tt> time</tt>
+type to avoid commitments about its form (e.g., integer or real). We
+use literals such as <tt> 30ms</tt> and <tt> 2y3d</tt> as values.  The strange
+type <tt> blob</tt><A NAME=35>&#160;</A> (a now-common acronym for Binary Large
+OBjects) is non-first-class type used only to refer to <em>
+uninterpretable</em> hunks of bits.
+<P>
+We do not assume any particular bounds on numerical types.  You may
+wish to do so, and could even tie them to common low-level constructs
+such as <tt> sixteenBitInt</tt>. But it is probably a better idea to express
+such things via constraints, and leave out the lowest level mappings
+until necessary.
+<P>
+<A NAME=38>&#160;</A><A NAME=39>&#160;</A><A NAME=40>&#160;</A>
+<A NAME=41>&#160;</A><A NAME=42>&#160;</A><A NAME=43>&#160;</A>
+<A NAME=44>&#160;</A>
+<P>
+Fixed sized vectors<A NAME=45>&#160;</A> (arrays) of types are denoted using
+syntax <em> type</em><tt> [</tt><em> capacity</em><tt> ]</tt>, where <em> capacity</em> is
+the number of elements; for example, an attribute <tt> name:char[20]</tt>.
+Elements are indexed starting at zero.  The <tt> [...]</tt> syntax is
+analogous to that for generic classes. However, unlike similar <tt>
+ARRAY</tt> collections (Chapter <A NAME=tex2html20 HREF="ch18.html">18</A>), we take these vector
+types as pure values, without any underlying object structure.  We use
+them almost exclusively to describe string constants.  Literals of any
+<tt> char</tt> vector type may be indicated as quoted strings <tt> &quot;like
+this&quot;</tt>.
+<P>
+Later in this chapter, we also illustrate a <tt> record</tt> (tuple) type
+used for structuring large sets of descriptions within messages.
+Messages themselves are in turn definable as value records.
+<P>
+We use value types extensively for describing and transmitting state
+information.  But we do so within this very limited framework.  We
+avoid the definition of, for example, sequence or set types.  We will
+see how to define <em> classes</em> that obtain the desired effects.  For
+example, to minimize implementation surprises, we reluctantly avoid
+even variable-length string types.  A <tt> String</tt> <em> class</em> may be
+used in order to avoid the silly, horrible limitations of types such
+as <tt> char[20]</tt>. But we will postpone doing so for a while.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Links</A></H2>
+<P>
+<A NAME=64>&#160;</A><A NAME=65>&#160;</A><A NAME=66>&#160;</A>
+
+Classes describe families of related objects. But class information
+attached to object attributes does not refer to classes <em> per se</em>,
+but instead to <em> connections to objects</em>.  The value of a link is
+the <em> identity</em> (ID) of the object on the other side of the link.
+You might think of an ID as some kind of pointer value. (It has been
+said that OO is the living proof that you can solve any problem by
+adding another pointer.)
+<P>
+In <i> ODL</i> we work only with <em> typed</em> IDs, meaning that <em> a</em>
+class membership must be specified whenever an ID is used.  Since
+objects may conform to more than one class, this class specification
+need not be unique. It may declare a superclass of the most specific
+class describing the object.  However, this declaration can then be
+used as a design-time safety measure to guide usage.  Types are used
+as a convenient way of recording the assumed attributes and operations
+of an object on the other side of a link.  Clients are generally
+restricted to only invoke operations that are listed in the class
+definition of the declared type.
+<P>
+<A NAME=73>&#160;</A><A NAME=74>&#160;</A>
+As we will see, not <em> every</em> construct is statically checkable
+within the restricted framework of standard OO type systems. While
+this is a major hindrance at the analysis level, the use of simply
+checkable type signature information is a major asset at the design level.
+Types describe constraints in the most ``lightweight'' possible
+fashion and communicate them to other designers, thus reducing
+possibilities for design error. They enable partial mechanical
+coherence checking of designs.  Situations in which simple checking
+fails alert designers to possibly fragile constructions.  The same
+remarks hold for additional constraints, invariants, and effects.  But
+here, prospects for mechanical checking are slim.  Still, they make it
+easier to perform reliable concrete design, they are often easier to
+communicate to others than vague textual descriptions, and they help
+partially automate testing and other checks.
+<P>
+<H2><A NAME=SECTION00013000000000000000> Objects</A></H2>
+<P>
+Objects themselves are considered to be either purely, magically primitive
+(e.g., <tt> BOOL</tt>) or purely composed of links to others.  There are
+no in-betweens.  This is essentially the <i> Smalltalk</i>
+[<A HREF="#smalltalk">10</A>]<A NAME=80>&#160;</A> model of objects.
+To illustrate some differences between values and objects, consider
+introducing a class allowing the use of values in contexts demanding
+object types. For example:
+<P>
+<PRE>class RealVal  val: fixed real &lt;&gt; end
+</PRE>
+<P>
+The main difference between a <tt> RealVal</tt> and a <tt> real</tt> is that
+an instance of <tt> RealVal</tt> has an identity. Two <tt> RealVal</tt>s, <tt>
+r1</tt> and <tt> r2</tt> that both hold the <tt> val 3.14159</tt> (so <tt> r1.val
+= r2.val</tt>) are still distinguishable via the test of whether <tt> r1 =
+r2</tt>.  The <em> value</em> <tt> 3.14159</tt> is the same no matter how many
+times you write it down (create an instance).  But as cast in an
+object framework, each instance is detectably different.  The fact
+that value types are ``unlocated'' is one reason we describe them as
+``more abstract'' than objects. Value frameworks abstract over our
+definitional feature of objects (see Chapter <A NAME=tex2html27 HREF="ch1.html">1</A>)
+requiring that instances be uniquely identifiable.
+<A NAME=94>&#160;</A>
+<A NAME=95>&#160;</A>
+<P>
+<H2><A NAME=SECTION00014000000000000000> Enumerations</A></H2>
+<A NAME=97>&#160;</A><A NAME=98>&#160;</A>
+<P>
+The equivalents of enumerated types are intertwined with the <i> ODL</i>
+<tt> oneOf</tt> subclassing constraint.  For example, instead of declaring
+an enumeration type <tt> voltageLevel</tt> with elements
+<tt> activeVoltage</tt> and <tt> ground</tt>, we might define:<A NAME=104>&#160;</A>
+<P>
+<PRE>class VoltageLevel                   fn level: real; end
+class ActiveVoltage is VoltageLevel inv level ~= 0.0 end
+class Ground is VoltageLevel        inv level = 0.0  end
+
+inv VoltageLevel = oneOf(ActiveVoltage, Ground)
+</PRE>
+<P>
+In <i> ODL</i> the <tt> C</tt> <tt> =</tt> <tt> oneOf(...)</tt> construct limits the
+subclasses of <tt> C</tt> to those in the list. It declares that the
+mentioned subclasses completely and exclusively cover the
+superclass. This is the <i> ODL</i> version of <em> partitioning</em>
+specifications (Chapter <A NAME=tex2html33 HREF="ch7.html">7</A>).
+<P>
+<A NAME=114>&#160;</A>
+<P>
+Restricting subclassability via <tt> oneOf</tt> trades off
+extensibility for precision and the ability to reason about cases.
+Only the listed subclasses may be defined. But this is often exactly
+what is needed and/or what an OOA model specified.  Note however that
+even if a set of subclasses covers a type, each of these may be
+further subclassed. For example, <tt> ActiveVoltage</tt> could be
+subclassed into <tt> PositiveVoltage</tt> and <tt> NegativeVoltage</tt>.  A
+set of classes that is exclusive but does not cover may be declared by
+defining an <tt> Other</tt> class, as described in
+Chapter <A NAME=tex2html35 HREF="ch7.html">7</A>.  We do not use a special design notation for
+cases in which subclasses nonexclusively cover the superclass.
+<P>
+It is an easy matter to transform simple enumerations into this
+framework. Restricted class declarations contain all of the expressive
+power of enumerations, and more. Since they are classes, each of the
+``enumerated elements'' may have additional properties, such as
+<tt> level</tt> in the current example.
+<P>
+<H2><A NAME=SECTION00015000000000000000> Qualifiers</A></H2>
+<P>
+Value and object types are used in defining <tt> fn</tt>s. These
+constructs serve as the basic translation mechanisms for OOA-level
+attributes, and may be annotated with the following qualifiers.
+Qualifiers are <em> descriptive</em> restrictions. Their effects are not
+always mechanically checkable.  For example, uniqueness of attributes
+normally cannot be checked by simple observation.  Behind-the-scenes
+design rules and/or run-time processing are needed to ensure that
+duplicate values are not present across objects. Just listing the
+qualifier cannot generate these mechanisms automatically.
+<P>
+<A NAME=126>&#160;</A><A NAME=127>&#160;</A><A NAME=128>&#160;</A><A NAME=129>&#160;</A><A NAME=130>&#160;</A><A NAME=131>&#160;</A><A NAME=132>&#160;</A>
+<A NAME=133>&#160;</A><A NAME=134>&#160;</A>
+<A NAME=135>&#160;</A><A NAME=136>&#160;</A>
+<A NAME=137>&#160;</A>
+<P>
+<DL ><DT><tt> fixed</tt>,
+<DD> meaning that the value remains constant (although
+        perhaps different for each instance) during the lifetime of
+        the entity.
+  <DT><tt> common</tt>,
+<DD> meaning that the value must be the same for
+        all instances of this entity.
+  <DT><tt> unique</tt>,
+<DD> meaning that the value of the attribute differs
+        across all entities.
+  <DT><tt> opt</tt>,
+<DD> meaning that the <tt> fn</tt> need not be
+        defined/connected at all.
+  <DT><tt> own</tt>,
+<DD> short for <tt> local</tt> <tt> fixed</tt> <tt> unique</tt>.
+<P>
+ </DL>
+<P>
+Outside of <tt> opt</tt>, <i> ODL</i> does not include multiplicity
+notation.  Multivalued <i> OAN</i> attributes are translated using <tt>
+SET</tt>s or other collections described in more detail in
+Chapter <A NAME=tex2html48 HREF="ch18.html">18</A>.
+<P>
+The ``scope'' of any qualifier or constraint is that of the enclosing
+entity (including top-level, classes, and operations).  In particular,
+qualifiers attached to <tt> op</tt> arguments, locals, and results apply
+per-invocation. For example, qualifying an <tt> op</tt> result as <tt>
+unique</tt> indicates that each invocation generates a unique result.
+<P>
+<H3><A NAME=SECTION00015100000000000000> Constancy</A></H3>
+<A NAME=159>&#160;</A>
+<P>
+Constancy declarations lie at the intersection of several annotation
+constructs. For example, the following all have the same
+meaning:<A NAME=160>&#160;</A>
+<P>
+<PRE>  votingAge: fixed int = 18;
+  votingAge: common fixed int = 18;
+  votingAge: fixed int;  init votingAge = 18
+  votingAge: fixed int init= 18;
+  votingAge: int;  inv votingAge = 18
+  votingAge: int = 18;
+</PRE>
+<P>
+The fact that an attribute cannot change aids later design and
+implementation.  For example, when object link attributes are declared
+as <tt> fixed</tt>, this means that two or more objects bear an immutable,
+hard-wired relation to one another (see Chapter <A NAME=tex2html51 HREF="ch18.html">18</A>).
+<P>
+However, qualification must be done with care. There is a difference
+between the observation that an attribute does not happen to change,
+and the requirement that it logically cannot change.  Applying <tt>
+fixed</tt> in the former case is a design error. It precludes declaration
+of perfectly reasonable subclasses in which the attribute <em> could</em>
+meaningfully assume different values, even if it happens not to in the
+superclass. On the other hand, failing to qualify an attribute as <tt>
+fixed</tt> when a class depends on its constancy is an easy way to
+generate inadvertent subclassing errors.
+<P>
+<H3><A NAME=SECTION00015200000000000000> Uniqueness</A></H3>
+<P>
+<A NAME=168>&#160;</A><A NAME=169>&#160;</A>
+<A NAME=170>&#160;</A><A NAME=171>&#160;</A>
+<A NAME=172>&#160;</A>
+<P>
+The best way to represent OOA-level uniqueness claims is to use <i>
+ODL</i> <em> unique</em> qualifiers.  Parametric instances
+(Chapter <A NAME=tex2html57 HREF="ch8.html">8</A>) are explicitly unique.  Other uniqueness
+claims are often explicit or implicit in <i> OAN</i> models.  For
+example, a bank branch may have a <tt> mgr:</tt> <tt> unique</tt> <tt>
+Manager</tt>.  Also, models may somehow claim or imply that a given object
+must be the sole member of a given class.
+<P>
+These issues come up in pure design contexts as well.  A design may
+ensure that there is only (at most) one live instance of a particular
+class.  For example, it may require that <em> exactly one</em> <tt>
+AccountNumberMaker</tt> object reside on a system. We mean ``require''
+in the sense that correctness of the system as a whole can be
+guaranteed only if there are not multiple instances that may interfere
+with each other, as opposed to a (possibly better) design that will
+work OK if there is one, but also if there are more than one.
+<P>
+System-wide uniqueness may be indicated via top-level uniqueness
+constraints, and supported by the appropriate computational devices.
+For example:<A NAME=183>&#160;</A>
+<P>
+<PRE>class AccountNumberMaker
+  generator AccountNumberMakerGen
+  own id: Int &lt;&gt; init id? = 0
+  op newNumber: unique int { id.inc; reply id? }
+end
+
+class AccountNumberMakerGen
+  theInstance: opt AccountNumberMaker;
+  op mk: AccountNumberMaker {
+     if null(theInstance) then
+        theInstance := new AccountNumberMaker(id := new INT(0)) end;
+     reply theInstance }
+end
+
+theAccountNumberMaker: fixed unique AccountNumberMaker :=
+   AccountNumberMakerGen$mk;
+</PRE>
+<P>
+Here, the generator class accepts the maintenance of uniqueness as its
+responsibility. However, there is a limit to the declarative
+specification of these matters.  For example, we <em> also</em> should have
+claimed that <tt> Account</tt><tt> Number</tt><tt> MakerGen</tt> was <tt> unique</tt>.
+This leads to infinite regression.  Ultimately, system construction
+<em> policies</em> must be invoked in order to ensure conformance.
+This is a general consequence of any kind of generator
+or metaclass framework. We may define generator-generators,
+generator-generator-generators, <em> ad infinitum</em>. At some point,
+correctness relies on disciplined usage of <tt> new</tt>.
+<P>
+In this example, we used <tt> unique</tt> at the <tt> Account</tt><tt>
+Number</tt><tt> Maker</tt> level to ensure that the results of each <tt>
+newNumber</tt> invocation were in turn unique. Our simplistic
+implementation required this tactic, since it had no other way of
+guaranteeing that the sequence numbers would not conflict with others.
+Similar considerations apply to other attributes and functions
+qualified as <tt> unique</tt>.  Again, the easiest (and sometimes only)
+way to ensure uniqueness of values is
+centralization.<A NAME=198>&#160;</A> Centralization is, in turn
+easiest to guarantee through the use of <tt> unique</tt> instances.
+Ultimately, uniqueness of instances is a system-wide construction
+policy issue.
+<P>
+<H3><A NAME=SECTION00015300000000000000> Own Attributes</A></H3>
+<P>
+<A NAME=201>&#160;</A><A NAME=202>&#160;</A><A NAME=203>&#160;</A>
+<P>
+The <tt> own</tt> qualifier for <tt> id</tt> is very useful in the <tt>
+Account</tt><tt> Number</tt><tt> Maker</tt> class. It claims that the <tt> Int</tt> component
+supporting the class is <em> fully</em> under the control of an <tt>
+Account</tt><tt> Number</tt><tt> Maker</tt> object.  The component is unique to the instance.
+The link is never revealed to any other object, so no other object can
+modify it.  The link is never rebound to a different component. To
+emphasize their hiddenness, we sometimes give <tt> own</tt>ed objects
+names starting with underscores. Listing components as <tt> own</tt> is
+almost always the best way of translating ensemble <em> constituents</em>
+(Chapter <A NAME=tex2html63 HREF="ch9.html">9</A>).
+<P>
+In general, the more links that can be declared as <tt> own</tt>, the
+safer the design. Classes possessing only nonexported <tt> own</tt> links
+form decoupled <em> communication-closed</em> layered structures that are
+easier to reason about, implement, and reuse.  In fact, non-owned
+links should be considered exceptional cases for ``elementary''
+classes and attributes.
+<A NAME=223>&#160;</A>
+<A NAME=224>&#160;</A>
+<P>
+<H3><A NAME=SECTION00015400000000000000> Optional Attributes</A></H3>
+<P>
+<A NAME=226>&#160;</A><A NAME=227>&#160;</A><A NAME=228>&#160;</A><A NAME=229>&#160;</A><A NAME=230>&#160;</A><A NAME=231>&#160;</A>
+<P>
+<i> ODL</i> attributes that are subject to redefinition and/or
+undefinition must ultimately be declared via <em> binding</em> rather than
+computational definition.  Non-<tt> fixed</tt> attributes may be rebound
+to different values <em> only</em> by their owners.  All <tt> opt</tt>
+attributes may be unbound using the common but deceptive, <tt> p</tt> <tt>
+:=</tt> <tt> null</tt>. (This is deceptive because it makes <tt> null</tt> look
+like a value or object of some sort, which it is not. It is a dynamic
+multiplicity indicator.) Predicate <tt> null(p)</tt> is true if <tt> p</tt> is
+not connected.  Optional attributes default to being unbound (<tt>
+null</tt>).
+<P>
+<H2><A NAME=SECTION00016000000000000000> Constraints</A></H2>
+<P>
+<A NAME=245>&#160;</A>
+<A NAME=246>&#160;</A>
+<P>
+There are two kinds of attribute constraints in <i> ODL</i>:
+<P>
+<DL ><DT><tt> inv</tt> <em> expr</em>
+<DD> constraints placing
+        restrictions on perhaps many attributes that hold throughout the
+        lifetime of the entity. As a shorthand,
+         <em> decl</em> <tt> =</tt> <em> expr,</em> denotes an
+        equality <tt> inv</tt> ``in line'' with the declaration.
+  <DT><tt> init</tt> <em> expr</em>
+<DD> constraints specifying conditions that
+        must hold on initialization.<A NAME=257>&#160;</A>
+        As a shorthand <em> decl</em> <tt> init=</tt> <em> expr</em> provides an
+        initial equality constraint ``in line'' with the declaration.
+<P>
+ </DL>
+<P>
+The <i> ODL</i> sublanguage used to specify invariants and initial
+conditions (as well as effects and other constraints) is somewhat
+limited.  We call expressions involving state-preserving <tt> fn</tt>s
+(attributes) <em> inspections</em>.  We mandate that all constraints be
+expressed as read-only inspections. This ensures that we are not
+specifying transitions when we think we are just declaring properties.
+We need good reason to believe that constraints may be concretely
+checked in ways that do not unintentionally affect the states of the
+objects they describe.
+<P>
+Value inspections in <tt> inv</tt> and other constraints consist of the usual
+boolean, relational, and arithmetic functions on values. We use
+operators common to most programming languages, including ``<code>~</code>''
+for <em> not</em>, ``<code>/\</code>'' for <em> and</em>, ``<code>\/</code>'' for <em>
+or</em>, ``<tt> =&gt;</tt>'' for <em> implies</em>, and ``<code>~=</code>'' for <em> not
+equal</em> (``<code>/\</code>'' and ``<code>\/</code>'' are treated as
+short-circuiting).  Also, series of expressions inside constraints may
+be separated by commas, denoting conjunction (<em> and</em>).
+Comma-separation is usually more readable because of lower precedence.
+Inspections may also contain <tt> if</tt> constructs and references to
+other functions.
+<P>
+Among many other applications, constraints may be used to help declare
+state discriminators that are based on particular settings or
+combinations of other attributes.  It is useful to define each such
+state mentioned in analysis models as a simple boolean <tt> fn</tt> of the
+same name that is true when the object is in that state.  For
+example:<A NAME=275>&#160;</A>
+<P>
+<PRE>class Account ...
+  currentBalance: real;
+  overdrawn: bool = ( currentBalance &lt; 0.0 );
+end
+</PRE>
+<P>
+These functions may take arguments, as in:
+<P>
+<PRE>class Lamp ...
+  fn hasStatus(b: bool): bool = ( on = b )
+end
+</PRE>
+<P>
+It is often appropriate to declare them as top-level functions. For
+example:<A NAME=276>&#160;</A>
+<P>
+<PRE>fn bothOn(a: Lamp, b: Lamp): bool = ( a.on /\ b.on )
+</PRE>
+<P>
+<H3><A NAME=SECTION00016100000000000000> Identity and Equality Constraints</A></H3>
+<P>
+<A NAME=278>&#160;</A><A NAME=279>&#160;</A><A NAME=280>&#160;</A><A NAME=281>&#160;</A>
+<P>
+When applied to links, ``<tt> =</tt>'' is the identity comparison
+operator, telling whether two links are connected to the same object.
+The fact that we can test whether any two links refer to the same
+object means that <em> every</em> object in a system must have a different
+identity.
+<P>
+Thus, there is no logical need to declare ``id numbers'' or other
+unique keys as properties (e.g., <tt> accountNumber</tt> in class <tt>
+Account</tt>). However, we will often still do so, in part for pragmatic
+reasons. Unless the system will live in a 100% self-contained
+object-oriented environment, it will sometimes need to interact with
+other database packages, communications services, and the like that do
+not understand or preserve object identity and thus require that some
+kind of ``manual'' identification strategy be used.  This occurs even
+when interacting with foreign OO systems that use different
+identity representation schemes than those in the target system
+implementation.  In such cases, we will need to veil
+pass-by-participation under pass-by-description protocols.  Manual
+identification schemes are well suited for such roles. Using those
+that have already been specified by OOA models avoids having to create
+them artificially. Also, per-class identifiers are substantially
+easier to maintain as unique than global ones.
+<P>
+Comparing two links with ``<tt> =</tt>'' only tests whether the links
+refer to the same object.  It is an error to use an identity test to
+discover whether two possibly different objects both provide some
+service or share some state characteristic.  However, if you want a
+function saying whether two objects have the same
+descriptive features, then you will have to write it yourself. We
+cannot predefine these. It is very common to only want to count
+selected features (e.g., keys) when testing for state equality.  In
+fact, it is often necessary to write <em> families</em> of equality
+functions reporting equality with respect to various criteria.  For
+example, there might be a function <tt> sameCoordinates</tt> to test that
+two points have the same <em> x,y</em> values, and a function <tt> sameColor</tt>
+to test that they have the same displayed color, and perhaps a
+function <tt> SameCoordinatesAndColor</tt>, and so on.
+<P>
+State equality is in the eye of the beholder in designs with
+subclassing. For example, two instances of a class <tt> Point</tt> that
+does not declare a <tt> color</tt> attribute could only be equal with
+respect to coordinates. Two objects of subclass <tt> ColoredPoint</tt>
+could be equal with respect to any of these three functions. A <tt>
+Point</tt> compared against a <tt> ColoredPoint</tt> may be equal with respect
+to coordinates, but not others.  You need to know which sense you mean
+in any particular case.  A good ounce of prevention is <em> never</em> to
+define a function just called <tt> equal</tt>. There are just too many
+senses of ``equal'' for one function to represent. Similar remarks
+hold for <tt> lessThan</tt> and other functions that compare two objects.
+<P>
+<center><P><P></center>
+
+
+<center><H2><A NAME=SECTION00020000000000000000> Concrete Attributes</A></H2></center>
+<P>
+<A NAME=301>&#160;</A><A NAME=302>&#160;</A>
+<P>
+<A NAME=303>&#160;</A>
+Attributes in concrete classes must be defined via either <em>
+binding</em> or <em> computation</em>.  The choice is made in <i> ODL</i> by
+either listing an attribute as ``<tt> &lt;&gt;</tt>'', meaning that the value must
+be bound at construction, or defining it in ``<tt> {...}</tt>''
+brackets, meaning that it is computed.
+<P>
+Bound (or ``stored'') attributes differ from computed ones in that
+they may be <em> rebound</em> (if non-<tt> fixed</tt>) and/or <em> unbound</em>
+(if <tt> opt</tt>).  For simplicity and conformance to most implementation
+languages, we require that computationally defined attributes and
+operations not have their definitions rebound, unbound, or otherwise
+dynamically modified.  The only way in which their values may change
+over time is by internally accessing properties of one or more mutable
+<em> objects</em>.  The effects of rebinding may be had in this way, but
+the logistics are a bit harder.
+<P>
+<A NAME=314>&#160;</A><A NAME=315>&#160;</A>
+Of course, <i> ODL</i> supports the usual <tt> if</tt>, <tt> while</tt>, etc.,
+statements needed to evaluate concrete attributes. You can declare
+local objects, conditionals, loops, and so on.  Because we push OO
+conventions down to the bottom, operations on simple integers, etc.,
+look more like those in other languages that uniformly distinguish
+values from objects (e.g., <i> ML</i> and <i>
+forth</i>)<A NAME=321>&#160;</A><A NAME=322>&#160;</A> than procedural code. This is
+an acquired taste at best:<A NAME=323>&#160;</A><A NAME=324>&#160;</A>
+<P>
+<PRE>op factorial(n: int): int   {
+   local f: Int := new INT(1);
+   local i: Int := new INT(n);
+   while i? &gt; 0 do f.mul(i?); i.dec end;
+   reply f? }
+</PRE>
+<P>
+<i> ODL</i> <tt> local</tt> value <tt> fn</tt>s may be used
+to provide a more conventional veneer:
+<P>
+<PRE>op factorial(n: int): int   {
+   local f: int := 1;
+   local i: int := n;
+   while i &gt; 0 do f := f * i; i := i - 1 end;
+   reply f }
+</PRE>
+<P>
+<H2><A NAME=SECTION00021000000000000000> Representation</A></H2>
+<P>
+<A NAME=329>&#160;</A><A NAME=330>&#160;</A><A NAME=331>&#160;</A>
+<P>
+The mechanics of stored links differ from those of stored value
+attributes.  Stored links may be represented transparently as
+``slots''.  For example:<A NAME=332>&#160;</A>
+<P>
+<PRE>class Elevator ...
+  local door: ElevatorDoor &lt;&gt;            % stored
+  doorButton: DoorButton { door.button } % computed
+  op replaceDoor(newDoor: ElevatorDoor)  % rebind
+     { door := newDoor }
+end
+</PRE>
+<P>
+The same declaration patterns hold for value attributes:
+<P>
+<PRE>class Elevator ...
+  isMoving: bool &lt;&gt;                      % stored
+  doorOpen: bool { door.isOpen }         % computed
+  op move { isMoving := true; ... }      % rebind
+end
+</PRE>
+<P>
+However,  any non-<tt> fixed</tt> stored value attribute depends on some kind of
+<em> object</em> to maintain state information.  As a default
+mechanics-level strategy, we assume that stored value attributes
+expand into functions that access (via ``<tt> ?</tt>'') and reset (via
+<tt> set(val)</tt>) the states of automatically defined objects of
+corresponding types (e.g., <tt> Bool</tt> objects for <tt> bool</tt> values).
+The underlying links are given the same names as the functions, but
+with a leading underscore.  For example, the listed declaration may be
+treated as if it were:
+<P>
+<PRE>class Elevator ...
+  own  _isMoving: Bool &lt;&gt;
+  isMoving: bool { _isMoving? }
+  op move { _isMoving.set(true); ... }
+end
+</PRE>
+<P>
+Alternatively, updates could be performed by binding the links to
+fresh objects with the indicated initial values; it does not much
+matter.  In any such scheme, ``stored'' value attributes are provided
+with computational definitions referring to underlying objects.  These
+links may be initialized in constructors via explicit binding or, by
+convention, implicit linkage to a new object of the corresponding
+default concrete subclass:
+<P>
+<PRE>class ElevatorGen ...
+  op mk: unique Elevator {
+       reply new Elevator(isMoving := false ...) }
+end
+</PRE>
+<P>
+The net effect of these conventions is to allow value attributes to
+appear to be ``directly represented'' within objects whenever it is
+convenient to do so. However, by making these conventions explicit, we
+also facilitate bindings of values to ``smarter'' objects when
+necessary. For example, <tt> isMoving</tt> might instead be defined to
+extract the value of an object of a special subclass of <tt> Bool</tt> that
+shadows state changes on persistent media or notifies an indicator
+lamp object when its state is changed.  The ideas may be scaled to any
+value-like attribute type.
+<P>
+<H3><A NAME=SECTION00021100000000000000> Optional Attributes</A></H3>
+<P>
+Because computational definitions may not be rebound or unbound, <tt>
+opt</tt> attributes must be defined through binding, not computation.  For
+optional value attributes, this requires similar representational
+maneuvering.  We do not specify a default strategy.
+<P>
+There are many ways to declare and represent optionality that might
+make sense in particular cases.  These may be defined manually.  For
+example, an optional attribute might be transformed to two <tt> fn</tt>s;
+<tt> attr:A</tt> to hold the value, and <tt> hasAttr:bool</tt> to tell whether
+it is logically bound or not.  Alternatively, an <tt> int</tt> attribute
+that should logically never be negative may be given a negative value
+to indicate unboundedness.
+<P>
+<H2><A NAME=SECTION00022000000000000000> Concrete Inspections</A></H2>
+<P>
+Both our analysis models and our design-level constraint annotations
+treat attributes such as <tt> aBool.val</tt> and <tt> aLamp.on</tt> as
+``directly'' sensed and knowable both within and among objects.
+<P>
+In software, generally, the only way for one object to determine the
+state of another is to ask and be told.  Thus, in design, a value
+attribute is construed as a ``function call''.  In this way,
+information that looks ``static'' in analysis must be communicated via
+simple dynamics.  For example, the <tt> on</tt> value in <tt> Lamp</tt>
+objects is obtained by invoking <tt> val</tt> for the <tt> switch</tt>
+component, ultimately obtaining a value.  Objects even ``ask
+themselves'' what their states are. Essentially all software objects
+are ``reflective'' and ``self aware'' at least in this limited sense.
+We exploit this more in design than in analysis.
+<P>
+Even though we must handle this information dynamically, it is vitally
+important to maintain the implicit assumption that an object's listed
+attributes may be determined without otherwise disrupting the object.
+Doing otherwise would mean that the logical state of an object would
+change in the act of ascertaining it.  Any design that includes such
+actions has low <em> a priori</em> chances of being correct.
+<P>
+This leads to the design rule that the concrete definitions of state
+sensor functions (attributes) cannot ever cause state changes visible
+from other potential client objects.  In other words, they must be
+<em> state-preserving</em>, in a somewhat stronger sense than the
+otherwise similar notion of service transitions. They must behave as
+if no transitions are performed at all.
+<P>
+ However, to be picky, concrete <tt> fn</tt>s are <em> never</em>
+computationally pure.  They induce ``microstates'' in objects while
+computing and returning answers to function queries.  Our design rules
+boil down to the requirements that the computational necessity of
+these microstates should never impact abstract functionality (see
+Chapter <A NAME=tex2html94 HREF="ch19.html">19</A>).
+<P>
+Note that ``state preservation'' is defined with respect to <em>
+descriptive</em> information. Concretely defining a function to perform
+some internal processing that could never have any effect visible to
+other objects is consistent with this view, although intrinsically
+slightly dangerous. A classic example is a <tt> Point</tt> implementation
+that uses standard rectangular coordinates for internal
+representation, but also caches the values of its polar
+coordinates whenever asked so that it may more quickly report them if
+asked again.<A NAME=362>&#160;</A>
+<P>
+<H2><A NAME=SECTION00023000000000000000> Examples</A></H2>
+<P>
+<A NAME=364>&#160;</A>
+<P>
+Objects such as <tt> MailingLabel</tt>s simply maintain several loosely
+related attributes.  The classes consist of set/get interfaces, with a
+value reporter and a value replacer operation for each property listed
+in the analysis model:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch17-img2.gif"><P>
+<P>
+<PRE>class String80 s: char[80] end
+class MailingLabel
+  name: fixed String80;
+  street: String80;
+  city: String80;
+  zipcode: int;
+  op setStreet(newSt: String80) ==&gt; street' = newSt end
+  op setCity(newC: String80) ==&gt; city' = newC end
+  op setZip(newZ: int) ==&gt; zip' = newZ end
+end
+</PRE>
+<P>
+Concrete versions are most often constructed by
+hooking up attributes to more primitive objects that provide the
+required functionality. A simple default-strategy class is:
+<P>
+<PRE>class MailingLabelV1 is MailingLabel
+  name: fixed String80 &lt;&gt;
+  street: String80 &lt;&gt;
+  city: String80 &lt;&gt;
+  zipcode: int &lt;&gt;
+  op setStreet(newSt: String80) { street := newSt }
+  ...
+end
+
+op mkMailingLabelV1(n: String80, s:String80, c: String80, z: int):
+ unique MailingLabelV1 {
+  reply new MailingLabelV1(name:=n, street:=s, city:=c, zip:=z) }
+</PRE>
+<P>
+Manual control over internals may obtained in a tedious but
+straightforward fashion:
+<P>
+<PRE>class MailingLabelV2 is MailingLabel
+  own _name:Name &lt;&gt;;
+  own _street:String80 &lt;&gt;;
+  own _city:String80 &lt;&gt;;
+  own _zip:Int &lt;&gt;
+
+  name: String80 { _name? }
+  street: String80 { _street? }
+  city: String80 { _city? }
+  zip: String80  { _zip? }
+  op setStreet(newSt: String80) { _street.set(newSt) }
+  ...
+end
+
+op mkMailingLabelV2(n: String80, s:String80, c: String80, z: int):
+ unique MailingLabelV1 {
+  reply new MailingLabelV2(
+    _name := new NameV1(_nm := new STRING80(n)),
+    _street := new STRING80(s),
+    _city := new STRING80(c),
+    _zip := new INT(z)) }
+</PRE>
+<P>
+Here, we have assumed the definition of a little <tt> Name</tt> class that
+holds <tt> char[80]</tt>'s for use as names, perhaps also supporting
+operations for finding middle initials, etc. We could have created
+similar classes for the other components.
+<P>
+Similar translations may be applied to most of the OOA class
+descriptions from Chapter <A NAME=tex2html97 HREF="ch3.html">3</A>.  For example, the <em>
+Bank</em> class:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch17-img3.gif"><P>
+<P>
+<PRE>class Bank
+  bankName: String80;
+  local headquarters: Headquarters;
+  local branch: SET[Branch];
+end
+</PRE>
+<P>
+We used the default visibility commitments here.  We listed the <tt>
+headquarters</tt> and <tt> branch</tt> attributes as private links and the
+<tt> name</tt> as a public attribute.  In this abstract version, we avoid
+computational and representational commitments. A
+corresponding concrete class can nail this down, perhaps as:
+<PRE>class BankV1 is Bank
+  bankName: String80 &lt;&gt;
+  local headquarters: Headquarters &lt;&gt;
+  local branchInfo: BranchInfo &lt;&gt;
+  local branch: SET[Branch] { branchInfo.getBranches(bankName) }
+end
+</PRE>
+<P>
+<center><P><P></center>
+
+
+<center><H2><A NAME=SECTION00030000000000000000> Views</A></H2></center>
+<A NAME=404>&#160;</A><A NAME=405>&#160;</A><A NAME=406>&#160;</A>
+<P>
+A general term for a class that renames or exports restricted
+properties of another is a <em> view</em>. By adding renaming-based views,
+a concrete class may be repackaged to obey a variety of abstract
+interfaces expected by different clients.  Views are often employed as
+retrospective techniques that allow already-existing components to be
+used in new ways.<sup>2</sup> Among the
+most common applications is to create a secondary interface for one or
+more classes to remove incompatibilities with other software.  For
+example:<A NAME=409>&#160;</A>
+<P>
+<PRE>class DB_CompatibleAccountV2 is DB_CompatibleAccount ...
+  local acct: Account;
+  num: int { acct.acctNumber }
+  op add(amt: Cash) { acct.credit(amt) }
+end
+</PRE>
+
+<blockquote>
+ <sup>2</sup>Footnote:<br>
+More formally inclined readers might notice
+that views provide a way to define arbitrary homomorphisms among
+classes, albeit in a ``second-class'' fashion. We have no way of
+expressing the abstract properties of these homomorphisms.
+</blockquote>
+<P>
+We have created a view simply in order to rename properties and
+operations to those expected by some other clients.  Renaming-based
+views are among the best means of supplying ``glue'' that allow
+classes developed for different purposes, or obtained from different
+libraries, to be used together.
+<P>
+<em> Unrestricted</em> views may be created to allow use of values in
+contexts demanding object types. We used this tactic earlier in
+defining the <tt> RealVal</tt> and  <tt> String80</tt> classes.
+<P>
+More importantly for present purposes, views provide mechanics to
+restrict, protect, and package components to meet abstract
+constraints on host attributes. Thus they serve as vehicles to
+implement forwarding and encapsulation properties of both OOA-level
+ensembles and the smaller ensemble-like classes that pervade design.
+<A NAME=413>&#160;</A>
+<P>
+<H2><A NAME=SECTION00031000000000000000> Restricting Operations</A></H2>
+<A NAME=415>&#160;</A><A NAME=416>&#160;</A>
+<P>
+Our predefined value-maintaining classes (<tt> Int</tt>, <tt> Bool</tt>, <tt>
+Real</tt> <tt> Char</tt>) possess all of the usual update operations (<tt>
+set</tt>, <tt> add</tt>, etc.) definable for objects maintaining the
+corresponding values.
+<P>
+Some of these operations may be nonsensical when predefined object
+types are used in support of new classes.  It is necessary to think
+through the legal and meaningful operations that are supported, even
+(or especially) for simple property-holding classes.  Classes holding
+values with restricted operations may be defined manually by listing
+the operations in full.
+<P>
+For example, we may wish to restrict objects representing account
+balances to have a current dollar value that is initially zero, and to
+limit operations to those that add and subtract other values to the
+current value (corresponding to deposits and withdrawals), as well as
+to adjust by a multiplicative constant (in order to add interest and
+the like). ``Looser'' and/or inappropriate operations (e.g., <tt>
+set</tt>, <tt> div</tt>) need not be supported.  This could be expressed
+abstractly as:<A NAME=425>&#160;</A>
+<P>
+<PRE>class Balance
+  val: real init= 0.0;
+  op add(c: real) ==&gt; val' = val + c end
+  op sub(c: real) ==&gt; val' = val - c end
+  op mul(r: real) ==&gt; val' = val * r end
+end
+</PRE>
+<P>
+A concrete class may be defined as a view of a built-in class:
+<PRE>class BalanceV1 is Balance
+  own _val: Real &lt;&gt;
+  val: real { _val? }
+  op add(c: real)  { _val.add(c) }
+  op sub(c: real)  { _val.sub(c) }
+  op mul(r: real)  { _val.mul(r) }
+end
+</PRE>
+<P>
+The definition of a class such as <tt> Balance</tt> mostly serves to protect
+against accidental misuse, not abuse. For example, it <em> is</em>
+possible for another object to reset a balance to a completely
+different value by first subtracting out the current value, and then
+adding in a new one.  However, if nothing else, the restricted
+constructs advertise standard usage and practice.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Restricting Values</A></H2>
+<A NAME=429>&#160;</A>
+<P>
+The descriptive value types defined in our basic framework do not
+provide any ``active'' protection for maintaining constrained,
+structured, or interdependent properties; for example, the fact that a <em>
+probability</em> value must be between zero and one. Views provide a locus
+for the infrastructure necessary to ensure that simple values and
+states stay within prescribed restrictions.
+<P>
+State values may be constrained by creating and using a <em> class</em>
+describing immutable objects.  Such a class consists only of <tt> fn</tt>s
+describing <tt> fixed</tt> (or otherwise constant) attributes, along with
+invariants among them.  Because there is no way to change the state of
+such objects, they have the same pragmatic role in transmitting state
+information as simple values. For example:<A NAME=434>&#160;</A>
+<P>
+<PRE>class ProbabilityValue
+  val: fixed real;  inv 0.0 &lt;= val, val &lt;= 1.0
+end
+
+class ProbabilityValueV1 is ProbabilityValue
+  own _val: Real &lt;&gt;
+  val: real { _val? }
+end
+</PRE>
+<P>
+For objects that do not change state, it is obviously crucial to get
+their construction right. An abstract generator interface and
+appropriate subclasses might be defined as follows.
+We intentionally skirt error processing for now, and simply use a
+value of zero if the argument is out of range in <tt> mk</tt>:
+<P>
+<PRE>class ProbabilityValueGen
+  local fn inRange(r: real): bool = (0.0 &lt;= r /\ r &lt;= 1.0);
+  defaultProb: real init= 0.05;
+  op setDefault(r: real) when inRange(r) then defaultProb' = r else end
+  op mk(r: real) q: unique ProbabilityValue
+     when inRange(r) then q.val = r else q.val = 0.0 end
+  op dflt q: unique ProbabilityValue ==&gt; q.val = defaultProb end
+  op clone(p: ProbabilityValue) q: unique ProbabilityValue
+      ==&gt; q.val = p.val end
+end
+
+class ProbabilityValueV1Gen is ProbabilityValueGen ...
+  op mk(r: real): unique ProbabilityValueV1 ...;
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION00033000000000000000> Restricting Mutability</A></H2>
+<A NAME=437>&#160;</A>
+<P>
+Similar techniques apply to stateful classes. For example,
+a mutable <tt> Probability</tt> class and associated utilities may be
+defined as follows.  To again postpone error handling issues, we make
+things easy for ourselves by failing to require any action when
+numbers are out of bounds.
+<P>
+<PRE>class Probability
+  val: real;
+  local inRange(x: real): bool = (0.0 &lt;= x /\ x &lt;= 1.0);
+  inv inRange(val)
+  op set(r: real): () when inRange(r) then val' = r else end
+end
+
+class ProbabilityV1 is Probability
+  own _val: Real &lt;&gt;
+  local inRange(x: real): bool { 0.0 &lt;= x /\ x &lt;= 1.0 }
+  val: real { _val? }
+  op set(r: real) { if inRange(r) then _val.set(r) end }
+end
+
+op copy(dest: Probability, src: Probability) { dest.set(src.val) }
+
+class ProbabilityGen  op mk ...; end
+</PRE>
+<P>
+<H4><A NAME=SECTION00033010000000000000> Changing state by rebinding objects.</A></H4>
+<P>
+A different concrete design strategy is to construct a
+class that rebinds a <tt> ProbabilityValue</tt> on each <tt> set</tt>:
+<P>
+<PRE>class ProbabilityV2 is Probability
+  local p: ProbabilityValue &lt;&gt;
+  val: real { p.val? }
+  op set(r: real) { if inRange(r) then p := ProbabilityValueGen$mk(r) end }
+end
+</PRE>
+<P>
+This ``write once'' strategy guarantees that bottommost entities are
+never mutated. Links are instead rebound to fresh immutable objects.
+This sometimes simplifies their management.
+<P>
+<H4><A NAME=SECTION00033020000000000000> Combinations.</A></H4>
+<P>
+Value and operation restrictions may, of course, be combined.  For
+example, if a savings account balance should never be negative, this
+could be reflected in an associated class:
+<P>
+<PRE>class SavingsBalance ...
+  val: real;  inv val &gt;= 0.0
+  op sub(c: real)
+     when c &lt;= val then val' = val - c else % error % end
+end
+</PRE>
+<P>
+These strategies provide more understandable, safer, and better
+encapsulated class definitions than ones supporting <tt> set</tt> and
+<tt> get</tt> interfaces to read and write values. Rather than just giving
+in at this lowest level and treating value-maintaining objects as
+read/write ``variables'' in the procedural programming sense, it pays
+off to model them like any other object, in terms of required
+properties and transitions.  In practice, OOA models rarely
+do this, so the task is left to design.
+<P>
+<H2><A NAME=SECTION00034000000000000000> Wrappers</A></H2>
+<A NAME=446>&#160;</A><A NAME=447>&#160;</A>
+<P>
+Consider a class that provides a view of a <em> single</em> operation on a
+<em> single</em> object in order to give it different characteristics.
+For example, suppose for some reason we need to use a <tt> Lamp</tt>
+object, but instead of invoking <tt> flip</tt>, we would like to just call it
+<tt> call</tt>. We could do this with a little view class:<A NAME=453>&#160;</A>
+<P>
+<PRE>class LampWrapper
+  local l: Lamp &lt;&gt;
+  op call: () { l.flip }
+end
+...
+wrapper := new LampWrapper(l := myLamp);
+wrapper.call;
+</PRE>
+<P>
+Given just this example, it may be hard to believe that classes such as
+<tt> LampWrapper</tt> turn out to be useful technical tools.
+<em> Wrappers</em> are perhaps not the most intuitive OOD construct, but
+they are among the most versatile for technical manipulations.  It is
+easy to generate them automatically.  First define abstract class:
+<P>
+<PRE>class Wrapper
+  op call: ();
+  op send;
+end
+</PRE>
+<P>
+For convenience, we provide both a blocking (<tt> call</tt>) and one-way
+(<tt> send</tt>) version of each, so clients may use either form.  In
+<i> ODL</i> we define a macro <sup>3</sup> <tt> WRAP</tt> that defines an appropriate subclass and also
+instantiates a corresponding instance.
+
+<blockquote>
+ <sup>3</sup>Footnote:<br>
+<em> Macros</em> are tiny
+software development tools expressible inside a language. Our
+macros might be replaced either by external tools or by adding
+corresponding syntax to the language <em> per se</em>.  Some constructs that we
+describe as macros might be considered ``basic'' in other systems, and
+vice versa. Also note that many of our macros are <em> very</em> smart. We
+make no claims that they are implementable via  text replacement
+mechanisms.
+</blockquote>
+For example:
+<P>
+<PRE>wrapper := WRAP(myLamp.flip);
+</PRE>
+<P>
+automatically generates something like the following.
+<P>
+<PRE>class Thunk9063 is Wrapper
+  local object: fixed Lamp &lt;&gt;
+  op call: () { object.flip }
+  op send { object.flip }
+end
+
+wrapper := new Thunk9063(object := myLamp);
+</PRE>
+<P>
+When we are using classes as tools for organizing attributes,
+constraints and operations, their definitions tend to be focused on
+computational matters rather than properties and descriptions.  But
+not a lot can be said about a wrapper.  Every concrete subclass of
+<tt> Wrapper</tt> does something completely different when <tt> call</tt> is
+invoked. This makes it harder for wrapper users to predict effects of
+invocations. For this reason, more rigidly specified view classes are
+preferable to wrappers whenever something more <em> can</em> be said about
+operations.
+<P>
+But in a different sense, wrappers <em> enhance</em> design safety.  A
+wrapper user cannot get at any of the other operations the underlying
+object may possess, and thus cannot generate unexpected message
+sequences. In this way, wrappers serve as pure ``operation ports''
+<A NAME=467>&#160;</A> that are untied to particular objects.  One difference
+between OOD and other distributed processing frameworks is that in OO,
+object links are basic and operation ports are derived, while in
+otherwise similar systems such as <i> Hermes</i>
+[<A HREF="#hermes">16</A>]<A NAME=470>&#160;</A>, something close to the opposite holds.
+This style may be emulated using wrappers and views.
+<P>
+<center><P><P></center>
+
+
+<center><H2><A NAME=SECTION00040000000000000000> Exports</A></H2></center>
+<A NAME=472>&#160;</A><A NAME=473>&#160;</A>
+<P>
+Objects should not export links to other objects as public attributes
+or as arguments or results of other operations unless it is logically
+necessary to do so in order to enable further communication.
+<P>
+It is both an abstraction error and a pragmatic invitation for
+disaster for an object to return a link to a helper object when it is
+asked simply to report the value of some attribute.  If identities are
+never revealed to other objects, then others cannot (directly) send them
+inappropriate messages.
+<P>
+Consider, for example, a <tt> Square</tt> class built using <tt>
+Point</tt>s:<A NAME=476>&#160;</A><A NAME=477>&#160;</A>
+<P>
+<PRE>class Point
+  x: real;
+  y: real;
+  op shiftX(v: real): () ==&gt; x' = x + v end
+  op shiftY(v: real): () ==&gt; y' = y + v end
+end
+</PRE>
+<P>
+<PRE>class Square
+  local lowerLeft: Point;
+  local upperRight: Point;
+  inv upperRight.x &gt; lowerLeft.x,
+      upperRight.x - lowerLeft.x = upperRight.y - lowerLeft.y
+  op shiftHorizontally(offset: real): ()
+     ==&gt; lowerLeft.x' = lowerLeft.x + offset end
+end
+</PRE>
+<P>
+This class contains no provisions for other objects to determine the
+coordinates of the square. Clearly, some are needed.  The <em> wrong</em> way to
+do this is:
+<P>
+<PRE>class BadSquare ...
+  lowerLeftPt: Point { lowerLeft }
+end
+
+op abuse(s: BadSquare)  { s.lowerLeftPt.shiftY(1000.0) }
+</PRE>
+<P>
+The client (<tt> abuse</tt>) changed the lower left point in a way that
+almost surely broke the squareness invariant.  Moreover, this
+construction is <em> conceptually</em> wrong in this context. The
+identity of the <tt> lowerLeft</tt> point is not the value of the
+attribute.  In fact, since it is not listed as <tt> fixed</tt>, the link
+might sometime be rebound to a different <tt> Point</tt> object that still
+maintains the listed invariants.  The attribute function should
+instead reveal the indicated logical state information, not the helper
+object itself.  There are several ways to do this.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Forwarding</A></H2>
+<A NAME=485>&#160;</A><A NAME=486>&#160;</A>
+<P>
+A simple but sometimes tedious approach is to expand out and forward
+all relevant value attributes. This is the same technique seen in
+Chapter <A NAME=tex2html122 HREF="ch9.html">9</A> for exposing partial transition networks for
+constituents.  For example:
+<P>
+<PRE>class Square_2
+  lowerLeftX: real;
+  lowerLeftY: real;
+  upperRightX: real;
+  upperRightY: real;
+  inv upperRightX &gt; lowerLeftX ...
+end
+</PRE>
+<P>
+A concrete class could still use <tt> Point</tt> objects internally:
+<P>
+<PRE>class Square_2V1 is Square_2 ...
+  own lowerLeft: Point &lt;&gt;
+  lowerLeftX: real { lowerLeft.x }
+end
+</PRE>
+<P>
+The argument (rather than attribute/result) version of this is to
+parameterize operations to receive a set of value parameters that
+transmits the state information.  The receiver might use this
+information to make a local copy of the object, and work off that:
+<P>
+<PRE>op moveCursor(xcoord: real, ycoord: real) {
+   local p: Point := new PointV1...; ... }
+
+class SquareV2 is Square ...
+  op moveToLowerLeft {
+     moveCursor(lowerLeft.x, lowerLeft.y) }
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION00042000000000000000> Description Records</A></H2>
+<P>
+Tedious attribute-by-attribute forwarding may be replaced with
+aggregate description records that transmit all relevant information
+about objects in a more structured fashion.  In <i> ODL</i> we use an
+immutable record framework for such purposes:
+<A NAME=492>&#160;</A>
+<A NAME=493>&#160;</A>
+<P>
+<PRE>record pointDescription(xcoord: real, ycoord: real);
+
+class Point2 is Point
+  xc: Real; yc: Real;
+  x: real { xc? } ...
+  fn description =  pointDescription(x, y);
+end
+
+class SquareV3 is Square ...
+  own lowerLeft: Point &lt;&gt;
+  lowerLeft: pointDescription { lowerLeft.description }
+end
+</PRE>
+<P>
+In <i> ODL</i>, <tt> record</tt>s have the same form as messages themselves.
+They are used only to simplify and structure message transmissions.
+If it is necessary to hold or manipulate them, then corresponding <em>
+objects</em> and their classes must be defined.
+<P>
+Definition of <tt> description</tt> functions across classes in a system
+can be an effective preliminary step in establishing mechanisms that save
+descriptions of objects on persistent media (see
+Chapter <A NAME=tex2html125 HREF="ch22.html">22</A>). They also help standardize the forms of state
+descriptions that are decoded into objects by receivers. For example,
+a <tt> Square</tt> class may itself support:
+<P>
+<PRE>record SquareDescription(ll: PointDescription, ur: PointDescription);
+
+class SquareV3b is Square ...
+  description: squareDescription  =
+    squareDescription(lowerLeft.description, upperRight.description)
+end
+</PRE>
+<P>
+These may be even further standardized to achieve compatibility with
+external software.  For example, descriptions could be structured
+according to the <i> ASN.1</i> [<A HREF="#asn">15</A>] standard. <A NAME=503>&#160;</A>
+<P>
+<H2><A NAME=SECTION00043000000000000000> Copying</A></H2>
+<A NAME=505>&#160;</A><A NAME=506>&#160;</A><A NAME=507>&#160;</A>
+<P>
+Another common solution is to return copies (clones) of internally held
+objects. For example:
+<P>
+<PRE>class PointV3 is Point
+  xc: Real; yc: Real;
+  x: real { xc? } ...
+end
+</PRE>
+<P>
+<PRE>class SquareV4 is Square ...
+  lowerLeftPt: unique Point {
+    new PointV3(xc := new REAL(lowerLeft.x),
+                yc := new REAL(lowerLeft.y)) }
+end
+</PRE>
+<P>
+<em> Sending</em> copies as arguments to other operations can be an
+effective way of avoiding situations where clients try to send
+messages via links obtained as arguments.  The two-sided version of
+this protocol is <em> copy-in/copy-out</em> passing in which the server
+sends back a newly created object that the client may then bind.
+<P>
+The difference between copy-based protocols and simply exporting links
+is that even though the original and the copy have the same state,
+they are not the same object. Receivers cannot depend on messages to
+these copies having any consequences with respect to their
+originators.  This is one way of interpreting our conventions for
+passing pure values.  Even though passing a <tt> real</tt> might
+
+ultimately be implemented using a local <tt> REAL</tt> object,
+the receiver knows that it cannot exploit this object's identity.
+<P>
+<H2><A NAME=SECTION00044000000000000000> Views</A></H2>
+<A NAME=513>&#160;</A>
+<P>
+An intermediate solution is to construct read-only views of
+exported objects. For example (collapsing abstract and concrete
+versions of classes for the sake of brevity):
+<P>
+<PRE>class PointVal
+  locals _x: Real &lt;&gt;;  _y: Real &lt;&gt;; end
+  x: fixed real { _x? }
+  y: fixed real { _y? }
+end
+
+class Point3 ...
+  own xc: Real &lt;&gt;;  own yc: Real &lt;&gt;
+  coordinates: PointVal { new PointValV1(_x := xc, _y := yc) }
+end
+
+class Square5 ...
+  own lowerLeft: Point3 &lt;&gt;
+  lowerLeftPt: PointVal  {  lowerLeft.coordinates }
+end
+</PRE>
+<P>
+
+Since <tt> lowerLeft</tt> is never rebound in <tt> Square5</tt>, the attribute
+functions of <tt> PointVal</tt> views will always report the current
+values, not just those that held at the point of construction.  Yet
+objects that hold these views are unable to modify them.  Views thus
+serve as <em> capabilities</em>. Objects holding views may perform only
+those operations that are forwarded out.  It is easy to generalize
+this scheme to provide views of <em> any</em> subset of properties, not
+just status attributes. For example, a view could be constructed to
+only allow clients to modify <tt> x</tt> coordinates, not <tt> y</tt>.  These
+capabilities/views may even be constructed and managed by a central
+service.<A NAME=521>&#160;</A>
+<P>
+<H2><A NAME=SECTION00045000000000000000> Exports and Delegation</A></H2>
+<P>
+<A NAME=523>&#160;</A><A NAME=524>&#160;</A>
+<P>
+While it is a bad idea to export links as stand-ins for attributes,
+objects may sometimes send local links to other helper objects in
+the course of operations.  It is for this reason that we have not
+``syntactically'' mandated that <tt> own</tt> links not be exported.
+We will in further discussions merely assume that a no-export policy
+or its equivalent is maintained.
+<P>
+``Equivalent'' here means that objects may well send out <tt> own</tt>
+links as arguments to other ``trusted'' helper functions, operations,
+and objects that responsibly assist in their maintenance without
+further exporting them or interfering with other operations.  Pure
+inspection <tt> fn</tt>s may always be invoked in this way.  While
+intrinsically somewhat dangerous, other exports are occasionally
+difficult to avoid.
+<P>
+Trustworthiness of helpers is another way of talking about their
+correctness with respect to a given need and context. For example, a
+<tt> Balance</tt> object might delegate interest updates to an <tt>
+InterestMgr</tt> via the message <tt> im.update(_val)</tt>. The decision to
+export <tt> own</tt> link <tt> _val</tt> represents a measure of trust that
+the operation performs the intended service. If this sense of safety
+and correctness of a helper is not ascertainable, then more
+conservative measures are called for.  Adaptations of other standard
+measures are available.  Among other possibilities, the <tt> Balance</tt>
+object could send a clone of the <tt> _val</tt>, and later copy the state
+of the clone back to <tt>
+_val</tt>. Alternatively, the <tt> InterestMgr::update</tt> operation could
+be recast to receive and return values. The clients themselves may
+then update the appropriate objects. A more extreme option is for the
+<tt> Balance</tt> to perform all interest computations itself. However,
+this needlessly duplicates the functionality of <tt> InterestMgr</tt> and
+adds to the complexity of the <tt> Balance</tt> class.
+<P>
+Measures based on the safety and correctness of individual operations
+suffice for localized, small-scale use. Unlike most methods described
+in this chapter, they do not always scale well.  We describe more
+extensive and ``heavyweight'' measures ensuring safe exclusive control
+over arbitrary exported linked objects in Chapter <A NAME=tex2html134 HREF="ch22.html">22</A>.
+<P>
+<H2><A NAME=SECTION00046000000000000000> Screening Functions</A></H2>
+<P>
+<A NAME=543>&#160;</A><A NAME=544>&#160;</A>
+Especially when attributes are in any way hidden, exceptional
+interaction conditions often may be avoided by exporting ``screening
+functions'' in addition to status indicators.
+<P>
+Some operations contain <tt> when</tt> conditions that refer solely to
+unchanging properties of their arguments.  To avoid exceptions,
+clients should be able to determine whether the arguments they intend
+to send are indeed legal. Illegal cases may include out-of-range
+numerical values, unbound <tt> opt</tt> links, and objects that do not
+obey <tt> inv</tt> constraints with one another.  To prevent clients from
+sending bad arguments, receivers may provide them with the means to
+determine themselves whether they are OK.  Objects may <em> advertise</em>
+preconditions by exporting guard screening functions that clients may
+invoke before committing.  This pulls responsibility for dealing with
+errors up one level from the receiver to the sender:
+<P>
+<PRE>class Probability ...
+  fn inRange(x: real): bool { 0.0 &lt;= x /\ x &lt;= 1.0}
+end
+
+op user(p: Probability, r: real)  {
+   if p.inRange(r) then p.set(r) else ... end }
+</PRE>
+<P>
+However, even with such arrangements, the operations must still
+contain exception mechanics (see Chapter <A NAME=tex2html137 HREF="ch20.html">20</A>) unless
+<em> all</em> clients obey the protocol. This may be enforced by design
+rules and tools.  Another way to assign responsibility for value
+argument screening is to phrase arguments in terms of simple
+constrained value-holding classes.  This localizes most error
+situations to those surrounding (failed) object construction, which is
+sometimes a more convenient base for defining error protocols than
+elsewhere.
+<P>
+<center><P><P></center>
+
+
+<center><H2><A NAME=SECTION00050000000000000000> Composition and Inheritance</A></H2></center>
+<P>
+<A NAME=553>&#160;</A><A NAME=554>&#160;</A>
+<P>
+We have so far in this chapter focused on compositional layering
+mechanism to form concrete classes that obey declarative constraints.
+Subclassing strategies provide both extensions and alternatives.
+<P>
+The most important intuitive guideline for subclassing at the design
+level is <em> substitutability</em>. It must be possible to substitute a
+subclass instance everywhere a superclass type is listed in a system, and
+still have everything operate correctly with respect to superclass
+guarantees.  Hence, as described in Chapter <A NAME=tex2html140 HREF="ch7.html">7</A>, it is OK
+for subclasses to add or strengthen properties listed in the
+superclass, but never to delete, contradict, or weaken them.
+<P>
+<H2><A NAME=SECTION00051000000000000000> Extending Operations</A></H2>
+<P>
+Subclassing is, of course, the natural technique to employ when a
+class requires <em> extended</em> rather than restricted views of
+primitives. For example, in later chapters we will need versions of
+simple classes that may be lockable, may notify other objects when
+they change state, and so on.  In some applications (see
+Chapter <A NAME=tex2html141 HREF="ch22.html">22</A>) nearly every class should contain one or more
+standardized notification protocols.  These may be defined in a
+familiar fashion. For example:<A NAME=562>&#160;</A>
+<A NAME=563>&#160;</A>
+<P>
+<PRE>class ShadowedReal is Real
+  local db: PersistentStore;
+  local op notifyOfChange ==&gt; db.notify(self, val)'' end
+  op set(r: real): () ==&gt; val' = r, notifyOfChange' end
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION00052000000000000000> Concrete Subclassing</A></H2>
+<A NAME=565>&#160;</A>
+<P>
+It is very common for one concrete class to be a subclass of some
+abstract class, and additionally to share internal strategies with
+another related concrete class.  This provides an opportunity to pit
+the compositional designs we have so far been using against
+multiple inheritance designs. For example, consider an <tt>
+Adjust</tt><tt> able</tt><tt> Lamp</tt> class:<A NAME=569>&#160;</A>
+<P>
+<PRE>class AdjustableLamp is Lamp
+  brightness: real;
+  op adjust(delta: real) ==&gt; brightness' = brightness + delta end
+end
+</PRE>
+<P>
+One way to construct a concrete class <tt> Adjust</tt><tt> able</tt><tt> LampV1</tt>
+is as a subclass of <tt> Adjust</tt><tt> able</tt><tt> Lamp</tt> that happens to
+contain a <tt> LampV1</tt> as an internal component to which it delegates
+most properties and operations:
+<P>
+
+<PRE>class AdjustableLampV1 is AdjustableLamp  % composition
+  own l: LampV1 &lt;&gt;
+  own br: Real &lt;&gt;
+  on: bool               { l.on }
+  op flip                { l.flip }
+  brightness: real       { br? }
+  op adjust(delta: real) { br.add(delta) }
+end
+</PRE>
+<P>
+A second version says that <tt> Adjust</tt><tt> able</tt><tt> LampV2</tt>
+is both a concrete subclass of <tt> Adjust</tt><tt> able</tt><tt> Lamp</tt>
+and also an ``extension'' subclass of <tt> LampV1</tt>, since it employs
+the same kinds internal components and adds one more:
+<P>
+
+<PRE>class AdjustableLampV2 is AdjustableLamp, LampV1 % concrete inheritance
+  own br: Real &lt;&gt;
+  brightness: real       { br? }
+  op adjust(delta: real) { br.add(delta) }
+end
+</PRE>
+<P>
+This second sense of inheritance, <em> concrete subclassing</em>, is the
+most common form of inheritance employed in object-oriented
+programming.  It is a simple way to combine the effects of
+compositional design with abstract subclassing, thus adding to the
+innumerable ways to express <em> PartOf</em>.
+<P>
+Concrete inheritance can also lead to more concise class descriptions
+than does the manual combination of composition and property
+inheritance.  Listing delegations in a composition-based strategy
+is tedious and inelegant looking. To remedy this just a bit in <i>
+ODL</i>, we use a macro <tt> FORWARD(obj)</tt> that declares forwarders for
+<em> all</em> operations supported <tt> obj</tt>, and a parameterized version
+that forwards only the indicated operations.  (We describe some
+further variants in Chapter <A NAME=tex2html146 HREF="ch22.html">22</A>.)  For example:
+<P>
+<A NAME=592>&#160;</A>
+<P>
+<PRE>class AdjustableLampV1 is AdjustableLamp ...
+  l: LampV1;  FORWARD(l, on, flip);
+end
+</PRE>
+<P>
+In the remainder of this section, we survey issues leading us to
+downplay the use of concrete subclassing for many design problems.
+<P>
+<H4><A NAME=SECTION00052010000000000000> Black-box reuse.</A></H4>
+<A NAME=594>&#160;</A>
+Our initial example of <tt> Adjust</tt><tt> able</tt><tt> LampV1</tt> was (for
+illustrative purposes) suboptimal. There is no reason at all that a
+concrete <tt> Adjust</tt><tt> able</tt><tt> Lamp</tt> class should be linked to a
+concrete <tt> LampV1</tt> object. Indeed, declaring it so breaks our
+design rule that links should be declared with respect to <em>
+abstract</em> classes rather than concrete ones. It is clear that
+<em> any</em> kind of <tt> Lamp</tt> would be OK as a component. A constructor
+for <tt> Adjust</tt><tt> able</tt><tt> Lamp</tt> should be free to pick the one it
+wants:
+<P>
+<PRE>class AdjustableLampV1a is AdjustableLamp ...
+  l: Lamp &lt;&gt;   % not LampV1
+end
+
+op mkAdjustableLampV1a: unique AdjustableLampV1a {
+   reply new AdjustableLampV1a(l := LampGen$dflt, br := new REAL(0.0)) }
+</PRE>
+<P>
+This level of decoupling is impossible with concrete subclassing.  Our
+<tt> Adjust</tt><tt> able</tt><tt> LampV2</tt> class must always use exactly
+the same representation as <tt> LampV1</tt>. <A NAME=612>&#160;</A>
+<P>
+<H4><A NAME=SECTION00052020000000000000> Embedding.</A></H4>
+<A NAME=614>&#160;</A>
+There are several conceptual interpretations and programming language
+support mechanisms for concrete subclassing. In most schemes (e.g.,
+[<A HREF="#snyderAOM">14</A>]) a concrete subclass is construed as somehow
+containing an ``embedded'' instance of a superclass.  However, this
+does not provide a simple handle for later (in this case)
+independently placing simple <tt> Lamp</tt>s and the <tt> Adjust</tt><tt>
+able</tt><tt> Lamp</tt>s built upon them in different processes, if
+required. While this is perhaps a silly idea in the present example,
+larger designs encounter serious problems. Commitments about whether
+one object should be <tt> packed</tt> representationally within another
+are physical design issues, and should be addressed as such (see
+Chapter <A NAME=tex2html151 HREF="ch23.html">23</A>).
+<P>
+<H4><A NAME=SECTION00052030000000000000> Renamings and restrictions.</A></H4>
+<A NAME=624>&#160;</A>
+A subclass cannot change the name of a property declared in its
+superclass(es).  Also, it is just plain wrong for a subclass to somehow
+``cancel'' properties or operations listed in its superclasses. Both
+of these break the substitutability relation that forms the heart of
+subclassing in design.  However, these effects are easy to obtain using
+composition. In fact, most of our restricted value classes use exactly
+this strategy.  For example, we simply cannot force a computer to
+directly accommodate a simple concrete <tt> Balance</tt> type, which only
+supports <tt> add</tt>, etc. We must restrict the more general
+capabilities of <tt> Real</tt>s, which <em> are</em> directly supportable via
+<tt> REAL</tt> and/or other classes, in order to design concrete versions
+of this ``simpler'' class.
+<P>
+<H4><A NAME=SECTION00052040000000000000> Inner invocations.</A></H4>
+<A NAME=631>&#160;</A><A NAME=632>&#160;</A>
+Subclassing allows the creation of actions with ``inner''
+self-invocations, in which the sense of the self-invocation changes in
+subclasses.  This is an intrinsically self-recursive idiom.  Here the
+subclass intersperses new work between the actions defined in the
+superclass version. This must be prearranged, usually via subclassing
+strategies of the form:
+<P>
+<PRE>class A
+  op middle { }
+  op m { print(&quot; begin &quot;); self.middle; print(&quot; end &quot;) }
+end
+</PRE>
+<P>
+<PRE>class SubA is A
+  op middle { print(&quot; middle &quot;) }
+end
+</PRE>
+<P>
+Here, <tt> (new SubA).m</tt> prints ``<tt> begin</tt>'' ``<tt> middle</tt>'' and
+``<tt> end</tt>'' (although perhaps not in this order, since they were
+defined as one-way sends in this example). This is because the
+self-invocation to <tt> middle</tt> in <tt> A::m</tt> is taken to refer to the
+currently overridden version, not the one in <tt> A</tt>.  In OO systems,
+the class identity of <tt> self</tt> is defined to covary with the
+subclass being declared.  The effects are most noticeable when
+self-referential computations are invoked.
+<A NAME=641>&#160;</A><A NAME=642>&#160;</A><A NAME=643>&#160;</A>
+<P>
+It is easy to define such recursive invocation structures using
+subclassing.  However, the same effects may be obtained in a sometimes
+clearer fashion via explicit layering.  Here, a new layer may be
+created simply by redefining <tt> m</tt> as a top-level operation.  It
+need/should not know anything about how the parts work, just how to
+coordinate them. While we are at it, we could break out a slightly
+better interface:
+<P>
+<PRE>class AA
+  op pre;  op middle;  op post;
+end
+
+op m(a: AA) { a.pre; a.middle; a.post }
+
+class A is AA
+  op middle { }
+  op pre    { print(&quot; begin &quot;) }
+  op post   { print(&quot; end &quot;) }
+end
+
+class SubA is AA
+  a: A;  FORWARD(a, pre, post);
+  op middle { print(&quot; middle &quot;) }
+end
+</PRE>
+<P>
+Probably the most common cases where inner operations appear most
+natural are <em> default</em> scripted actions listed in superclasses.
+Like <tt> m</tt> here, these default actions are intrinsically
+coordination-based, defining higher-level operations as scripts of
+more primitive class operations, each of which may be redefined in
+subclasses. However, layering these scripts on top of classes rather
+than within them generally leads to more extensible designs.
+<P>
+<A NAME=647>&#160;</A><A NAME=648>&#160;</A>
+<A NAME=649>&#160;</A>
+<P>
+<H4><A NAME=SECTION00052050000000000000> Mixins.</A></H4>
+<P>
+Consider a slight recasting of our lamp example, this time using the
+<em> mixin</em> class <tt> Adjust</tt><tt> able</tt>. This class provides
+independent functions for adjusting magnitudes, untied to <tt> Lamp</tt>s:
+<P>
+<PRE>class Adjustable
+  magnitude: real init= 0;
+  op adjust(delta: real) ==&gt; magnitude' = magnitude + delta end
+end
+
+class AdjustableLamp_2 is Adjustable, Lamp end
+</PRE>
+<P>
+Classes such as <tt> Adjust</tt><tt> able</tt> are nearly useless by
+themselves, but readily combine with others to form new
+specializations.  Mixin-style multiple inheritance, like all multiple
+inheritance designs, is simplest when the properties described in each
+class are completely independent from those of the others.  In these
+cases, simple composition suffices to create concrete versions:
+<P>
+<PRE>class AdjustableLamp_2V1 is AdjustableLamp_2
+  own adj: Adjustable &lt;&gt;; own l: Lamp &lt;&gt;;
+  FORWARD(adj); FORWARD(l);
+end
+</PRE>
+<P>
+A similar version using concrete subclassing for either or both
+ancestors would run into the same issues as simple concrete
+inheritance.  Moreover, when multiply inherited properties do
+interact, it is generally necessary to handcraft special versions
+of relevant operations. For example, if adjusting the magnitude down
+to zero should automatically turn off the lamp, this interaction would
+need to be hand-crafted (perhaps using notifications between <tt> adj</tt>
+and <tt> l</tt>; see Chapter <A NAME=tex2html161 HREF="ch22.html">22</A>).
+<P>
+<H2><A NAME=SECTION00053000000000000000> Subclassing and White Box Reuse</A></H2>
+<P>
+<A NAME=662>&#160;</A><A NAME=663>&#160;</A>
+<A NAME=664>&#160;</A>
+<A NAME=665>&#160;</A><A NAME=666>&#160;</A>
+<A NAME=667>&#160;</A>
+<P>
+Black-box composition is generally a safer strategy than either
+concrete composition or concrete subclassing. The new class uses the
+other as a mere component, so it has no special privileges to any
+internals.  This makes it impossible for the new class to redefine
+things in ways that inadvertently break invariants.
+<P>
+Further, both layered composition and subclassing may be distinguished
+from forms of differential design in which bits and pieces of
+definitions in one class are reused and reworked in white-box fashion
+in another.  These do not usually coincide. When they do not, <em>
+neither</em> disciplined subclassing nor composition is appropriate.
+However, pragmatic concerns make it very tempting to abuse one of
+these techniques.
+<P>
+In a sense, the <em> right</em> tool for this job is <em> cut-and-paste</em>
+reuse, in which definitions from one class are lifted and edited for
+use in another. However, the disadvantages of such practices are
+obvious. Among other problems, if the original version is discovered
+to be incorrect, it becomes very difficult to trace all of the others
+that are equally wrong.
+<P>
+There <em> is</em> a good solution, adopted in several OO languages. A
+design and programming system can itself facilitate and control
+white-box reuse-with-modification by providing a means for logically
+cutting and pasting the internals of one concrete class inside
+another, along with the convention that definitions mentioned as
+different in the new class replace those in the other.  (A nearly
+equivalent strategy is used in languages (e.g., <i> POOL</i>
+[<A HREF="#pool">3</A>]) that explicitly maintain two separate kinds of
+inheritance hierarchies, one for properties, and the other for reused
+code.)
+<P>
+For example, suppose we need to design a lamp that only has two
+brightness settings:
+<P>
+<PRE>class DiscretelyAdjustableLamp is Lamp
+  brightness: int;
+  op adjustUp ==&gt; brightness' = 269 end
+  op adjustDown ==&gt; brightness' = 54 end
+end
+
+class DiscretelyAdjustableLampV1 is DiscretelyAdjustableLamp
+  opens AdjustableLampV1
+  op adjustUp { br.set(269) }
+  op adjustDown  { br.set(54) }
+  local op adjust(delta: int)
+end
+</PRE>
+<P>
+The <tt> opens</tt> clause says that the listed parts of the class(es) are
+logically copied into the current declaration (subject to overrides)
+without saying <em> anything</em> about subclassing relations. It need
+only be used when performing white-box reuse that mangles the
+internals of the other class in a way that does not preserve
+subclassing relations. This was done here because the <tt>
+AdjustableLampV1::adjust</tt> operation does not deal with absolute
+settings, only relative ones. There is no other direct way to
+unconditionally set the brightness to a particular value. Also, since
+the <tt> adjust</tt> operation is not a part of the <tt>
+DiscretelyAdjustableLamp</tt> interface, it is redeclared as <tt> local</tt>.
+(This is safer than deleting it outright.)
+<P>
+The advantages such facilities are mainly (and importantly) <em>
+managerial</em>.  They have the same effects as cut-and-paste-and-modify,
+but help track modifications by linking constructions to their
+ultimate sources.  This ensures that if a definition is changed, the
+effects are felt in all other classes that use it.
+<P>
+These methods do <em> not</em> introduce <em> object</em> access issues.  The
+<tt> open</tt>ed objects themselves are not being accessed, just their
+declarative and definitional structures. Similarly, invariant and
+effect information found in the <tt> open</tt>ed class cannot be reused.
+Usage is limited to concrete characteristics.
+<P>
+The whole idea of white-box reuse is to modify component and
+subcomponent code to do things they were never intended to do.  When
+either pure composition or pure subclassing suffice, they are
+far better options. The hard work, guarantees, tests, and so on that
+others have already put into the design of these components may then
+be exploited.
+<P>
+For example, in the present case, a <tt> DiscretelyAdjustableLampV2</tt>
+class could be constructed to use a <tt> AdjustableLampV1</tt> as a
+component, while additionally keeping track of the current brightness
+settings via other attributes. In this way, it can send the
+appropriate value to <tt> adjust</tt> to implement <tt> adjustUp</tt> and <tt>
+adjustDown</tt>.  This layering might or might not lead to a slower
+implementation.  If it does, encapsulation boundaries may broken in a
+more thoughtful way in later design steps dealing explicitly with
+performance issues (see Chapter <A NAME=tex2html168 HREF="ch25.html">25</A>).
+<P>
+<center><P><P></center>
+
+
+<center><H2><A NAME=SECTION00060000000000000000> Summary</A></H2></center>
+<P>
+Being careful about the occasional subtleties of simple attributes is
+the first step in reliable class design. We refine OOA-level
+descriptions to reflect distinctions that make a difference in
+software.  We introduced a number of <em> design restrictions</em>,
+including strong typing and state-preserving inspection rules.  Even
+``elementary'' classes include attributes that must be dynamically
+constrained by restricting value ranges, mutability, and exports.
+Inheritance and composition mechanisms may collide in designs using
+concrete subclassing. This is generally avoided through the use of
+abstract subclassing plus composition.
+<P>
+<H2><A NAME=SECTION00061000000000000000> Further Reading</A></H2>
+<P>
+OO methods for dealing with attributes share commonalities with those
+based on abstract data types (ADTs)<A NAME=695>&#160;</A>; see Liskov
+[<A HREF="#liskov">11</A>].  Cook [<A HREF="#cook">5</A>] describes some differences between OO
+and ADT methods.
+<P>
+Many slightly different constructs have been termed ``views'' and
+several other view-like constructs have been described; see, e.g.,
+[<A HREF="#abiteboul">2</A>,<A HREF="#scholl">13</A>,<A HREF="#obj3">9</A>,<A HREF="#ditchfield">7</A>].  Constructs similar to
+wrappers have been termed <em> thunks</em>
+[<A HREF="#abelson">1</A>]<A NAME=701>&#160;</A> and <em> envelopes</em>
+[<A HREF="#coplien">6</A>]<A NAME=704>&#160;</A>. They are also mappable to <em>
+closures</em><A NAME=706>&#160;</A> in <i> Smalltalk</i>
+[<A HREF="#smalltalk">10</A>]<A NAME=709>&#160;</A>. Communication-closed layers form a
+central role in many distributed design frameworks; see, for example,
+[<A HREF="#apt">4</A>].
+<A NAME=711>&#160;</A>
+<P>
+The use of compositional methods rather than concrete subclassing is
+discussed more fully by Raj and Levy [<A HREF="#raj">12</A>].  Inheritance in
+active objects is discussed in [<A HREF="#frolund">8</A>] and references therein.
+<P>
+<H2><A NAME=SECTION00062000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Design one or more <tt> Date</tt> classes that would serve the needs
+        of <em> Date</em>s as used throughout Part I.
+<P>
+  <LI> Design one or more <tt> Cash</tt> classes that could
+        serve as a translation of <em> $Number</em> from Part I.
+        Use or revise <tt> Balance</tt>.
+<P>
+  <LI> Should <tt> bcd</tt> (binary coded decimal) be a primitive value type?
+        Why/why not?
+<P>
+  <LI> Describe three additional ways to represent the
+        OOA notion of an optional value attribute.
+<P>
+  <LI> Design generator classes for <tt> MailingLabel</tt>s.
+<P>
+  <LI> Why should built-in concrete classes such as <tt> INT</tt>
+        support a mutable <tt> add(x:int)</tt> operation that
+        adds <tt> x</tt> to the current state value? Would
+        it be better to just support <tt> set(x:int)</tt>?
+<P>
+  <LI> Design a class for immutable <tt> Complex</tt> numbers.
+        Create a view of <tt> Complex</tt> to reimplement <tt> Point</tt>.
+<P>
+  <LI> Give an example of a case in which an object cannot
+        provide argument screening precondition functions because
+        it cannot compute them.
+<P>
+  <LI> Design abstract and concrete <tt> Checking</tt><tt> Account</tt> subclasses
+        of the <tt> Account</tt> class.
+        Design the concrete versions using (a) composition (b)
+        concrete subclassing.
+<P>
+  <LI> An alternative to defining value-based views would be to
+        enhance the primitive value system. This might then allow us
+        to write <tt> type</tt> <tt> probability</tt> <tt> =</tt> <tt> real</tt>
+        <tt> where</tt> <tt> 0.0</tt> <tt> &lt;=</tt> <tt> probability</tt> <tt> &lt;=</tt>
+        <tt> 1.0</tt> <tt> end</tt>. Why is it better to define <em>
+        classes</em> instead?
+<P>
+  <LI> Build a tool that accepts range-restricted value descriptions
+        (e.g., in the form listed in the previous question) and
+        automatically generates (a) an abstract immutable class, (b) a
+        default concrete subclass, (c) an abstract mutable class, and
+        (d) a default concrete subclass, all obeying conventions of
+        your choosing.
+<P>
+ </OL>
+<P>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=abelson><STRONG>1</STRONG></A><DD>
+H. Abelson and G. Sussman.
+ <em> Structure and Interpretation of Computer Programs</em>.
+ MIT Press, 1985.
+<P>
+<DT><A NAME=abiteboul><STRONG>2</STRONG></A><DD>
+S. Abiteboul and A. Bonner.
+ Objects and views.
+ In <em> ACM SIGMOD Conference</em>. ACM, 1991.
+<P>
+<DT><A NAME=pool><STRONG>3</STRONG></A><DD>
+P. America.
+ A parallel object-oriented language with inheritance and subtyping.
+ In <em> OOPSLA '90</em>. ACM, 1990.
+<P>
+<DT><A NAME=apt><STRONG>4</STRONG></A><DD>
+K. Apt and E. Olderog.
+ <em> Verification of Sequential and Concurrent Programs</em>.
+ Springer-Verlag, 1991.
+<P>
+<DT><A NAME=cook><STRONG>5</STRONG></A><DD>
+W. Cook.
+ Object-oriented programming versus abstract data types.
+ In J. deBakker, W. deRoever, and G. Rozenberg, editors, <em>
+  Foundations of Object-Oriented Languages</em>. Springer Verlag, 1991.
+<P>
+<DT><A NAME=coplien><STRONG>6</STRONG></A><DD>
+J. Coplien.
+ <em> Advanced C++: Programming Styles and Idioms</em>.
+ Addison-Wesley, 1991.
+<P>
+<DT><A NAME=ditchfield><STRONG>7</STRONG></A><DD>
+G. Ditchfield.
+ Contextual polymorphism.
+ Technical Report Thesis, University of Waterloo, Ontario, 1992.
+<P>
+<DT><A NAME=frolund><STRONG>8</STRONG></A><DD>
+S. Frolund.
+ Inheritance of synchronization constraints in concurrent
+  object-oriented programming languages.
+ In <em> ECOOP '92</em>. Springer-Verlag, 1992.
+<P>
+<DT><A NAME=obj3><STRONG>9</STRONG></A><DD>
+J. Goguen and J. Meseguer.
+ Unifying functional, object-oriented and relational programming with
+  logical semantics.
+ In B. Shriver and P. Wegner, editors, <em> Research Directions in
+  Object-Oriented Programming</em>. MIT Press, 1987.
+<P>
+<DT><A NAME=smalltalk><STRONG>10</STRONG></A><DD>
+A. Goldberg.
+ <em> Smalltalk 80: The Interactive Programming Environment</em>.
+ Addison-Wesley, 1984.
+<P>
+<DT><A NAME=liskov><STRONG>11</STRONG></A><DD>
+B. Liskov.
+ Data abstraction and hierarchy.
+ In <em> OOPSLA '87</em>. ACM, 1987.
+<P>
+<DT><A NAME=raj><STRONG>12</STRONG></A><DD>
+R. Raj and H. Levy.
+ A compositional model for software reuse.
+ In <em> ECOOP '89</em>. Cambridge University Press, 1989.
+<P>
+<DT><A NAME=scholl><STRONG>13</STRONG></A><DD>
+M. Scholl, C. Laasch, and M. Tresch.
+ Updatable views in object oriented databases.
+ In C. Delobel, M. Kifer, and Y. Masunaga, editors, <em> Deductive and
+  Object-Oriented Databases</em>. Springer-Verlag, 1991.
+<P>
+<DT><A NAME=snyderAOM><STRONG>14</STRONG></A><DD>
+A. Snyder.
+ Modeling the c++ object model: An application of the abstract object
+  model.
+ In <em> ECOOP '91</em>. Springer-Verlag, 1991.
+<P>
+<DT><A NAME=asn><STRONG>15</STRONG></A><DD>
+Open Systems Interconnection Standard.
+ <em> OSI: ASN.1 Encoding Rules</em>.
+ ISO, 1985.
+<P>
+<DT><A NAME=hermes><STRONG>16</STRONG></A><DD>
+R. Strom, D. Bacon, A. Goldberg, A. Lowry, D. Yellin, and S. Yemeni.
+ <em> Hermes: A Language for Distributed Computing</em>.
+ Prentice Hall, 1991.
+</DL>
+<P>
+
+<a href="ch18.html">Next: Chapter 18</a>
+<center><P><P></center>
+
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:57:14 EDT 1995</I>
+</ADDRESS>
+</BODY>

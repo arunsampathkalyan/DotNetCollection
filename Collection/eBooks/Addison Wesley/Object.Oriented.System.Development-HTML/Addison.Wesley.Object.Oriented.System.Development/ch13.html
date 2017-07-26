@@ -1,0 +1,328 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Domain Analysis</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Domain Analysis">
+<meta name="keywords" value="ch13">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 13: Domain Analysis</h2>
+<ul>
+<LI> <A NAME=tex2html17 HREF="#SECTION00010000000000000000"> Models</A>
+<LI> <A NAME=tex2html18 HREF="#SECTION00020000000000000000"> Reuse</A>
+<LI> <A NAME=tex2html19 HREF="#SECTION00030000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<A NAME=9>&#160;</A><A NAME=10>&#160;</A>
+<P>
+Previous chapters have concentrated on analysis methods resulting in
+the clarification of the requirements of a particular target system.
+However, often, a system may be seen as an element of a stream of
+products.  If so, we can investigate their common features.  Such a
+domain characterization can then be leveraged for each system to be
+developed.
+<P>
+Target-specific OO analysis techniques often generate models with
+applicability stretching beyond the needs of the system(s) under
+consideration, and thus intrinsically incorporate at least some form
+and extent of domain analysis.  However, the notion of domain analysis
+as a distinguishable enterprise remains an immature topic, in need of
+considerable development.  In this chapter, we survey general views,
+models, and variants of domain analysis, along with their consequences
+for reuse.
+<P>
+There are several ways to define ``domain''.  For example, Berard
+[<A HREF="#berard">2</A>] gives two characterizations:
+<OL><LI> A collection of current and future (software) applications that share a
+set of common characteristics.
+<P>
+<LI> A well-defined set of characteristics that accurately, narrowly, and
+completely describe a family of problems for which computer application
+solutions are being, and will be sought.
+</OL>
+<P>
+A founder, if not the founder, of domain analysis is Neighbors
+[<A HREF="#neigh1">5</A>,<A HREF="#neigh2">6</A>].  He wrote in 1980:
+<blockquote> The key to reusable software is captured in domain analysis in that it
+stresses the reusability of analysis and design, not code.
+</blockquote><BR>
+
+
+<center><H2><A NAME=SECTION00010000000000000000> Models</A></H2></center>
+<P>
+The scope of a domain
+investigation can vary widely.  A definition of domain
+analysis<A NAME=18>&#160;</A> formulated by
+Prieto-Diaz [<A HREF="#tracz">8</A>] elucidates its purpose as:
+<blockquote> ... a process by which information used in developing software systems is
+identified, captured, and organized with the purpose of making it reusable
+when creating new systems.
+</blockquote>
+<P>
+Arango and Prieto-Diaz [<A HREF="#pd">1</A>] present a model of domain analysis
+summarized in the following SADT diagram:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch13-img1.gif"><P>
+<P>
+This model describes domain analysis as an activity that takes
+multiple sources of input, produces many different kinds of output, and
+is heavily parameterized.  For example, one parameter is the development
+paradigm (e.g., SA, Jackson, OO).  Raw domain knowledge from any
+relevant source is taken as input.  Participants in the process can
+be, among others, domain experts and analysts.  Outputs are
+(semi)formalized concepts, domain processes, standards, logical
+architectures, etc.  Subsequent activities produce generic design
+fragments, frameworks, etc.
+<P>
+While this account gives an inspiring initial insight into domain
+analysis, it is not the full story.  Several refinements are presented
+next.
+<P>
+<A NAME=68>&#160;</A>
+<P>
+<H2><A NAME=SECTION00011000000000000000> Product Definition Domain Analysis</A></H2>
+<P>
+When a product is seen as part of a new or an existing stream of
+products, the domain of this product stream may itself be studied.
+This study will in general go beyond technical aspects of the product.
+For example, strategic alignment, longer term marketing aspects,
+product positioning, risk analysis, common look-and-feel, covering a
+diversity of product features, etc., will play a role in conjunction
+with investigations of generic terminology, logical architectures,
+reliability standards, and other general considerations.
+<P>
+Such a study may be seen as a domain analysis.  It involves a
+multidisciplinary team. Consequently a nonformal language is the <em>
+lingua franca</em>.  A software development paradigm, such as OO, is unlikely
+to play a prominent role here.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Requirements Domain Analysis</A></H2>
+<P>
+<A NAME=72>&#160;</A>
+<A NAME=73>&#160;</A>
+<P>
+When there is enough confidence that a stream of products can be
+produced, one may want to factor out the commonalities in the multiple
+analyses that must be done for each product.  Thus one may want to do
+a <em> conceptual</em> domain analysis that yields common ground for each
+specific analysis.  OO analysis notions lend themselves for capturing
+generic concepts at multiple levels of granularity.  Ensembles,
+subensembles, classes, and generic relationships are all candidates
+for describing an application domain.
+<P>
+While we can use the <em> notions</em> and notations from an OO analysis
+method for requirements domain analysis, we have to adjust the process
+dimension.  We cannot rely on a system-specific requirements document
+as input to the process.  Instead, we have to take in any relevant
+features from the documentation that describe the commonality of the
+products.  Experts and customers may be tapped, as suggested in the
+generic diagram.  However, the situation differs from the diagram in
+that people have to be primed for more specific and detailed
+information.  The output side differs as well because the process
+stops earlier; no model is to be constructed.  Instead, generic
+classes, relationships, ensembles, etc.,  are produced. These
+may be organized into one or more OO <em> frameworks</em> that may be
+specialized to the needs of particular systems.<A NAME=77>&#160;</A>
+<P>
+For example, many of the ATM examples in previous chapters are not
+geared to any specific system.  To the extent to which these
+descriptions are realistic, they are contributions to an OO domain
+analysis of ``ATMs for banks''. Our model of the OOA process in
+Chapter <A NAME=tex2html10 HREF="ch12.html">12</A> represents an even better example of this
+form of domain analysis. This model abstracted across different
+development styles and contexts. It did not culminate in a particular
+target model, but only those model components forming a basis for
+any OOA process.
+<P>
+<H3><A NAME=SECTION00012100000000000000> Domain Engineering</A></H3>
+<P>
+<A NAME=81>&#160;</A>
+<P>
+A requirements domain analysis may lead to an OO domain engineering
+effort.  This entails the construction of design fragments of the
+generic elements identified by a requirements domain analysis.  These
+designs can be implemented and added to a domain-specific code
+library.
+<P>
+<H2><A NAME=SECTION00013000000000000000> Generator Domain Analysis</A></H2>
+<P>
+When a stable domain serves as the basis of a product line or market
+segment, one may consider constructing a generator for a particular
+domain.  This generator may then be used to automatically build (parts
+of) any of a series of related products.  Relational database systems
+are an example of a mature, stable domain where it is quite
+conceivable to perform a generator type domain analysis.  The query
+language, platform, operating system and windowing environment would
+be main parameters for such a relational database builder.
+<P>
+The analysis performed for the construction of such a meta-program may
+be seen as a third version of the notion of domain analysis.  One may
+assume for such an enterprise not only that the domain is stable and
+well understood, but also that domain specific design and/or code
+libraries are available.
+<P>
+One may even step one level higher. For example, the Rose system
+(Reuse Of Software Elements) [<A HREF="#lubars1">3</A>,<A HREF="#lubars2">4</A>] was an
+experimental meta-meta-program that assisted in capturing domain
+knowledge and design know-how for the domain.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Reuse</A></H2></center>
+<A NAME=85>&#160;</A>
+<A NAME=86>&#160;</A>
+<P>
+Domain analysis is not a one-shot affair.  Product definitions evolve
+continuously.  The development of a particular system that exploits
+previously accumulated domain knowledge can be the source for new
+insights about the domain that adds to or refines codified domain
+knowledge.  In analogy to the emergence of domain-specific code
+libraries, we foresee the development of domain-specific analysis
+concept repositories, linked ultimately to code via domain-specific
+design repositories.  The following diagram describes the interactions:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch13-img2.gif"><P>
+<P>
+Functional model components are the primary outputs of a domain
+analysis.  The feedback loops describe/prescribe that the outputs of the
+different phases are to be abstracted and added to the domain
+repositories.  The ``bird-feet'' lines in the diagram that are
+attached to the repositories express their interconnections.  For
+example, a domain analysis concept can have multiple realizations in
+the design repository.  Similarly, a domain construct can have
+multiple realizations in the corresponding code repository, where each
+realization satisfies different auxiliary requirement trade-offs.
+<P>
+Domain analysis is the spearhead for disciplined reuse in software
+development.  This is quite obvious for the generator version of
+domain analysis, but applies as well to the two weaker versions.  An
+organization for system development will be complemented, when cost
+effective, by an organization that maintains and manages
+domain-specific repositories.  OO analysis has much to offer to domain
+analysis from a technical perspective.  However the sociological,
+cultural and organizational problems of realizing a cost effective
+reuse program that underlies our diagram extend beyond the technical
+dimension (see, among others [<A HREF="#pd2">7</A>]). As discussed in
+Chapter <A NAME=tex2html14 HREF="ch15.html">15</A>, these obstacles are more easily conquered at
+the OO design and implementation levels. This has led to the
+widespread adoption of reuse-based strategies in OO design and
+programming efforts. However, these practices remain incomplete
+without equally prevalent adoption of a reuse-based engineering
+discipline at the requirements and analysis levels.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Summary</A></H2></center>
+<P>
+While OO analysis is focused on the features and functionality of a
+single system to be generated, a domain analysis focuses on the common
+and variant features across a family of systems.  At least three
+versions of domain analysis may be distinguished: (1) at the level of
+product definitions, (2) at the level of analysis of the
+proto-products, and (3) at the level of the analysis for a generator
+of applications in the domain.  Because of the informality of version
+(1), the OO paradigm plays a less significant role there than in
+versions (2) and (3).
+<P>
+To ensure the reusability of the domain models produced, domain analysts
+use diverse sources of domain knowledge.  These sources provide information
+on the range of potential systems in the domain.  While all domain analysis
+methods involve extraction of terminology and identification of a common
+domain language, the OO domain analysis method accomplishes this task
+through identification of classes, relationships and behaviors.  Such
+domain models may translate into reusable frameworks.
+<P>
+In a reuse strategy the domain analysis work-products must be
+maintained and enhanced over many systems.  The domain analysis
+repository contains domain models that form the basis of subsequent
+systems analysis activities.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Further Reading</A></H2>
+<P>
+The state of the art in domain analysis is concisely formulated in a
+Domain Analysis Working Group Report from a workshop held in 1991
+[<A HREF="#tracz">8</A>].  Many open questions are formulated in this document.
+The great diversity of perspectives suggests that domain analysis is
+still in an embryonic stage with substantial potential for further
+developments.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Exercises</A></H2>
+<P>
+<OL>
+<LI> Revisit the previous chapters and identify which of those specific notions,
+notations, and procedures can be reused for a domain analysis.
+<P>
+<LI> Perform a domain analysis in any of the interpretations of this
+chapter for a domain with which you are familiar.
+<P>
+</OL>
+<P>
+
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=pd><STRONG>1</STRONG></A><DD>
+G. Arango and R. Prieto-Diaz.
+ Domain analysis: Concepts and research directions.
+ In R. Prieto-Diaz and G. Arango, editors, <em> Domain Analysis:
+  Acquisition of Reusable Information for Software Construction</em>. IEEE Computer
+  Society Press, May 1989.
+<P>
+<DT><A NAME=berard><STRONG>2</STRONG></A><DD>
+E. Berard.
+ <em> Essays in Object-Oriented Software Engineering</em>.
+ Prentice Hall, 1992.
+<P>
+<DT><A NAME=lubars1><STRONG>3</STRONG></A><DD>
+M.D. Lubars.
+ Wide-spectrum support for software reusability.
+ In <em> Workshop on Software Reusability and Maintainability</em>.
+  National Institute of Software Quality and Productivity, October 1987.
+<P>
+<DT><A NAME=lubars2><STRONG>4</STRONG></A><DD>
+M.D. Lubars.
+ Domain analysis and domain engineering in idea.
+ Technical Report STP-295-88, MCC, September 1988.
+<P>
+<DT><A NAME=neigh1><STRONG>5</STRONG></A><DD>
+J.M. Neighbors.
+ Software construction using components.
+ Technical Report 160, Department of Information and Computer
+  Sciences, University of California, Irvine, 1980.
+<P>
+<DT><A NAME=neigh2><STRONG>6</STRONG></A><DD>
+J.M. Neighbors.
+ The draco approach to constructing software from reusable components.
+ <em> IEEE Transactions of Software Engineering</em>, SE-10(5), September
+  1984.
+<P>
+<DT><A NAME=pd2><STRONG>7</STRONG></A><DD>
+R. Prieto-Diaz.
+ Implementing faceted classification of software reuse.
+ <em> Communications of the ACM</em>, May 1991.
+<P>
+<DT><A NAME=tracz><STRONG>8</STRONG></A><DD>
+W. Tracz.
+ Domain analysis working group report.
+ In <em> First International Workshop on Software Reusability</em>, 1991.
+</DL>
+<P>
+
+<a href="ch14.html">Next: Chapter 14</a>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:53:42 EDT 1995</I>
+</ADDRESS>
+</BODY>

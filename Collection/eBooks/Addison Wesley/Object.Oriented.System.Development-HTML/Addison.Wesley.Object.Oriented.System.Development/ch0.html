@@ -1,0 +1,376 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Preface</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Preface">
+<meta name="keywords" value="ch0">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+ <BR>
+
+<center><P><P></center>
+
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Preface</h2>
+</td><tr></table>
+
+Object-oriented (OO) programming has a growing number of converts.
+Many people believe that object orientation will put a dent in the
+software crisis.  There is a glimmer of hope that OO software
+development will become more like engineering.  Objects, whatever they
+are now, may become for software what nuts, bolts and beams are for
+construction design, what <em> 2-by-4</em>s and <em> 2-by-6</em>s are for home
+construction, and what chips are for computer hardware construction.
+<P>
+However, before making this quantum leap, object-oriented methods
+still have to prove themselves with respect to more established
+software development paradigms.  True, for small tasks the war is
+over.  Object-oriented programs are more compact than classic
+structured programs.  It is easier to whip them together using
+powerful class libraries.  Inheritance allows ``differential
+programming'', the modification in a descendant class of what is wrong
+with a parent class, while inheriting all of its good stuff.  User
+interfaces, which are often sizable fractions of small systems, can be
+put together easily from object-oriented libraries.
+<P>
+Delivering large object-oriented software systems routinely
+and cost effectively is still a significant challenge.  To quote Ed
+Yourdon: ``A system composed of 100,000 lines of <i> C++</i> is not to
+be sneezed at, but we don't have that much trouble developing 100,000
+lines of <i> COBOL</i><A NAME=11>&#160;</A> today.  The real test of OOP will come when
+systems of 1 to 10 million lines of code are developed.<sup>1</sup>''.
+
+<blockquote>
+ <sup>1</sup> Footnote:<br>
+To
+be fair and accurate, systems of 100,000 lines of <i> C++</i> <A NAME=13>&#160;</A> and
+those of 1,000,000 lines of <i> COBOL</i> are often of the same order of
+magnitude in complexity.
+</blockquote>
+<P>
+The development of large systems is qualitatively different from that
+of small systems.  For instance, a multinational banking conglomerate
+may want a system supporting around-the-clock access to the major
+stock markets in the world.  They may additionally want to integrate
+accounts for all worldwide customers, providing fault-tolerant
+distributed transaction services.  The banking conglomerate cannot
+realize this system by relying exclusively on a bundle of smart
+programmers.  Instead, as enshrined by the structured paradigm,
+analysis and design must precede pure implementation activities.  OO
+methods are known by experience to scale up to such large systems. For
+example, Hazeltine [<A HREF="http://g.oswego.edu/dl/oosd/node1.html#hazeltine">2</A>] reports a project with ``about
+1000 classes, 10 methods per class, involving an average of 40 persons
+over 2 years.''
+<P>
+This book is intended to help the reader better understand the role of
+analysis and design in the object-oriented software development
+process.  Experiments to use structured analysis and design as
+precursors to an object-oriented implementation have failed.  The
+descriptions produced by the structured methods partition reality
+along the wrong dimensions.  Classes are not recognized and
+inheritance as an abstraction mechanism is not exploited.  However, we
+are fortunate that a multitude of object-oriented analysis and design
+methods have emerged and are still under development.  Core OO notions
+have found their home place in the analysis phase.  Abstraction and
+specialization via inheritance, originally advertised as key
+ingredients of OO programming, have been abstracted into key
+ingredients of OO analysis (OOA).  Analysis-level property inheritance
+maps smoothly on the behavior inheritance of the programming realm.
+<P>
+A common selling point of the OO paradigm is that it is more
+``natural'' to traverse from analysis to implementation.  For example,
+as described in [<A HREF="#champander">1</A>], developers at Hewlett-Packard who were
+well versed in the structured paradigm reported that the ``conceptual
+distances'' between the phases of their project were smaller using OO
+methods.  Classes identified in the analysis phase carried over into
+the implementation.  They observed as well that the defect density in
+their <i> C++</i> code was only 50% of that of their <i> C</i><A NAME=19>&#160;</A>
+code.
+<P>
+However, more precise characterizations of why this might be so and
+how best to exploit it are still underdeveloped. The black art
+mystique of OO methods is a major inhibitor to the widespread
+acceptance of the OO paradigm.  Hence we have devoted ample attention
+to the process aspects of development methods.
+<P>
+Will this book be the last word on this topic?  We hope not.  The
+object-oriented paradigm is still developing.  At the same time, new
+challenges arise.  Class libraries will have to be managed.  Libraries
+for classic computer science concepts can be traversed using our
+shared, common knowledge.  But access to application specific domain
+libraries seems to be tougher.  Deciding that a particular entry is
+adequate for a particular task without having to ``look inside'' the
+entry is a challenge.  Will the man-page style of annotations be
+sufficient?  Our experience with man-pages makes us doubt that it
+will be.
+<P>
+Further horizons in OO are still too poorly understood to be exploited
+
+in the construction of reliable systems. For example, some day methods
+may exist for routinely developing ``open systems'' of ``smart''
+active objects<A NAME=20>&#160;</A> inspired by the pioneering work of
+Hewitt.<sup>2</sup> While active object
+models do indeed form much of the foundation of this book, their
+furthest-reaching aspects currently remain the focus of research and
+experimental study.
+
+<blockquote>
+<sup>2</sup>Footnote :<br>
+Some quotes from this manifesto paper
+[<A HREF="#hewitt">3</A>]: ``This paper proposes a modular ACTOR architecture and
+definitional method for AI that is conceptually based on a single kind
+of object: actors... The formalism makes no presuppositions about
+the representation of primitive data structures and control
+structures.  Such structures can be programmed, micro-coded or
+hard-wired in a uniform modular fashion.  In fact it is impossible to
+determine whether a given object is `really' represented as a list, a
+vector, a hash table, a function or a process. Our formalism shows how
+all of the modes of behavior can be defined in terms of <em> one</em> kind
+of behavior: <em> sending messages to actors</em>.'' We briefly discuss
+open systems of actors in Chapter <A NAME=tex2html3 HREF="ch22.html">22</A>.
+</blockquote>
+<P>
+The object oriented paradigm, and this book, may impact different
+software professionals in different ways:
+<P>
+<DL ><DT>Analysts.
+<DD>
+OO analysis is a fairly new enterprise.  There is an abundance of
+unexplored territory to exploit.  On the other hand there are few
+gurus to rely on when the going gets tough.  The OO paradigm <em> is</em>
+tough going when one has been inundated with the structured way of
+thinking.  While structured analysis is supposed to be implementation
+technique independent, it turns out to have a built-in bias toward
+classical implementation languages.  Its core abstraction mechanism is
+derived from the procedure/function construct.  Letting structured
+abstractions play second violin to object and inheritance takes some
+effort.
+<P>
+<DT>Designers.
+<DD> OO design is as novel as OO analysis.  By virtue of
+object orientation, more activities in the design phase and links to
+both analysis and implementation can be distinguished than has been
+previously possible.  Our treatment focuses on the continuity of analysis
+and design, thus presenting many descriptive issues that are normally
+considered as ``OO design'' activities in the context of OOA. On the
+other side, it pushes many decisions that are usually made in the
+implementation phase into design.
+<P>
+<DT>Implementors.
+<DD> OO implementation should become easier when the task of
+satisfying functional requirements has been moved into the design
+phase.  Implementation decisions can then concentrate on exploiting
+the features of a chosen configuration and language needed to realize
+all the remaining requirements.
+<P>
+<DT>Software engineers.
+<DD> OO software development is becoming a viable
+alternative to structured development.  The application domains of
+both appear virtually the same.  While the structured version has the
+advantage of currently being better supported by CASE tools, the
+object-oriented version will most likely become even better supported.
+<P>
+<DT>Project managers.
+<DD> Experience with OO methods may be obtained
+using a throwaway, toy example to go through all the phases.  The
+promise of large scale reuse should justify the transition costs.
+Software development planning is notoriously hard.  This text
+addresses this topic by formulating a generic development scenario.
+However, foolproof criteria for measuring progress are as yet
+unavailable.
+<P>
+<DT>Tool builders.
+<DD> The OO community needs
+integrated tools.  In addition to object orientation, team effort, version
+control, process management, local policies, metrics, all need
+support.
+<P>
+<DT>Methodologists.
+<DD> We cite open issues and unsolved problems
+throughout the text, usually while discussing further readings.
+<P>
+<DT>Students and teachers.
+<DD> While the object-oriented paradigm is
+rapidly overtaking industrial software development efforts, few
+courses address fundamental OO software engineering concepts untied to
+particular commercial methods.  We have successfully used material in
+this book as a basis for one-semester graduate and undergraduate
+courses, one-week courses, and short tutorials <sup>3</sup>.
+<P>
+<blockquote>
+<sup>3</sup>Footnote :<br>
+A team-based
+development project is almost mandatory for effective learning in
+semester courses, but raises logistics problems common to any software
+engineering course.  Projects should neither be so big that they
+cannot be at least partially implemented by a team of about three
+students within the confines of a semester, nor be so small that they
+evade all systems-level development issues.  Successful projects have
+included a version of <tt> ftp</tt> with an <i>
+InterViews</i>[<A HREF="#linton">4</A>]<A NAME=31>&#160;</A> based interface, and a
+simple event display system for <i> Mach</i> processes.  To implement
+projects, students who do not know an OO programming language will
+need to learn one long before the end of the course.  One way to
+address this is to teach the basics of OOP in a particular language
+and other implementation pragmatics early on, independently of and in
+parallel with the topics covered in this book.  For example, in a
+course meeting two or three times per week, one class per week could
+be devoted to programming and pragmatics. As the semester continues,
+this class could focus on project status reports and related
+discussions.  This organization remains effective despite the fact
+that the contents of the different classes are often out of synch.  By
+simplifying or eliminating project options corresponding to the
+contents of Chapters <A NAME=tex2html5 HREF="ch22.html">22</A> through <A NAME=tex2html6 HREF="ch26.html">26</A>, final
+implementation may begin while still discussing how these issues apply
+to larger efforts.
+</blockquote>
+<DT>Others.
+<DD>
+The reader may think at this point that this book is relevant only for
+large system development.  We don't think so.  Even in a one-hour
+single-person programming task, activities applying to a large
+system can be recognized.  The difference is that these activities all
+happen inside the head of the person. There is no written record of
+all the decisions made.  The person may not even be aware of some of the
+decisions.  We hope that everyone will obtain a better understanding
+of the overall development process from this book.
+<P>
+ </DL>
+<P>
+This text does not aim at defining yet another OO
+``method''. Instead, we aim to give a minimum set of notions and
+to show how to use these notions when progressing from a set of requirements
+to an implementation.  We reluctantly adopt our own minimal
+(graphical) analysis and (textual) design notations to illustrate
+basic concepts.  Our analysis notation (<i> OAN</i>) and design language
+(<i> ODL</i>) are ``lightweight'' presentation vehicles chosen to be
+readily translatable into any OO analysis, design, and programming
+languages and notations you wish to use. (Notational summaries may be
+found in the Appendix <A NAME=tex2html13 HREF="ch27.html">27</A>.)
+<P>
+Most of what we have written in this book is not true.  It is also not
+false.  This is because we are in the <em> prescriptive</em> business.
+Software development is a special kind of process.  We describe
+in this book a (loosely defined) algorithm for producing a system.
+Algorithms are not true or false.  They are appropriate for a task or
+not.  Thus this book should contain a correctness proof that
+demonstrates that the application of its methods invariably yields a
+desired system.  However, due to space limitations, we have omitted
+this proof.
+<P>
+More seriously, we have tried to decrease the fuzziness that is inherent in
+prescriptive text by giving precise <em> textual</em> descriptions of the key
+notions in the respective methods.  We have tried to be precise as well, in
+describing how analysis output carries over into design and how the design
+output gets massaged into an implementation.  Thus we obtain checks and
+balances by integrating the methods across the development phases.  This,
+of course, provides only a partial check on the correctness of the
+methods.  Their application will be their touchstone.
+<P>
+We are opinionated regarding formal techniques.  We want to offer
+software developers ``formality a la carte''.  Developers may want to
+avoid rigorous ``mathematical'' precision as one extreme, or may want
+to provide correctness proofs of a target system against the
+requirements as another extreme.  We leave this decision to the
+developer.  As a consequence for us, we avoid introducing notions for
+which the semantics are not crystal clear.  As a result, the developer
+can be as formal as desired.  Since we were at times
+unable to come up with concise semantics, we have omitted some
+modeling and design notions that are offered in other accounts.
+<P>
+While we have tried to provide a solid foundation for the core
+concepts, we are convinced as well that a true formalist can still
+point out uncountably many ambiguities. On the other side, we simply
+do not understand most of the material in this book sufficiently well
+to trivialize it into recipes.
+<P>
+Although one can read this book while bypassing the exercises, we do
+recommend them.  Some exercises ask you to operationalize the
+concepts in this book.  Others are quick ``thought questions'',
+sometimes even silly sounding ones, that may lead you into territory
+that we have not explored.
+<P>
+
+<H2><A NAME=SECTION00001000000000000000> Acknowledgments</A></H2>
+<P>
+Together, we thank our editors Alan Apt and John Wait, and
+reviewers
+Jim Coplien,
+Lew Creary,
+Desmond D'Souza,
+Felix Frayman,
+Watts Humphrey,
+Ralph Johnson, and
+Hermann Kaindl.
+<P>
+DdC thanks Alan Apt for being a persistent initiator to this
+enterprise.  He has an amazing ability to exploit your vanity and lure
+you in an activity that is quite hazardous to plain family life.  On
+the way he gives encouragement, blissfully ignoring the perilous
+situation in which the writer has maneuvered him/herself.
+Donna Ho provided an initial sanity check.  Patricia Collins
+expressed very precisely her concerns about domain analysis.
+<P>
+DL thanks others providing comments and advice about initial versions,
+including
+Umesh Bellur,
+Gary Craig,
+Rameen Mohammadi,
+Rajendra Raj,
+Kevin Shank,
+Sumana Srinavasan, and
+Al Villarica.
+And, of course, Kathy, Keith, and Colin.
+<P>
+We remain perfectly happy to take blame for all remaining omissions,
+stupidities, inaccuracies, paradoxes, falsehoods, fuzziness, and other
+good qualities.  We welcome constructive as well as destructive
+critiques. Electronic mail may be sent to <tt> dl@g.oswego.edu</tt>.
+<P>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=champander><STRONG>1</STRONG></A><DD>
+D. de Champeaux, A. Anderson, M. Dalla Gasperina, E. Feldhousen, F. Fulton,
+  M. Glei, C. Groh, D. Houston, D. Lerman, C. Monroe, R. Raj, and D. Shultheis.
+ Case study of object-oriented software development.
+ In <em> OOPSLA '92</em>. ACM, 1992.
+<P>
+<DT><A NAME=hazeltine><STRONG>2</STRONG></A><DD>
+N. Hazeltine.
+ Oopsla panel report: Managing the transition to object-oriented
+  technology.
+ <em> OOPS Messenger</em>, October 1992.
+<P>
+<DT><A NAME=hewitt><STRONG>3</STRONG></A><DD>
+C. Hewitt, P. Bishop, and R. Steiger.
+ A universal modular actor formalism for ai.
+ In <em> Third International Joint Conference on Artificial
+  Intelligence</em>, 1973.
+<P>
+<DT><A NAME=linton><STRONG>4</STRONG></A><DD>
+M. Linton and et al.
+ <em> InterViews</em>.
+ interviews.stanford.edu, 1990.
+</DL>
+<P>
+
+
+
+<A NAME=tex2html1 HREF="ch1.html"> Next: Chapter 1</A><P>
+
+<center><P><P></center>
+
+<BR> <HR> <P>
+
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed Jan 10 07:51:42 EST 1996</I>
+</ADDRESS>
+</BODY>

@@ -1,0 +1,699 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Object Relationships</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Object Relationships">
+<meta name="keywords" value="ch4">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 4: Object Relationships</h2>
+<UL>
+<LI> <A NAME=tex2html65 HREF="#SECTION00010000000000000000"> Relationships</A>
+<LI> <A NAME=tex2html66 HREF="#SECTION00020000000000000000"> Collections</A>
+<LI> <A NAME=tex2html67 HREF="#SECTION00030000000000000000"> Identifying Relationships</A>
+<LI> <A NAME=tex2html68 HREF="#SECTION00040000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+<p>
+
+
+In this chapter, we provide further apparatus for capturing the static
+dimension of a system or domain of interest.  In the previous chapter,
+we looked at objects in isolation.  Here we consider static
+regularities among objects.  We discuss relations<A NAME=10>&#160;</A>
+in the tradition of entity-relationship
+(ER) modeling<A NAME=11>&#160;</A>.  An example is the <em>
+Ownership</em> relation that connects objects in the class <em> Client</em>
+and objects in the class <em> Account</em>.
+
+<center><H2><A NAME=SECTION00010000000000000000> Relationships</A></H2></center>
+<P>
+<A NAME=16>&#160;</A>
+<A NAME=17>&#160;</A>
+<P>
+A relationship may be seen as a named family of typed tuples.  They
+are typed in the sense that the <em> n</em>th element in a tuple is an
+instance from a specific domain or class.  The <em> signature</em> of a
+relationship is just a listing of these types.  For example, the
+signature of the <em> Ownership</em> relationship is (<em> Client</em>, <em>
+Account</em>) since it has a family of 2-tuples where the first domain is
+the class of <em> Client</em>s and the second domain is the class of <em>
+Account</em>s.
+<P>
+Following the tradition of the data modeling community and other OOA
+methods, a diamond is used to depict a relationship in our graphical
+notation.  A diamond is connected via edges to the domains of the
+tuple elements.  Obviously, we will always have at least two edges.
+For example, to indicate that class <em> Client</em> and class <em>
+Account</em> are connected by the relationship <em> Own</em>:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img1.gif"><P>
+<A NAME=39>&#160;</A>
+<P>
+In the same way that we may want to refer to particular instances of
+classes in a particular target system, we may want to express that
+certain instances actually belong to a relationship.  For example, we
+may want to express that a particular client owns a particular
+account.  An instance of a relation is represented with a diamond
+containing a filled circle:<A NAME=40>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img2.gif"><P>
+<P>
+Graphical notation can sometimes cause an ambiguity when a
+relationship connects identical domains.  For example, the <em>
+Supervise</em> relationship between two <em> Person</em>s is described in
+textual representations by ordering the arguments, as in:<BR>
+<em> Supervise(Person, Person)</em>.<BR>
+We can agree that the first argument represents the supervisor and the
+second argument the ``supervisee'' (person that is being supervised).
+To avoid ambiguity in diagrams we can add role names, as
+in (letting <em> Spv</em> stand for <em> Supervise</em>):
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img3.gif"><P>
+<P>
+The <em> arity</em>, or number of elements in the signature is another way
+of classifying relationships.  Binary relations (such as <em> Own</em> and
+<em> Supervise</em>) have tuples of length two.  Ternary relations have
+tuples of length three.  Examples include:
+<P>
+<DL ><DT><em> InBetween</em>,
+<DD> a relationship among three <em> Location</em>s.
+For example, Chicago is in between San Francisco and New York.
+<P>
+<DT><em> TravelTimeBetween</em>,
+<DD> a  relationship among two <em>
+Location</em>s and a <em> TimeInterval</em>. For example, the travel
+time between New York and San Francisco is six hours.
+<P>
+<DT><em> ParentsOf</em>,
+<DD> a relationship among three <em> Person</em>s.
+For example, John and Mary are the parents of Susanna.
+<P>
+<DT><em> ResideInSince</em>,
+<DD> a relationship among a <em> Person</em>,
+a <em> Location</em>, and a <em> Date</em>. For example, John resides in
+Stockholm since December.
+<P>
+<DT><em> BorrowedFrom</em>,
+<DD> a  relationship among two <em> Person</em>s
+and a <em> Thing</em>. For example, John borrowed a lawn mower from
+Mary. (``<em> Thing</em>'' here is perhaps too broad. Can someone
+borrow the Sun?)
+<P>
+ </DL>
+<P>
+We can have relations with tuple lengths larger than three as well.
+Graphically, more than two edges are obviously required for
+relationships with arity greater than two. For example, we may
+construe <em> Transfer</em> as a relation among a pair of accounts, an
+amount, and a date (letting <em> Trans</em> stand for <em>
+Transfer(fromAccount, toAccount, amount, date)</em>):
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img4.gif"><P><H2><A NAME=SECTION00011000000000000000> Features</A></H2>
+<P>
+In Chapter <A NAME=tex2html10 HREF="ch3.html">3</A>, we attached features to attributes in
+order to capture more semantics.  Similarly, features can be attached
+to the tuple domains of a relationship.
+<P>
+<H3><A NAME=SECTION00011100000000000000> Cardinality</A></H3>
+<P>
+<A NAME=127>&#160;</A><A NAME=128>&#160;</A>
+<P>
+Consider a domain in which an <em> account</em> cannot have more than one
+owner.  This means that a particular instance of <em> Account</em> can
+occur not more than once in an <em> Own</em> tuple.  <em> Cardinalities</em>
+(the relational versions of multiplicities) may be used to indicate
+such properties.  Here, we can add the cardinality notation <em> [0:1]</em> to
+the diagram:
+<P>
+<A NAME=134>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img5.gif"><P>
+<P>
+Alternatively, we could express that each client can own one to
+multiple accounts and each account can have one to multiple owners:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img6.gif"><P>
+<P>
+As another example, we may want to express that a peculiar group of <em>
+*Client*</em>s have at least three but at most five accounts with:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img7.gif"><P>
+<P>
+The date that a client becomes a customer may be
+described as a relationship.<A NAME=174>&#160;</A> Each client
+must have exactly one start date.  A client may have started on the
+same date as another client. Letting <em> CsSn</em> stand for <em>
+CustomerSince(Client, Date)</em>:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img8.gif"><P><H3><A NAME=SECTION00011200000000000000> Qualifiers</A></H3>
+<P>
+Relationships may be classified according to their technical
+properties.  See any discrete mathematics text (e.g.,
+[<A HREF="#manna">4</A>]) for fuller descriptions of properties including:
+<P>
+<DL ><DT><b> Reflexive:</b>
+<DD> For all <em> x</em>, <em> R(x, x)</em> holds; i.e., every element
+    is necessarily related to itself. For example, the
+    relationship <em> SameAgeAs</em>.
+<DT><b> Symmetric:</b>
+<DD> For all <em> x</em> and <em> y</em>,  <em> R(x, y)</em> implies
+    <em> R(y, x)</em>; i.e., the relationship is ``bidirectional''.
+    For example, the relationship <em> SiblingOf</em>.
+<DT><b> Transitive:</b>
+<DD> For all <em> x, y, z,</em> if <em> R(x, y)</em> and
+    <em> R(y, z)</em> hold, then <em> R(x, z)</em> holds.
+    For example, the relationship <em> AncestorOf</em>.
+<P>
+ </DL><H2><A NAME=SECTION00012000000000000000> Constraints</A></H2>
+<P>
+In the same way that constraints provide supplementary information
+about simple attributes, additional constraints may express
+restrictions on the allowed instances of a relation.  For example, we
+can rephrase the fact that instances of class <em> Person</em> have
+the attribute <em> spouse</em> as a binary relationship <em> Spouse</em>
+between <em> Person</em> and <em> Person</em> (assuming the <em> spouse</em>
+attribute has been eliminated from class <em>
+Person</em>):<A NAME=218>&#160;</A><A NAME=219>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img9.gif"><P>
+<P>
+The <em> [0:1]</em> cardinality captures a monogamy restriction.
+<P>
+As before, we may want the ability to express <!--that the sex of the
+partners is different.  (This would also imply that a person cannot be
+his or her own spouse.) In addition, we may want to express --> age
+restrictions on the <em> Person</em> tuple elements.  We omit notation
+conventions for expressing these constraints; see
+Chapter <A NAME=tex2html17 HREF="ch3.html">3</A> for suggestions.
+<P>
+<H2><A NAME=SECTION00013000000000000000> Parametric Relation Instances</A></H2>
+<P>
+<A NAME=238>&#160;</A>
+<A NAME=239>&#160;</A>
+<A NAME=240>&#160;</A>
+<A NAME=241>&#160;</A>
+<A NAME=242>&#160;</A>
+<P>
+The instances of one relation, or more commonly, the attributes of a
+class may be constrained to be instances of another relation.  For
+example, consider a simplified <em> Family</em> class containing (only)
+one <em> parent</em> and (only) one <em> child</em> attribute, along with a
+binary relationship <em> Custody</em> capturing the fact that one person
+has custody over another person.
+<P>
+We would like to express the constraint that in each <em> Family</em>, the
+parent must have custody over the child. This requires that the parent
+and child must also be instances of the <em> Custody</em> relationship.
+However, simple relation instances cannot be used to state this.  They
+indicate the existence of particular instances of a relation. We need
+here a way to say that <em> any</em> persons in the <em> parent</em> and <em>
+child</em> roles must also be instances of the <em> Custody</em> relationship.
+This leads to the concept of a <em> parametric</em> relation instance (see
+[<A HREF="#brachman">1</A>]). ``Parametric'' in this context refers to the fact
+that the exact identity of the relation instance is a variable
+(parameter), different for each instance of class <em> Family</em>.
+<P>
+We indicate parametric relation instances (PRIs) with an open dot.
+For example, the following diagram says that the <em> parent</em> and <em>
+child</em> in a <em> Family</em> must be members of a <em> Custody</em>
+relationship.  The relational constraint applies to all instances of
+the class:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img10.gif"><P>
+<P>
+[Note that the <em> Person</em> boxes in this diagram are used in two
+different ways, as attribute domains and as relation domains. For
+further economy at the expense of readability, we could have drawn
+only one <em> Person</em> box, used in four ways.]
+<P>
+The parametric relation instance places constraints on the
+instances of <em> Family</em> that one may construct.  If we wanted a
+class in which the parent is not always the custodian, we might for
+example introduce another attribute, <em> nonCustodyChild</em> with the
+same value domain <em> Person</em>.
+<P>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Collections</A></H2></center>
+<P>
+<A NAME=297>&#160;</A>
+<P>
+Collections represent groups of objects. They may be employed when
+describing those objects that fall under a common relationship or need
+to be manipulated in a common fashion.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Sets</A></H2>
+<A NAME=299>&#160;</A><A NAME=300>&#160;</A><A NAME=301>&#160;</A>
+<P>
+<em> Sets</em> are the most well-known and useful kinds of collections.
+We have introduced sets indirectly in the scope of regular classes.
+Any multivalued attribute has a set for its domain. Sets may also be
+employed explicitly as primitive notions (cf., [<A HREF="#kurtz">2</A>]).  We
+restrict ourselves to typed sets where all elements of the set belong
+to an indicated class (including subclasses of that class -- see
+Chapter <A NAME=tex2html27 HREF="ch7.html">7</A>).
+<P>
+A set is to be distinguished from a class.  A set must be defined in
+an extensional way, by construction, optionally in combination with
+a filtering characterization.  Thus we <em> exclude</em> here intensionally
+defined subclasses, such as:<BR>
+Accounts with a balance over $1000, <BR>
+but we <em> include</em>:<BR>
+Accounts in our database with a balance over $1000.
+<P>
+Other examples include a branch with an attribute representing a set
+of its local accounts (if this association is not represented as a
+relationship) and similarly for the local clients of a branch.
+<P>
+Once we have sets, we can open the floodgates and adjoin to our
+representational apparatus the notations that are
+available in set theory. These include:<BR>
+<IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img11.gif"> for intersection,<BR>
+<IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img12.gif"> for summation,<BR>
+<IMG  ALIGN=MIDDLE ALT="" SRC="ch4-img13.gif"> for subtraction,<BR>
+<IMG  ALIGN=MIDDLE ALT="" SRC="ch4-img14.gif"> for the subset relationship,<BR>
+<IMG  ALIGN=MIDDLE ALT="" SRC="ch4-img15.gif"> for the superset relationship.
+<P>
+We denote sets by expressing their domains as ``arguments''.  For
+example, a set of branches is denoted as <em> SET(Branch)</em>.  Observe
+that we now have two ways to describe multivalued attributes; sets and
+multiplicity features.  The following two depictions may be treated as
+equivalent:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img16.gif"><P>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img17.gif"><P>
+<P>
+Multiplicity and set notations may be combined, for example, when we
+introduce multivalued attributes where each individual value is a set.
+In the following example the class <em> School</em> treats its faculty as
+an undifferentiated set of employees and treats the student body as a
+family of sets of students:<A NAME=331>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img18.gif"><P>
+<P>
+When a multivalued attribute would have more specific multiplicity
+bounds, as in <em> [3:7]</em>, the corresponding set notation may be
+annotated accordingly in any agreed on manner.
+<P>
+<H2><A NAME=SECTION00022000000000000000> Other Collections</A></H2>
+<P>
+If necessary, the analyst is invited to employ other collection
+notations and the usual operations associated with them:
+<P>
+<DL ><A NAME=345>&#160;</A><A NAME=346>&#160;</A>
+<DT>Sequences.
+<DD> For example, the class <em> String</em>
+    may be described as <em> SEQ(Char)</em>.
+    Other examples include
+    the ATM attribute <em> logOfSessions</em>, which has as value
+    domain <em> SEQ(Session)</em>.
+<P>
+<DT>Arrays.
+<DD><A NAME=351>&#160;</A> For example, the
+    class <em> 2D-4-5-grid</em> may be described as <em> ARRAY[3:4](Point)</em>.
+    The days of a year can be represented as an array, for instance, to record
+    a savings account interest rate for that time period:
+    <em> ARRAY[365](Day)</em>.
+<P>
+<DT>Bags.
+<DD><A NAME=355>&#160;</A> For example, the collection of accounts
+involved in receiving funds in a certain time period may be described
+as a <em> BAG(Account</em>). Since an account may receive funds more than
+once we can have repetitions.
+<P>
+ </DL><H2><A NAME=SECTION00023000000000000000> Generic Classes</A></H2>
+<P>
+<A NAME=359>&#160;</A><A NAME=360>&#160;</A><A NAME=361>&#160;</A>
+<P>
+Additional collections and related constructs may be defined as <em>
+generic</em> classes. These classes capture the commonalities of a broad
+range of other classes.  Inheritance (see Chapter <A NAME=tex2html36 HREF="ch7.html">7</A>) is
+an excellent mechanism to exploit abstract classes and create more
+specific versions.  Generic classes instead use the style of procedure
+or function variables to express genericity.
+<P>
+Our notations for sets and other collections are special cases of that
+for generic classes.  By convention we use upper case names for
+generic classes.  For example, the following generic class <em> QUEUE</em>
+has instances with elements of type <em> X</em>.
+<P>
+<A NAME=367>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img19.gif"><P>
+<P>
+When the class <em> Job</em> happens to be around, we can
+introduce the class <em> QUEUE(Job)</em>.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Identifying Relationships</A></H2></center>
+<P>
+<A NAME=381>&#160;</A>
+<A NAME=382>&#160;</A>
+<P>
+<H2><A NAME=SECTION00031000000000000000> Relationships versus Classes</A></H2>
+<P>
+Analysts often have some freedom in whether to use classes versus
+relationships to represent static features of a domain.  The notion of <em>
+Transfer</em> is an example.  It was represented as a <em> class</em> in
+Chapter <A NAME=tex2html40 HREF="ch3.html">3</A> but as a relationship in this chapter.
+<P>
+The main consideration is that classes and relationships describe
+different kinds of instances.  As defined in
+Chapter <A NAME=tex2html41 HREF="ch2.html">2</A>, objects (class instances) have identity,
+features, and operators that may change state across time and
+communicate with other objects.  Instances of relationships do not
+necessarily share these properties.  A relation instance need
+not be ascribed an independent identity. It may be fully characterized
+merely by listing the elements of the tuple. Relation instances need
+not have any intrinsic properties outside of those of the tuple.  And
+they cannot change state or communicate with other objects at all.
+<P>
+Analysts may choose the approach that appears most appropriate to the
+task at hand. When aspects of a purported relation appear class-like,
+or vice-versa, descriptions may change accordingly.
+<P>
+<H3><A NAME=SECTION00031100000000000000> Intensional Versus Extensional Definition</A></H3>
+<P>
+<A NAME=391>&#160;</A>
+<A NAME=392>&#160;</A>
+<P>
+The ways in which classes and relationships are defined also differ.
+Classes list the central defining characteristics of identifiable
+objects in a domain.  As noted in Chapter <A NAME=tex2html44 HREF="ch3.html">3</A>, classes
+provide <em> intensional</em> descriptions of objects by listing their
+defining properties rather than their members.
+<P>
+Like sets, relationships are normally described in a partially <em>
+extensional</em> fashion. Most relationships describe tuples corresponding
+to the state of affairs in the ``world'' and are determined by
+circumstances.  Thus, they have been obtained by some form of
+observation.  The <em> Ownership</em> relation is an example.  In this
+case, the family of tuples is simply a set, and in practice is a
+``small'' finite set.  For all practical purposes, relational modeling
+deals only with extensionally defined relations in which the family of
+tuples is small and can conceivably be handled by storage media that
+will satisfy resource requirements constraints.
+<P>
+While a useful guide, this distinction does not <em> intrinsically</em>
+separate classes from relationships.  Intensionally defined
+relationships may provide a definition (e.g., a predicate) that
+characterizes which tuples belong to the relation and which do not.
+Grandparenthood defined as being the parent of a parent is an example.
+Another example from the realm of math is the successor relationship
+relating every natural number <em> N</em> with its successor <em> N+1</em>.  Here, the
+family of tuples is still a set, although not small and in fact of
+infinite size.  Relationships where the family of tuples is not a set
+any longer are possible as well.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Relationships versus Attributes</A></H2>
+<P>
+<A NAME=402>&#160;</A>
+<A NAME=403>&#160;</A>
+<P>
+In Chapter <A NAME=tex2html47 HREF="ch3.html">3</A>, we mentioned that an attribute may be
+seen as a special binary relationship between the central object and
+an entity in the value domain.  As a result of the similarity between
+attributes and binary relationships, an analyst must take care not to
+prematurely absorb binary relationships into a class definition.
+<P>
+The main conceptual issue is whether a feature is definitionally
+intrinsic to an object.  One question to ask is whether every instance
+of a class is <em> necessarily</em> related to a member of the other
+
+<P>
+domain.  In this case it is normally a genuine attribute; in
+other cases it is better represented as a relationship.  On the
+other hand, one should be pragmatic as well.  For example, in spite of
+the existence of <em> Glider</em>s, it makes sense to see <em> Engine</em> as
+a <em> [0:M]</em> (multivalued) attribute of <em> Airplane</em>.
+Consequently, <em> Glider</em>s may be described as effectively lacking
+the attribute <em> Engine</em> by giving them the multiplicity feature
+<em> [0]</em>.
+<P>
+A related question is whether one object is conceptually ``in
+control'' of the values assumed in the other domain. This generally
+corresponds to whether an object may contain transitions (see
+Chapter <A NAME=tex2html48 HREF="ch5.html">5</A>) that directly change the value. If so, it
+is appropriate to list it as an attribute. For example, in
+Chapter <A NAME=tex2html49 HREF="ch3.html">3</A> we listed the ``relationship'' between an
+<em> Account</em> and the <em> Number</em> representing the current balance as
+an attribute. Account objects are in control of their own
+balances, may alter them within transactions, etc.
+<P>
+<A NAME=420>&#160;</A><A NAME=421>&#160;</A>
+As another example, in Chapter <A NAME=tex2html52 HREF="ch6.html">6</A> we will introduce
+<em> acquaintance</em> relations describing the partners in object
+interactions.  In order to describe the behavior of an object in its
+full generality, independent of the role it may play in a particular
+target system, we may need to describe a handle to another, as yet
+unknown, object with which it needs to interact.  Binary acquaintance
+relations serve this need. However, when one object must be able to
+determine its partner(s), this information may be listed in attribute
+form.
+<P>
+<H3><A NAME=SECTION00032100000000000000> Functions</A></H3>
+<A NAME=426>&#160;</A>
+<P>
+<A NAME=427>&#160;</A>
+<A NAME=428>&#160;</A>
+<P>
+<em> Functional relationships</em> (or just ``functions'') represent the
+meeting point of these considerations.  A tuple component of a
+relation depends functionally on the other components if its value is
+uniquely determined by the other components.  The cardinalities <em>
+[0:1]</em> and <em> [1:1]</em> for any of the domains indicate a
+functional dependency.  The cardinality <em> [0:1]</em> reflects a <em>
+partial</em> function that need not ``hit'' every element in the domain.
+<P>
+For example, the following diagram indicates that every person has
+precisely one mother, and every mother has at least one
+child.<A NAME=434>&#160;</A> Letting <em> Mo</em> stand for the <em>
+MotherOf</em> relation:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img20.gif"><P>
+<P>
+Functions are among the most common kinds of relationships. In
+functional relationships, at least one direction of the relation
+associates a single element of one domain to those in the other. It is
+convenient and often reasonable to treat them as attributes in functional
+direction if this appears central to the definition of the class.  In
+this sense (as exploited in design -- see
+Chapter <A NAME=tex2html57 HREF="ch16.html">16</A>) all attributes are functions.  For
+example, to indicate that each person must have a mother:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img21.gif"><P>
+<P>
+Similarly, consider the <em> MaintainedBy(Account, Branch)</em> relation
+saying that an account must be maintained by one branch, and a branch
+maintains at least one, possibly more accounts.  This could be
+described as a functional relationship (letting <em> MnBy</em> stand for
+<em> MaintainedBy</em>):
+<P>
+<A NAME=464>&#160;</A>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch4-img22.gif"><P>
+<P>
+Alternatively, the <em> Account</em> class could have an attribute <em>
+maintainer</em> with domain <em> Branch</em>.  The ``other'' direction in a
+functional relationship may also be described as an attribute when
+this contributes to the definitional characterization of a class.
+However, in this case, the attribute normally has a <em> SET</em> domain.
+For example, each <em> Branch</em> could have an attribute <em>
+maintainedAccts</em> with domain <em> SET(Account)</em>.
+<P>
+More generally,  any binary relationship may be described with a
+<em> pair</em> of possibly set-valued functional attributes (one per
+domain) when it is meaningful to do so. However, the ``equal
+partnership'' implicit in the idea of describing pairs of functional
+attributes is better captured as a relationship proper.
+<P>
+<A NAME=486>&#160;</A>
+<A NAME=487>&#160;</A>
+<P>
+The extreme case of a functional relationship is a <em> one-to-one</em>
+function, where the cardinalities of both domains are <em> [1:1]</em>.  In
+this case, each element of one domain is ``matched' with a unique
+element of the other.  (If one of the domains has cardinality <em>
+[0:1]</em>, this instead represents a partial one-to-one function).  For
+example, the ``relationship'' between an <em> Account</em> and its <em>
+accountNumber</em> is one-to-one, as would be a relationship between
+<em> Department</em>s and <em> Manager</em>s saying that each department has a
+unique manager and each manager manages a single department. These
+relationships are most naturally captured as attributes.  When doing so,
+attribute multiplicity notation may be extended as <em> [1:1]-[1:1]</em>,
+or abbreviated as <em> unique</em> to indicate this property.
+<P>
+We summarize these classifications by showing how some standard
+function categories are described as attributes:
+<P>
+<DL ><DT><b> One-to-One:</b>
+<DD> A function is one-to-one if each distinct
+        argument maps to a distinct result. This corresponds
+        to <em> unique</em>.
+  <DT><b> Pure:</b>
+<DD> A function is pure if multiple applications with the
+        same argument always give the same result. This corresponds to
+        per-object <em> fixed</em>.
+  <DT><b> Singular:</b>
+<DD> A function is singular (or fully
+        many-to-one) if it always gives the same answer, regardless
+        of argument.  This corresponds to
+        per-class <em> common</em> (i.e., constraining all instances
+        to possess the same value).
+  <DT><b> Partial:</b>
+<DD> A function is total if it is defined
+        for each possible argument. Otherwise it is partial.
+        Partial functions are denoted with <em> [0:1]</em> multiplicities.
+  <DT><b> Multivalued:</b>
+<DD> A multivalued (or one-to-many) function
+        corresponds to either <em> [1:N]</em> multiplicities or
+        <em> SET</em> or other collection domains.
+<P>
+ </DL><BR>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Summary</A></H2></center>
+<P>
+Relationship modeling captures generally static connections between
+objects.  Relationships may be distinguished across dimensions
+including arity, domains, and cardinality.  Relationship notation may
+be embellished with additional features and constraints.
+Collections, especially sets, may be used to describe groups
+of objects bearing a common relationship or role.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Further Reading</A></H2>
+<P>
+Relationships have been treated extensively in relational database
+theories and generic entity-relationship modeling; see for instance
+Ullman [<A HREF="#ullman">6</A>] and Maier  [<A HREF="#maier">3</A>].
+<P>
+Relationships are widely employed in OOA methods.  As discussed in
+Chapter <A NAME=tex2html61 HREF="ch3.html">3</A>, attributes are avoided in Embley et al
+[<A HREF="#kurtz">2</A>].  Instead they emphasize the importance of relationships.
+They also describe set membership as a relationship between two
+classes where one provides the ``raw material'' instances and the
+other represents the sets constructed from them.  Wirfs-Brock et al
+[<A HREF="#wirfs">7</A>], describe several special relationships including <em>
+PartOf</em>, <em> DependsUpon</em>, <em> HasKnowledgeOf</em>, <em> IsAnalogousTo</em>,
+and <em> isKindOf</em>.  Relationships are not employed directly in the
+OMT <A NAME=523>&#160;</A> method of Rumbaugh et al
+[<A HREF="#rumbaugh">5</A>].  They use the similar concept of <em> associations</em>
+instead.
+<P>
+<H2><A NAME=SECTION00042000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Formulate a relation that has tuples of length four, five, ...
+Try to avoid relations that are constructed by adjoining time and/or space
+qualifiers as in: John travels <em> from A to B on Sunday</em>.
+<P>
+<LI> Can the following information be represented as relationships?
+<OL><LI> The balance of an account ten days ago.
+<LI> Accounts associated with the zip code(s) of their owners.
+<LI> Employees located in Toronto.
+<LI> The grandparents of the children living in Springfield.
+<LI> The weather report of 2001 January 1.
+<LI> The molecular structure of <em> H2O</em>.
+<LI> The contents of a library.
+<LI> The public transportation schedule in LA (assuming they have one).
+<LI> The recipes in a cookbook.
+<LI> The patterns of traffic lights at an intersection.
+<LI> The contents of an encyclopedia.
+<LI> The grammar of FORTRAN.
+</OL>
+<P>
+<LI> Give examples of generic classes having one, two, ... arguments.
+<P>
+<LI> Discuss whether the following families of objects can be represented
+as a set and/or as a class.
+<OL><LI> The states of the US.
+<LI> The members of your family.
+<LI> The atoms in the universe.
+<LI> The inhabitants of Berlin.
+<LI> The colors of the rainbow.
+<LI> The natural numbers.
+<LI> The days of the week.
+</OL>
+<P>
+<LI> Redo exercise 1 from the previous chapter but this time exploit
+relationships as well.  Compare your solutions.
+<P>
+Identify objects, introduce their classes, give attributes, their
+features and constraints as suggested by the following text:
+<P>
+Mr. White is married.  He teaches OO Software Engineering classes on
+Fridays.  He is a part-time member of the faculty at the CS Department of
+the All-Smart Institute.  His 23-year-old son John was enrolled in the OOA
+class that Mr. White taught in the previous semester.  John does not like
+broccoli.  Mrs. White uses a ten-speed for transportation to and from
+the campus (she teaches Philosophy at the same institute).  Class size is
+limited at the institute to 14 students.  The faculty at the institute,
+when seen as parents, have at most two children.  The sister of John has a
+boyfriend that is two years younger than she is and plays two different
+instruments.
+<P>
+</OL>
+<P>
+
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=brachman><STRONG>1</STRONG></A><DD>
+R.J. Brachman.
+ A structural paradigm for representing knowledge.
+ Technical Report 3605, BBN, May 1978.
+<P>
+<DT><A NAME=kurtz><STRONG>2</STRONG></A><DD>
+D.W. Embley, B. Kurtz, and S.N. Woodfield.
+ <em> Object-Oriented Systems Analysis</em>.
+ Yourdon Press/Prentice Hall, 1992.
+<P>
+<DT><A NAME=maier><STRONG>3</STRONG></A><DD>
+D. Maier.
+ <em> The Theory of Relational Databases</em>.
+ Computer Science Press, 1983.
+<P>
+<DT><A NAME=manna><STRONG>4</STRONG></A><DD>
+Z. Manna and R. Waldinger.
+ <em> The Logical Basis for Computer Programming</em>.
+ Addison-Wesley, 1985.
+<P>
+<DT><A NAME=rumbaugh><STRONG>5</STRONG></A><DD>
+J. Rumbaugh, M. Blaha, W. Premerlani, F. Eddy, and W. Lorensen.
+ <em> Object-Oriented Modeling and Design</em>.
+ Prentice Hall, 1991.
+<P>
+<DT><A NAME=ullman><STRONG>6</STRONG></A><DD>
+J.D. Ullman.
+ <em> Principles of Database Systems</em>.
+ Computer Science Press, 1982.
+<P>
+<DT><A NAME=wirfs><STRONG>7</STRONG></A><DD>
+R. Wirfs-Brock, B. Wilkerson, and L. Wiener.
+ <em> Designing Object-Oriented Software</em>.
+ Prentice Hall, 1990.
+</DL>
+<P>
+
+<a href="ch5.html">Next: Chapter 5</a><p>
+
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed Jan 10 07:52:46 EST 1996</I>
+</ADDRESS>
+</BODY>

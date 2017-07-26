@@ -1,0 +1,397 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Designing Distributed Objects</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+
+<H1>Designing Distributed Objects</H1>
+
+
+HTML-ized slides from a talk on IBM CENET, 1993
+by <A HREF="http://g.oswego.edu/dl">Doug Lea</A>.
+
+
+<P>
+<H2><A NAME=SECTION00001000000000000000> Distributed Objects will be Everywhere</A></H2>
+<P>
+  <UL><LI> Confluence of object-oriented and distributed systems
+     <LI> Examples: Financial Systems, Real-time Systems, Large Applications,
+           Multimedia.
+     <LI> We are still learning what they are and how to build them.
+     <LI> Good techniques exist; mainly scale-ups of familiar OO methods.
+     <LI> Distributed OOD also scales <em> down</em>, and helps to
+           organize and enhance even in-the-small OOD.
+   </UL><H2><A NAME=SECTION00002000000000000000> Outline</A></H2>
+<P>
+<UL><LI> Autonomous active objects
+   <LI> Modeling and Functional Design
+   <LI> Overview of Physical Design and Implementation
+</UL>
+<P>
+Reference: <em> Object-Oriented System Development</em> by Dennis deChampeaux,
+Doug Lea, &amp; Penelope Faure. Addison-Wesley, 1993.
+<P>
+<H2><A NAME=SECTION00003000000000000000> OO Models and Distribution</A></H2>
+<P>
+<UL><LI> OO
+  <UL><LI> Objects: Instances, Classes, Inheritance
+    <LI> Statics: Attributes, Interfaces, Relations
+    <LI> Dynamics: States, Transitions, Methods, Message Passing
+   </UL>
+<P>
+  <LI> Distributed
+  <UL><LI> Processes, tasks, threads, messages, RPC, ports, routing
+   </UL>
+<P>
+  <LI> Active Objects
+  <UL><LI> <em> Each</em> object is a single-threaded process-like entity
+          that can perform at most one action at a time.
+    <LI> Objects concurrently interact to form larger-grained systems.
+  </UL></UL>
+<P>
+
+<P>
+<P><IMG BORDER=0 ALIGN=BOTTOM ALT="" SRC="img1.gif"><P><H2><A NAME=SECTION00004000000000000000> Why Active Objects?</A></H2>
+<P>
+<UL><LI>  High-level OO modeling and design intrinsically
+          (but implicitly) employs active object models.
+          Examples: CRC cards, OMT, timethreads ...
+  <LI> Most OO concepts and methods apply <em> more</em> easily
+          to active than passive objects.
+  <LI> Many standard OO design techniques hold without change under
+          the assumption that each object is active.
+ <LI> Designs have a great amount of parallelism,
+          that may be exploited via distribution.
+          But some objects will later be clustered, passivized
+          and sequentialized.
+</UL><H2><A NAME=SECTION00005000000000000000> Alternatives</A></H2>
+<P>
+<UL><LI> Some approaches separate
+        (passive) data objects from (active) processes and threads
+        across entire development cycle.
+  <LI> Some  approaches start with the assumption that the entire
+          system will run as a single program, and then attempt
+          to parallelize and distribute it.
+  <LI> Some approaches focus on decomposing functions, not objects
+         across processes.
+  <LI> Some approaches employ intra-object concurrency rather than
+         or in addition to inter-object concurrency.
+  <LI> We steal ideas from such approaches, but believe that the
+          basic active object model is more fundamental, more natural,
+          and more fun.
+</UL><H2><A NAME=SECTION00006000000000000000> Some differences between active and passive objects</A></H2>
+<P>
+<UL><LI> The ``membranes'' protecting active objects are more
+          pronounced.
+  <UL><LI> Local versus remote computation; interfaces
+    <LI> Composition and delegation vs physical embedding.
+   </UL>
+  <LI>  Control of conditions under which objects accept messages.
+  <UL><LI> Synchronization, interference control
+   </UL>
+  <LI> New forms of message passing
+  <UL><LI> Oneway sends, multicast, timed protocols, ...
+   </UL>
+  <LI> Larger gap between design and implementation.
+  <UL><LI> Need tools and services to manually implement OO features.
+   </UL></UL><H2><A NAME=SECTION00007000000000000000> Development Steps</A></H2>
+<P>
+<UL><LI> Modeling:
+       Abstract declarative specifications of
+            externally visible objects, tasks, ...
+  <LI> Functional design:
+         Composing concrete objects out of others in a way that
+            can be executed on a virtual machine substrate.
+  <LI> Physical Design:
+        Mapping constructs onto actual computational
+            substrate.
+  <LI> Implementation:
+       Reconciliation, assessment, performance tuning, ...
+  <LI> Isolating steps doesn't commit to a process. Could be arranged
+          as spiral or whatever.
+</UL><H2><A NAME=SECTION00008000000000000000> Modeling Active Objects</A></H2>
+<P>
+<UL><LI> Model-level classes are <em> specifications</em>
+      <LI> Attributes, invariant constraints
+      <LI> Relationships, relational constraints, contracts
+      <LI> States, transitions, event reception and generation
+      <LI> Services, tasks, timethreads, use cases, performance constraints
+      <LI> Object generation, resource constraints
+  <LI> Subclassing -- Property inheritance
+    <UL><LI> Classes describe families of (potential) instances in
+            terms of required properties.
+      <LI> Subclasses describe subfamilies by strengthening properties
+            (adding features, constraints).
+    </UL></UL><H2><A NAME=SECTION00009000000000000000> From Models to Designs</A></H2>
+<P>
+<UL><LI> Functional design can be conceptualized in any of several nearly
+            equivalent ways:
+    <UL><LI> Abstraction/refinement: Concrete classes are subclasses
+            describing subfamilies of modeled objects with
+            particular concrete commitments.
+      <LI> Type:  Models serve as types for concrete classes.
+      <LI> Specification: Concrete classes are reifications.
+      <LI> Transformational: Concrete classes are transformations
+            of models into the domain of software.
+      <LI> Simulation: Concrete objects simulate models.
+     </UL>
+   <LI> Design steps typically add many other behind-the-scenes
+         classes, objects, etc., that may in turn be subject to
+         declarative modeling.
+</UL><H2><A NAME=SECTION000010000000000000000> Distribution-friendly Composition</A></H2>
+<P>
+<UL><LI> Objects obtain properties by composing those of other
+          autonomous objects.
+   <LI> Designs are architectures of static links and
+           dynamic targeted messages.
+   <LI> Links may be termed pointers, references,
+          handles, ObjRefs, channels, ports, ..., and implemented
+          differently at different levels.
+   <LI> Object possess links to helpers, not embedded subobjects.
+   <LI> Subclasses extend specifications. Subclass objects
+          do not necessarily contain embedded superclass objects.
+   <LI> Objects cannot themselves be passed in messages, only
+          links (perhaps along with other base
+          values like <tt> int</tt>s).
+   <LI> OO link passing is both wonderful and horrible: Object
+          <tt> A</tt> can send <tt> B</tt> a link to <tt> C</tt>, allowing
+          <tt> B</tt> and <tt> C</tt> to communicate.
+</UL>
+<P>
+<IMG BORDER=0 ALIGN=BOTTOM ALT="" SRC="img2.gif"><H2><A NAME=SECTION000011000000000000000> General Design Issues</A></H2>
+<P>
+<UL><LI> Allocation of responsibility
+    <UL><LI> Locality,  Minimizing central control
+     </UL>
+  <LI> Coordination
+     <UL><LI> Control; synchronization; Micro-architectures
+     </UL>
+  <LI> Conformance to models
+    <UL><LI>  Correctness; Performance;  Reliability;
+    </UL>
+  <LI> Design Safety
+    <UL><LI> Explicit, testable types and constraints
+      <LI> Preserving property inheritance
+    </UL></UL><H2><A NAME=SECTION000012000000000000000> Some Specific Design Issues</A></H2>
+<P>
+<UL><LI> Abstract vs Concrete classes
+  <LI> Message passing
+  <LI> Encapsulation
+  <LI> Construction
+  <LI> Illustrated with <i> ODL</i>, a pidgin OOPL with
+        minimal extensions to express:
+    <UL><LI> Message acceptance control
+       <LI> Non-procedural message passing
+       <LI> Declarative constraints
+    </UL></UL><H2><A NAME=SECTION000013000000000000000> Abstract Classes</A></H2>
+<P>
+<UL><LI> Abstract classes require more than signatures to propel design.
+  <LI> Minimally distinguish three kinds of visible methods -- functional,
+        procedural, and oneway.
+  <LI> Synchronization constraints may be part of intrinsic specification.
+        We use <em> when guards</em>; there are other choices.
+  <LI> (Whether client objects should know and exploit these is sometimes
+        a matter of debate.)
+</UL>
+<PRE>class Semaphore
+  fn locked: bool init= false;
+  op wait: ()     when ~locked then locked' else pend end
+  op signal ==&gt;   ~locked' end
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION000014000000000000000> Concrete Classes</A></H2>
+<P>
+<UL><LI> Separation of local world from externally visible methods
+  <LI> Local structure designed similarly to that in ST, C++, etc.
+</UL>
+<PRE>class Chapter
+  locals
+    prev: opt Chapter; next: opt Chapter; text: CharStream;
+    op printText: () { Printer$print(text.chars); }
+  end
+  op printBook { if ~null(prev) then prev.printBook
+                 else self.printAndPropagate end }
+  op printAndPropagate {  printText;
+     if ~null(next) then next.printAndPropagate end }
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION000015000000000000000> Midpoints</A></H2>
+<P>
+<UL><LI> Can specifications reveal architectures?
+</UL>
+<PRE>class CardEater
+  locals
+     beeper: Beeper;
+     own cardLatch: CardLatch;
+  end
+  fn holding: bool init= false;
+  fn latched: bool init= false;
+  op unlatch ==&gt; ~latched' end
+  op latch   ==&gt;  latched' end
+  op eject when ~latched /\ holding then
+              cardLatch.release', ~holding'
+           elsewhen ~latched /\ ~holding then beeper.beep'
+           else pend end
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION000016000000000000000> Asynchronous Message Passing</A></H2>
+<P>
+<UL><LI> Useful only when client doesn't care <em> when</em>
+            effects of a message hold.
+  <LI> Many OO designs entail logically oneway messages.
+    <UL><LI> MVC-style notifications; constraint propagation
+      <LI> Interactions with external devices.
+      <LI> Asynchronous service requests (e.g., printing).
+      <LI> To-whom-it-may-concern messages via relays that
+             choose a recipient.  Examples: mouse event
+             handlers, service relays.
+      <LI> Multiple-recipient messages via multicasters.
+             Examples: publish-subscribe,  collections,
+             replicated fault-tolerant services.
+      <LI>  Protocol objects that pass messages without looking at them.
+   </UL></UL><H2><A NAME=SECTION000017000000000000000> Callbacks</A></H2>
+<P>
+<UL><LI> Callbacks allow manual construction of protocols
+        midway between pure oneway and pure procedural.
+   <LI> Variants: hardwired (as below), mediated,
+         exceptions, call-with-timeout, etc.
+</UL>
+<PRE>class BeeperTimer
+  local delayer: Delayer;
+  op alarm(secs: time, b: DelayedBeeper) {
+     delayer.delay(secs); b.beep };
+end
+class DelayedBeeper
+  local t: BeeperTimer;
+  op beep ... ;
+  op beepAfter(secs: time) { t.alarm(secs, self) }
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION000018000000000000000> Encapsulation</A></H2>
+<P>
+<UL><LI> Larger-grained encapsulation does not come for free.
+    <UL><LI> The same dangers are present in any large design, whether
+             fully sequential, concurrent, or in-between.
+       <LI> When objects record and pass around links to others,
+             it can become difficult to understand and control interaction.
+    </UL>
+   <LI> Problems
+    <UL><LI> Safety failures -- inconsistent states.
+       <LI> Liveness failures -- deadlock, lockup.
+       <LI> One object plays two roles in a task -- aliasing.
+    </UL>
+   <LI> Design measures
+    <UL><LI> Prevention: Communication closure
+       <LI> Management: Coordination
+    </UL></UL><H2><A NAME=SECTION000019000000000000000> Communication Closure</A></H2>
+<P>
+<UL><LI> Logical containment and exclusive control are design policies to
+        obtain (nearly) independent subsystems that are easier to
+        construct, verify, test, compose, and think about.
+  <LI> Minimizing fan-in by controlling link exports (arguments, results).
+  <LI> Choosing replication over sharing when appropriate.
+  <LI> Reducing reliance on identity: Service (interface) based vs
+         object based dispatching.
+  <LI> Concepts like <tt> friend</tt> must be scaled into security and
+        authentication schemes constructed or adopted -- sometimes
+        only for the sake of design integrity, not malicious invasion.
+</UL><H2><A NAME=SECTION000020000000000000000> The Limits of Modularity</A></H2>
+<P>
+<UL><LI> Some interactions cannot be isolated, so must be managed.
+  <LI> Examples:
+    <UL><LI> Potential simultaneous access of scripted actions; for
+             example Transaction systems where two users may be trying
+             to step the same account through sequences representing deposits
+             versus withdrawals.
+       <LI> Tasks that must step two different objects
+            through logically atomic all-or-nothing actions;
+            for example transferring money from savings into checking
+            accounts.
+       <LI> Operations with guards that reference other objects
+             that are not under the exclusive control of recipients;
+             for example, automatic account transfer daemons that
+             trigger when all participants are in the proper state.
+   </UL></UL><H2><A NAME=SECTION000021000000000000000> Coordination</A></H2>
+<P>
+<UL><LI> Most solutions require expicit coordinator
+        objects that oversee interactions.
+  <LI> But these require cooperation from the individual participants:
+    <UL><LI> Locking
+      <LI> Change-notifications sent to coordinators
+      <LI> State-saves and rollbacks; <em> Undo</em> operations.
+      <LI> Service replication
+      <LI> Nested measures for subtransactions
+    </UL>
+  <LI> These solutions can become arbitrarily heavy.
+  <LI> Structural containment, even if only partial, is the
+        key to simpler, better designs.
+</UL><H2><A NAME=SECTION000022000000000000000> Object Construction</A></H2>
+<P>
+<UL><LI> Active object construction is similar to process construction.
+ <LI> Centralized facilities (e.g., global <tt> new</tt>, metaclass objects)
+       do not always scale well.
+ <LI> For any class <tt> C</tt> we may define a <em> generator</em>
+       class <tt> CGen</tt>, that specifies details of how to construct
+       instances of <tt> C</tt>.
+ <LI> Typically, a single generator will serve as a <em> factory</em>,
+       that constructs instances of several related classes.
+ <LI> There may in fact be many instances of
+       <tt> CGen</tt> distributed across a system.
+ <LI> (Still need one global <tt> new System</tt> to get
+       a system started.)
+</UL><H2><A NAME=SECTION000023000000000000000> Clustering Logical Objects into Physical Objects</A></H2>
+<P>
+<UL><LI> Group objects into <em> clusters</em> --
+        ``fat'' active objects with embedding constraints.
+        <UL><LI> Each cluster physically contains many objects,
+               each of which must be sequentialized.
+         <LI> The system as a whole consists of a relatively small
+               number of interacting coarse-grained processes,
+               each with an interface representing encapsulated functionality.
+        </UL>
+  <LI> Guided by measurable quantities: throughput, process size
+  <LI> Also includes intrinsically heuristic criteria:
+        <UL><LI> Keeping logically related objects physically together
+         <LI> Isolation for reliability, interoperability.
+         <LI> Maintainability, simplicity
+        </UL></UL><H2><A NAME=SECTION000024000000000000000> Adapting to System Infrastructure</A></H2>
+<P>
+<UL><LI> Process control
+         <LI> Layering on top of system services for message passing
+                and routing.
+         <LI> Integration with other coarse-grained systems
+         <LI> Run-time backups for bad and transient object placements.
+         <LI> Management of heterogeneous computational resources.
+         <LI> Persistence, reliability, security.
+         <LI> ...
+</UL><H2><A NAME=SECTION000025000000000000000> Compiling Designs</A></H2>
+<P>
+<UL><LI> Passivization and performance tuning are transformations
+            mapping clustered objects onto program-level objects
+            (storage + code).
+    <LI> Variants
+      <UL><LI> Classic OO passive:
+            Single active agent representing and executing
+            code on behalf of other simulated objects.
+        <LI> Classic OO distributed: Multiple active agents
+                each handling different simulated objects.
+        <LI> Multithreaded: Multiple active agents handling
+                 overlapping sets of simulated objects.
+        <LI> Persistent: Any of above with agents recovering descriptions
+                of objects from media, simulating methods, and
+                saving resulting state descriptions.
+      </UL></UL><H2><A NAME=SECTION000026000000000000000>   About this document ... </A></H2>
+<P>
+ <STRONG>Designing Distributed Objects</STRONG><P>
+This document was generated using the <A HREF="http://cbl.leeds.ac.uk/nikos/tex2html/doc/latex2html/latex2html.html"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 95.1 (Fri Jan 20 1995) Copyright &#169; 1993, 1994,  <A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, Computer Based Learning Unit, University of Leeds. <P> The command line arguments were: <BR>
+<STRONG>latex2html</STRONG> <tt>-split 0 cenetslides.tex</tt>. <P>The translation was initiated by Doug Lea on Mon Feb 26 07:24:32 EST 1996<HR>
+<P><ADDRESS>
+<I>Doug Lea@Mon Feb 26 07:24:32 EST 1996 <BR>
+</I>
+</ADDRESS>
+</BODY>

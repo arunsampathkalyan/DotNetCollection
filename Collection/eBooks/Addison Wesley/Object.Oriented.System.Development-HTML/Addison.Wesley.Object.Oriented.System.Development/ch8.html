@@ -1,0 +1,349 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Instances</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Instances">
+<meta name="keywords" value="ch8">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+
+<h2>Chapter 8: Instances</h2>
+<UL>
+<LI> <A NAME=tex2html31 HREF="#SECTION00010000000000000000"> Subclasses and Instances</A>
+<LI> <A NAME=tex2html32 HREF="#SECTION00020000000000000000"> Metaclasses</A>
+<LI> <A NAME=tex2html33 HREF="#SECTION00030000000000000000"> Parametric Instances</A>
+<LI> <A NAME=tex2html34 HREF="#SECTION00040000000000000000"> Summary</A>
+<LI> <A NAME=tex2html35 HREF="#SECTION00050000000000000000">References</A>
+</UL>
+</td><tr></table>
+ <P>
+<P>
+In previous chapters, we have modeled general properties of instances
+via their classes.  In this chapter, we discuss methods for describing
+those objects that actually exist in a given target system.
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Subclasses and Instances</A></H2></center>
+<P>
+<A NAME=10>&#160;</A><A NAME=11>&#160;</A>
+<P>
+Previous chapters have introduced core notions and notations for
+describing software systems.  Most of these notions aim at introducing
+general ``vocabulary'' that can be used not only for describing a
+particular system, but also related systems. This is one reason why
+basic OOA techniques may be used for an object-oriented <em> domain
+analysis</em>.<A NAME=13>&#160;</A> As discussed in
+Chapters <A NAME=tex2html7 HREF="ch2.html">2</A> and <A NAME=tex2html8 HREF="ch13.html">13</A>, domain analysis is an
+activity that identifies generic, core concepts, frameworks,
+architectures, etc., that are likely to be relevant for the analysis
+of multiple future systems in the target domain.  Nearly all OOA
+activities ordinarily produce at least some models that are more
+general than necessary for the system at hand. Indeed, this is a
+distinct advantage of the OO approach.
+<P>
+However, construction of any <em> particular</em> system often requires
+that instances of more specialized classes be put together into a
+system configuration. For example, most of our illustrative <em>
+Account</em>, <em> ATM</em>, <em> Client</em>, etc., classes have been fairly
+generic. They have not always included features that may be peculiar to
+the instances that populate <em> American Bank</em>.
+<P>
+The need to specialize immediately raises the question: How much
+class-based specialization is enough? For example, must the <em>
+Account</em> class be specialized to <em> ABAccount</em>, or can each account
+object in the American Bank system be described simply as an instance
+of class <em> Account</em>?
+<P>
+When one class <em> adds</em> attributes (perhaps with corresponding
+states and transitions) to those of another, then subclassing is
+always called for unless the added attribute may be meaningfully
+considered as optional (<em> [0:1]</em>) in the superclass.  In other
+cases, it is sometimes a matter of raw judgment whether a class should
+be divided into subclasses describing groups of instances or whether
+those instances should be described as variants of the same class.
+Initial models usually provide at least preliminary commitments about
+the depth and granularity of subclassing for a particular domain.
+Target system-specific refinements are not always bound by such
+commitments.  Sometimes it is sensible to use deeper or even shallower
+hierarchies.<sup>1</sup>
+
+<blockquote>
+ <sup>1</sup>Footnote:<br>
+Similar concerns apply in the design phase,
+where concretely instantiable classes are defined as subclasses of
+analysis-level classes. Different subclasses and/or instances are
+constructed to reflect different ways of representing and computing
+static and dynamic properties. See Chapter <A NAME=tex2html3 HREF="ch16.html">16</A>.
+</blockquote>
+<P>
+<A NAME=30>&#160;</A>
+For example, in our <em> MailingLabel</em> classes
+(Chapter <A NAME=tex2html11 HREF="ch7.html">7</A>), we might have been content to declare that
+all <em> MailingLabel</em>s contain an uninterpreted <em> string</em> value
+representing postal codes. In that case, U.S., Canadian, French, etc.,
+codes could all be accommodated without having to declare subclasses.
+In the other direction, we could have created one subclass per <em>
+City</em>, and grouped instances even more finely.  Ultimately, we could
+have isolated every individual mailing label object in its own unique
+class.
+
+
+
+<P>
+While there can be no recipes for making decisions about when to use
+subclasses and when to use instances, some guidelines exist.
+Generally, <em> over</em>classification is easier to deal with than <em>
+under</em>classification.  The extreme tactic of defining one class <em>
+Object</em> with all possible attributes listed as optional and all
+possible input events ignored does not get you very far in
+object-oriented development.  On the other hand, the extreme case of
+defining one class per entity <em> can</em> be tolerated if all reasonable
+superclasses have also been defined.  Others need only use those
+properties in which they are interested, by referencing the
+appropriate superclass. <em> Prototype</em>-based OO systems (e.g., the OO
+language <i> SELF</i> [<A HREF="#self">3</A>]<A NAME=44>&#160;</A>) implicitly
+take a form of this extreme position by not even supporting a <em>
+class</em> construct.  There are only individuals, along with mechanisms
+for creating new individuals with properties similar to those of
+existing ones.  Class-based frameworks allow simpler descriptions of
+commonalities among objects.  However, even here, the notion that each
+object has a unique identity might be interpreted in part as a way of
+making up for the coarse granularity of most class descriptions.
+Unless all objects of a class share all properties and are immutable,
+when the specific values of a set of attributes are required, one must
+describe, say, ``instance <em> XYZ_423</em>'', rather than ``any instance
+of class <em> XYZ</em>''.
+<P>
+We illustrate other considerations with the ubiquitous example of
+whether to create class <em> Square</em> as a subclass of <em> Rectangle</em>.
+<P>
+<A NAME=50>&#160;</A><A NAME=51>&#160;</A>
+<P>
+<H4><A NAME=SECTION00010010000000000000> Constraints.</A></H4>
+<P>
+Subclassing is by far the best way to subdivide sets of instances that
+carry additional invariant constraints. For example, it may be
+insufficiently precise to construct square objects only as instances
+of class <em> Rectangle</em>. Declaring a <tt> Square</tt> class allows
+simpler expression and exploitation of the definitional requirement
+that squares are rectangles with sides that are always equal.
+<P>
+<H4><A NAME=SECTION00010020000000000000> Client interactions.</A></H4>
+<P>
+When different subsets of instances interact with different kinds of
+clients or support significantly different client applications, these
+clients become easier to model if the instances are differentiated
+through subclassing.  For example, if squares are drawn by
+special-purpose square rendering objects, then distinguishing them as
+different subclasses simplifies description of the different
+interactions. This is an application of the justification rule in
+Chapter <A NAME=tex2html15 HREF="ch7.html">7</A> for subclassing on the basis of narrowed
+relations. If the <em> SquareRenderer</em> is a subclass of <em>
+Renderer</em>, then the acquaintance relation between <em> Square</em> and
+<em> SquareRenderer</em> specializes that between <em> Rectangle</em> and <em>
+Renderer</em>.
+<P>
+<H4><A NAME=SECTION00010030000000000000> Mutability and state abstraction.</A></H4>
+<P>
+If instances of <em> Rectangle</em> may change their dimensions (and thus
+sometimes are square and sometimes not) then squareness constraints
+are not invariant, and the definition of a <em> Square</em> subclass might
+do more harm than good.  Indeed, if the <em> Rectangle</em> class contains
+transitions that change one dimension without changing the other, a
+<em> Square</em> class should not inherit them, and cannot be defined as a
+subclass.  State abstraction is a more useful alternative.  It would
+be more fitting to define and employ an <em> isSquare</em> state in the
+<em> Rectangle</em> class to discriminate rectangles that happen to have
+equal sides.  This state may even be defined via a <em> class</em> serving
+as the domain of an appropriate attribute.
+<P>
+<H4><A NAME=SECTION00010040000000000000> Nonsubclassed groupings.</A></H4>
+<P>
+One reasonable compromise for squares would be to define both <em>
+Square</em> and <em> Rectangle</em>s as classes, but not to make <em> Square</em>
+a subclass of <em> Rectangle</em> or vice versa. They may however share
+some other ancestor that does not list mutative transitions.
+Rectangles that just happen to be square for a while would not belong
+to class <em> Square</em>.  The resulting subclass structure is not always
+as simple or aesthetically pleasing, but can make for good pragmatics.
+This is entirely analogous to programming language distinctions between
+<tt> real</tt>s, that sometimes assume integral values, versus <tt>
+integer</tt>s, that always do.  Even though there are some deeper
+relations between them, they are treated as distinct unrelated types
+for the sake of practicality.
+<P>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Metaclasses</A></H2></center>
+<A NAME=81>&#160;</A><A NAME=82>&#160;</A>
+<P>
+In the same way that a class has instances, we may consider regular
+<em> classes</em> to be instances of a <em> metaclass</em> named <em> Meta</em>.
+This allows all properties of regular classes to be described in a
+common manner.  Metaclasses provide a purely declarative basis for
+analysis level descriptions of object management.  We can summarize
+descriptions of classes presented in previous chapters by defining
+class <em> Meta</em>, that includes as <em> attributes</em> those features we
+have ascribed to regular classes.  One possible version is as follows:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch8-img1.gif"><P><H2><A NAME=SECTION00021000000000000000> Object Construction and Deletion</A></H2>
+<P>
+<A NAME=122>&#160;</A>
+<A NAME=123>&#160;</A>
+<P>
+By giving <em> Meta</em> the attribute <em> instances</em> we specify that
+every regular class can keep track of its instances.  Describing the
+mechanism for creating and deleting instances is now a matter of
+establishing service transitions:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch8-img2.gif"><P>
+<P>
+The <em> fresh-instance</em> <em> I</em> must be initialized in accord with all
+constraints and defaults. There may be several variant <em> New</em>
+services that include requests to override defaults.  A similar
+transition describes the deletion of an instance:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch8-img3.gif"><P><BR>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Parametric Instances</A></H2></center>
+<P>
+<A NAME=175>&#160;</A>
+<A NAME=176>&#160;</A>
+<P>
+While we may use metaclasses to describe the construction of instances
+in a target system, we would also like to be able to refer to the
+instances more abstractly, without necessarily having to say anything
+about how or when they are created.  To enable this, we introduce the
+notion of a <em> parametric</em> instance (PI).
+<P>
+Like a regular instance, a PI denotes a unique instance of a certain
+class which is fixed over the lifetime of a system.  However, unlike a
+normal instance, there is no commitment about the exact identity of
+the instance.  PIs are similar to roles (attributes) in ordinary
+classes in that they describe <em> any</em> instance that may occupy such
+a role. They differ only in that PIs describe ``top-level'' roles that
+are not necessarily listed within other classes in a system.
+<P>
+For example, in our banking domain, we may want to focus on the
+subsystem of a branch -- not a particular branch, but a generic
+branch.  We would like the ability to refer within this system to
+the branch itself.  We may not want to freeze the branch to a
+particular instance, because we want to have a description that
+applies to any branch.  Thus, we choose to represent the branch as a
+PI.
+<P>
+We use open circles to denote parametric instances. For example,
+our branch PI:
+<A NAME=179>&#160;</A><A NAME=180>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch8-img4.gif"><P>
+<P>
+<A NAME=187>&#160;</A>
+<A NAME=188>&#160;</A>
+<P>
+Usually, the most notable features of a parametric instance lie in its
+relationships to other PIs. These may be expressed using parametric
+relation instances (PRIs), first encountered in Chapter <A NAME=tex2html26 HREF="ch4.html">4</A>.
+For example, to indicate that a certain unique employee manages a
+certain unique branch:<A NAME=191>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch8-img5.gif"><P>
+<P>
+In addition, we may introduce a ``utility'' bank account that is
+associated with the branch via the relationship <em>
+BranchBankAccount</em> (abbreviated as <em> BrBnkA</em>).  We show as well
+that the branch manager is the ``owner'' of the branch account in the
+sense that he or she is <em> Authorized</em> to deal with this
+account:<A NAME=220>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch8-img6.gif"><P>
+<P>
+An alternative to using multiple PIs is to construct a class <em>
+System</em> that includes as attributes all stable instances in the
+system.  A single PI of class <em> System</em> may then be used to
+represent the system.  The attributes of <em> System</em> may be
+constrained using parametric relation instances in exactly the same
+way as is done for PIs.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Summary</A></H2></center>
+<P>
+Instances must be specified to populate a particular system.
+Description of target-system-specific instances is sometimes
+facilitated by subclassing.  Metaclasses provide a declarative
+framework for describing class features and object construction and
+deletion.  Networks of parametric instances joined by parametric
+relation instances express features and constraints of the instances
+in a target system. These allow for the construction of generic models
+where we need instances, but do not as yet want to commit to what these
+instances are.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Further Reading</A></H2>
+<P>
+There are few existing alternatives to the constructs described in
+this chapter.  An exception is Embley et al [<A HREF="#kurtz">1</A>] who introduce
+(in addition to instances) the notion of a class that has only a
+single instance.  This facilitates the representation of top level
+notions such as ``the president of the company'', ``the personnel
+department'', ``headquarters'', without having to be specific about a
+unique president, personnel department or headquarters.
+<P>
+The reader interested in meta-stuff is encouraged to study  [<A HREF="#kiczales">2</A>].
+A quote from its introduction:
+<blockquote> Metaobject protocols are interfaces to the language that give users the
+ability to incrementally modify the language's behavior and implementation,
+as well as the ability to write programs within the language.
+</blockquote><H2><A NAME=SECTION00042000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Consider making a model of an elementary school.  What classes,
+specialized classes, and parametric instance(s) would you introduce?
+<P>
+<LI> Extend the transition network of <em> Meta</em> to describe
+<OL><LI> The introduction and removal of user class attributes.
+  <LI> The introduction and removal of user classes.
+</OL></OL>
+<P>
+
+<P>
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=kurtz><STRONG>1</STRONG></A><DD>
+D.W. Embley, B. Kurtz, and S.N. Woodfield.
+ <em> Object-Oriented Systems Analysis</em>.
+ Yourdon Press/Prentice Hall, 1992.
+<P>
+<DT><A NAME=kiczales><STRONG>2</STRONG></A><DD>
+G. Kiczales, J. des Rivieres, and D.G. Bobrow.
+ <em> The Art of the Metaobject Protocol</em>.
+ MIT Press, 1991.
+<P>
+<DT><A NAME=self><STRONG>3</STRONG></A><DD>
+D. Ungar.
+ The self papers.
+ <em> Lisp and Symbolic Computation</em>, 1991.
+</DL>
+<P>
+
+<a href="ch9.html">Next: Chapter 9</a><p>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed Jan 10 07:54:37 EST 1996</I>
+</ADDRESS>
+</BODY>

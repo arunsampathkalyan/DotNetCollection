@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>The Grady Experience</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="The Grady Experience">
+<meta name="keywords" value="ch14">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<H2>Chapter 14: The Grady Experience</H2>
+</td><tr></table>
+
+
+<P>
+Above all else, the goal of analysis is human understanding of systems
+and their problem domains.
+<P>
+In a recent study  [<A HREF="#grady">1</A>], Grady identified cost components of
+software development across the whole lifecycle, including
+maintenance and functionality enhancements.  The cost percentages
+assigned to the different components stem from a combination of
+educated guesses and empirical data obtained from inside and outside
+of Hewlett-Packard:
+<P>
+<table border=5>
+<tr><td>
+<b>Component</b> </td><td> <b>Percentage</b></td></tr><tr><td>
+Program understanding </td><td> 27%</td></tr><tr><td>
+Requirements analysis </td><td> 24%</td></tr><tr><td>
+Design </td><td> 18%</td></tr><tr><td>
+Implementation </td><td> 18% </td></tr><tr><td>
+Testing </td><td> 13%</td></tr>
+</table>
+
+<P>
+Grady estimates that 27% of the total cost must be attributed to
+``program understanding''.  This is a separate component from
+requirements analysis, design, implementation, and testing.  It
+represents the efforts of analyzing what existing artifacts are all
+about before remedial actions can be taken in the case of bug fixes,
+or, in other cases, before functionality extensions can be performed.
+<P>
+One may wonder why the program understanding component absorbs such a
+large fraction of costs.  A glimpse of an explanation may be found in
+another set of data presented in [<A HREF="#grady">1</A>].  Each of the four other
+components were further split into two categories: <em> Work</em>, the
+effort spent during the first time in the cycle; and <em> Rework</em>, the
+accumulated efforts from all the other iterations.
+<P>
+The following table demonstrates that rework plus program
+understanding accounts for 60% of costs.  These contribute little to
+the implementation efforts.  Assuming that code size correlates with
+coding effort, the code grows as a result of rework by about
+<sup>1</sup>/<sub>4</sub>.
+<P>
+<table border=5>
+<tr><td>
+<b>Component</b> </td><td> <b>Work</b> </td><td> <b>Rework</b></td></tr><tr><td>
+
+Requirements analysis </td><td> 7% </td><td> 17%</td></tr><tr><td>
+Design </td><td> 7% </td><td> 11% </td></tr><tr><td>
+Implementation </td><td> 14% </td><td> 4% </td></tr><tr><td>
+Testing </td><td> 12% </td><td> 1%</td></tr>
+
+</table>
+
+<P>
+We conjecture that the key to the substantial program understanding
+component resides in the initial efforts.  The initial analysis,
+design and implementation efforts have the ratio 1:1:2.  We surmise
+that implementations start before the task is sufficiently understood
+and before a reasonable design has been constructed.  Once an initial
+implementation has been obtained, the damage is done.  The analysis
+and design outputs are insufficient guides for maintaining and
+enhancing the system.
+<P>
+Grady's account of the cost components is somewhat tentative.  Still we
+recommend that the reader go back to the beginning of Part I.
+<P>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=grady><STRONG>1</STRONG></A><DD>
+B. Grady.
+ An investment model for software process improvement.
+ Technical report, Hewlett-Packard Corporate Engineering, February
+  1992.
+</DL>
+<P>
+
+<a href="ch15.html">Next: Chapter 15</a>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:54:18 EDT 1995</I>
+</ADDRESS>
+</BODY>

@@ -1,0 +1,692 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Introduction to Analysis</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Introduction to Analysis">
+<meta name="keywords" value="ch2">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+<center><P><P></center>
+
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 2: Introduction to Analysis</h2>
+<UL>
+<LI> <A NAME=tex2html48 HREF="#SECTION00010000000000000000"> Purpose</A>
+<LI> <A NAME=tex2html49 HREF="#SECTION00020000000000000000"> Models</A>
+<LI> <A NAME=tex2html50 HREF="#SECTION00030000000000000000"> Process</A>
+<LI> <A NAME=tex2html51 HREF="#SECTION00040000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<p>
+<H2><A NAME=SECTION00010000000000000000> Purpose</A></H2>
+<A NAME=10>&#160;</A>
+<P>
+
+<P>
+The analysis phase of object-oriented software development is an
+activity aimed at clarifying the requirements of an intended software
+system, with:
+<DL ><DT><b> Input:</b>
+<DD> A fuzzy, minimal, possibly inconsistent target
+specification, user policy and project charter.
+<P>
+<DT><b> Output:</b>
+<DD> Understanding, a complete, consistent description of
+essential characteristics and behavior.
+<P>
+<DT><b> Techniques:</b>
+<DD> Study, brainstorming, interviewing, documenting.
+<P>
+<DT><b> Key notion for the descriptions:</b>
+<DD> Object.
+<P>
+ </DL>
+<P>
+The final item in this list distinguishes object-oriented analysis
+from other approaches, such as Structured Analysis [<A HREF="#yourdonb">14</A>] and
+Jackson's method [<A HREF="#jackson">6</A>].
+<P>
+<center><H2><A NAME=SECTION00011000000000000000> Importance</A></H2></center>
+<A NAME=22>&#160;</A>
+<P>
+Constructing a complex artifact is an error-prone process.  The
+intangibility of the intermediate results in the development of a
+software product amplifies sensitivity to early errors.  For example,
+Davis [<A HREF="#davis">4</A>] reports the results of studies done in the early
+1970's at GTE, TRW and IBM regarding the costs to repair errors made
+in the different phases of the life cycle. As seen in the following
+summary table, there is about a factor of 30 between the costs of
+fixing an error during the requirement phase and fixing that error in
+the acceptance test, and a factor of 100 with respect to the
+maintenance phase. Given the fact that maintenance can be a sizable
+fraction of software costs, getting the requirements correct should
+yield a substantial payoff.
+<P>
+<table border=5>
+<tr><td>
+<b>Development Phase</b> </td><td> <b>Relative Cost of Repair</b> </td></tr><tr><td>
+
+Requirements	</td><td>  0.1 -- 0.2 </td></tr><tr><td>
+Design		</td><td>  0.5 </td></tr><tr><td>
+Coding		</td><td>  1 </td></tr><tr><td>
+Unit test	</td><td>  2 </td></tr><tr><td>
+Acceptance test	</td><td>  5 </td></tr><tr><td>
+Maintenance	</td><td>  20 </td></tr>
+</table>
+
+
+<P>
+Further savings are indeed possible.  Rather than being aimed at a
+particular target system, an analysis may attempt to understand a
+domain that is common to a family of systems to be developed.  A <em>
+domain analysis</em> factors out what is otherwise repeated for each
+system in the family.  Domain analysis<A NAME=32>&#160;</A> lays the
+foundation for reuse<A NAME=33>&#160;</A> across systems.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Input</A></H2>
+<A NAME=35>&#160;</A>
+<P>
+There are several common input scenarios, generally corresponding to
+the amount of ``homework'' done by the customer:
+<P>
+<UL><LI> At one extreme, we can have as input a ``nice idea''.  In this case, the
+requirements are most likely highly incomplete.  The characterization
+of the ATM system in Chapter <A NAME=tex2html8 HREF="ch1.html">1</A> is an example.  The
+notion of a bank card (or any other technique) to be used by a
+customer for authentication is not even mentioned.  In this case,
+elaboration on the requirements is a main goal.  Intensive interaction
+between analyst and client will be the norm.
+<P>
+<LI> In the ideal case, a document may present a ``totally''
+thought-through set of requirements.  However, ``totally'' seldom
+means that the specification is really complete.  ``Obvious'' aspects
+are left out or are circumscribed by reference to other existing
+systems.  One purpose of the analysis is to make sure that there are
+indeed no surprises hiding in the omissions.  Moreover, a translation
+into (semi) formal notations is bound to yield new insights in the
+requirements of the target system.
+<P>
+<LI> In another scenario, the requirements are not yet complete.
+Certain trade-offs may have been left open on purpose.  This
+may be the case when the requirements are part of a public offering
+for which parties can bid.  For instance, we can imagine that our ATM
+example is a fragment of the requirements formulated by a bank
+consortium.  Since the different members of the consortium may have
+different regulations, certain areas may have been underdefined and
+left to be detailed in a later phase.  A main aim of the analysis will
+be the precise demarcation of these ``white areas on the map''.
+<P>
+<A NAME=39>&#160;</A><A NAME=40>&#160;</A>
+<P>
+<LI> A requirements document may propose construction of a
+<em> line of products</em> rather than one system in particular.  This
+represents a request for an OO <em> domain analysis</em>.  Domain analysis
+specifies features common to a range of systems rather than, or in
+addition to, any one product.  The resulting domain characterization
+can then be used as a basis for multiple target models. Domain
+analysis is discussed in more detail in Chapter <A NAME=tex2html11 HREF="ch13.html">13</A>. Until
+then, we will concentrate most heavily on the analysis of single
+target systems. However, we also note that by nature, OO analysis
+techniques often generate model components with applicability
+stretching well beyond the needs of the target system under
+consideration. Even if only implicit, some form and extent of domain
+analysis is intrinsic to any OO analysis.
+<P>
+</UL>
+<P>
+Across such scenarios we may classify inputs as follows:
+<A NAME=46>&#160;</A><A NAME=47>&#160;</A><A NAME=48>&#160;</A>
+<P>
+<DL ><DT><b> Functionality:</b>
+<DD> Descriptions that outline behavior in terms of the
+expectations and needs of clients of a system. (``Client'' is used here in a
+broad sense. A client can be another system.)
+<DT><b> Resource:</b>
+<DD> Descriptions that outline resource consumptions for the
+development of a system (or for a domain analysis) and/or descriptions that
+outline the resources that an intended system can consume.
+<DT><b> Performance:</b>
+<DD> Descriptions that constrain acceptable response-time
+characteristics.
+<DT><b> Miscellaneous:</b>
+<DD> Auxiliary constraints such as
+the necessity for a new
+system to interface with existing systems, the dictum that a particular
+programming language is to be used, etc.
+<P>
+ </DL>
+<P>
+Not all these categories are present in all inputs.  It is the task of
+the analyst to alert the customer when there are omissions.
+<P>
+As observed by Rumbaugh et al  [<A HREF="#rumbaugh">10</A>], the input of a fuzzy
+target specification is liable to change due to the very nature of the
+analysis activity.  Increased understanding of the task at hand may lead to
+deviations of the initial problem characterization.  Feedback from the
+analyst to the initiating customer is crucial.  Feedback failure leads to
+the following consideration  [<A HREF="#rumbaugh">10</A>]: If an analyst does exactly
+what the customer asked for, but the result does not meet the customer's
+real need, the analyst will be blamed anyway.
+<P>
+<H2><A NAME=SECTION00013000000000000000> Output</A></H2>
+<A NAME=58>&#160;</A>
+<P>
+The output of an analysis for a single target system is, in a sense,
+the same as the input, and may be classified into the same categories.
+The main task of the analysis activity is to elaborate, to detail, and
+to fill in ``obvious'' omissions.  Resource and miscellaneous
+requirements often pass right through, although these categories may
+be expanded as the result of new insights obtained during analysis.
+<P>
+The output of the analysis activity should be channeled in two
+directions.  The client who provided the initial target specification
+is one recipient.  The client should be convinced that the
+disambiguated specification describes the intended system faithfully
+and in sufficient detail.  The analysis output might thus serve as the
+basis for a contractual agreement between the customer and a third
+party (the second recipient) that will design and implement the
+described system. Of course, especially for small projects, the
+client, user, analyst, designer, and implementor parties may overlap,
+and may even all be the same people.
+<P>
+An analyst must deal with the delicate question of the feasibility of the
+client's requirements.  For example, a transportation system with the
+requirement that it provide interstellar travel times of the order of
+seconds is quite unambiguous, but its realization violates our common
+knowledge.  Transposed into the realm of software systems, we should insist
+that desired behavior be plausibly implementable.
+<P>
+Unrealistic resource and/or performance constraints are clear reasons
+for nonrealizability.  Less obvious reasons often hide in behavioral
+characterizations.  Complex operations such as Understand, Deduce, Solve,
+Decide, Induce, Generalize, Induct, Abduct and Infer are not as yet
+recommended in a system description unless these notions correspond to
+well-defined concepts in a certain technical community.
+<P>
+Even if analysts accept in good faith the feasibility of the stated
+requirements, they certainly do not have the last word in this matter.
+Designers and implementors may come up with arguments that demonstrate
+infeasibility.  System tests may show nonsatisfaction of
+requirements.  When repeated fixes in the implementation and/or
+design do not solve the problem, backtracking becomes necessary in
+order to renegotiate the requirements.  When the feasibility of
+requirements is suspect, prototyping<A NAME=59>&#160;</A> of a relevant
+``vertical slice'' is recommended.  A mini-analysis and mini-design
+for such a prototype can prevent rampant throwaway
+prototyping.<A NAME=60>&#160;</A>
+<P>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Models</A></H2></center>
+<A NAME=62>&#160;</A>
+<P>
+Most attention in the analysis phase is given to an elaboration of
+functional requirements.  This is performed via the construction of
+<em> models</em> describing objects, classes, relations, interactions,
+etc.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Declarative Modeling</A></H2>
+<P>
+<A NAME=65>&#160;</A>
+<P>
+We quote from Alan Davis  [<A HREF="#davis">4</A>]:
+<P>
+<blockquote> A <em> Software Requirements Specification</em> is a document containing a
+complete description of <em> what</em> the software will do without describing
+<em> how</em> it will do it.<A NAME=71>&#160;</A>
+</blockquote>
+<P>
+Subsequently, he argues that this what/how distinction is less obvious
+than it seems.  He suggests that in analogy to the saying ``One
+person's floor is another person's ceiling'' we have ``One person's
+how is another person's what''.  He gives examples of multiple
+what/how layers that connect all the way from user needs to the code.
+<P>
+We will follow a few steps of his reasoning using the single
+requirement from our ATM example that clients can obtain cash from any
+of their accounts.
+<P>
+<OL><LI> Investigating the desired functionality from the user's perspective
+may be seen as a definition of <em> what</em> the system will do.
+<P>
+The ability
+of clients to obtain cash is an example of functionality specified by the
+user.
+<P>
+<LI> ``The next step might be to define all possible systems ... that
+could satisfy these needs.  This step clearly defines <em> how</em> these
+needs might be satisfied. ...''
+<P>
+The requirements already exclude a human intermediary.  Thus, we can
+consider different techniques for human-machine interaction, for example
+screen and keyboard interaction, touch screen interaction, audio and
+voice recognition.   We can also consider different authentication
+techniques such as PIN, iris analysis, handline analysis.  These
+considerations address the <em> how</em> dimension.
+<P>
+<LI> ``On the other hand, we can define the set of all systems that could
+possibly satisfy user needs as a statement of <em> what</em> we want our system
+to do without describing <em> how</em> the particular system ... will behave.''
+<P>
+The suggestion to construct this set of all systems (and apply behavior
+abstraction?) strikes us as artificial for the present discussion,
+although an enumeration of techniques may be important to facilitate a
+physical design decision.
+<P>
+<LI> ``The next step might be to define the exact behavior of the actual
+software system to be built ... This step ... defines <em> how</em> the system
+behaves ...''
+<P>
+This is debatable and depends on the intended meaning of ``exact
+behavior''.  If this refers to the mechanism of the intended system
+then we subscribe to the quotation.  However, it could also encompass
+the removal of ambiguity by elaborating on the description of the
+customer-ATM interaction.  If so, we still reside in <em> what</em>
+country.  For example, we may want to exemplify that customer
+authentication precedes all transactions, that account selection is to
+be done for those customers who own multiple accounts, etc.
+<P>
+<LI> ``On the other hand, we can define the external behavior of the
+actual product ... as a statement of <em> what</em> the system will do without
+defining <em> how</em> it works internally.''
+<P>
+We may indeed be more specific by elaborating an interaction sequence
+with: ``A client can obtain cash from an ATM by doing the following
+things: Obtaining proper access to the ATM, selecting one of his or her
+accounts when more than one owned, selecting the cash dispense option,
+indicating the desired amount, and obtaining the delivered cash.''  We
+can go further in our example by detailing what it means to obtain
+proper access to an ATM, by stipulating that a bank card has to be
+inserted, and that a PIN has to be entered after the system has asked
+for it.
+<P>
+<LI> ``The next step might be to define the constituent architectural
+components of the software system.  This step ... defines <em> how</em> the
+system works internally ...''
+<P>
+Davis continues by arguing that one can define what these components do
+without describing how they work internally.
+<P>
+</OL>
+<P>
+In spite of such attempts to blur <em> how</em> versus <em> what</em>, we
+feel that these labels still provide a good initial demarcation of the
+analysis versus the design phase.
+<P>
+On the other hand, analysis methods (and not only OO analysis methods)
+
+do have a <em> how</em> flavor.  This is a general consequence of any
+modeling technique.  Making a model of an intended system is a
+constructive affair.  A model of the dynamic dimension of the intended
+system describes <em> how</em> that system behaves.  However, analysts
+venture into how-country only to capture the intended externally
+observable behavior, while ignoring the mechanisms that realize this
+behavior.
+<P>
+The object-oriented paradigm puts another twist on this discussion.
+OO analysis models are grounded in object models that often retain
+their general form from analysis (via design) into an implementation.
+As a result, there is an illusion that <em> what</em> and <em> how</em> get
+blurred (or even should be blurred).  We disagree with this
+fuzzification.  It is favorable indeed that the transitions between
+analysis, design, and implementation are easier (as discussed in
+Chapter <A NAME=tex2html21 HREF="ch15.html">15</A>), but we do want to keep separate the
+different orientations inherent in analysis, design, and implementation
+activities.
+<P>
+We should also note that the use of models of any form is debatable.  A
+model<A NAME=93>&#160;</A> often contains spurious elements
+that are not strictly demanded to represent the requirements.  The
+coherence and concreteness of a model and its resulting (mental)
+manipulability is, however, a distinct advantage.
+<P>
+<H2><A NAME=SECTION00022000000000000000> Objects in Analysis</A></H2>
+<A NAME=95>&#160;</A>
+<P>
+OO analysis models center on objects.  The definition of objects
+given in Chapter <A NAME=tex2html24 HREF="ch1.html">1</A> is refined here for the analysis
+phase.  The bird's eye view definition is that an object is a
+conceptual entity that:
+<P>
+<UL><LI> is identifiable;
+<P>
+<LI> has features that span a local state space;
+<P>
+<LI> has operations that can change the status of the system locally,
+while also inducing operations in peer objects.
+</UL>
+<P>
+Since we are staying away from solution construction in the analysis phase,
+the objects  allowed in this stage are constrained.  The output of the
+analysis should make sense to the customer of the system development
+activity.  Thus we should insist that the objects correspond with
+customers' notions, and add:
+<P>
+<UL><LI> an object refers to a thing which is identifiable by the users of the
+target system -- either a tangible thing or a mental construct.
+</UL>
+<P>
+Another ramification of avoiding solution construction pertains to the
+object's operator descriptions.  We will stay away from procedural
+characterizations in favor of declarative ones.
+<P>
+<H3><A NAME=SECTION00022100000000000000> Active Objects</A></H3>
+<P>
+Some OO analysis methods have made the distinction between <em>
+active</em> and <em> passive</em>
+objects.<A NAME=105>&#160;</A><A NAME=106>&#160;</A> For
+instance Colbert [<A HREF="#colbert">3</A>] defines an object as active if it
+``displays independent motive power'', while a passive object ``acts
+only under the motivation of an active object''.
+<P>
+We do not ascribe to these distinctions, at least at the analysis
+level.  Our definition of objects makes them <em> all</em> active, as far
+as we can tell.  This active versus passive distinction seems to be
+more relevant for the design phase (cf., Bailin [<A HREF="#bailin">1</A>]).
+<P>
+This notion of objects being active is motivated by the need to
+faithfully represent the autonomy of the entities in the ``world'',
+the domain of interest.  For example, people, cars, accounts, banks,
+transactions, etc., are all behaving in a parallel, semi-independent
+fashion.  By providing OO analysts with objects that have at least one
+thread of control,<A NAME=110>&#160;</A> they have the means to stay close to
+a natural representation of the world.  This should facilitate
+explanations of the analysis output to a customer.  However, a price
+must be paid for this.  Objects in the programming realm deviate from
+this computational model.  They may share a single thread of control
+in a module.  Consequently, bridging this gap is a major
+responsibility of the design phase.
+<P>
+<H2><A NAME=SECTION00023000000000000000> Four-Component View</A></H2>
+<P>
+<A NAME=secfourcomp>&#160;</A>
+<P>
+A representation of a system is based on a core vocabulary.  The
+foundation of this vocabulary includes both static and dynamic
+dimensions.  Each of these dimensions complements the other.
+Something becomes significant as a result of how it behaves in
+interaction with other things, while it is distinguished from those
+other things by more or less static features.  This distinction
+between static and dynamic dimensions is one of the axes that we use
+to distinguish the models used in analysis.
+<P>
+Our other main distinction refers to whether a model concentrates on a
+single object or whether interobject connections are addressed.  The
+composition of these two axes give us the following matrix:
+<P>
+<table border=5>
+<tr><td>
+</td><td> <b>inside object</b> </td><td> <b>between objects</b> </td></tr><tr><td>
+
+<b>static</b> </td><td> attribute<br> constraint  </td><td>
+relationship <br> acquaintanceship  </td></tr><tr><td>
+
+<b>dynamic</b> </td><td> state net and/or <br> interface </td><td>
+interaction and/or <br> causal connection </td></tr><tr><td>
+
+</table>
+
+<P>
+Detailed treatments of the cells in this matrix are presented in
+the following chapters.
+<P>
+The static row includes a disguised version of entity-relationship
+(ER) modeling<A NAME=118>&#160;</A>.  ER modeling was
+initially developed for database design.  Entities correspond to
+objects, and relations occur between objects.<sup>1</sup> Entities are
+described using attributes<A NAME=120>&#160;</A>.
+Constraints<A NAME=121>&#160;</A> capture limitations among attribute
+value combinations. Acquaintanceships represent the static connections
+among interacting objects.
+
+<blockquote>
+<sup>1</sup>Footnote:<br>
+The terms
+``relation'' and ``relationship'' are generally interchangeable.
+``Relationship'' emphasizes the notion as a noun phrase.
+</blockquote>
+<P>
+The dynamic row indicates that some form of state machinery is
+employed to describe the behavior of a prototypical element of a
+class<A NAME=122>&#160;</A>.  Multiple versions of causal
+connections capture the ``social'' behavior of objects.
+<P>
+Inheritance<A NAME=123>&#160;</A> impacts all four cells by specifying
+relationships among <em> classes</em>.  Inheritance allows the
+construction of compact descriptions by factoring out commonalities.
+<P>
+<H2><A NAME=SECTION00024000000000000000> Other Model Components</A></H2>
+<P>
+The four models form a core.  Additional models are commonly added to
+give summary views and/or to highlight a particular perspective.  The
+core models are usually represented in graphic notations.  Summary
+models are subgraphs that suppress certain kinds of detail.
+<P>
+For instance, a summary model in the static realm may remove all
+attributes and relationship interconnections in a class graph to
+highlight inheritance structures.  Alternatively, we may want to show
+everything associated with a certain class <em> C</em>, for example, its
+attributes, relationships in which <em> C</em> plays a role, and inheritance
+links in which <em> C</em> plays a role.
+<P>
+An example in the dynamic realm is a class interaction
+graph<A NAME=129>&#160;</A> where the significance of a link
+between two classes signifies that an instance of one class can
+connect in some way or another with an instance of another class.
+Different interaction mechanisms can give rise to various interaction
+summary graphs.  Another model component can capture prototypical
+interaction sequences between a target system and its context.
+Jacobson [<A HREF="#jac87">7</A>] has labeled this component <em> use cases</em><A NAME=132>&#160;</A>.  They are discussed in Chapters <A NAME=tex2html36 HREF="ch10.html">10</A>
+and <A NAME=tex2html37 HREF="ch12.html">12</A>.
+<P>
+All of these different viewpoints culminate in the construction of a
+model of the intended system<A NAME=137>&#160;</A> as discussed in
+Chapter <A NAME=tex2html39 HREF="ch10.html">10</A>.
+<P>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Process</A></H2></center>
+<P>
+<A NAME=141>&#160;</A>
+<P>
+Several factors prevent analysis from being performed according to a fixed
+regime.  The input to the analysis phase varies not only in completeness
+but also in precision.  Backtracking to earlier phases is required to the
+extent of the incompleteness and the fuzziness of the input.  Problem size,
+team size, corporate culture, etc., will influence the analysis process as
+well.
+<P>
+After factoring out these sources of variation, we may still wonder
+whether there is an underlying ``algorithm'' for the analysis process.
+Investigation of current OO analysis methods reveals that:
+<P>
+<UL><LI> The creators of a method usually express only a weak preferences
+for the sequence in which models are developed.
+<P>
+<LI> There is as yet no consensus about the process.
+<P>
+<LI> There appear to be two clusters of approaches: (1) Early
+characterization of the static dimension by developing a vocabulary in
+terms of classes, relations, etc. (2) Early characterization of the
+behavioral dimension, the system-context interactions.
+<P>
+</UL>
+<P>
+We have similarly adopted a weak bias. Our presentation belongs to the
+cluster of methods that focuses on the static dimension first and,
+after having established the static models, gives attention to the
+dynamic aspects.  However, this position is mutable if and when
+necessary.  For instance in developing large systems, we need
+top-down<A NAME=144>&#160;</A> functional decompositions to get
+a grip on manageable subsystems.  Such a decomposition requires a
+preliminary investigation of the dynamic realm.
+Chapter <A NAME=tex2html42 HREF="ch9.html">9</A> (Ensembles)
+<A NAME=147>&#160;</A> discusses these issues in more
+detail.  A prescribed sequence for analysis is given via an example in
+Chapter <A NAME=tex2html44 HREF="ch10.html">10</A> (Constructing a System Model).  A
+formalization of this ``algorithm'' is given in
+Chapter <A NAME=tex2html45 HREF="ch12.html">12</A> (The Analysis Process).
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Summary</A></H2></center>
+<P>
+Analysis provides a description of <em> what</em> a system will do.
+Recasting requirements in the (semi) formalism of analysis notations
+may reveal incompleteness, ambiguities, and contradictions.
+Consistent and complete analysis models enable early detection and repair of
+errors in the requirements before they become too costly to revise.
+<P>
+Inputs to analysis may be diverse, but are categorizable along the
+dimensions of functionality, resource constraints, performance
+constraints and auxiliary constraints.
+<P>
+Four different core models are used to describe the functional aspects
+of a target system.  These core models correspond with the elements in
+a matrix with axes static versus dynamic, and inside an object versus
+in between objects.
+<P>
+Analysis is intrinsically non-algorithmic. In an initial iteration we
+prefer to address first the static dimension and subsequently the
+behavioral dimension.  However, large systems need decompositions
+that rely on early attention to functional, behavioral aspects.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Further Reading</A></H2>
+<P>
+We witness an explosion of analysis methods.  A recent comparative
+study [<A HREF="http://g.oswego.edu/dl/oosd/node5.html#ch3">5</A>] describes ten methods.  A publication half a year later
+[<A HREF="http://g.oswego.edu/dl/oosd/node5.html#korson">9</A>] lists seventeen methods.
+Major sources include Shlaer and Mellor [<A HREF="http://g.oswego.edu/dl/oosd/node5.html#sm">11</A>,<A HREF="http://g.oswego.edu/dl/oosd/node5.html#sm4">12</A>], Booch
+[<A HREF="http://g.oswego.edu/dl/oosd/node5.html#boochbook">2</A>], Rumbaugh et al [<A HREF="http://g.oswego.edu/dl/oosd/node5.html#rumbaugh">10</A>], Wirfs-Brock et al
+[<A HREF="http://g.oswego.edu/dl/oosd/node5.html#wirfs">13</A>], and Jacobson et al [<A HREF="http://g.oswego.edu/dl/oosd/node5.html#jacobson">8</A>].
+<P>
+<H2><A NAME=SECTION00042000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Discuss whether analysis, in the sense discussed in this chapter,
+should be performed for the following tasks:
+<OL><LI> The construction of a new <i> Fortran</i> compiler for a new machine with a
+new instruction repertoire.
+<LI> The planning for your next vacation.
+<LI> The repair of faulty software.
+<LI> The acquisition of your next car.
+<LI> The remodeling of your kitchen.
+<LI> The decision to get married.
+<LI> The reimplementation of an airline reservation system to exploit five
+supercomputers.
+<LI> A comparative study of OO analysis methods.
+</OL>
+<P>
+<LI> Analysis is a popular notion.  Mathematics, philosophy, psychiatry,
+and chemistry all have a claim on this concept.  Is there any
+commonality between these notions and the notion of analysis developed in
+this chapter?
+<P>
+<LI> Do you expect the following items to be addressed during OO
+analysis?
+<OL><LI> Maintainability.
+<LI> Quality.
+<LI> The development costs of the target system.
+<LI> The execution costs of the target system.
+<LI> The programming language(s) to be used.
+<LI> The reusability of existing system components.
+<LI> The architecture of the implementation.
+<LI> The relevance of existing frameworks.
+</OL></OL>
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=bailin><STRONG>1</STRONG></A><DD>
+S.C. Bailin.
+ An object-oriented requirements specification method.
+ <em> Communications of the ACM</em>, 32(5), May 1989.
+<P>
+<DT><A NAME=boochbook><STRONG>2</STRONG></A><DD>
+G. Booch.
+ <em> Object Oriented Design with Applications</em>.
+ Benjamin/Cummings, 1990.
+<P>
+<DT><A NAME=colbert><STRONG>3</STRONG></A><DD>
+E. Colbert.
+ The object-oriented software development method: A practical approach
+  to object-oriented development.
+ In <em> TRI-Ada 89</em>, October 1989.
+<P>
+<DT><A NAME=davis><STRONG>4</STRONG></A><DD>
+A.M. Davis.
+ <em> Software Requirements, Analysis and Specification</em>.
+ Prentice-Hall, 1990.
+<P>
+<DT><A NAME=ch3><STRONG>5</STRONG></A><DD>
+D. de Champeaux and P. Faure.
+ A comparative study of object-oriented analysis methods.
+ <em> Journal of Object-Oriented Programming</em>, March/April 1992.
+<P>
+<DT><A NAME=jackson><STRONG>6</STRONG></A><DD>
+M. Jackson.
+ <em> Systems Development</em>.
+ Prentice Hall, 1982.
+<P>
+<DT><A NAME=jac87><STRONG>7</STRONG></A><DD>
+I. Jacobson.
+ Object-oriented development in an industrial environment.
+ In <em> OOPSLA '87</em>. ACM, 1987.
+<P>
+<DT><A NAME=jacobson><STRONG>8</STRONG></A><DD>
+I. Jacobson, M. Christerson, P. Jonsson, and G. Overgaard.
+ <em> Object-Oriented Software Engineering</em>.
+ Addison-Wesley, 1992.
+<P>
+<DT><A NAME=korson><STRONG>9</STRONG></A><DD>
+T.D. Korson and V.K. Vaishnavi.
+ Managing emerging software technologies: A technology transfer
+  framework.
+ <em> Communications of the ACM</em>, September 1992.
+<P>
+<DT><A NAME=rumbaugh><STRONG>10</STRONG></A><DD>
+J. Rumbaugh, M. Blaha, W. Premerlani, F. Eddy, and W. Lorensen.
+ <em> Object-Oriented Modeling and Design</em>.
+ Prentice Hall, 1991.
+<P>
+<DT><A NAME=sm><STRONG>11</STRONG></A><DD>
+S. Shlaer and S.J. Mellor.
+ <em> Object-Oriented Systems Analysis</em>.
+ Yourdon Press, 1988.
+<P>
+<DT><A NAME=sm4><STRONG>12</STRONG></A><DD>
+S. Shlaer and S.J. Mellor.
+ <em> Object Life Cycles: Modeling the World in States</em>.
+ Yourdon Press, 1991.
+<P>
+<DT><A NAME=wirfs><STRONG>13</STRONG></A><DD>
+R. Wirfs-Brock, B. Wilkerson, and L. Wiener.
+ <em> Designing Object-Oriented Software</em>.
+ Prentice Hall, 1990.
+<P>
+<DT><A NAME=yourdonb><STRONG>14</STRONG></A><DD>
+E. Yourdon.
+ <em> Modern Structured Analysis</em>.
+ Yourdon Press, 1989.
+</DL>
+
+<a href="ch3.html">Next: Chapter 3</a><p>
+
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed Jan 10 07:52:09 EST 1996</I>
+</ADDRESS>
+</BODY>

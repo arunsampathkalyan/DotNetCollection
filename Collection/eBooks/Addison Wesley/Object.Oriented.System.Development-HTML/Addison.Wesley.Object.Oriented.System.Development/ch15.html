@@ -1,0 +1,2054 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>From Analysis to Design</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="From Analysis to Design">
+<meta name="keywords" value="ch15">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 15: From Analysis to Design</h2>
+<BR>
+<UL>
+<LI> <A NAME=tex2html109 HREF="#SECTION00010000000000000000"> Continuity</A>
+<LI> <A NAME=tex2html110 HREF="#SECTION00020000000000000000"> Transformation</A>
+<LI> <A NAME=tex2html111 HREF="#SECTION00030000000000000000"> Design Phases</A>
+<LI> <A NAME=tex2html112 HREF="#SECTION00040000000000000000"> Design Criteria</A>
+<LI> <A NAME=tex2html113 HREF="#SECTION00050000000000000000"> Managing Design</A>
+<LI> <A NAME=tex2html114 HREF="#SECTION00060000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<A NAME=9>&#160;</A>
+<P>
+The goal of the design phase is to generate a description of how to
+synthesize software objects that behave in accord with analysis models
+and meet all other system requirements. This phase is a set of
+activities with:<A NAME=10>&#160;</A>
+<P>
+<DL ><DT><b> Input:</b>
+<DD> Functional, resource, and performance requirements.
+  <DT><b> Output:</b>
+<DD> A specification providing a complete plan for
+    implementing the system.
+  <DT><b> Techniques:</b>
+<DD>  Transformation, refinement, reification,
+        composition.
+<P>
+ </DL>
+<P>
+Analysts see objects as descriptions of required properties and
+behavior. Designers view objects as <em> computational</em> entities which
+realize the desired properties in a manner that may be readily
+implemented using common object-oriented programming languages and
+tools.  In this way, design serves as a bridge between analysis
+activities that describe those properties a system should possess, and
+implementation activities that describe the language and
+environment-dependent manner in which it is constructed.
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Continuity</A></H2></center>
+<A NAME=18>&#160;</A><A NAME=19>&#160;</A>
+<P>
+The border between analysis and design is often filled with
+discontinuities in non-object-oriented approaches to development.
+Designers sometimes use analysis information in only the most general
+ways and reanalyze the problem at hand from a computational
+perspective using different techniques and strategies than that of
+analysis. This can even apply to object-oriented design. When OOD is
+preceded by non-OO analysis, much of the design phase should be
+
+preceded by a secondary analysis using the methods described
+in Part I to establish declarative structure.
+<P>
+One of the most attractive features of a uniform object-oriented
+approach to software development is <em> structural continuity</em>. The
+basic decomposition of a system into objects retains its general form
+from analysis through design and into implementation.  Structural
+continuity is both an empirical observation (i.e., something that
+appears to hold widely across object-oriented development efforts) and
+a guiding principle for design methods.  Even though their
+perspectives, methods, and goals differ, object-oriented analysts,
+designers, and implementors maintain the same overall orientation.
+They employ the same concepts and terminology for describing objects,
+classes, behaviors, inheritance, etc.  This simplifies and streamlines
+the development process.
+<P>
+From a designer's point of view, many of the structures and
+descriptions that we have been calling analysis <em> models</em> in Part
+I may be thought of as declarative software <em> designs</em>.  In Part
+II we assume that the main declarative aspects of a system
+model/design have been constructed using the methods described in Part
+I. Part II is ``merely'' about computational concerns.  However, the
+continuity principle also ensures that OOA models may be refined and
+restructured during the design phase without the need for painful
+back-translation when reconciling designs with specifications.  The
+border between design and implementation is also guided by continuity.
+Program designs should be tuned and restructured on the basis of
+experimentation, monitoring, and feedback with executable code.
+<P>
+Among the best tools for assessing the need for improvements at all
+levels is prototyping.  We will show how OOD methods can accommodate
+the creation of prototypes that reflect only those transformations and
+details already committed.  These steps may then be revisited after
+experimenting with the tentative system.
+<P>
+Exploitation of continuity results in a design process that is robust
+in the face of errors, suboptimal constructions, and other snags.  Any
+design process that relies on the omniscience and perfection of
+analysts is doomed to failure.  Methods must allow for analysis models
+to have occasional gaps and imperfections.  Constraints and
+opportunities that stem from computational concerns can strengthen,
+complete, or override those seen from a declarative perspective.
+Similarly, analysts (even domain analysts) may not always recognize
+and exploit common design idioms, reusable components, and
+applications frameworks.  Regardless of these considerations, the
+diversity of OO constructs allows many concepts to be described in any
+of several nearly equivalent ways. In the following chapters, we
+present several alternative strategies for expressing various analysis
+constructs.  The best choice from a design perspective need not mesh
+with that from analysis.
+<P>
+For these reasons, designers should be prepared for the possibility of
+new insights, corrections, and improvements throughout the development
+process.  Designers sometimes introduce new classes, refactor class
+hierarchies, and intertransform constructs in the process of meeting
+other goals. The methods described in Part II allow these
+manipulations to be phrased in ways that maintain contact with the
+original OOA models.
+<P>
+<H3><A NAME=SECTION00010100000000000000> Reviews</A></H3>
+<A NAME=24>&#160;</A>
+<P>
+Continuity also streamlines <em> traceability</em><A NAME=26>&#160;</A>
+from a software process management perspective. When design
+refinements are intrinsically keyed to OOA models, they are much
+easier to keep track of than otherwise. However, achieving this is by
+no means automatic, especially when analysis groups differ from design
+groups. Traceability requires a high degree of interaction and
+frequent reviews, mainly during the early stages of design.
+<P>
+During such reviews, designers should try to anticipate points at
+which models run into computational feasibility problems, cases where
+model incompleteness leads to ambiguities, class structures that are
+known to lead to software quality problems, and so on.  Analysts must
+be prepared to defend, fill in, and/or revise their decisions.
+<P>
+There are many ways to structure this review process. One is to follow
+IBIS  procedures [<A HREF="#ibis">6</A>]<A NAME=28>&#160;</A> in which review points are
+raised as well-formed <em> issues</em>. For each issue there may be one or
+more <em> positions</em>. Each position may in turn have one or more <em>
+rationales</em>. Issues, positions, and rationales may all lead to other
+nested issues. These may ultimately lead to a set of decisions,
+actions, or other outcomes.  Maintaining a record of such reviews in
+this structured form enhances traceability.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Transformation</A></H2></center>
+<A NAME=33>&#160;</A>
+<A NAME=34>&#160;</A>
+<A NAME=35>&#160;</A><A NAME=36>&#160;</A><A NAME=37>&#160;</A>
+<P>
+<H2><A NAME=SECTION00021000000000000000> Inputs</A></H2>
+<P>
+Object-oriented design methods exploit continuity while proceeding
+from a declarative to a procedural point of view.  This process may be
+seen as a series of transformations from the inputs to the outputs of
+the design process.  The most important input considerations <em>
+from</em> analysis are of the same general form as those described in
+Chapter <A NAME=tex2html15 HREF="ch2.html">2</A> as analysis <em> inputs</em>.  While the
+headings are the same, the details are substantially more refined, and
+reflect the products of OOA activities.<A NAME=43>&#160;</A>
+<P>
+<DL ><DT><b> Functionality:</b>
+<DD> The purpose of the system, as described
+        by (multiple) declarative models of objects, classes,
+        relations, states, transitions, interactions, etc.
+<DT><b> Resource:</b>
+<DD> The computational substrate on which the system
+        will be built.
+<DT><b> Performance:</b>
+<DD> The expected response times of the system.
+<DT><b> Miscellaneous:</b>
+<DD> Auxiliary constraints including:
+  <DL ><DT> Software quality
+<DD> requirements concerning reliability, modularity,
+        safety, cohesion, testability, understandability, reusability,
+        and extensibility.
+  <DT> Lifecycle
+<DD> requirements for system evolution,
+        demanding design allowances for reimplementation, repair,
+        extension, and related adaptations necessary for coping with
+        future requirements.
+  <DT> Compatibility
+<DD> requirements governing interactions with
+        other systems, subsystems, and components (most typically
+        non-OO ones) through constrained interfaces.
+<P>
+ </DL>
+ </DL><H2><A NAME=SECTION00022000000000000000> Process Criteria</A></H2>
+<P>
+<A NAME=56>&#160;</A>
+<P>
+We describe design activities as a series of transformations.
+However, we cannot prescribe fully algorithmic transformation schemes.
+The spectrum of transformations includes a few utterly mechanical
+translations, some involving guided (but not fully predetermined)
+series of refinements, some providing a wide range of options that
+must be chosen using situation-specific criteria (this is the most
+typical case), and some for which we can only provide general advice
+about how to connect initial and final conditions.  The structure of
+these transformations relies on criteria common to the design of <em>
+any</em> transformational process, including:
+<P>
+<UL><LI> Group all transformations into
+        meaningful, tractable phases with well-defined inputs,
+        outputs,  and separation of concerns.
+  <LI> Obey logical dependencies. Do not schedule
+        a step until its prerequisites are complete.
+  <LI> Keep downstream options open. Avoid
+        premature commitments to nonessential details.
+  <LI> Operate on the most general representation
+        possible for any transformation, thus minimizing
+        redundancies resulting from similar operations on special cases.
+  <LI> Output refinements and restructurings using
+        the same representational framework as their inputs.
+</UL>
+<P>
+For example, requirements may be handed to a designer in sizable
+chunks, or even all at once.  However, because of their intrinsic
+dependencies, design activities attempting to deal with these
+requirements must be in part sequential. It is impossible to assign
+resources to objects and manage their use until resource demands are
+at least approximately determined by establishing representational and
+computational properties. It is similarly impossible to address
+performance issues until these mappings are known.  Sequentiality does
+not, however, imply that <em> all</em> activities within one subphase
+should be performed before all in the next.
+<P>
+While we use these criteria for guiding the overall design process,
+they also govern the architecture of just about any transformational
+system. Examples include compiler design, simulation system design,
+and computer vision processing system design.
+<P>
+<H2><A NAME=SECTION00023000000000000000> Phases and Activities</A></H2>
+<P>
+<A NAME=62>&#160;</A>
+<P>
+The three major categories of input from analysis subdivide focal
+design issues in a natural way. We can expand on these groupings to
+better characterize them from a design perspective:
+<P>
+<DL ><DT><b> Functional design:</b>
+<DD> Definition of representational and
+        algorithmic
+        properties of classes obeying the declarative constraints
+        specified within OOA models.
+  <DT><b> Physical design:</b>
+<DD> Mapping of objects to processors, processes,
+        storage, and communication channels, along with design of
+        facilities to manage these resources.
+  <DT><b> Performance design:</b>
+<DD> Reconciliation of functionality and
+        resource mappings  to meet performance requirements
+        when expressed using the target implementation languages,
+        tools, configurations, etc.
+<P>
+ </DL>
+<P>
+The distinctions between functional, physical, and performance phases
+help capture different concerns and activities within design. While
+this is a reasonable way of classifying well-accepted <em>
+object-oriented</em> design practices, it differs from traditional
+approaches in a number of respects.  For example, there is no
+separation between ``coarse'' and ``detailed'' design. Our
+presentation actually begins by discussing some small granularity
+issues, and our performance design methods consider both in-the-small
+and in-the-large performance factors. Thus, these categories focus
+more on the goals of design than their granularities.  Similarly, we
+do not focus on (logical) ``architectural design'' <em> per se</em>.  OOA
+models already specify much of the logical structure of systems. While
+many aspects of this structure may be modified during design, their
+general forms are established through declarative modeling.
+<P>
+We summarize some highlights of this process in the accompanying
+
+diagram. (It has the same interpretation as those of
+Chapter <A NAME=tex2html19 HREF="ch12.html">12</A>).
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch15-img1.gif"><P>
+<P>
+The basic framework admits several variations. For example, functional
+design may be interleaved with parts of OOA by dealing with subsystems
+or other coarse-grained components as they become available.  Design
+activities may be subdivided among designers working concurrently and
+semi-independently. Performance design and implementation activities
+may be similarly distributed and pipelined. Also, design of the
+general form, policies, and infrastructure of many physical system
+matters may proceed at nearly any point.
+<P>
+<H2><A NAME=SECTION00024000000000000000> Object Definitions and Models</A></H2>
+<A NAME=101>&#160;</A>
+<P>
+Even though OOA is a declarative activity, analysts implicitly or
+explicitly adopt some kind of underlying abstract computation
+framework.  Designers must ultimately replace this framework with one
+that is more easily supported by implementation languages, tools, and
+systems.  Thus, not only must designers transform abstractly defined
+objects into concretely implementable ones, they must also transform
+the underlying processing and communication structure.  This may be
+clarified by separating out the underlying computational models used
+in OOA from the ways analysts describe
+objects:<A NAME=102>&#160;</A>
+<P>
+<UL><LI> Objects possess logical states and attributes, relations to
+        other objects, and dynamic capabilities that may alter these
+        across time.
+  <LI> Each object is a member of some class.  All objects of a
+        particular class possess the same static and dynamic
+        features, but may be in different states.
+  <LI> Each object is a potentially active, autonomous sequential
+        agent, performing at most one activity at a time.
+  <LI> Objects communicate by generating events. The nature of
+        event generation varies, and may include point to point
+        messages<A NAME=104>&#160;</A> and nonspecific requests issued via blocking,
+        nonblocking, and timed protocols.
+  <LI> Events may trigger transitions, new events, and/or the
+        construction of new objects.
+</UL>
+<P>
+We have seen in Part I that most OOA practices implicitly or explicitly
+assume that every object is an ``active''<A NAME=106>&#160;</A> agent
+residing in its own processor. This framework would be pretty easy to
+deal with in design if a system were targeted for a massively parallel
+MIMD computer supporting exactly this computational model.  But this
+is not a reality.  These days, practical systems must occupy many fewer
+processors than objects. This means that objects must be packed into
+a relatively small number of interacting processes.
+<P>
+For both conceptual and pragmatic reasons, it is useful to think about
+a model that pushes this to an extreme, and packs <em> all</em> objects
+into a single program.  This computational model is captured in the
+notion of a single-process object-oriented supervisory
+kernel<A NAME=108>&#160;</A>. A kernel is the virtual machine that supports
+object computation. It specifies how objects are constructed and
+managed, how events are scheduled, and how communication is arranged.
+<P>
+The pragmatic utility of this model is that, unlike the massively
+parallel version, a single-process kernel may actually be implemented
+without engaging in many of the design issues described in Part II
+(cf., [<A HREF="#tidwell">22</A>]).
+<P>
+<H2><A NAME=SECTION00025000000000000000> Prototype Interpreters</A></H2>
+<A NAME=111>&#160;</A><A NAME=112>&#160;</A>
+<A NAME=113>&#160;</A>
+<P>
+An operational high-level kernel serves not only as a concrete
+implementation of a computational reference model, but also as an
+interpretive prototype simulator useful for experimenting with
+preliminary  designs.
+<P>
+Prototypes may be implemented using techniques common to any
+single-process simulator or interpreter. The basic idea is to create a
+single active computational agent that receives all events in some
+kind of queue. When conditions allow, it pulls an event off the queue
+and performs the indicated actions on behalf of the simulated
+objects.  In this way, all conceptually active objects may be
+simulated passively, at the expense of creating an all-powerful
+super-object forever repeating the following steps:
+<P>
+<P>
+<UL><LI> Take from the queue any action that has all of its triggering
+        constraints satisfied and process it:
+    <UL><LI> If it is an object construction event, create a new
+            (passive) object with the required initial states and
+            attributes.
+      <LI> Else if it is an elementary state change operation on a
+            primitive object, then directly compute it.
+      <LI> Else place on the queue all component events listed in the
+            body of the transition.
+    </UL></UL>
+
+<P>
+This is actually just a variation on the computational structure
+implicit in OOA object models. (Compare the figure in
+Chapter <A NAME=tex2html28 HREF="ch6.html">6</A>.)  It assumes that <em> all</em> state
+changes, etc., are explicitly described in a computational fashion.
+But instead of empowering all objects to perform their own transitions
+and communicate with others, this model forces the single super-object
+to behave as if it were composed of all others, and to communicate
+only with itself via the queue.
+<P>
+The single-process nature of this interpreter allows it to be
+constructed without dealing with concurrency, distribution, and
+encapsulation issues that otherwise complicate design.  However,
+this is a highly simplified model. A more complete version would need
+
+to address several other issues described in Part II, including:
+<P>
+<DL ><DT><b> Dispatching:</b>
+<DD> Translating an event
+        into the corresponding operation of a
+        particular object.
+  <DT><b> Queuing:</b>
+<DD> Keeping track of the conditions
+        allowing operations to be triggered.
+  <DT><b> Conversion:</b>
+<DD> Translation of more complex
+        constructs (e.g., client-server interactions) into
+        the simple format demanded by the model, or, equivalently,
+        incorporating extensions that directly accommodate these.
+  <DT><b> Object management:</b>
+<DD> Controlling storage and
+        other resources consumed by simulated objects.
+  <DT><b> Symbolic analysis:</b>
+<DD> Evaluating constraints, types,
+        and annotations placed on objects, classes, relations,
+        events, etc., before or during simulation.
+  <DT><b> Efficiency:</b>
+<DD> Selection of algorithms that
+        allow acceptable performance of functioning interpreters.
+<P>
+ </DL>
+<P>
+Many other design and implementation issues must be faced during the
+construction of such an interpreter. For large software development
+projects, efforts to do so are repaid with the ability to test
+preliminary designs. For smaller efforts, this model, even if
+not implemented, remains a useful conceptual tool for approaching and
+organizing design efforts.
+<P>
+While very generally stated, the features of this model are not
+engraved in stone. A preliminary design step is to agree on those
+details that might impact the overall approach taken in designing
+individual classes. This may then serve as a computational <em>
+reference model</em> for design. For example, the reference model may be
+severely constrained when the system is required to be implemented as
+a single program written in a single language. In this case, the
+language's own run-time kernel (or an abstraction thereof) may be
+substituted for the interpreter.
+<P>
+This view of prototype-compatible design does not cover <em> all</em> uses
+of prototypes. For example, prototyping the look and feel of a user
+interface is best carried out through side efforts experimenting
+directly with a <i> Smalltalk</i> environment, or with a <i> C++</i>
+system using the <i> InterViews</i><A NAME=134>&#160;</A> toolkit [<A HREF="#linton">12</A>], or whatever.
+<P>
+<H2><A NAME=SECTION00026000000000000000> Translating Notations</A></H2>
+<P>
+<A NAME=137>&#160;</A><A NAME=138>&#160;</A>
+<A NAME=139>&#160;</A><A NAME=140>&#160;</A><A NAME=141>&#160;</A>
+<P>
+<A NAME=atodtab>&#160;</A>
+<P><A NAME=342>&#160;</A><A NAME=atodtab>&#160;</A>
+
+<table border=5>
+<tr>
+<td><b>OAN Construct</b></td>
+<td><b>ODL Construct</b></td>
+</tr>
+
+<tr><td>
+Instance (<a href="ch3.html"> ch.3</a>, <a href="ch8.html">ch. 8</a>)
+</td><td>
+<CODE> new</CODE> (<a href="ch16.html">ch.16 </a>)
+</td></tr>
+
+<tr><td>
+Parametric Instance (<a href="ch8.html"> ch. 8</a>)
+</td><td>
+<CODE> new</CODE>, <CODE> unique</CODE> (<a href="ch17.html"> ch. 17 </a>)</td></tr>
+
+<tr><td>
+Class (<a href="ch3.html"> ch.3</a>)
+</td><td>
+<CODE> class</CODE> (<a href="ch16.html"> ch.16 </a>)
+</td></tr>
+<tr><td>
+Attribute (<a href="ch3.html"> ch.3 </a>)
+</td><td>
+<CODE> fn</CODE> (<a href="ch17.html"> ch. 17</a>)
+</td></tr>
+<tr><td>
+Qualifier (<a href="ch3.html"> ch. 3</a>)
+</td><td>
+Qualifier (<a href="ch17.html"> ch. 17</a>)
+</td></tr>
+<tr><td>
+Constraint (<a href="ch3.html">ch. 3</a>)
+ </td><td>
+<CODE> inv</CODE> (<a href="ch17.html">ch 17 </a>)
+</td></tr>
+<tr><td>
+Multiplicity (<a href="ch3.html"> ch. 3 </a>)
+</td><td>
+<CODE> opt</CODE>, <CODE> SET</CODE>, ... <a href="ch17.html"> ch. 17</a><a href="ch18.html">ch. 18 </a>)
+</td></tr>
+<tr><td>
+Default (<a href="ch3.html">ch. 3 </a>)
+</td><td>
+<CODE> generator op</CODE>s (<a href="ch16.html"> ch. 16</a> -<a href="ch17.html"> ch. 17 </a>)
+</td></tr>
+<tr><td>
+
+<tr><td>
+Relationship  (<a href="ch4.html"> ch. 4</a>)
+</td><td>
+<CODE> class</CODE>, <CODE> fn</CODE>, ...(<a href="ch18.html"> ch. 18</a>)
+</td></tr>
+<tr><td>
+Relation Instance (<a href="ch4.html">ch. 4 </a>)
+</td><td>
+<CODE> new</CODE>, <CODE> class</CODE>, <CODE> fn</CODE>, ... (<a href="ch18.html"> ch. 18</a>)
+</td></tr>
+<tr><td>
+Parametric Relation Instance (<a href="ch4.html">ch.4 </a>)
+</td><td>
+<CODE> inv</CODE>, ... (<a href="ch18.html">ch. 18 </a>)
+</td></tr>
+<tr><td>
+Generic Class (<a href="ch4.html"> ch. 4</a>)
+</td><td>
+<CODE> class[T]</CODE> (<a href="ch16.html"> ch. 16</a>, <a href="ch18.html">ch. 18 </a>)
+</td></tr>
+<tr><td>
+Set (<a href="ch4.html"> ch. 4</a>)
+</td><td> <CODE> class</CODE>, <CODE> SET[T]</CODE>, ... (<a href="ch18.html"> ch. 18 </a>)
+</td></tr>
+<tr><td>
+
+<tr><td>
+State (<a href="ch5.html"> ch. 5</a>)
+</td><td> <CODE> fn</CODE> (<a href="ch17.html"> ch. 17</a>,<a href="ch19.html"> ch. 19</a>)
+</td></tr>
+<tr><td>
+Initial State (<a href="ch5.html">ch. 5 </a>)
+</td><td> <CODE> init</CODE> (<a href="ch17.html">ch. 17 </a>)
+</td></tr>
+<tr><td>
+Final State (<a href="ch5.html">ch. 5 </a>)
+</td><td> <CODE> delete</CODE> (<a href="ch24.html">ch. 24 </a>)
+</td></tr>
+<tr><td>
+
+<tr><td>
+Transition Guard (<a href="ch5.html">ch. 5 </a>,6}<a href="ch6.html">ch. 6 </a>)
+</td><td> <CODE> when</CODE> (<a href="ch19.html">ch. 19 </a>)
+</td></tr>
+<tr><td>
+Transition Action (<a href="ch5.html">ch. 5 </a>,6}<a href="ch6.html">ch. 6 </a>)
+</td><td> <CODE> ==></CODE>, <CODE> {</CODE> <em>calls</em> <CODE> }</CODE> (<a href="ch16.html">ch. 16 </a>20}<a href="ch20.html">ch. 20 </a>)
+</td></tr>
+<tr><td>
+Transition Event (<a href="ch5.html">ch. 5 </a>,6}<a href="ch6.html">ch. 6 </a>)
+</td><td> <CODE> ==></CODE>, <CODE> {</CODE> <em>sends</em> <CODE> }</CODE> (<a href="ch16.html">ch. 20 </a>20}<a href="ch20.html">ch. 20 </a>)
+</td></tr>
+<tr><td>
+
+<tr><td>
+Service (<a href="ch5.html">ch. 6 </a>,<a href="ch6.html"> </a>)
+</td><td> <CODE> op </CODE> (<a href="ch20.html">ch. 20 </a>)
+</td></tr>
+<tr><td>
+Exception (<a href="ch5.html"> ch. 5</a>,<a href="ch6.html">ch. 6 </a>)
+</td><td> <CODE> reply</CODE>, ... (<a href="ch20.html"> ch. 20</a>)
+</td></tr>
+<tr><td>
+Message Queuing (<a href="ch6.html">ch. 6 </a>)
+</td><td> <CODE> pend</CODE> (<a href="ch19.html"> ch. 19</a>)
+</td></tr>
+<tr><td>
+Acquaintance  (<a href="ch6.html">ch. 6 </a>)
+</td><td> <CODE> fn</CODE>, arguments, <CODE> class</CODE>, ... (<a href="ch16.html">ch. 16 </a><a href="ch18.html">ch. 18 </a>)
+</td></tr>
+<tr><td>
+
+<tr><td>
+Subclass (<a href="ch7.html">ch. 7 </a>)
+</td><td> <CODE> is</CODE>, ... (<a href="ch16.html"> ch. 16</a>)
+</td></tr>
+<tr><td>
+Partition (<a href="ch7.html"> ch. 7</a>)
+</td><td> <CODE> oneOf</CODE>, ... (<a href="ch17.html">ch. 17 </a>)
+</td></tr>
+<tr><td>
+
+<tr><td>
+Metaclass (<a href="ch8.html">ch. 8 </a>)
+</td><td> <CODE> class</CODE>, <CODE> generator</CODE>, ... (<a href="ch18.html">ch. 18 </a>, <a href="ch22.html">ch. 22 </a>)
+</td></tr>
+<tr><td>
+
+<tr><td>
+Ensemble (<a href="ch9.html"> ch. 9</a>)
+</td><td> <CODE> class</CODE> (<a href="ch16.html"> ch. 16</a>,<a href="ch22.html">ch. 22 </a>)
+</td></tr>
+<tr><td>
+Ensemble Constituent (<a href="ch9.html">ch. 9 </a>)
+</td><td> <CODE> local</CODE>, <CODE> own</CODE> (<a href="ch17.html">ch. 17 </a>)
+</td></tr>
+<tr><td>
+
+Timing Constraint (<a href="ch11.html">ch. 11 </a>)
+</td><td> <CODE> @</CODE> ... (<a href="ch19.html">ch. 19 </a>-<a href="ch20.html">ch. 20 </a>)
+</td></tr>
+</table>
+
+
+
+<P>
+<P>
+The language of analysis is that of models and notations geared toward
+the goals of the analysis phase centering on the description of what
+systems do (not how they do it), written in a way that is meant to be
+complete, yet humanly understandable by both customers and designers.
+<P>
+Designers need to recast analysis models to enable further
+transformation of the declarative information supplied by OOA, while
+also supporting expression of computational and representational
+information important to implementors. Neither the graphical and
+textual notations of analysis, nor the implementation-dependent
+
+notations of common object-oriented programming languages suffice to
+describe this effectively.  The computational aspects of design become
+tractable only by introduction of a notation that can capture analysis
+concepts on the one side, and implementation constructs on the other.
+<P>
+These considerations are not restricted to matters of software design.
+Electronics design increasingly relies on textual notations such as
+<i> VHDL</i><A NAME=346>&#160;</A> [<A HREF="#vhdl">13</A>] to express the detailed structures
+and properties of designs while still abstracting over physical
+layouts and electrical characteristics.  However, there are no
+universally or even commonly accepted intermediate languages for
+software design.  In the case of systems-level object-oriented design,
+there are few such languages at all, and none that seem particularly
+well-suited to our goals of supporting (relatively) simple translation
+of analysis models on the one hand, and (relatively)
+language-independent design on the other.  So, for the purposes of
+this book, we have reluctantly concocted an intermediate language
+(<i> ODL</i>) as a vehicle for expressing basic design notions.  Like
+<i> OAN</i>, <i> ODL</i> is intended to be a very lightweight veneer that
+is easily converted to other notations and languages. We do not in any
+way insist that <i> ODL</i> be used when following the design methods
+described in Part II, but we need something concrete and specific to
+get across the main ideas. However, this book is not ``about'' <i>
+OAN</i> and <i> ODL</i>.  You do not have to take the syntax as seriously
+as we sometimes do. In the course of reading examples, you ought to be
+able to jot down similar constructions using your favorite notation.
+<P>
+While translation from OOA to OOD declarative form is straightforward,
+there are few recipes. As listed in the accompanying table (a preview
+of translation mechanics discussed in Part II), several options are
+usually available.  Even so, the transformational nature of design
+maintains backwards compatibility.  Design measures result in classes,
+operations, etc., whose basic structural characteristics remain
+representable in <i> OAN</i>.  The principle of structural continuity
+implies that most graphical OOA models are also graphical <em> design</em>
+tools, at least for the declarative aspects of design. However, our
+increasing computational focus leads to decreased reliance on <i>
+OAN</i>.
+<P>
+<i> ODL</i> shares many features with commonly used object-oriented
+programming languages.  It differs from programming languages in its
+ability to describe the properties of objects and operations, in
+addition to their representational and computational structure.  Also,
+<i> ODL</i> retains from our analysis models the ability to describe
+parallelism and system architecture without having to commit to the
+extra-linguistic tools and systems typically required for their
+implementation.  (This fact represents the most fundamental reason for
+using <i> ODL</i> in this book. The current state of languages, tools,
+and services for implementing such notions otherwise precludes a
+uniform treatment of underlying design concepts.)  Still, <i> ODL</i> is
+very small and primitive, as OO notations go.  These properties
+sometimes lead to awkwardness, but also lead to transparent
+translation to OO programming and tool constructions.  We will
+exemplify translations to <i> C++</i><A NAME=362>&#160;</A> and <i> C++</i>-based
+tools as we progress toward program design issues.
+<P>
+<H2><A NAME=SECTION00027000000000000000> Active Objects</A></H2>
+<P>
+<A NAME=365>&#160;</A>
+<P>
+Design notations and corresponding methods for objects that may
+indeed be active, process-like entities denoted by our analysis models
+differ in several respects from those focused only on passive
+objects manipulated within a single OO program.  Because these
+concerns <em> may</em> come into play even when objects are ultimately
+implemented as passive entities, we will not often distinguish the two
+until we need to. As a preview for those experienced in OO design of
+passive objects, we briefly characterize here some of the more notable
+differences in constructs and emphasis. Details will, of course,
+follow in later chapters.
+<P>
+<H4><A NAME=SECTION00027010000000000000> Autonomy.</A></H4>
+<A NAME=368>&#160;</A>
+Because they are autonomous independent agents, the ``membranes''
+separating the insides from the outsides of active objects are better
+defined than those for passive objects.  For example, active objects
+are sometimes ultimately placed on different processors. There cannot
+be any representation dependencies, references to ``shared memory'',
+or commitment to other single-process constructions at least until it
+is known where different objects will physically reside.  Similarly,
+it is usually a bad idea to claim that one active object is
+representationally embedded within another.  Design methods arrange
+connections among helper objects rather than ``embedded subobjects''.
+The existence of links connecting one object to others thus forms
+important design information, even when these links can never be
+directly accessed by other objects and do not form parts of visible
+interfaces.  Another consequence is that there are fewer opportunities
+for simultaneously subclassing both interfaces and implementations.
+<P>
+Thus, many design steps that form natural components of passive object
+design must be restructured. We resist premature commitments to
+sequentialization, representation, and other computational strategies
+that support declarative properties. The resulting practices may,
+however, be seen as extensions of the classic design goal of avoiding
+premature optimizations (i.e., counter-optimizations) of any form.
+<P>
+<A NAME=369>&#160;</A>
+<H4><A NAME=SECTION00027020000000000000> Communication.</A></H4>
+<P>
+Interactions may include combinations of one-way message sends and
+synchronized bidirectional exchanges.  Designs relying on one-way
+asynchronous messages and other protocols built from them are often
+qualitatively different than sequential programs employing only
+procedural invocation.
+<P>
+As in our analysis models, we treat the issue of whether an operation
+should reply to a sender as a property of the receiving object.
+Clients <em> must</em> wait for the reply in any interaction defined using
+a bidirectional, procedural operation.  One-way message sends may be
+
+either synchronous or asynchronous.  In one-way communication,
+synchronicity refers the sending and reception of messages. <em> All</em>
+one-way messages are asynchronous with respect to their <em> effects</em>.
+In synchronous one-way schemes (as found, e.g., in <i>
+Ada</i><A NAME=375>&#160;</A> rendezvous constructs) a sender must wait until the
+receiver is able to accept a message. In asynchronous schemes (as
+found in most distributed processing toolkits), a sender may always
+generate a message. The message may be buffered by the communications
+media until it is accepted. There are intermediate forms as well.  For
+example, even in asynchronous schemes, senders may need to wait for a
+channel over which to send a message.  Channel availability may depend
+on the readiness of a dispatcher that resolves and routes requests.
+Conversely, in synchronous systems, receiver objects may possess
+queuing mechanisms allowing them to essentially always accept
+messages.  Thus, we have been and will continue conservatively
+construing one-way messages as generally asynchronous. Adding
+synchronicity properties does not change the logic of resulting
+designs, but may lead to stronger guarantees about event sequencing
+and timing.
+<P>
+<H4><A NAME=SECTION00027030000000000000> Coordination.</A></H4>
+<P>
+Interaction protocols for common services and bookkeeping
+responsibilities must be specifically designed.  Routing, dispatching,
+and polymorphism support may also be under ``manual'' control.  In
+addition to other computational and construction details,
+synchronization and control mechanisms must be specified and
+implemented.  In particular, the design of joint actions involving
+synchronized transitions among possibly many objects requires
+transformations that eliminate potential interference, establish
+protocols to coordinate transitions among participating autonomous
+objects, and provide recovery mechanisms allowing one object or
+operation to fail without causing the entire system to fail.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Design Phases</A></H2></center>
+<P>
+This section provides an overview of principal phases, activities,
+concepts, and issues described in Part II of this book.  Part II is
+structured similarly to Part I, although many details are not strictly
+parallel to those of Part I.  The core
+chapters <A NAME=tex2html42 HREF="ch17.html">17</A>-<A NAME=tex2html43 HREF="ch20.html">20</A> parallel
+chapters <A NAME=tex2html44 HREF="ch3.html">3</A>-<A NAME=tex2html45 HREF="ch6.html">6</A> describing the four
+basic components of OOA models. However, dynamic computational issues
+play a far more central role in design, and thus permeate all other
+discussions.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Functional Design</A></H2>
+<P>
+<A NAME=387>&#160;</A><A NAME=388>&#160;</A>
+<P>
+The initial focus of design is to move from the world of description
+to that of computation. In the terminology that we will adopt for Part
+II, OOA descriptions are <em> abstract</em>. They describe attributes and
+constraints without completely indicating how it is that objects
+represent and maintain them.  OOA dynamic models are similarly
+abstract. They describe the conditions and effects of state
+transitions and interactions without fully committing to algorithmic
+or representational details.
+<P>
+<H3><A NAME=SECTION00031100000000000000> Abstract Classes</A></H3>
+<A NAME=391>&#160;</A><A NAME=392>&#160;</A>
+<P>
+Abstract classes are the translation units of OOA information into a
+form suitable for other design activities.  An abstract class is a
+kind of summary model, that may be used in the analysis phase as well
+as design (see Chapter <A NAME=tex2html50 HREF="ch6.html">6</A>). One or more abstract
+classes bring together descriptions of attributes, relations, states,
+transitions, events, and interaction protocols for an analysis-level
+class, while also propelling further design activities.
+<P>
+A near-synonym for ``abstract'' is <em> black-box</em>. Analysis models
+describe the outsides of objects without saying much about what
+the insides ought to look like.  Abstract classes and operations are
+valuable tools for design too.  Abstract classes at the design level
+may also represent constraints that are decidedly ``abstract'' but of
+interest only to designers, not analysts.  They may describe the
+nature of objects introduced solely for behind-the-scenes design
+purposes and to fill in other gaps.
+<P>
+It is sometimes necessary to recast analysis information into
+different constructs and idioms in order to meet design goals.
+Analysis models do not address the nature of classes as software
+artifacts.  Other class architecture requirements are implicitly or
+explicitly present during the functional design phase.  We explore
+these issues a bit further later on in this chapter.
+<P>
+<H3><A NAME=SECTION00031200000000000000> Concrete Classes</A></H3>
+<A NAME=397>&#160;</A>
+<P>
+Among the primary tasks of functional design is <em> reification</em>, the
+synthesis of internal representational and algorithmic specifications
+that meet the declarative constraints of analysis models, along with
+other software-based criteria.  This is the most time-consuming and
+creative aspect of the design process. Designers must choose among the
+multitude of available idioms to find those that best reflect the
+abstract specifications and other design goals.  They must ensure that
+software quality criteria are met by paying attention to well-known
+pitfalls including aliasing and interference.
+<P>
+For each abstract class, a design must define one or more <em>
+concrete</em> classes that define the inner details of objects that
+fulfill the promises laid out in the abstract versions.  These
+concrete classes may be introduced without disrupting the abstract
+characterizations. Any concrete class defines one particular,
+specialized way of obtaining the properties defined in an abstract
+class.  Thus, concrete classes may be defined as <em> subclasses</em> of
+abstract ones. Because of subclassing, the abstract versions may
+continue to be used in the course of other design activities, without
+introducing any dependencies on how these classes are actually
+composed.  Design also <em> introduces</em> a number of classes for
+the purpose of organizing and managing relationships, constraints, and
+interactions between other objects.
+<P>
+<H3><A NAME=SECTION00031300000000000000> Compositional Design</A></H3>
+<A NAME=403>&#160;</A>
+<P>
+Essentially all OO methods for synthesizing internal class properties
+are <em> compositional</em>. Objects obtain their static and dynamic
+properties by aggregating, delegating, inheriting, and coordinating
+those of other objects.  The basic idea of compositional design is to
+build complex objects and operations out of simpler ones.  This can
+take many forms, falling between two extremes:
+<P>
+<H4><A NAME=SECTION00031310000000000000> Property-driven composition.</A></H4>
+<P>
+Property-driven composition begins when you are given an abstract
+characterization of a class. You must then find some components that
+make good on it. Typical steps include:
+<P>
+
+<OL><LI> A set of attributes and behavior is described as an abstract class.
+  <LI> Other candidate components supporting at least some of the
+        required properties are found or created.
+  <LI> The declarative constraints of the complex entity are restated
+        in terms of combinations or sequences of those of the
+        identified components.
+  <LI> A concrete version of the complex entity is then defined to
+        access, coordinate, and/or extend the components.
+</OL>
+
+<P>
+<H4><A NAME=SECTION00031320000000000000> Management-driven composition.</A></H4>
+<P>
+In management-driven composition, you are given information about how
+a number of other objects may be related and/or how they may interact.
+This information is just as ``abstract'' as OOA class descriptions,
+but is focused on relations rather than individuals.  The design goal is
+to find ways of representing and managing relations and interactions.
+Typical steps include:
+<P>
+
+<OL><LI> A set of relations, constraints, services, management chores,
+        or interaction protocols is determined for a given set of
+        objects.
+  <LI> A class or set of classes is defined to
+        represent and track participant object information. Instances of
+        these classes serve as ``agents'' for the components.
+  <LI> Constraints and protocols are localized within the agent classes.
+  <LI> Abstract characterizations, external interfaces, inheritance
+        relations, etc., are defined for the agent classes.
+</OL>
+
+<P>
+These approaches are almost opposite perspectives on the same process
+of bridging external interfaces and internal affairs through managed
+composition. Most designs involve at least some aspects of both
+perspectives.  For the moment, we emphasize only the compositional
+basis of both views. Abstract objects become software objects when
+built out of other software components. Conversely, groups of related
+components can be brought together under an abstract interface.
+<P>
+<H3><A NAME=SECTION00031400000000000000> Bottom-up Methods</A></H3>
+<A NAME=412>&#160;</A>
+<P>
+The compositional object-oriented design process differs significantly
+from that of classic ``structured'' methods. In those approaches, the
+design phase is normally a top-down refinement process starting with
+crude structural design, followed by module design, and then detailed
+design. OO strategies sometimes amount to the reverse of this.
+<P>
+OOA models already provide top-down decomposition of a system into
+constructs akin to abstract classes.  Designers may define associated
+concrete classes in a more productive bottom-up fashion.
+<P>
+Assuming the existence of good analysis models, there is no absolute
+necessity that design methods be bottom-up.  Top-down analysis models
+specify both complex and simple classes, operations, etc. It is
+possible to start off designing details of complex objects and to
+worry about components later. But there are a number of compelling
+reasons for working up from the simple to the complex as the default
+strategy:
+<P>
+<DL ><DT><b> Internal reuse:</b>
+<DD> Smaller scale components tend to be
+        usable in many different roles across a system. If they are
+        not designed once, up front, it is very likely that similar,
+        but not identical classes will be designed (perhaps by
+        different designers) for many of these roles. This is a waste
+        of everyone's time, a source of incompatibilities, and a
+        barrier to further reusability.<A NAME=415>&#160;</A>
+  <DT><b> Layering:</b>
+<DD> A different label for internal reuse is
+        ``layering'' (or ``superimposition'')<A NAME=417>&#160;</A>.
+        Higher level, coarser-grained classes may be layered on top of
+        collections of simpler ones.  When the underlying classes are
+        addressed first, other designers may in turn build off this
+        richer base, without worrying about the feasibility of
+        underlying details.<A NAME=418>&#160;</A>
+  <DT><b> External reuse:</b>
+<DD> If components are useful in multiple
+        roles within one system, it is likely that they will be
+        reusable in other applications as well. It often pays to
+        design such components more carefully to make them usable in
+        broader contexts than those required for the applications
+        immediately at hand.  It is technically easier in OO
+        frameworks to tune a general component for a
+        particular application than to generalize a special-purpose one.
+  <DT><b> Imported components:</b>
+<DD> Components created
+        for relatively general and/or elementary purposes are more
+        likely to be available than those for specialized subsystems. If
+        available, complex classes can be designed to use them.
+  <DT><b> One pass design:</b>
+<DD> Detailed characterizations of the attributes
+        and behaviors of complex objects are often dependent on
+        properties of components. If these are known, further
+        design activities need not be interrupted or postponed.
+        Simple safeguards within
+        foundational objects minimize chances of making design
+        errors stemming from assumptions that a component can do something that
+        it cannot, and improve run-time safety.
+  <DT><b> Testability:</b>
+<DD> Unit tests may be designed for individual
+        components without considering their application contexts.
+  <DT><b> Known primitives:</b>
+<DD> Analysts get to pick their own
+        ``primitives''. But all software objects must
+        ultimately be tied to the workings of elementary software
+        objects such as booleans, integers, etc. Sometimes this involves
+        an annoying amount of attention to such details.
+        There is a compensating advantage: Because this bottommost
+        level is essentially constant across different programming
+        languages, systems, and platforms, designers have a known
+        starting point for composing classes.
+<P>
+ </DL>
+<P>
+These considerations lead to tactics that are highly reminiscent of
+those used in other design enterprises.  The combination of top-down
+analysis and compositional design has been a winning strategy in a
+variety of engineering endeavors, especially electronics design. As
+discussed by Cox [<A HREF="#cox">7</A>], many aspects of object-oriented
+software design parallel those of circuit design. A circuit is
+designed by composing (most typically via standard interconnection
+strategies) various elementary devices, each of which is described in
+terms of its interface, and is often available in different versions.
+<P>
+<H4><A NAME=SECTION00031410000000000000> Identifying components.</A></H4>
+<A NAME=427>&#160;</A>
+Bottom-up composition first involves the identification and design of
+those elementary classes necessary in the construction of others. This
+is not quite as glamorous as larger scale design activities.  But one
+of the general claims of OO approaches is that class-based methods
+<em> scale</em> across small and large granularity problems.
+<P>
+Pure bottom-up design is most straightforward for very basic and/or
+general components.  It is easy to identify at least some of the
+analysis model entities that serve as the most fundamental building
+blocks in a system. They are the ones that do not make any reference
+at all to any others in the definitions of their static and dynamic
+properties. After defining these, attention can be turned to classes
+that depend only on elementary ones, and then in turn these, and so
+on.  All of this can usually be surmised through an informal
+definitional dependency analysis noting which classes
+definitionally rely on which others. Of course, it is not the least
+bit necessary, or even desirable, to proceed exactly in this order.
+<P>
+Preliminary models often lack detailed consideration of the lowest
+levels of component structure. They sometimes omit descriptions of
+such components all together, leaving them to designers, who may in
+turn pass the buck down to implementors.  In other cases, they may
+describe features in unstructured terms, rather than as encapsulated
+classes.  In others, analysts may have failed to notice how the
+definition of an elementary class or two could simplify treatment of
+several complex ones.
+<P>
+Some of these situations may be avoided through reviews of analysis
+models, especially with domain analysts who are familiar with tactics
+used in related software efforts. Others will require a bit of
+backtracking while in the midst of dealing with other components.
+Experience gained while designing various classes may lead to
+refactorings, new encapsulations, and other simplifications that are
+sometimes difficult to predict in advance.
+<P>
+<H4><A NAME=SECTION00031420000000000000> Identifying frameworks.</A></H4>
+<A NAME=430>&#160;</A>
+In addition to pure bottom-up sweeps, self-contained hierarchies may
+be isolated for special attention. These frameworks are useful not
+only as subsystem- or system-independent components, but also as tools
+in helping shape the conceptual underpinnings of a system development
+effort.  Frameworks may be viewed as partial ``theories'' of
+particular domains, problems, and plans of attack. Early selection of
+frameworks helps guide application design. It ensures that different
+designers view similar problems appearing in different parts of a
+system in similar ways.
+<P>
+<H4><A NAME=SECTION00031430000000000000> Scaling up.</A></H4>
+<A NAME=432>&#160;</A>
+The ultimate in bottom-up compositional design is <em> megaprogramming</em>
+[<A HREF="#wiederhold">23</A>], the piecing together of large systems into huge
+ones. Similar methods apply but, of course, at much different scales.
+Many of the safeguards that allow smaller scale composition to proceed
+smoothly become unavailable, and strategies must be created to
+``glue'' large, otherwise incompatible megaobjects together in a
+useful fashion.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Physical Design</A></H2>
+<P>
+<A NAME=436>&#160;</A><A NAME=437>&#160;</A><A NAME=438>&#160;</A>
+<P>
+The task of physical design is to map a set of software objects
+onto a set of physical objects.
+<P>
+Typical OO systems cannot enjoy the simplicities of either of our
+extreme computational models, ``one object per processor'' or ``all
+objects in one process''.  Most systems need to reside in some middle
+ground of this continuum, in which all analysis-level objects are
+grouped into some number of coarse-grained active objects, or <em>
+clusters</em>. Each cluster contains some (usually large) number of
+objects sharing a CPU, an address space, and other physical
+resources.<A NAME=440>&#160;</A>
+<P>
+Clusters themselves map easily into contemporary system <em> process</em>
+structures. In fact, our active object model is nearly identical to
+standard models of system processes. Thus, another way of viewing the
+design process is that in functional design, we assume <em> every</em>
+object, from the tiniest boolean object on up, can be implemented as a
+self-contained system process.  For purposes of functional design we
+would like to stay away from physical mappings as long as reasonable.
+With few exceptions, these concerns do not impact the basic structure
+of classes and objects described by analysis models.  It is not
+terribly productive to deal with these constraints until the
+computational properties of a system are at least approximately known.
+<P>
+In physical system design, we remedy the illusion that the system can
+be implemented using arbitrarily many processes.  There are two
+principal phases of physical design. First, objects must be mapped to
+clusters. Second, the management facilities required to support these
+objects and clusters must be designed and/or employed.
+<P>
+Nearly all systems are constructed with the help of support tools and
+services that make specific commitments about how clusters are put
+together, managed, and allowed to communicate.  These allow for
+ultimate transformation into a range of software architectures.
+<P>
+<H2><A NAME=SECTION00033000000000000000> Performance Design</A></H2>
+<A NAME=444>&#160;</A><A NAME=445>&#160;</A>
+<P>
+Systems design activities result in a two-tiered architecture. The
+system as a whole may be viewed in terms of the interactions of a
+relatively small number of coarse-grained cluster objects. Each of the
+clusters is in turn a <em> program</em>, usually written in a standard
+sequential OO programming language along with associated tools allowing
+communication to other clusters.
+<P>
+Performance design mainly involves transformations of the
+``second-class'' passive<A NAME=447>&#160;</A> objects forced to
+reside within programs.  Design activities involve both accommodation
+and tuning:
+<P>
+<H4><A NAME=SECTION00033010000000000000> Passivation.</A></H4>
+<A NAME=449>&#160;</A>
+Intrinsically concurrent properties and mechanisms such as
+synchronization and triggering need to be either eliminated or
+simulated by objects residing in sequential environments and
+programmed using standard OO languages.
+<P>
+<H4><A NAME=SECTION00033020000000000000> Optimization.</A></H4>
+<P>
+Numerous measures are available to recast or otherwise tune classes
+and operations to meet performance requirements.
+Optimization and tuning involve interplay between designers and
+implementors.
+<P>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Design Criteria</A></H2></center>
+<P>
+The central notion of a class at the design level is wonderfully
+flexible and powerful. Classes form a natural focal point for
+organizing diverse descriptive, representational, and computational
+properties.  The ways in which these properties are conceptually
+viewed often governs the basic plan of attack for functional design.
+<P>
+We focus on design techniques associated with several different
+conceptual perspectives on the nature and roles of classes and
+objects.  The different perspectives normally correspond to OOA models
+that stress particular features of objects.  Often, multiple
+perspectives may be applied to the same OOA model. Designs can look
+very different depending on which sets of techniques are employed.
+<P>
+We will encounter some general principles for designing classes, as
+well as some particular idiomatic constructions representing known
+(small-, medium- or large-scale) architectures that may be applied to
+common design problems. We focus primarily on the former. We cannot
+describe all of the OO design architectures, patterns, and idioms that
+you are likely to need or run into.  We restrict ourselves to surveys
+of some general forms.  Still, we frequently discuss multiple
+alternative paths to a design solution, sometimes at the expense of
+presenting idioms and constructs that are closer to the level of neat
+tricks than of principled, stepwise developments.  OO design has not
+matured to the point where we can fully rationalize, evaluate, or even
+categorize these strategies.  Indeed, some people think that the
+situation-specific nature of design all but precludes development of
+comprehensive theories and accounts.
+<P>
+We describe many constructs, idioms, and strategies available for
+transforming analysis constructs into software.  While we provide a
+few hints and guides for using them, we do not include explicit
+answers for questions such as, ``Which strategy is best for
+representing relationship R?'', ``Should M be written as a blocking or
+nonblocking operation?'', and so on.  Most such questions cannot be
+answered. Few strategies and constructions are always right.  Their
+appropriateness depends on how they fit into other design goals and
+criteria, that may differ from those of analysis.  This notion that
+<em> models</em> are to be transformed into software <em> components</em>
+places a different perspective on some standard quality notions.
+<P>
+<A NAME=454>&#160;</A>
+The most central criteria revolve around <em> compositionality</em>.
+Compositional design is simplest when the construction of one class
+depends only on the abstract class specifications of its components,
+not their internal structures.  In a compositional design framework,
+just about every class should be designed to be amenable for use as a
+component by others.    In the remainder of
+this section, we survey a few more specific criteria and concerns that
+may serve as guides for deciding among different OO methods and
+constructions.  We will also preview some of their implications for
+choosing among design idioms and transformations, leaving others for
+later.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Coupling</A></H2>
+<A NAME=457>&#160;</A>
+<P>
+The most well-known design guidelines for enhancing composition
+revolve around the issue of <em> coupling</em>.  An operation, object, set
+of objects, class, or set of classes that minimizes demands on the
+computational environment is said to have low coupling with respect
+to that environment.  Decoupled entities are normally easiest to
+compose.  Coupling is a very broad concept, and may be partitioned
+along several dimensions.
+<P>
+<H4><A NAME=SECTION00041010000000000000> Representational coupling.</A></H4>
+<A NAME=460>&#160;</A>
+Classes should not depend on the specific representational and
+computational details of one another.  The central tactic of defining
+and using abstract classes stems from the idea that composite classes
+and actions should minimize dependencies on irrelevant
+representational and computational details.  These concerns lead to
+the routine exploitation of <em>
+interoperability</em><A NAME=462>&#160;</A> and <em> black-box
+reuse</em><A NAME=464>&#160;</A>.
+<P>
+Complex objects need not be dependent on, or even know about, the
+representational and computational details of other components, as
+long as they do the right thing.  Common abstract class descriptions may
+cover a range of interoperable implementations. This solves several
+related design problems:
+<P>
+<DL ><DT><b> Interchangeable parts:</b>
+<DD> New components may be swapped
+        for old ones without disrupting other classes.
+  <DT><b> Multiple representations:</b>
+<DD> Different versions of the
+        same kind of component may work best in different parts
+        of the system. There is no reason at all to settle on
+        just one version. Unlike most <em> modular</em> design
+        strategies, OOD facilitates
+        coexistence of multiple implementations of the same capabilities.
+  <DT><b> Prototype evolution:</b>
+<DD> During prototype development,
+        classes can be thrown together in the most haphazard way, even
+        as nonfunctional stubs, in order to get something executable
+        for evaluation. These classes may then be
+        replaced with more serious versions in an incremental fashion.
+  <DT><b> System evolution:</b>
+<DD> Very often, evolutionary software
+        changes can be isolated by reimplementing a few classes that
+        preserve the same interface to the rest of the system, but
+        differ vastly in internal details. For example, persistent
+        storage management may be recast to use a different
+        database service.<A NAME=471>&#160;</A>
+  <DT><b> Performance tuning:</b>
+<DD> Poorly performing classes can
+        be identified and replaced, again, without disruption.
+        In this way, prototype evolution, performance tuning,
+        repair, and evolution are all performed using the same fundamental
+        strategy of component replacement.
+  <DT><b> Extensibility:</b>
+<DD> There may be several levels of subclasses that
+        all preserve the same interface but add upon each other's
+        mechanics. Creation of a subclass rather than an
+        interoperable sibling class is an attractive option for
+        tuning, evolution, and replacement.
+  <DT><b> External components:</b>
+<DD> Existing systems that we cannot (or will
+        not) implement may be described via ordinary classes, but with
+        implementation details that are beyond our control.
+  <DT><b> Standardization:</b>
+<DD> It is both easier and more productive for a
+        company or group to standardize on interfaces than on internal
+        details.  Some people predict eventual
+        industry-wide standardization of many object-oriented component
+        specifications.
+  <DT><b> Testability:</b>
+<DD> Representation-independent test suites may be
+        constructed for entire sets of classes.
+  <DT><b> Frameworks:</b>
+<DD> Medium-scale, multipurpose, reusable class
+        hierarchies that depend only on the abstract interfaces of
+        various components have proven to be valuable tools for
+        simplifying and accelerating further design. The frameworks
+        themselves are never touched. Different applications are
+        constructed by defining particular versions of the abstract
+        components. Generally, just about <em> any</em> hierarchy of abstractly
+        defined classes is a candidate framework.
+        However, only those few that turn out to be useful
+        across different applications and contexts deserve
+        the title.<A NAME=479>&#160;</A>
+<P>
+ </DL>
+<P>
+We are fanatical about eliminating representational coupling,
+especially at the lowest levels of class design.  We are concerned
+about the design of systems that might be built using multiple
+heterogeneous platforms, operating systems, and configurations. We
+take careful, even tedious, measures early in the design process to
+guarantee avoidance of low-level representational dependencies.
+<P>
+These concerns extend upward. The other side of interoperable
+subclasses is <em> black-box reuse</em>. We encourage the use of pure
+composition rather than certain subclassing strategies. Black-box
+composition is a means of routinely minimizing representational
+coupling.
+<P>
+<H4><A NAME=SECTION00041020000000000000> Value coupling.</A></H4>
+<A NAME=483>&#160;</A>
+Classes should be written so that operations are as independent as
+possible on the particular values of attributes. This is a natural
+practice in OOD. Generally, superclasses define attributes and
+behaviors without committing to particular values. Whenever necessary
+or desirable, subclasses and related constructs may then define
+special cases for special values and conditions. Parameterization
+constructs (e.g., generic classes) provide similar opportunities for
+removing such dependencies.
+<P>
+<H4><A NAME=SECTION00041030000000000000> Subclass coupling.</A></H4>
+<A NAME=485>&#160;</A>
+Beyond minimizing the dependence of one class on how other classes
+support various features, components may be designed to reduce
+dependence on whether these features are present at all.
+This is another view of the notion that preconditions
+
+should never be overstated.
+<P>
+Attributes and arguments should always be defined using the <em>
+least</em> specific (i.e., most abstract) class type that is guaranteed to
+have the right attributes and behavior.  For example, if some <tt>
+print</tt> <sup>1</sup>
+operation just prints a <tt> name</tt> attribute, then even though it
+might be ``intended'' for use in printing <tt> Client</tt> names, it may
+as well accept any <tt> Person</tt> object, assuming that <tt> Person</tt>s
+have names and class <tt> Client</tt> is a subclass of class <tt> Person</tt>.
+This may in turn lead you to abstract out yet simpler and more general
+superclasses.  For example, you might decide to create a class <tt>
+NamedObject</tt> as a superclass of <tt> Person</tt> and/or other classes.
+
+<blockquote>
+Footnote <sup>1</sup>:br:
+For clarity and emphasis, we continue to use <em> this
+font</em> for OOA level names but <tt> this font</tt> for OOD level names.
+</blockquote>
+<b>
+
+</b>
+<P>
+Other consequences of subclass coupling include the following.
+<P>
+<DL ><DT><b> Subclass independence:</b>
+<DD>
+    Decreasing the granularity of classes by imposing new superclasses
+    introduces a different form of coupling. Classes become less
+    dependent on each other, but more dependent on the details of a
+    class hierarchy itself. This is not at all bad, but sometimes results
+    in the design of components that are unusable outside of an otherwise
+    irrelevant class hierarchy. The use of shallow hierarchies, as
+    well as exploitation of generic, parameterized class mechanisms can
+    remove unnecessary dependencies. Also,
+    special ``flattened'' versions of classes may be defined. These pull
+    together all inherited information in one class, allowing it to be used
+    stand-alone.
+<P>
+  <DT><b> Subclass extensibility:</b>
+<DD>
+    Superclasses may be defined only in terms of base properties,
+    which are then specialized in subclasses. Applications need not know
+    which particular subclass they are using.  But abstraction of the
+    ``right'' properties can be hard. Superclass descriptions need to be
+    strong enough to be usable by other classes as arguments and
+    components. But they also need to be weak and general enough to allow
+    definition of subclasses that extend and refine these properties in
+    all useful directions.
+  <DT><b> Subclass performance:</b>
+<DD>
+    Inheritance may be used as an optimization technique. By
+    constructing classes ensuring that general-purpose algorithms are always
+    available, but employing special ones when additional constraints hold,
+    both performance and integrity criteria can be met.
+    When efficiency requirements overwhelm others, optimization
+    via subclassing can be further exploited to improve performance,
+    although sometimes at the expense of additional, undesirable coupling.
+<P>
+ </DL><H4><A NAME=SECTION00041040000000000000> Identity coupling.</A></H4>
+<A NAME=504>&#160;</A>
+A real danger in OOD is the potential proliferation of ``connection''
+attributes within classes. These connections maintain
+communication channels with other objects. The more objects and
+classes that one object needs to know about, the more dependent it is
+on the details of its environment.
+<P>
+There are several remedies. For example, when one object requires some
+service, it often does not need to know exactly who provides this
+service. We would rather not have to keep track of the targets
+(recipients) of service messages, especially when they may change, or
+when discovering the ``best'' service provider is a nontrivial matter.
+We attack this at several levels, from exploitation of basic <em>
+dispatching</em> mechanisms to the design of higher granularity mediator
+objects.
+<P>
+<H4><A NAME=SECTION00041050000000000000> Protocol coupling.</A></H4>
+<A NAME=507>&#160;</A>
+A sender of any message (or, equivalently, generator of an event)
+should require only those effects and communication of effects
+minimally necessary.  For example, send-and-forget one-way message
+passing places the lowest possible demands on the objects performing
+the operations, since it does not assume anything about when operation
+effects hold, or even require that notification be sent back to
+senders indicating completion. We will also discuss constructs that
+allow objects to interact without hard-wiring either the identities or
+the operations invoked on the other objects.  A similar tactic is to
+build mediator objects that enforce particular protocols among objects
+who do not otherwise know how to respond to each other.
+<P>
+Minimization of identity and protocol coupling is the design
+analog of analysis-level postponement of the definition of interaction
+partners (Chapter <A NAME=tex2html80 HREF="ch6.html">6</A>). However, identity and protocol
+coupling are <em> not</em> always all bad from a computational
+perspective. Perhaps the ultimate decoupled system is a relational
+database, where (from an OO view) objects are just represented in
+terms of their attributes and relations, and centralized systems
+(database managers) coordinate all state changes without any
+independent communication between the objects whatsoever.  While this
+may or may not be a good way to manage persistent storage, it is far
+too centralized to serve as a reasonable model of most software
+systems.  Object-oriented designs distribute knowledge and
+coordination across a system, generally at the lowest level that it
+can be reasonably managed.  This requires compromises between
+localization and centralization through intermediate levels of
+identity and protocol coupling.
+<P>
+<H4><A NAME=SECTION00041060000000000000> Code coupling.</A></H4>
+<P>
+The definition of concrete operations should be decoupled from the
+contexts in which they are employed. This requirement is most obvious
+and critical when classes are designed for possible use in concurrent
+execution environments.  Here, the internal characteristics of an
+operation may be identical across different classes and subclasses,
+but the situations under which these actions are triggered may differ
+significantly.
+<P>
+For example, in a concurrent environment a request to get an item from
+a <tt> List</tt> may be postponed until an item becomes available. In a
+sequential environment, it may result in an exceptional condition.
+However, we would like to describe the details of how the item is
+obtained in the case when the list is not empty in the same way across
+both situations.  We will focus on the design of classes that are
+assumed to be usable in concurrent settings. However, many will need
+to become sequentialized.
+<P>
+<H2><A NAME=SECTION00042000000000000000> Cohesion</A></H2>
+<A NAME=514>&#160;</A>
+<P>
+The other side of minimizing <em> demands</em> is minimizing <em>
+features</em>. This is related to the familiar software engineering concept
+of <em> cohesion</em>.  A class that maintains, localizes, and protects
+only those features necessary to perform its primary role is said to
+have high cohesion.
+<P>
+Objects should provide ``just enough'' functionality and support
+features necessary to serve their intended roles. While there is often
+some leeway in deciding among core primitive attributes and
+operations, objects need not be burdened with the responsibility of
+supporting derived operations that can be performed <em> with</em> them,
+rather than <em> by</em> them.  This enables additional superimposed
+layers to control components in different ways.
+<P>
+<H4><A NAME=SECTION00042010000000000000> Strengthening features.</A></H4>
+<P>
+The most common strategy for minimizing features is to enhance the
+guaranteed properties of those that remain as core attributes.  For
+behavioral features, this often corresponds to the notion of
+strengthening postconditions.
+<P>
+<H4><A NAME=SECTION00042020000000000000> Encapsulation.</A></H4>
+<A NAME=522>&#160;</A>
+Encapsulation is the meeting point between coupling and cohesion.
+Objects in design contain features that support advertised
+functionality, but hide the underlying mechanisms so that other
+objects cannot reach in and corrupt them.  This kind of encapsulation
+is among the central defining features of the object-oriented
+approach. But it is not an <em> automatic</em> consequence of OOD, and is
+among the hardest things to get just right.  Well-designed classes are
+as open as possible, so that others may use them for diverse
+applications, but not so open that others may abuse them.
+<P>
+<H2><A NAME=SECTION00043000000000000000> Reliability</A></H2>
+<A NAME=525>&#160;</A><A NAME=526>&#160;</A>
+<P>
+Correctness is, of course, of paramount importance. However, objects
+must also be designed to be robust with respect to internal design and
+implementation errors leading to run-time faults, misuse (errors by
+clients), and failures of other objects on which they rely.
+<P>
+Several alternative strategies are available for each case. They need
+to be tailored to the situations at hand.  In addition to the kinds of
+errors usually addressed in OOA, computational concerns lead to the
+following problems.  Several are just different views of the same
+phenomena.
+<P>
+<UL><LI> A message has no valid receiver.
+  <LI> A message is sent to the ``wrong'' receiver.
+  <LI> An object receives a message it cannot handle.
+  <LI> An object receives a message with value argument that it cannot handle.
+  <LI> A client obtains a result that it cannot handle.
+  <LI> An invoked bidirectional operation never replies.
+  <LI> A received request never executes.
+  <LI> An object reaches an illegal (undefined) state.
+  <LI> An object cannot be constructed.
+  <LI> An object cannot be killed.
+  <LI> An object forever waits for an event that never occurs.
+  <LI> An operation triggers ``by accident''.
+  <LI> A supposedly ``dead'' object wakes up.
+</UL><H4><A NAME=SECTION00043010000000000000> Error policies.</A></H4>
+<A NAME=530>&#160;</A>
+Of course, the best policy for dealing with errors is avoidance.
+Error avoidance is mainly a static design-time issue that ensures that
+no action is ever performed unless all of its preconditions hold.  In
+principle, many errors are avoidable via program verification.  But we
+do not foresee the existence of full OO verification tools and
+techniques in the near future.
+<P>
+Descriptions of the diagnosis and recovery of unpreventable errors
+should be part of any OOA model. Communications failures, deadlocks,
+and so on may be accommodated using time-outs, recoveries off history
+logs, or whatever means specified.  Design activities may introduce
+other opportunities for failure.  In most cases, the best strategy is
+to backtrack to Part I of this book and reanalyze conditions and
+actions, including:
+<P>
+<UL><LI> Inaction (ignoring errors).
+<LI> Logging faulty attempts.
+<LI> Notifying other objects about failures.
+<LI> Notifying people about failures.
+<LI> Multi-level notification protocols based on severity.
+<LI> Notification protocols at multiple levels of centralization.
+<LI> Retrying an operation again with different arguments, etc.
+<LI> Postponement, usually by requeuing failed operations.
+<LI> Time-outs on waits for operations.
+<LI> Redirecting a message to a different receiver.
+<LI> Conditional continuation based on error values, etc.
+<LI> Termination of operation sequences.
+<LI> Rollbacks to undo the incomplete effects of a failed operation.
+<LI> Re-initializing or reconstructing failed objects.
+<LI> Re-initializing or reconstructing the entire system.
+<LI> Self-destruction.
+</UL><H2><A NAME=SECTION00044000000000000000> Human Factors</A></H2>
+<P>
+Like all software constructs, classes are written both for machine and
+human consumption.  To be usable (and reusable), classes must be
+retrievable, readable, understandable, convenient, general, and so on.
+These properties rest in part on the availability of good tools to
+help designers find, understand, and integrate other classes, as well
+as the availability of documentation, tracing mechanisms, etc.  But
+even the best tools and documentation are useless unless classes are
+designed with these factors in mind.
+<P>
+<H2><A NAME=SECTION00045000000000000000> Conservatism</A></H2>
+<A NAME=535>&#160;</A>
+<P>
+<em> First, do no harm.</em> Some OOD constructs and idioms are novel,
+esoteric-looking, and/or technically demanding. These are balanced
+with notions aimed at enhancing the chances that designs will be
+correct, reliable, maintainable, traceable, testable, understandable,
+and reusable.  This emphasis distinguishes our account from many other
+standard treatments of OOD. We strive to integrate descriptive and
+computational approaches, sometimes to the point of awkwardness, but
+always with the intention of providing maximal guidance for designing
+classes in a conservative, correct fashion.
+<P>
+The key components of this approach are those that <em> integrate</em>
+descriptive and computational information, mainly via steps linking
+abstract and concrete classes.  We should note that this approach does
+have some limitations.  It can limit the design space. Some concrete
+class designs may obey abstract constraints, but maintain properties
+in ways that we cannot describe. We sometimes avoid this by limiting
+the kinds of descriptive properties attached to abstract classes.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00050000000000000000> Managing Design</A></H2></center>
+<P>
+<A NAME=539>&#160;</A><A NAME=540>&#160;</A>
+<A NAME=541>&#160;</A>
+<P>
+Good design requires good management of constituent activities and
+developers.  While general software development process management
+strategies are outside the scope of this book, we note in this section
+a few aspects that are special to OO design and development efforts,
+especially those surrounding roles and practices enhancing component
+reuse. They apply equally well across most phases and levels of design
+and implementation. We will not bother to distinguish them within
+this context.
+<P>
+<H2><A NAME=SECTION00051000000000000000> Roles</A></H2>
+<A NAME=543>&#160;</A>
+<P>
+Development roles may be assigned according to the kinds of entities
+that need to be designed and implemented. These may include classes,
+process management services, interprocess communication services,
+programs, code-generating tools, simulators, test suites, performance
+monitors, documentation, installation manuals, and so on.  There are
+also partitioning strategies that cut across these task-based
+categorizations.  Different individuals or teams may be assigned
+responsibility for tasks associated with different <em> subsystems</em>
+
+identified in the analysis or design phase.  This is common practice in
+any development effort.  Alternatively, people may be assigned
+responsibility for developing related <em> classes</em> and/or <em> tools</em>
+that need to be built regardless of their use in any particular
+subsystem.
+<P>
+These categorizations sometimes conflict.  An increasingly prevalent
+compromise is to perform most assignments by subsystem and/or task,
+but also to assign people or teams to <em> reuse management</em> and/or
+<em> tool management</em> efforts that operate in close coordination with
+other teams.<A NAME=549>&#160;</A>
+<P>
+In an ideal version of this partitioning, individuals performing
+subsystem and application development engage in pure <em> design with
+reuse</em> methods. All development builds on top of reusable components
+and tools developed and maintained by other teams. At the same time,
+newly developed components are fed back into the reuse effort.  This
+may be pushed to extremes for routine applications development.
+Individuals assigned to create miscellaneous small applications may do
+so solely by connecting existing components in new ways. This would be
+facilitated by the use of special graphical OO programming languages
+that construct programs by compiling interconnection graphs.
+<P>
+<H3><A NAME=SECTION00051100000000000000> Support Teams</A></H3>
+<A NAME=552>&#160;</A><A NAME=553>&#160;</A>
+<P>
+Tool management and reuse management teams are motivated and
+structured along the same lines, and are even commonly rolled together
+as the responsibility of a single team or individual. In both cases,
+implementation of the current system may progress most rapidly if the
+teams are involved very early in the system development process, so
+that support software is ready when needed.
+<P>
+The differences between OO tools and OO class libraries can be a
+little subtle, and perhaps not even worth defining with respect to
+management efforts. For example, a tool that <em> generates</em> classes
+for custom user interfaces is often interchangeable with an
+application framework providing operations on abstract <tt> Window</tt>,
+<tt> Button</tt>, etc., classes that may be customized through composition
+and subclassing. The availability of one might govern whether and how
+to develop the other.  Here, for example, the optimal solution might
+be to have both an applications framework and a tool that quickly
+generates common cases within that framework.
+<P>
+A vague but more useful distinction is separation of general-purpose
+tools and classes from domain-specific ones.
+<P>
+General-purpose software might include user interface classes and
+tools, interprocess communication tools, basic collection classes,
+system interface classes, and instrumentation tools.  For these, teams
+and individuals may spend more time in acquisition and evaluation of
+externally obtainable components than in creating new ones.  They may
+become the local experts in the use of this software, and provide
+training and consulting to others.  Cases in which general-purpose
+classes and tools are required, but not available, may lead to side
+channel development efforts that are sponsored by several ongoing
+applications projects.
+<P>
+Domain-specific software supports a line of products, but not any
+one of them <em> per se</em>, for example, application classes (e.g., for
+banking), tools generating class stubs obeying particular error
+protocols, and classes and tools supporting authentication protocols.
+Most domain-specific efforts are constructive rather than evaluative.
+Building such classes and tools during the course of development of
+any one project represents an investment in the future.
+<P>
+<H2><A NAME=SECTION00052000000000000000> Managing Reuse and Tools</A></H2>
+<A NAME=559>&#160;</A><A NAME=560>&#160;</A><A NAME=561>&#160;</A>
+<P>
+Reuse management should be an ongoing concern. For any particular
+project, a reuse team should be involved early in the development
+process. Members help identify components and chart out reusability
+prospects. These efforts are facets of <em> domain analysis</em>, as
+described in Chapter <A NAME=tex2html97 HREF="ch13.html">13</A>.<A NAME=565>&#160;</A>
+<P>
+Regardless of whether they address general-purpose or specialized
+software, and whether they are centered around tools or components,
+the basic goals in support management are similar: To prevent people
+from needlessly re-creating designs and implementations, to provide
+people with a means of profiting from the efforts of others, and to
+encourage people to create components and tools that may be reused by
+others.
+<P>
+Problems emerge when individuals do not think to reuse classes before
+designing or implementing them.  Without care, many essentially
+identical classes may be defined using different names and conventions
+in different parts of the system.  Among other problems, none of these
+are typically as good as those that would be produced from a
+well-managed reuse program.  Support efforts may include:
+<P>
+<UL><LI> Identifying potentially reusable components.
+  <LI> Evaluating component quality and suitability for reuse.
+  <LI> Importing components developed elsewhere.
+  <LI> Developing software ``glue'' to facilitate composition of
+        different components.
+  <LI> Providing support tools for browsing, understanding, and
+        using components.
+  <LI> Coordinating feedback, annotations, bug reports, etc.
+  <LI> Integrating different media and notations.
+  <LI> Developing components projected for use across multiple projects.
+  <LI> Training others in the use of existing components.
+</UL><H3><A NAME=SECTION00052100000000000000> Controlling Components</A></H3>
+<P>
+<A NAME=569>&#160;</A>
+<A NAME=570>&#160;</A>
+<P>
+The control of reusable components extends techniques common
+to other software coordination efforts. Tools and techniques
+should address both reuse-specific and other supportive roles,
+including:
+<P>
+<DL ><DT><b> Version control:</b>
+<DD> Central tracking of
+    versions, tests, and usage histories.
+  <DT><b> Format standards:</b>
+<DD> Tools maintaining standard formats
+    for designs, code, documentation, etc.
+  <DT><b> Updates:</b>
+<DD> Protocols and tools for error reports,
+    change requests, suggested improvements, resubmissions, and
+    replacements, along with subsequent release notices.
+  <DT><b> Annotations:</b>
+<DD> Feedback and commentary from component users
+    accessible to other potential and actual users. Usage
+    notes remain among the best means for communicating client-side
+    documentation.
+  <DT><b> Retrieval:</b>
+<DD> Clients cannot reuse components if they cannot
+    find them. Components may be retrievable using any
+    plausible path. These include the standard inheritance-based paths,
+
+    those specified by interface, by functional
+    category, by keywords, and so on.
+  <DT><b> Browsing:</b>
+<DD> A standard browsing system for models,
+    designs, code, graphics, documentation, etc.
+  <DT><b> Metrics:</b>
+<DD> Basic metrics (e.g., numbers of classes, subclasses,
+    operations) may be collected to summarize sets of related
+    components.
+  <DT><b> Ownership protocols:</b>
+<DD> Responsibility for a class or set
+    of classes may be assigned to a principal ``owner'', who may or
+    may not also be an actual designer. If a component passes from a
+    team to a reusable library, ownership may also pass to the reuse
+    team.
+  <DT><b> Access control:</b>
+<DD> During development, classes should be
+    available to developers, but not others. Access control strategies
+    prevent potential users of a class from obtaining and/or
+    attempting to modify premature versions.
+  <DT><b> Configuration control:</b>
+<DD> Components destined to work in
+    specific products, releases, platforms, etc., must be so marked and
+    maintained.
+  <DT><b> Release management:</b>
+<DD> Tools to gather software,
+    documentation, etc., in preparation for particular releases.
+
+  <DT><b> Testing:</b>
+<DD> Test histories, test generators, testing and
+    integration protocols, etc.
+  <DT><b> Generators:</b>
+<DD> Standardization of
+    formats, approaches, and policies is facilitated by tools that
+    help semiautomatically generate parts of design descriptions, for
+    example, those that help ensure conformance to selected
+    error handling policies.
+  <DT><b> Design checkers:</b>
+<DD> Tools for checking whether designs
+    meet standards and other criteria.
+  <DT><b> Program development:</b>
+<DD> Compilers, debuggers,
+    editors, etc.
+<P>
+ </DL><H4><A NAME=SECTION00052110000000000000> Tool integration.</A></H4>
+<A NAME=589>&#160;</A>
+It is unlikely that you will find single integrated tool sets that contain
+all of this functionality, in addition to integrated support for OOA
+methods (Chapter <A NAME=tex2html102 HREF="ch12.html">12</A>) and requirements and domain
+analysis. In the future, integrated tools may be available supporting
+traceability and version management of all artifacts across all
+development phases, team (policy) support, prototype interpreters, and
+indexed access to libraries of analysis, design and code components.
+<P>
+However, less extensive solutions fare reasonably well, especially for
+small and medium efforts. For example, as reported in
+[<A HREF="#champander">9</A>], a successful medical software product produced in
+18 months by a team of eight relied only on a single-user OOA drawing
+tool and a <i> C++</i> compiler.  Still, they expect more than 80%
+reuse for a follow-on project.
+<P>
+<H3><A NAME=SECTION00052200000000000000> Evaluating Components</A></H3>
+<P>
+Criteria and protocols need to be established for assigning,
+accepting, revising, replacing, and removing components. General
+criteria may be based on the quality concerns described
+earlier in this chapter.  However, such criteria are notoriously
+difficult to apply to individual components. Beyond simply observable
+qualities such as tests and testability, few automatic checkoffs are
+always applicable. This leads to the widespread adoption of <em>
+review</em> (inspection) procedures.
+<P>
+There are many kinds of reviews<A NAME=596>&#160;</A>, including blind
+inspections, joint walk-throughs, and comparisons of multiple
+independent designs. These procedures are well described in standard
+texts on software process management (e.g., [<A HREF="#humphrey">10</A>]). They
+apply equally well to OO development and to reuse management.  Such
+efforts may be operationalized via <em>
+certification</em><A NAME=599>&#160;</A> policies and procedures describing
+those steps that must be taken for any component to be certified for
+general reuse.  These normally include some combination of
+requirements for testing, review, and assessment via metrics.
+<P>
+<H3><A NAME=SECTION00052300000000000000> Evaluating Use</A></H3>
+<P>
+Reuse and tool management efforts and their clients should themselves
+be evaluated.  This is a difficult issue.  Metrics for evaluating how
+effectively people have reused classes and exploited tools remain
+controversial.  Worse, many standard ``productivity'' measures (e.g.,
+lines of code generated per programmer) sometimes <em> counterindicate</em>
+effective reuse.  Much care and judgment is needed in evaluating
+developers within this framework.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00060000000000000000> Summary</A></H2></center>
+<P>
+Ideally, object-oriented design methods and practices seamlessly mesh
+with those of analysis. This is a byproduct of more general
+continuities inherent in object-oriented software development.  These
+ideals may be approximated by arranging that design subphases and
+activities respect these continuities. Design may be approached as a
+series of <em> transformations</em> dealing with functional, resource, and
+performance requirements. At a technical level, transformation is
+often only a metaphor, not a series of blind mechanical translations.
+But even so, transformational logic leads to the formulation of a
+default strategy that is structured enough to be useful, yet flexible
+enough to support countless situation-specific variations.
+<P>
+Whether it is focused on the description of object properties,
+behaviors, relationships, or interactions,  design is primarily a
+compositional process. Complex classes rely on simpler ones for many
+of their static and dynamic features.  Since OOA models already
+provide descriptive accounts of high-level class organization, the
+design process may employ more productive bottom-up methods.
+OO design is also <em> idiomatic</em>. Class-based design frameworks
+are almost <em> too</em> flexible. Different idiomatic approaches
+to the same problem often lead to different design solutions.
+<P>
+Criteria for evaluating such solutions resemble those established for
+any other software artifact.  There are many criteria to
+choose from, and few ways to measure any one of them. We
+consider them to be most valuable in guiding the design process
+itself, rather than as metrics for gauging the quality of individual
+classes, although they may certainly play a part in this as well.
+<P>
+Creating distinct reuse and/or tool management teams is a central
+factor in making good on the high productivity reputation of the OO
+paradigm.
+<P>
+<H2><A NAME=SECTION00061000000000000000> Further Reading</A></H2>
+<P>
+Different authors differently categorize the borders or lack thereof
+between analysis and design; see, for example, Monarchi and Puhr
+[<A HREF="#monarchi">17</A>], Dasgupta [<A HREF="#dasgupta">8</A>], and Potts [<A HREF="#potts">20</A>] for
+summaries.
+<P>
+The compositional OO approach to the design of active objects is
+perhaps most closely associated with the work of Tsichritzis,
+Nierstrasz, and colleagues at Geneva; see, for example,
+[<A HREF="#nierstraszcacm">19</A>].
+<P>
+Berard [<A HREF="#berard">2</A>] and Meyer [<A HREF="#meyer">14</A>] provide alternative
+characterizations of coupling and related OO software quality
+criteria.  Reuse-oriented software process management is discussed by
+several authors in the collection edited by Biggerstaff and Perlis
+[<A HREF="#biggerstaff">4</A>].
+<P>
+Design interpreters may be constructed using simulation, logic
+programming, and constraint propagation techniques, including those
+found in OO constraint systems such as <i> Garnet</i> [<A HREF="#garnet">18</A>].
+<P>
+More formal computational models of active objects might be based on
+abstract process models including <i> CCS</i> [<A HREF="#ccs">15</A>], pi-calculus
+[<A HREF="#picalc">16</A>], and the Chemical Abstract Machine
+[<A HREF="#cham">3</A>], on algebraic frameworks (e.g., [<A HREF="#wieringa">24</A>]),
+or on concurrent constraint systems (e.g., [<A HREF="#saraswat">21</A>]).
+Alternative conceptualizations include models treating all objects as
+sets of storage locations accessed and controlled by multiple
+processes [<A HREF="#unity">5</A>,<A HREF="#apt">1</A>,<A HREF="#lamport">11</A>].<A NAME=623>&#160;</A>
+<P>
+<H2><A NAME=SECTION00062000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Compare the approach described in this chapter with that of
+        other transformational systems with which you are familiar;
+        e.g., compilers, computer vision systems.
+<P>
+  <LI> Describe how and why our OO kernel and reference model differs
+        from those used in discrete event simulation systems.
+<P>
+  <LI> Sequentially pipelined activities sometimes stall.
+        Describe some possible stall points in a pipelined
+        analysis-design-implementation process framework and how to
+        deal with them.
+<P>
+  <LI> In Chapter <A NAME=tex2html106 HREF="ch5.html">5</A>, we started using constructs (e.g., event
+        generation) that are not classically considered to be
+        <em> black box</em>. Why do you think we still characterize them
+        as abstract from a design perspective?
+<P>
+  <LI> Explain the difference between function composition
+        and object composition.
+<P>
+  <LI> We did not list ``generality'' <em> per se</em> as an independent
+        component design criterion. Should we have?
+<P>
+
+  <LI> List similarities and differences between:
+<OL><LI> An <tt> Integer</tt> object and a <em> nail</em>.
+      <LI> A <tt> PullDownMenu</tt> object and a <em> hot water faucet knob</em>.
+      <LI> An <tt> AccountList</tt> object and a <em> refrigerator</em>.
+      <LI> Reusable <em> software</em> and reusable <em> hardware</em>.
+    </OL>
+
+<P>
+  <LI> Why do lines-of-code metrics sometimes counterindicate reuse?
+        Do they <em> always</em> do so?
+<P>
+</OL>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=apt><STRONG>1</STRONG></A><DD>
+K. Apt and E. Olderog.
+ <em> Verification of Sequential and Concurrent Programs</em>.
+ Springer-Verlag, 1991.
+<P>
+<DT><A NAME=berard><STRONG>2</STRONG></A><DD>
+E. Berard.
+ <em> Essays in Object-Oriented Software Engineering</em>.
+ Prentice Hall, 1992.
+<P>
+<DT><A NAME=cham><STRONG>3</STRONG></A><DD>
+G. Berry and G. Boudol.
+ The chemical abstract machine.
+ In <em> ACM Conference on Principles of Programming Languages</em>. ACM,
+  1990.
+<P>
+<DT><A NAME=biggerstaff><STRONG>4</STRONG></A><DD>
+T. Biggerstaff and A. Perlis, editors.
+ <em> Software Reuse</em>.
+ ACM Press, 1989.
+<P>
+<DT><A NAME=unity><STRONG>5</STRONG></A><DD>
+K. Chandy and J. Misra.
+ <em> Parallel Program Design: A Foundation</em>.
+ Addison-Wesley, 1988.
+<P>
+<DT><A NAME=ibis><STRONG>6</STRONG></A><DD>
+J. Conklin and M. Begeman.
+ gibis: a hypertext tool for exploratory policy discussions.
+ <em> ACM Transactions on Office Information Systems</em>, October 1988.
+<P>
+<DT><A NAME=cox><STRONG>7</STRONG></A><DD>
+B. Cox.
+ <em> Object-Oriented Programming: An Evolutionary Approach</em>.
+ Addison-Wesley, 1986.
+<P>
+<DT><A NAME=dasgupta><STRONG>8</STRONG></A><DD>
+S. Dasgupta.
+ <em> Design Theory and Computer Science</em>.
+ Cambridge University Press, 1991.
+<P>
+<DT><A NAME=champander><STRONG>9</STRONG></A><DD>
+D. de Champeaux, A. Anderson, M. Dalla Gasperina, E. Feldhousen, F. Fulton,
+  M. Glei, C. Groh, D. Houston, D. Lerman, C. Monroe, R. Raj, and D. Shultheis.
+ Case study of object-oriented software development.
+ In <em> OOPSLA '92</em>. ACM, 1992.
+<P>
+<DT><A NAME=humphrey><STRONG>10</STRONG></A><DD>
+W.S. Humphrey.
+ <em> Managing the Software Process</em>.
+ Addison-Wesley, 1990.
+<P>
+<DT><A NAME=lamport><STRONG>11</STRONG></A><DD>
+L. Lamport and N. Lynch.
+ Distributed computing models and methods.
+ In J. van Leeuwen, editor, <em> Handbook of Theoretical Computer
+  Science</em>. MIT Press, 1990.
+<P>
+<DT><A NAME=linton><STRONG>12</STRONG></A><DD>
+M. Linton and et al.
+ <em> InterViews</em>.
+ interviews.stanford.edu, 1990.
+<P>
+<DT><A NAME=vhdl><STRONG>13</STRONG></A><DD>
+R. Lipsett, C. Schaefer, and C. Ussery.
+ <em> VHDL: Hardware Description and Design</em>.
+ Kluwer Academic Press, 1991.
+<P>
+<DT><A NAME=meyer><STRONG>14</STRONG></A><DD>
+B. Meyer.
+ <em> Object-Oriented Software Construction</em>.
+ Prentice Hall International, 1988.
+<P>
+<DT><A NAME=ccs><STRONG>15</STRONG></A><DD>
+R. Milner.
+ <em> Communication and Concurrency</em>.
+ Prentice Hall International, 1989.
+<P>
+<DT><A NAME=picalc><STRONG>16</STRONG></A><DD>
+R. Milner, J. Parrow, and D. Walker.
+ A calculus of mobile processes.
+ <em> Information and Computation</em>, 100, 1992.
+<P>
+<DT><A NAME=monarchi><STRONG>17</STRONG></A><DD>
+D. Monarchi and G. Puhr.
+ A research typology for object-oriented analysis and design.
+ <em> Communications of the ACM</em>, September 1992.
+<P>
+<DT><A NAME=garnet><STRONG>18</STRONG></A><DD>
+B. Myers, D. Giuse, and B. Zanden.
+ Declarative programming in a prototype-instance system.
+ In <em> OOPSLA '92</em>. ACM, 1992.
+<P>
+<DT><A NAME=nierstraszcacm><STRONG>19</STRONG></A><DD>
+O. Nierstrasz, S. Gibbs, and D. Tsichritzis.
+ Component-oriented software development.
+ <em> Communications of the ACM</em>, September 1992.
+<P>
+<DT><A NAME=potts><STRONG>20</STRONG></A><DD>
+C. Potts.
+ A generic model for representing design methods.
+ In <em> 11th International Conference on Software Engineering</em>. IEEE,
+  1989.
+<P>
+<DT><A NAME=saraswat><STRONG>21</STRONG></A><DD>
+V. Saraswat.
+ Concurrent constraint programming.
+ In <em> ACM conference on Principles of Programming Languages</em>. ACM,
+  1990.
+<P>
+<DT><A NAME=tidwell><STRONG>22</STRONG></A><DD>
+B.K. Tidwell.
+ Object-oriented analysis state controlled implementation.
+ In <em> OOPSLA '91 Workshop on Object-Oriented (Domain) Analysis</em>.
+  ACM, 1991.
+<P>
+<DT><A NAME=wiederhold><STRONG>23</STRONG></A><DD>
+G. Wiederhold, P. Wegner, and S. Ceri.
+ Towards megaprogramming.
+ Technical Report STAN-CS-90-1341, Stanford University, October 1990.
+<P>
+<DT><A NAME=wieringa><STRONG>24</STRONG></A><DD>
+G. Wieringa.
+ A formalization of objects using equational dynamic logic.
+ In C. Delobel, M. Kifer, and Y. Masunaga, editors, <em> Deductive and
+  Object-Oriented Databases</em>. Springer-Verlag, 1991.
+</DL>
+<P>
+
+<a href="ch16.html">Next: Chapter 16</a>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:54:42 EDT 1995</I>
+</ADDRESS>
+</BODY>

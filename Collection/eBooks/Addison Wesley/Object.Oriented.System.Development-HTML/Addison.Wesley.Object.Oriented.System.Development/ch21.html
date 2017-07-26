@@ -1,0 +1,869 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Dispatching</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Dispatching">
+<meta name="keywords" value="ch21">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 21: Dispatching</h2>
+<UL>
+<LI> <A NAME=tex2html58 HREF="#SECTION00010000000000000000"> Selection</A>
+<LI> <A NAME=tex2html59 HREF="#SECTION00020000000000000000"> Resolution</A>
+<LI> <A NAME=tex2html60 HREF="#SECTION00030000000000000000"> Routing</A>
+<LI> <A NAME=tex2html61 HREF="#SECTION00040000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<A NAME=9>&#160;</A>
+<A NAME=10>&#160;</A>
+<A NAME=11>&#160;</A>
+<A NAME=12>&#160;</A>
+<A NAME=13>&#160;</A>
+<A NAME=14>&#160;</A>
+<P>
+Any message sent in an OO system may be <em> dispatched</em> in any of
+several senses.  At least three separate aspects of dispatching may be
+distinguished:
+<P>
+<OL><LI> <em> Selection</em> of concrete code associated with an invoked
+        operation for a given object.
+  <LI> <em> Resolution</em> of the ``best matching'' version of
+        an operation when two or more are defined.
+  <LI> <em> Routing</em> of a nonspecific request to a particular
+        object.
+</OL>
+<P>
+Not all senses are directly supported in all OO programming languages
+and systems. We discuss ways of coping with this later.
+<P>
+Dispatching is a decoupling technique. The three forms of dispatching
+decouple requests from the corresponding code, versions, and receivers.
+A <em> dispatching error</em> results when an object sends a message that
+has no valid receiver or corresponding operation. This
+can occur when there is not a unique best matching action defined for
+the message name and types of the actual arguments, including the case
+where no such operation is defined at all, and in the case of object
+routing, where no eligible recipient exists.
+<P>
+Dispatching errors are among the most difficult problems to plan for.
+It is inconceivable to write actions that check to see if each and
+every message could be dispatched and to take evasive action if not.
+If dispatching errors do occur, the only recourse is to define
+top-level error recovery facilities, triggered by dispatching
+mechanisms.  Indeed, one of the main reasons for using a strongly
+typed design language is to avoid this.
+<P>
+Typed OO dispatching adds a safety guarantee to decoupling.
+Senders are assured that no matter which receiver, version, and code
+is dispatched, messages result in the desired effects.  Thus,
+dispatching rules are among the mechanisms by which OO systems support
+subclass <em> polymorphism</em>. Because of this, the dynamics of
+dispatching are dependent on the <em> declarative</em> structure of
+classes and operations.
+
+<center><H2><A NAME=SECTION00010000000000000000> Selection</A></H2></center>
+<P>
+<A NAME=25>&#160;</A>
+<A NAME=26>&#160;</A>
+<A NAME=27>&#160;</A>
+<P>
+Dispatching mechanisms associated with code selection are essential
+for basic OO methods. They are usually uncomplicated, simply linking
+the version of concrete code defined in a class to the appropriate
+operation name and message.
+<P>
+<H2><A NAME=SECTION00011000000000000000> Refining Operations in Subclasses</A></H2>
+<P>
+To meet basic safety guarantees, subclass versions of operations must
+obey the rules for refined transitions given in
+Chapter <A NAME=tex2html12 HREF="ch7.html">7</A>. To briefly recap, subclass versions may
+weaken preconditions, add actions, and strengthen result guarantees
+with respect to superclasses.
+<P>
+These requirements occasionally lead to surprising constraints on
+subclasses and operations.  For example, it may appear reasonable to
+define an <tt> addToBalance</tt> operation in class <tt> Account</tt> of the
+form:
+<P>
+<A NAME=33>&#160;</A>
+<P>
+<PRE>class Account ...
+  fn balance: real;
+  op addToBalance(v: real) ==&gt; balance' = balance + v end
+end
+</PRE>
+<P>
+Suppose now that while the <tt> balance</tt> attribute in <tt> Account</tt> is
+numerically unconstrained, subclass <tt> SavingsAccount</tt> adds the
+constraint that <tt> balance &gt;= 0</tt>.  This causes problems.  Because
+<tt> balance + v</tt> might be negative, the <tt> SavingsAccount</tt> <tt>
+balance</tt> constraint may be broken by the postcondition. Yet the
+operation cannot be modified to accept only positive values as data
+and still maintain the subclass justification. Thus, from either
+perspective, the design is inconsistent.
+<P>
+Several solutions are available. For example, the topmost <tt>
+Account</tt> class need not define any operations. Different operations
+with different names and constraints could be associated with
+different subclasses. However, this eliminates opportunities
+for polymorphism, thus complicating the design of client classes
+that interact with different <tt> Account</tt> subclasses.
+<P>
+If one would like to ensure that instances of all <tt> Account</tt>
+subclasses possess the operation, then the topmost version must be
+recast.  Here, one could define the <tt> Account</tt> version to accept
+only nonnegative values of <tt> v</tt>.  Subclasses able to accept
+negative values as well can then weaken the precondition and/or define
+additional operations. This would be appropriate only if it were
+logically impossible to define a subclass requiring a <em> stronger</em>
+input constraint. For example, it does not allow definition of a
+subclass requiring that <tt> v &gt;= transactionFee</tt>.
+<P>
+To allow for arbitrary variation in subclass restrictions, one may
+adopt a weaker but more general strategy using state abstraction along
+with a screening function. For example:
+<P>
+<PRE>class Account ...
+  fn canAdd(v: real): bool;
+  op addToBalance(v: real)
+    when canAdd(v) then balance' = balance + v
+    else % pend or exception % end
+end
+</PRE>
+<P>
+The <tt> canAdd</tt> predicate defines an abstract state.  The screening
+function may be unconstrained (undefined) in the abstract superclass.
+Subclasses may then add constraints and concrete definitions.  Clients
+of any subclass of <tt> Account</tt> must be prepared for <tt> canAdd</tt> to
+be false for any reason whatsoever. A variant of this tactic is to
+eliminate the guard and then recast <tt> addToBalance</tt> to return a boolean
+result or named reply reporting whether the operation succeeded or
+failed. Different subclasses may then differently define the
+conditions under which the operation reports success.
+<P>
+State abstraction and refinement may be exploited in other situations
+as well.  A subclass may specify refined states that distinguish
+attribute settings that were lumped together in one superclass state.
+This may result in two or more versions of an operation being defined
+in the subclass, each of which obey all superclass guarantees, but in
+different ways.  For example, suppose <tt> Q</tt> is a special checking
+account class that charges for transactions only if the balance is
+under a stated minimum. <tt> Q</tt> may subdivide the nonoverdrawn state
+of <tt> Account</tt> into cases of not overdrawn but under minimum balance
+versus at or over minimum balance. <tt> Q</tt> may then define two
+versions of a transaction operation accordingly, distinguished by
+different guard conditions.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Selection Policies</A></H2>
+<P>
+<A NAME=57>&#160;</A>
+<P>
+The details of selection rules may impact how classes and subclasses
+
+ultimately become defined in software.  Effective use and reuse often
+relies on more <em> fine-grained</em> types than are usually originally
+present in a design.  For example, consider:
+<P>
+<PRE>class X  a: bool;  b: int;  c: real; end
+
+op useA(p: ?) { if p.a then print(&quot;success&quot;) end }
+</PRE>
+<P>
+What type should be listed for <tt> p</tt> in <tt> useA</tt>?  Listing
+<tt> p:X</tt> would be OK. But it might not be the best choice in the
+long run.  It makes <tt> useA</tt> too tightly coupled to <tt> X</tt>. In
+fact, <tt> useA</tt> would work perfectly well if applied to an
+object of type:
+<P>
+<PRE>class Y   a: bool;  d: String; end
+</PRE>
+<P>
+This is a serious limitation to the use of class names in selecting
+operations.  Without evasive action <tt> useA</tt> will be too tightly
+bound to unnecessary capabilities, hence, less reusable.
+Solutions hinge on some specific language policies and dispatching
+mechanisms.
+<P>
+<H4><A NAME=SECTION00012010000000000000> Conformance.</A></H4>
+<A NAME=67>&#160;</A>
+In <i> emerald</i> [<A HREF="#emerald">5</A>]<A NAME=70>&#160;</A>, among other
+languages, class names do not even matter for type checking and
+dispatching purposes.  Any object of a class with the demanded (name
+based) properties may be used as an argument to an operation.  This is
+called <em> conformance</em>-based typing.  It allows ``partial'' abstract
+class declarations to be declared retrospectively.  For example, we might
+write:
+<P>
+<PRE>class AThing  a: bool; end
+
+op useA(a:  AThing)...;
+</PRE>
+<P>
+Subsequently, <tt> useA</tt> could be invoked with something of class <tt>
+X</tt> (or rather any concrete subclass of <tt> X</tt>) whether <tt> X</tt> had
+ever been declared to be a subclass of <tt> AThing</tt> or not.  If later,
+a special form of <tt> useA(p:Y)</tt> were found to be necessary to deal
+with <tt> Y</tt>s, it could be added. The original version would still be
+applied for <tt> X</tt>s.
+<P>
+The only disadvantage of pure conformance is that implicit or
+unstatable invariants and interdependencies may be broken
+inadvertently.  Despite efforts to the contrary, the placement of a group of
+attributes and operations within a particular class often implies more
+dependencies than are actually stated.  While this is not at all
+desirable, the possibilities often exist in real designs.
+<P>
+Still, conformance-based strategies are excellent ways to implement
+systems, since they are so readily extensible and adaptable.  But
+designs based on conformance assumptions can be difficult to
+transform into OO implementation languages that do not employ
+conformance-based dispatching. Most do not.
+<P>
+<H4><A NAME=SECTION00012020000000000000> Dynamic lookups.</A></H4>
+<A NAME=81>&#160;</A>
+In some OO programming languages, <tt> u.useA(x)</tt> for some <tt> x</tt>
+supporting <tt> a</tt> and some <tt> u</tt> of a class supporting <tt> useA</tt>
+could be sent without any special precautions or other considerations.
+In these languages (e.g., <i>
+Smalltalk</i> [<A HREF="#smalltalk">3</A>]<A NAME=89>&#160;</A>) messages are ``looked up''
+dynamically, without the need (or even the provisions) for declared
+class information. As with conformance, this can be an excellent way
+to implement systems.  However, it is weaker than conformance. Without
+class information to guide routing, it becomes impossible to
+specialize <tt> useA</tt> without embedding type tests inside a
+single version.
+<P>
+<H4><A NAME=SECTION00012030000000000000> Views.</A></H4>
+<A NAME=92>&#160;</A><A NAME=93>&#160;</A>
+Interfaces to existing classes may be repackaged using views. For
+example, even without a conformance-based system, we could still
+define class <tt> AThing</tt> and <tt> useA</tt>, but send in an
+<tt> X</tt> after creating a class:
+<P>
+<PRE>class XBasedAThing  is AThing
+  x: X;  FORWARD(x, a)
+end
+...
+useA(new XBasedAThing(x := myX))
+</PRE>
+<P>
+This is not always pretty, but is very useful for patching together
+otherwise incompatible classes and applications.  It preserves
+extensibility while still supporting class-based control of behavior.
+However, it also complicates object identity issues. An <tt>
+XBasedAThing</tt> forwarding messages to an <tt> X</tt> is not the same object
+as the inner <tt> X</tt>.
+<P>
+<H4><A NAME=SECTION00012040000000000000> Refactoring.</A></H4>
+<P>
+Even when dealing with systems supporting conformance, dynamic
+lookups, or dynamic views, the best strategy is to refactor a
+hierarchy in a way that accommodates less restrictive usage by
+retrospectively defining new superclasses using the methods described
+in Chapter <A NAME=tex2html21 HREF="ch7.html">7</A>. This has the advantage of only explicitly
+defining classes that make some conceptual sense and/or are of known
+value to client applications. It has the disadvantage of almost always
+causing further design iteration.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00020000000000000000> Resolution</A></H2></center>
+<P>
+<A NAME=104>&#160;</A>
+<A NAME=105>&#160;</A><A NAME=106>&#160;</A>
+<P>
+Different versions of operations may be defined inside classes or at
+top-level in order to deal with <em> arguments</em> of different types.
+Resolution rules are required to determine which version to apply in a
+particular context.  We have been implicitly assuming one of the
+broadest possible rules, <em> dynamic closest match</em> dispatching,
+which selects the best fitting version defined for the actual
+participants.
+<P>
+Multiple versions of operations may appear within classes and their
+subclasses, and/or as sets of ungrouped top-level operations. For
+simplicity, we will illustrate using top-level cases.  For example:
+<A NAME=109>&#160;</A>
+<P>
+<PRE>op credit(acct: Account, amt: Cash);
+
+op credit(acct: CheckingAccount, amt: Cash);
+</PRE>
+<P>
+Best-match dispatching follows the logic of <em> relational</em>
+inheritance (Chapter <A NAME=tex2html26 HREF="ch7.html">7</A>). The best version to use
+corresponds to the ``deepest'' defined relation/operation among the
+arguments.  Here, when <tt> credit(a, x)</tt> is invoked in some context,
+if <tt> a</tt> were of class <tt> Checking</tt><tt> Account</tt> or some
+subclass thereof, the <tt> credit(CheckingAccount,</tt> <tt> Cash)</tt>
+version would be selected. But if <tt> a</tt> were of class <tt> Account</tt>
+or some subclass of <tt> Account</tt> other than <tt> Checking</tt><tt>
+Account</tt>, the <tt> credit(Account, Cash)</tt> version would be selected.
+<P>
+Argument-based operation overriding is sometimes easier to manage than
+subclassing. It is not necessary to explicitly state which version of
+which operation is being overridden during declarations, nor even to
+keep track of which version is overriding which, as long as <em> some</em>
+coherent subclassing relation holds when all versions are considered
+as a whole.  For example, it is often acceptable if neither of two
+versions overrides the other, but both override a version that might
+conceptually exist, but because it is never needed, is not defined.
+<P>
+In <i> ODL</i>, the <em> obj</em> <tt> in</tt> <em> class</em>
+<A NAME=130>&#160;</A> construct may be used to indicate and
+control these mechanics explicitly.  Using ``<tt> in</tt>'' is not a very
+good way to <em> define</em> operations since it ignores receivers and
+buries dispatching policies within internals.  It is, however, a
+useful way to <em> view</em> them from a client-side perspective.  This is
+especially valuable when checking the consistency of effects across
+all defined versions of an operation.  For example, the combined view
+of <tt> credit</tt> is:
+<P>
+<PRE>op credit(acct: Account, amt: Cash)
+   when acct in CheckingAccount then
+     % special version for checking accounts
+   elsewhen acct in Account then
+     % version for ordinary accounts
+   else
+     % ``cannot happen''
+   end
+</PRE>
+<P>
+In <i> ODL</i>, each of a series of guards assumes negation of the
+previous ones. Here, this reduces to the fact that the first listed
+matching case is selected.  In accord with best-match dispatching
+policies, the subclass cases are listed first, so that the most special
+applicable version is invoked.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Ambiguity</A></H2>
+<A NAME=137>&#160;</A>
+<P>
+In Chapter <A NAME=tex2html29 HREF="ch7.html">7</A>, we discussed measures to avoid ambiguity
+under multiple inheritance.  Sets of operations dispatched on multiple
+arguments can get even more confusing and require similar care.  It is
+possible to declare sets of versions leading to situations where there
+can be no best match. For example (using <tt> CCA</tt> and <tt> PCA</tt> as
+stand-ins for effects):<A NAME=142>&#160;</A>
+<P>
+<PRE>class PreferredClient is Client ... end
+
+op inspect(c: Client, a: CheckingAccount)  ==&gt; CCA end
+
+op inspect(c: PreferredClient, a: Account) ==&gt; PCA end
+</PRE>
+<P>
+Neither of these is an override of the other, although both of them
+are related to the ``base'' form:
+<P>
+<PRE>op inspect(c: Client, a: Account) ==&gt; CA end
+</PRE>
+<P>
+<em> None</em> of these versions would be a unique best choice if <tt>
+inspect</tt> were invoked with a <tt> PreferredClient</tt> and a <tt>
+Checking</tt><tt> Account</tt>. It is easiest to see this when these
+versions are unrolled using <tt> when</tt> and <tt> in</tt>. There are <em>
+two</em> ways to do it:
+<P>
+<PRE>op inspect(c: Client, a: Account) % version 1
+   when  c in PreferredClient then
+     when   a in CheckingAccount then % (*)
+     else % a in Account %            PCA end
+   else % c in Client
+     when   a in CheckingAccount then CCA
+     else % a in Account %            CA  end end
+</PRE>
+<P>
+<PRE>op inspect(c: Client, a: Account) % version 2
+   when   a in CheckingAccount then
+     when   c in PreferredClient then % (*)
+     else % c in Client %             CCA end
+   else % a in Account
+     when   c in PreferredClient then PCA
+     else % c in Client %             CA  end end
+</PRE>
+<P>
+It is just not clear from the declarations what to write in case <tt>
+(*)</tt>.  The two different unrollings make either <tt> PCA</tt> or <tt> CCA</tt>
+most tempting. While it is surely most reasonable to declare that this
+case somehow combines the effects of <tt> PCA</tt> and <tt> CCA</tt>, no one,
+least-wise a dumb dispatching rule, can do this for you. Either the
+design should be completed to cover all cases or else special dispatch
+resolution rules must be defined (as in <i> CLOS</i><A NAME=157>&#160;</A>
+[<A HREF="#clos">2</A>]).
+<P>
+<H2><A NAME=SECTION00022000000000000000> Simulating Multiple Dispatch</A></H2>
+<P>
+Most object-oriented programming languages do not support full
+best-match dispatching rules. As with other caveats we have noted, this
+can affect the expression of designs, without affecting their
+logic.
+<P>
+Lack of best-match dispatching is a common source of programming-level
+errors. Without it, operations may be ``unrolled'' using type-tests.
+Another strategy is to transform it to simple selection dispatching.
+Here we describe the mechanics. These details may be safely ignored
+unless you need them, although they do demonstrate a model protocol
+that can be established across different classes for many related
+purposes.
+<P>
+<H4><A NAME=SECTION00022010000000000000> Double Dispatching.</A></H4>
+<A NAME=161>&#160;</A>
+There is a neat but messy trick that allows multiple dispatching to be
+simulated perfectly by adding operations to the participant classes,
+at the expense of protocol coupling.<A NAME=162>&#160;</A>
+For two-argument operations, this is called <em> double dispatching</em>.
+It extends in a straightforward but horribly awkward way for three or
+more arguments.  This is best illustrated with a bare-bones example.
+Suppose we have two sets of subclass structures, and multiple versions
+of some operation <tt> f</tt>:
+<P>
+<PRE>class A ... end
+class SubA is A ... end
+
+class B ... end
+class SubB is  B ... end
+
+op f(a: A,    b: B)    { P }
+op f(a: SubA, b: SubB) { Q }
+op f(a: A,    b: SubB) { R }
+</PRE>
+<P>
+This setup corresponds to that seen for <tt> Accounts</tt> and <tt>
+Clients</tt> supporting <tt> inspect</tt> operations. <tt> P</tt>, <tt> Q</tt> and
+<tt> R</tt> are just stand-ins for the concrete code. A fourth version,
+<tt> f(SubA, B)</tt> could be added without changing any of the following
+logic.
+<P>
+The first step is to <em> rename</em> the versions depending on <em>
+either</em> one of the argument types. It does not matter which one, but
+for ambiguous designs the different choices will result in different
+behaviors. This is one reason to avoid ambiguous designs.  Let's
+choose <tt> B</tt>. If we distinguish the versions on the exact <tt> B</tt>
+type, we can also recast all <tt> SubB</tt> declarations as just <tt> B</tt>.
+The procedure name will tell us which one to use.
+<P>
+<PRE>op fB(a: A,    b: B) { P }
+op fB(a: SubA, b: B) { Q }
+
+op fSubB(a: A, b: B) { R }
+</PRE>
+<P>
+Because we arranged that the second argument ``does not matter'' for
+dispatching purposes, we may now safely embed these inside the <tt> A</tt>
+<em> classes</em> corresponding to the first argument types:
+<P>
+<PRE>class A ...
+  op fB(b: B)    { P }
+  op fSubB(b: B) { R }
+end
+class SubA is A ...
+  op fB(b: B)    { Q }
+end
+</PRE>
+<P>
+We could stop here, except that callers would need to know the right
+versions to invoke, which they do not. But the <tt> B</tt>'s do.
+We may place the appropriate forwarders in the corresponding classes:
+<P>
+<A NAME=181>&#160;</A>
+<P>
+<PRE>class B ...
+  op f(a: A) { a.fB(self) }
+end
+
+class SubB is B ...
+  op f(a: A) { a.fSubB(self) }
+end
+</PRE>
+<P>
+Optionally, a single top-level version may be defined to start things
+rolling:
+<P>
+<PRE>op f(a: A, b: B) { b.f(a) }
+</PRE>
+<P>
+<H2><A NAME=SECTION00023000000000000000> Genericity and Dispatching</A></H2>
+<A NAME=183>&#160;</A>
+<A NAME=184>&#160;</A>
+<A NAME=185>&#160;</A><A NAME=186>&#160;</A>
+<P>
+Selection and resolution rules also come into play with generic classes.
+There is some leeway between subclassing and parameterization for
+defining collections and related classes.  For example, in
+Chapter <A NAME=tex2html39 HREF="ch17.html">17</A>, we could have defined a stack as follows:
+<A NAME=189>&#160;</A>
+<P>
+<PRE>class NonParamStack
+  empty: bool;
+  op push(x: Any): ();
+  op top: Any;
+  op pop;
+end
+</PRE>
+<P>
+This would define a stack that could hold instances of any kind of
+objects whatsoever. This is OK for putting things into a stack, but
+sometimes less so when they are pulled out. Unless it somehow happens
+to have additional information, a client looking at the <tt> top</tt>
+element does not know anything at all about its capabilities. As far as
+type information is concerned, it could be anything.
+<P>
+On the other hand, if a client has a <tt> STACK[Window]</tt>, it knows
+that all elements are <tt> Window</tt>s. The objects might still be of any
+subclass of <tt> Window</tt>; perhaps <tt> Bordered</tt><tt> Window</tt>, <tt>
+Scrollable</tt><tt> Window</tt> or whatever. But they are surely at least
+<tt> Window</tt>s. This guarantees that clients can perform window-based
+operations on all of the objects without having to bother with
+error-handling details.  Parameterized classes are thus generally safer than
+unrestricted classes and lead to simpler use by clients.
+<P>
+You might think that you could declare something like <tt> class</tt> <tt>
+WindowStack</tt> <tt> is</tt> <tt> NonParamStack</tt> to get the same effects
+through subclassing. But this cannot be done without breaking subclass
+substitutability rules. The definition of <tt> push</tt> in <tt>
+NonParamStack</tt> indicates that <tt> Any</tt> kind of object may be pushed
+onto it. This must be restricted in the subclass to only push <tt>
+Window</tt>s.  However, then the subclass would not be substitutable.
+<P>
+<H4><A NAME=SECTION00023010000000000000> Type restrictions.</A></H4>
+<A NAME=208>&#160;</A>
+For the sake of practical design efforts, we have not listed any
+restrictions on the type arguments acceptable for generic classes.
+We adopt the common OO convention that <em> any</em> type may match a type
+parameter, but that instantiating one that leads to undefined behavior
+is a design error.
+<P>
+We will digress with an example that illustrates some of the resulting
+issues.  Views and parameterized classes are often found together in
+designs.  For example, suppose you need to define ordered sets, where
+the ordering may be based on <em> any</em> kind of key held by any kind of
+class:<A NAME=211>&#160;</A>
+<P>
+<PRE>class Keyed  key: Any; end
+
+class KeyedSet is SET[Keyed] ...
+  op put(x: Keyed) { ... if lessThan(x.key, first.key) then ... end }
+end
+</PRE>
+<P>
+This could be used to hold, say, <tt> Account</tt>s, via a view:
+<P>
+<PRE>class KeyedAccount is Keyed
+  a: Account;
+  key: Balance { a.balance }
+end
+
+fn lessThan(x: Balance, y: Balance): bool { x.val &lt; y.val }
+
+myset := new KeyedSet(...);
+myset.put(new KeyedAccount(myAcct)); ...
+</PRE>
+<P>
+This is not as safe as it looks. Because the <tt> KeyedSet</tt> can hold
+anything viewable as <tt> Keyed</tt>, any particular instance might be
+filled with just about anything. Maybe that is what you want.  But if
+other such objects return different kinds of keys, then the comparison
+in <tt> put</tt> may attempt to compare <tt> Balances</tt> to, say,
+<tt> Bananas</tt>. Most likely you did not even define a
+version of <tt> lessThan</tt> that compares such things.  This would
+result in a dispatch failure.
+<P>
+This problem is a consequence of the laxness of parameterized type
+rules.  Here, it leads to the insensible notion that you can
+meaningfully compare <em> any</em> two arbitrary objects with a less-than
+operation,  which you cannot.
+<P>
+The simplest way to maximize safety in this and most related
+situations is to define different kinds of ordered sets based on the
+types of their keys.  The same general construction applies, but
+controlled by different kinds of <tt> Key</tt> classes, returning types
+for which less-than functions are known to be defined.  More
+elegant-sounding solutions (if they exist) are hard to obtain without
+introducing more controversial type apparatus.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00030000000000000000> Routing</A></H2></center>
+<P>
+<A NAME=222>&#160;</A>
+<P>
+In Chapter <A NAME=tex2html44 HREF="ch18.html">18</A>, we noted that multiparticipant
+operations may be transformed into classes.  Instead of defining
+deposits, withdrawals, and inspections as free-standing operations (or
+worse, as inappropriately received by clients, tellers, or
+accounts <em> per se</em>) they may be defined as the responsibility of
+corresponding coordinators:<A NAME=226>&#160;</A><A NAME=227>&#160;</A>
+<P>
+<PRE>class Trans
+  op inspect;
+  op deposit(amt: Cash); ...
+end
+
+class CheckingTrans is Trans... end
+
+class TransV1 is Trans
+  generator TransGen1
+  locals
+    c: fixed Client;  a: fixed Account;  t: fixed Teller;
+  end
+  op inspect; ...
+end
+
+class CheckingTransV1 is CheckingTrans ...
+   generator CTransGen1
+end
+</PRE>
+<P>
+By placing constructors within generators, clients may
+rely on the third sense of dispatching,
+object routing,  providing the highest level of decoupling:
+<P>
+<PRE>class TransGen1 ...
+  op mk(c: Client, a: Account, t: Teller): TransV1;
+end
+
+class CTransGen1 ...
+  op mk(c: Client, a: CheckingAccount, t: Teller): CheckingTrans;
+end
+
+op user {
+  t := TransGen1$mk(client1, account402, aTeller);
+  t.deposit(100.00); ... }
+</PRE>
+<P>
+The main limitation of this approach is that clients must know exactly
+which version of coordinator they wish to construct.  Avoiding this
+entails creation of another top-level operation that uses
+argument-based dispatching to route construction requests to the
+appropriate generator, so that clients do not have to do so
+themselves.  Thus, the two forms of dispatching do not always
+completely substitute for each other.
+<P>
+<A NAME=228>&#160;</A>
+<P>
+<H2><A NAME=SECTION00031000000000000000> Routing Structures</A></H2>
+<P>
+<A NAME=230>&#160;</A><A NAME=231>&#160;</A>
+<P>
+Object routing is usually implemented via mediator objects. These can
+take several forms, including <em> name servers</em> and <em> relays</em>.
+<P>
+<H4><A NAME=SECTION00031010000000000000> Name Servers.</A></H4>
+<P>
+A name server (or ID server) accepts requests describing the kinds of
+services needed, and returns the identity or other specifier of an
+object providing the service. For an extremely stripped down example:
+<P>
+<PRE>class IDServer
+  p: Printer;  d: Display;
+  op getServer(req: Request): Any {
+     if req.svc = &quot;print&quot; then reply p else reply d end }
+end
+</PRE>
+<P>
+Of course, the basic idea can and should be extended.  The server may
+hold updatable collections of objects providing different services,
+maintain descriptions of their interfaces, find the ``best-fitting''
+server for any given request, redirect inquiries to others when a good
+fit cannot be made, and so on.
+<P>
+These designs have intrinsic static typability problems. For example,
+the <tt> get</tt><tt> Server</tt> procedure is listed as having a result type
+only of <tt> Any</tt>, since it returns identities of different kinds of
+objects corresponding to different kinds of requests. There is no
+simple way to say anything more specific at the type level. For the
+sake of safety, clients should be prepared for anything:
+<P>
+<PRE>...
+p: Any := reg.getServer(&quot;print&quot;);
+if p in Printer then p.print(myPrintJob) else ... end;
+</PRE>
+<P>
+<H4><A NAME=SECTION00031020000000000000> Relays.</A></H4>
+<P>
+A relay receives requests and then routes them to designated
+service objects. For another overly simplified example:
+<P>
+
+<P>
+<PRE>class ServiceRelay ...
+  m: MAP[ServiceDescription, Server];
+  op register(s: ServiceDescription, v: Server) { m.put(s, v) }
+  op svcRequest(s: ServiceDescription) {
+     if m.has(s) then m.at(s).serve end }
+end
+</PRE>
+<P>
+The main difference between relays and name servers lies in their
+interfaces.  A pure relay silently connects objects, while a pure name
+server tells one object who it should connect to.  They have the same
+overall function as our object dispatching strategies and amount to
+manual simulations, extensions, or implementations of them.  For
+example, we could have expressed the name server example directly in
+<i> ODL</i> as <tt> Printer$print(myPrintJob)</tt>.  The reverse
+transformation is pragmatically valuable. Any design implemented using
+languages and tools that do not support object dispatching (most do
+not) needs to be transformed to use manually defined name server and
+relay objects.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Topologies</A></H2>
+<P>
+<A NAME=242>&#160;</A><A NAME=243>&#160;</A><A NAME=244>&#160;</A>
+<P>
+Routers and dispatchers of all sorts must keep track of the existences
+and capabilities of many other objects.  The resulting mediation
+networks may be organized into a number of topologies. It is often
+preferable to postpone commitments about particular forms to take
+advantage of those supported by system tools and services.
+<P>
+<H4><A NAME=SECTION00032010000000000000> Central arbitration.</A></H4>
+<P>
+In a centrally arbitrated design, only one object or service knows
+about the entire system. All other objects register themselves and
+their interfaces with a master ``broker''. All communication is
+mediated by this master broker. It forwards all events to the
+appropriate objects. Backup forwarders may also be present to protect
+the system against failure of the main broker. <A NAME=246>&#160;</A>
+<P>
+<H4><A NAME=SECTION00032020000000000000> Point-to-point.</A></H4>
+<P>
+In a fully distributed, point-to-point design, each object maintains
+all object and dispatching information for the system, locally
+resolves messages, and directly sends requests to the appropriate
+recipients.
+<P>
+<H4><A NAME=SECTION00032030000000000000> Broadcast.</A></H4>
+<P>
+Broadcasts offer tremendous simplification of point-to-point
+strategies.  In a broadcast-based design, objects send nonlocal
+requests to <em> all</em> other objects. Recipients simply ignore
+nonapplicable requests.  Objects need not know about nonlocal
+capabilities at all, at the expense of generating a possibly
+unacceptable level of message traffic.<A NAME=250>&#160;</A>
+<P>
+<H4><A NAME=SECTION00032040000000000000> Tree-structured.</A></H4>
+<P>
+Tree-structured designs represent a midpoint between fully central and
+fully distributed information. Each object (or an associated helper)
+knows about one or more routing-tree descendent objects, and routes
+those requests itself.  All other nonlocal requests are sent to a
+parent object that might either be the recipient, or might know which
+of its tree descendents to send the message to, or failing these might
+forward to <em> its</em> parent.  Various redundancies (e.g., secondary
+forwarders) may be built into this framework to protect against
+failures.  The general idea of structured distributed OO routing is
+sometimes called <em> cooperative dispatching</em>. Systems developed in
+such a way are sometimes termed <em> federated</em> architectures.  The
+history of network design suggests that as OO systems grow ever bigger
+and more distributed, such designs will remain among the few tractable
+options.  Even though they possess increased complexity and dynamic
+overhead, they scale quite well.
+<P>
+<H4><A NAME=SECTION00032050000000000000> Mixtures.</A></H4>
+<P>
+Aspects of these strategies may be combined. For example, a system
+might use point-to-point schemes for most messages, while also
+employing broadcast or restricted broadcast for others.  These
+decisions might be based in part on physical system issues including
+communication hardware support and its reliability.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00040000000000000000> Summary</A></H2></center>
+<P>
+Controlling actions by reference to class membership is central to OO
+dispatching rules.  Overriding operations abstractly and/or concretely
+defined in superclasses provides a means for specializing behaviors
+that correspond to the special properties of a subclass.  Similarly,
+defining multiple versions of scripted operations on the basis of the
+class membership of their participants is a way of specializing
+coordinated actions to deal with special kinds of participants.
+Without these, extensibility, polymorphism, generality, and the
+concomitant ability to specialize would be lost.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Further Reading</A></H2>
+<P>
+Many of the readings noted in Chapter <A NAME=tex2html55 HREF="ch7.html">7</A> include
+discussions of polymorphism and dispatching.  Argument-based
+dispatching was pioneered in <i> CLOS</i> [<A HREF="#clos">2</A>] and its
+precursors; see also Shrefl and Keppel [<A HREF="#shrefl">6</A>]. Simulation of
+multiple dispatch was first described by Ingalls [<A HREF="#ingalls">4</A>].
+General routing and communication topologies are discussed in many
+texts, including Bertsekas and Gallager [<A HREF="#bertsekas">1</A>].
+<P>
+<H2><A NAME=SECTION00042000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Operation overriding is often used extensively in design, but not
+        in analysis. Why is this so?
+<P>
+  <LI> Some people think that <em> obj</em> <tt> in</tt> <em> class</em> is an evil construct
+        that should not even be present in OO design and
+        programming systems. Give one argument pro and one con.
+<P>
+  <LI> Why is multiple versioning considered to be a better design
+        practice than the use of type tests, even though they
+        can be used to equivalent effect?
+<P>
+  <LI> Explain how to reduce triple dispatching to double dispatching.
+<P>
+  <LI> What is wrong with declaring<BR>
+<tt> class Comparable fn lessThan(other: Comparable): bool; end</tt><BR>
+        and using it as a basis for defining <tt> ORDERED_SET</tt>s?
+<P>
+  <LI> Given the fact that relays and name servers of any form
+        can be built, why are typed object routing mechanisms still
+        useful?
+<P>
+</OL>
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=bertsekas><STRONG>1</STRONG></A><DD>
+D. Bertsekas and R. Gallager.
+ <em> Data Networks</em>.
+ Prentice Hall, 1987.
+<P>
+<DT><A NAME=clos><STRONG>2</STRONG></A><DD>
+D. Bobrow, L. DeMichel, R. Gabriel, S. Keene, G. Kiczales, and D. Moon.
+ Common lisp object system specification.
+ <em> SIGPLAN Notices</em>, September 1988.
+<P>
+<DT><A NAME=smalltalk><STRONG>3</STRONG></A><DD>
+A. Goldberg.
+ <em> Smalltalk 80: The Interactive Programming Environment</em>.
+ Addison-Wesley, 1984.
+<P>
+<DT><A NAME=ingalls><STRONG>4</STRONG></A><DD>
+D. Ingalls.
+ A simple technique for handling multiple dispatch.
+ In <em> OOPSLA '86</em>. ACM, 1986.
+<P>
+<DT><A NAME=emerald><STRONG>5</STRONG></A><DD>
+R. Raj, E. Tempero, H. Levy, A. Black, N. Hutchinson, and E. Jul.
+ Emerald: A general purpose programming language.
+ <em> Software -- Practice and Experience</em>, 1991.
+<P>
+<DT><A NAME=shrefl><STRONG>6</STRONG></A><DD>
+J. Shrefl and G. Keppel.
+ Cooperation contracts.
+ In <em> 10th International Conference on the Entity-Relational
+  Approach</em>. Springer-Verlag, 1991.
+</DL>
+<P>
+
+<a href="ch22.html">Next: Chapter 22</a>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:59:53 EDT 1995</I>
+</ADDRESS>
+</BODY>

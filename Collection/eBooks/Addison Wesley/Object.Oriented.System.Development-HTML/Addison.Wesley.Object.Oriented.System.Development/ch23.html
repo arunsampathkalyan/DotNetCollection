@@ -1,0 +1,1243 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Clustering Objects</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Clustering Objects">
+<meta name="keywords" value="ch23">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 23: Clustering Objects</h2>
+<UL>
+<LI> <A NAME=tex2html106 HREF="#SECTION00010000000000000000"> Clustering</A>
+<LI> <A NAME=tex2html107 HREF="#SECTION00020000000000000000"> Cluster Objects</A>
+<LI> <A NAME=tex2html108 HREF="#SECTION00030000000000000000"> System Tools and Services</A>
+<LI> <A NAME=tex2html109 HREF="#SECTION00040000000000000000"> Persistence</A>
+<LI> <A NAME=tex2html110 HREF="#SECTION00050000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+<P>
+<A NAME=9>&#160;</A><A NAME=10>&#160;</A><A NAME=11>&#160;</A>
+<A NAME=12>&#160;</A>
+<A NAME=13>&#160;</A>
+<P>
+Most OO systems are implemented using a relatively small number of
+coarse-grained machine  processes, or <em> clusters</em>, each
+containing a usually large number of ``smaller'' objects.  Unless you
+are operating in an ideal automated OO systems development
+environment, the clustering of objects into processes is one of the
+main tasks of OO system design.
+<P>
+Clustering is a ``packing'' problem. A large number of ``logical''
+objects must be embedded into a smaller number of ``physical''
+objects. Each of these physical objects has the form of a standard
+system <em> process</em>, as supported by contemporary operating systems.
+Each process also serves as an interpreter in the sense of
+Chapter <A NAME=tex2html8 HREF="ch15.html">15</A>, simulating the actions of its ``passivized''
+components.
+<P>
+In this chapter, we discuss strategies for clustering objects and
+basic properties of the system infrastructure needed to support them.
+In the next chapter, we focus on techniques for transforming the
+resulting embedded objects into passive form.
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Clustering</A></H2></center>
+<P>
+<A NAME=19>&#160;</A>
+<P>
+It is possible to place strict <em> optimality</em> criteria on clustering
+strategies. On pure efficiency grounds, objects should be clustered
+to achieve the highest possible performance. However, this is a
+thoroughly useless guideline. Even if you did know the exact CPU and
+storage requirements of each object in a system, all object lifetimes,
+the exact communication times for all messages, and the exact resource
+capacities of all clusters, assigning them optimally is still an <em>
+NP-complete</em> ``bin-packing'' problem (see [<A HREF="#garey">7</A>]). This means
+that all known algorithms for solving the problem are infeasibly time
+consuming.
+<P>
+Thus, clustering <em> must</em> be performed using heuristic approaches
+that provide acceptable solutions.  For example, the <em> exact</em>
+number of objects generated during the lifetime of a system is usually
+unknowable. But the number of ``big'' or ``important'' objects is
+almost always at least approximately known, and suffices for
+clustering.  Also, even if efficiency-based clustering could be made
+algorithmic, performance should not be the only criterion.
+Performance must be balanced against other design factors, such as
+maintainability, that argue for the use of functional and structural
+criteria in addition to resource concerns.
+<P>
+As is true for most decomposition problems, the most natural approach
+to clustering is top-down.  First of all, the entire system may be
+considered as one big cluster, operating in the manner described by
+the kernel in Chapter <A NAME=tex2html10 HREF="ch15.html">15</A>.  From there, major objects and
+groups of objects may be partitioned off using any agreed-on criteria.
+The process may then be repeated on these clusters until all resources
+are accounted for.  These steps must also be applied to top-level <tt>
+System</tt> operations.  However, rather than providing an explicit
+central or subdivided <tt> System</tt> object, these services may be
+replicated in each process requiring them.  Only those top-level
+operations actually invoked in each cluster need be supported.
+<P>
+Generally, system designs are most understandable, maintainable, and
+extensible when cluster groupings correspond to structural and/or
+functional groupings. From the opposite point of view, attempts to
+cluster objects based purely via resource criteria sometimes reveal
+opportunities to refactor classes in conceptually meaningful ways. It
+is worth attempting to rationalize clusters retrospectively in this
+way, just to improve human factors and reduce complexity.  Several
+idioms described in previous chapters (e.g., master-slave) may apply.
+<P>
+Most machines and operating systems allow for multiple processes. In
+these cases, several clusters may be assigned to the same machine.
+This may (or may not) slightly degrade performance, but allows
+conceptually meaningful partitioning criteria to be applied in a much
+larger number of cases. Reasonable choices about the number and size
+of cluster processes per machine depend on the underlying efficiency
+of operating system scheduling and interprocess communication
+mechanisms.
+<P>
+Because clustering remains something of a black art, it is very
+convenient to use a prototyping tool to assist in the evaluation of
+clusterings. The interpreter outlined in Chapter <A NAME=tex2html11 HREF="ch15.html">15</A> may
+be extended to become a classic simulator by adding simulated
+communication delays for messages across tentative clusters.
+<P>
+<H2><A NAME=SECTION00011000000000000000> Criteria</A></H2>
+<P>
+<A NAME=32>&#160;</A>
+<P>
+Many possible overlapping and/or incompatible criteria may be
+established. We list some here just to demonstrate the range of
+options.
+<P>
+<DL ><DT><b> Forced:</b>
+<DD> Identify processes with objects as mandated in
+        non-functional requirements documents.
+  <DT><b> Functional:</b>
+<DD> Identify processes with coarse-grained
+        objects identified in analysis, especially ensembles.
+  <DT><b> Structural:</b>
+<DD> Identify processes with objects that are
+        easy to isolate. For example, transaction loggers and
+        other ``message sinks'' consume events generated by a
+        large number of other objects without communicating back to
+        them.
+  <DT><b> Compute-Based:</b>
+<DD> Place any two objects that ever
+        require substantial amounts of computation time
+        simultaneously in different clusters.
+  <DT><b> Service-based:</b>
+<DD> Isolate objects that perform well-known,
+        generic services in their own processes.
+  <DT><b> Visibility-based:</b>
+<DD> When systems constraints preclude full
+        object communication, some objects (e.g., relays) should be housed in
+        distinct processes to facilitate communication.
+  <DT><b> Task-based:</b>
+<DD> Combine all of those objects involved
+        in particular single-threaded tasks in a cluster.
+  <DT><b> Class-based:</b>
+<DD> Allocate all objects of particular concrete
+        classes to the same cluster.
+  <DT><b> Collection-based:</b>
+<DD> Allocate all objects that may be
+        members of the same collection object to the same cluster.
+  <DT><b> Link-based:</b>
+<DD> Partition clusters so that as many as
+        possible object
+        links point to objects residing in the same cluster.
+        This avoids <em> fragmentation</em>, in which objects include some
+        components situated in one cluster and some in another.
+  <DT><b> Communication-based:</b>
+<DD> Allocate heavily interacting
+        objects to the same cluster.
+  <DT><b> Performance-based:</b>
+<DD> Allocate slow objects to processes
+        residing on fast computers.
+  <DT><b> Machine-based:</b>
+<DD> Allocate objects that could exploit
+        special machine characteristics to processes on those
+        machines.
+  <DT><b> One-Per-Machine:</b>
+<DD> Machines and systems that do not
+        easily support multiprocessing should be assigned only
+        one cluster process.
+  <DT><b> Device-based:</b>
+<DD> Allocate objects that directly
+        communicate with special devices to processes on the
+        corresponding computers.
+  <DT><b> Recovery-based:</b>
+<DD> Isolate failure-prone objects
+        (e.g., those interacting with unreliable hardware) in
+        their own processes to facilitate restarts, etc.
+  <DT><b> Maintenance-based:</b>
+<DD> Isolate objects of classes that
+        are most likely to change in the future.
+<P>
+ </DL><H3><A NAME=SECTION00011100000000000000> Splitting Objects</A></H3>
+<P>
+An opposite problem may occur when objects are ``too big'' to fit into
+a cluster. In this case, the class needs to be further decomposed.
+This is not usually an issue in compositionally designed systems.
+<P>
+<H3><A NAME=SECTION00011200000000000000> Cluster Clusters</A></H3>
+<P>
+After a first-level pass at clustering, the individual clusters may
+themselves be clustered, in a different sense. Groups of heavily
+intercommunicating clusters may be targeted for placement on one or
+more machines with fast interprocess communication facilities. For
+example, if a system resides on several high-speed local area networks
+(LANs), which are in turn connected by slow modem connections, then
+clusters should be situated accordingly.  Wide-area (long-haul)
+communication is substantially slower and less reliable than LAN
+communication, which is in turn slower and less reliable than
+communication across processes residing on the same machine.
+<P>
+<H3><A NAME=SECTION00011300000000000000> Dynamic Clustering</A></H3>
+<P>
+When resources are not fixed and additional processes may be
+created dynamically during system execution, clustering may be
+equally dynamic.  Except in special cases, this is hard to achieve.
+Tractable situations are often limited to those in which the
+creation of objects of certain classes is always performed by
+generating a new process.
+<P>
+<H3><A NAME=SECTION00011400000000000000> Migration</A></H3>
+<P>
+<A NAME=57>&#160;</A>
+Even though clusters are designed around the management of particular
+sets of objects, in many cases it is sensible and desirable to <em>
+migrate</em> an object from one cluster to another.  While conceptually
+straightforward, this is fraught with implementation difficulties,
+including synchronization problems and inter-cluster coordination of
+storage management. It is an option only if system infrastructure
+services are available to manage this.
+<P>
+<H3><A NAME=SECTION00011500000000000000> Redundancy</A></H3>
+<P>
+<A NAME=60>&#160;</A><A NAME=61>&#160;</A>
+A more common and less intimidating variant of migration is object <em>
+redundancy</em>. Clones of objects may reside in multiple clusters.  When
+these objects are stateless, or just immutable for the duration of
+their duplicate existences, this is easy to arrange. When the objects
+are mutable, additional support is required to maintain full
+consistency across copies. This is a very special form of constraint
+management, in which all changes in one version must transparently
+trigger changes in the other (see Chapter <A NAME=tex2html16 HREF="ch22.html">22</A>).  Redundancy
+is also a means for achieving greater system reliability.  Entire
+clusters may be redundantly implemented.
+<P>
+<H3><A NAME=SECTION00011600000000000000> Other Mapping Strategies</A></H3>
+<P>
+In some systems, it may be necessary or preferable to avoid the notion
+of static clusters all together.  System-level processes may be able
+to represent and execute code for different design-level objects at
+different times. Other mediator objects must route requests to the
+currently appropriate process.  This is an extreme form of dynamic
+clustering and migration.  For example, the states of objects may be
+centrally held on persistent media, and reconstructed in suitable
+processes when needed.  Systems composed under these assumptions
+differ in numerous small ways from those adhering to the
+better-supported models that we will focus on in the remainder of this
+chapter. Conceptually straightforward but implementation-intensive
+adaptations are necessary to support an extra level of indirection in
+the mapping from objects and clusters to processes.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Examples</A></H2>
+<P>
+Clustering is usually much easier than our remarks might suggest.
+Many of the criteria amount to the application of a bit of common sense.
+<P>
+For example, the system described in Chapter <A NAME=tex2html17 HREF="ch10.html">10</A>
+declared <tt> ATM</tt> and <tt> Bank</tt> as highest level subsystems.
+Assuming there is at least one processor per physical ATM, then device
+and communications criteria lead to one <tt> ATM</tt> object per ATM
+station.  If there were more than one processor or process available
+per ATM station, reliability criteria then argue for isolation of
+individual device-based control systems, <tt> CardControl</tt> and
+<tt> DispenserControl</tt>. From there, visibility criteria lead to
+isolation of the communications interface with the <tt> Bank</tt>.
+<P>
+The <tt> Bank</tt> subsystem might be housed on a single powerful
+computer, or spread out over many computers depending, of course, on
+the configuration.  Even if it were on a single computer it would
+still be wise to use other criteria to place objects in multiple
+processes. Structural and service criteria suggest splitting off time
+based services, perhaps as centralized into a time daemon.  If a
+nonintegrated database is being used for persistent management of
+<tt> Account</tt>s, <tt> Client</tt>s, etc., then reliability, maintenance,
+and communication criteria argue for isolating the database interface
+veneer objects as processes.
+<P>
+If the <tt> Bank</tt> is physically distributable, then communications
+performance and visibility criteria lead to separation of processes
+that communicate with the <tt> ATM</tt> objects.  If, instead of a foreign
+database, extensive use is made of large collections (possibly
+themselves supporting persistence), these may be split into
+master-slave configurations. The most important ones (e.g., <tt>
+ActiveAccount</tt>s) may be supported redundantly through shadowed
+multiple clusters. Associated <tt> LockMgr</tt>s and the like may also be
+isolated in processes.  Other objects responsible for control logic
+(e.g., billing) may be split off from there, until all resources are
+accounted for.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00020000000000000000> Cluster Objects</A></H2></center>
+<P>
+<A NAME=83>&#160;</A>
+The basic technique for packing objects into clusters is to have each
+cluster object subsume responsibility for construction, maintenance,
+dispatching, and execution of held objects and operations.  Each of
+the component objects must ultimately be ``passivized'', as described
+in Chapter <A NAME=tex2html19 HREF="ch24.html">24</A>.  In principle, cluster objects are just
+big artificial ensemble objects.  Thus, clusters are objects with
+many, many <tt> own</tt> components that happen to be physically embedded
+within a common ``address space''. For much of Part II, we have
+downplayed premature commitment to representational embedding, in part
+to facilitate mappings into clusters.
+<P>
+<A NAME=87>&#160;</A><A NAME=88>&#160;</A>
+These designs may be expressed in <i> ODL</i> using the attribute
+qualifier <tt> packed</tt>, that denotes physical embedding requirements
+of a passive stored component inside another object.  Sometimes, this
+is all that is necessary to define the resulting cluster structure.
+For a too-simple example, a <tt> LampV1</tt>
+(Chapter <A NAME=tex2html22 HREF="ch16.html">16</A>) that is isolated in its own cluster
+may embed its <tt> Bool</tt> switch component via:
+<P>
+<PRE>class LampV1C is LampV1 ...
+  packed switch: Bool &lt;&gt;
+end
+</PRE>
+<P>
+In the resulting configuration, each cluster protects components
+through a well-defined interface.  All intercluster communication must
+pass through cluster interfaces.  The system as a whole may be
+designed and viewed in terms of a relatively small number of possible
+interactions between very large-grained objects.  In practice,
+clustering usually carries additional constraints, including:
+<P>
+<DL ><DT><b> Impermeability:</b>
+<DD> Objects residing within different clusters may
+        not be able to communicate directly, or even know of one
+        another's existence.
+  <DT><b> Restricted Messages:</b>
+<DD> All intercluster communication is
+        to be directed to the clusters themselves, not inner components.
+        Further, these messages may need to be transformed into
+        different formats and protocols.
+  <DT><b> Persistence:</b>
+<DD> Because processes are volatile, some or all
+        component objects may be redundantly represented on persistent
+        media.
+  <DT><b> Resource Management:</b>
+<DD> Clusters may be responsible for keeping
+        track of component objects and their storage and computational
+        requirements.
+  <DT><b> System Chores:</b>
+<DD> Clusters may need to play roles in keeping
+        track of other clusters, detecting deadlock, restarting
+        processes, and other bookkeeping.
+<P>
+ </DL><H2><A NAME=SECTION00021000000000000000> Cluster Interfaces</A></H2>
+<P>
+<A NAME=103>&#160;</A><A NAME=104>&#160;</A>
+The interface of each cluster consists of the set of reachable
+operations on its inner objects.  The nicest cases occur when a
+cluster holds a single reachable object.  If this is the case, then
+the cluster agent interface is the same as that object. Otherwise, the
+interface must be crafted to support a composite of operations.
+Cluster interfaces, like all others, need to be meaningful and
+understandable. This provides an additional reason to perform
+clustering using structural and functional criteria when possible.
+<P>
+A common technique for representing the interfaces of other clusters
+inside their clients is through <em> proxies</em> (stubs).
+Proxy classes are among the most trivial kinds of wrappers.  They
+generate cluster-local objects with interfaces identical to those of
+nonlocal objects (i.e., other clusters).  All within-cluster messages
+consist only of local invocations of operations on these proxies, which in
+turn forward them to other clusters via interprocess communication
+facilities.<A NAME=106>&#160;</A>
+<P>
+<H2><A NAME=SECTION00022000000000000000> Interfaces to External Software</A></H2>
+<P>
+<A NAME=108>&#160;</A>
+Process-level objects may need to communicate with software entities
+in addition to those represented by other clusters.  Most systems
+interact with other existing software. This software is most commonly
+non-object-oriented. However, it is still possible to provide
+object-oriented veneers with respect to desired interactions with the
+system being designed.
+<P>
+Among the purest applications of abstract class design is interface
+design for <em> foreign</em> software objects that will not even be
+implemented as part of the target system, but must be used just as
+they are currently implemented.  This may be approached through pure
+black-box techniques.  As far as abstract declarations are concerned,
+there is little difference between an external component and something
+that must be implemented. The only problem is that the way in
+which its functionality is defined and implemented is normally fixed
+and beyond a designer's control.
+<P>
+<H3><A NAME=SECTION00022100000000000000> Veneers</A></H3>
+<P>
+<A NAME=111>&#160;</A>
+Interactions between any external component and the system at hand
+always need to be mediated by a layer of internal processing that
+<em> is</em> controllable, as long as it has the right properties when
+seen from the external component's point of view. Thus, internal <em>
+veneer</em> classes may be defined via standard constructs, and concrete
+classes may put together the necessary connections.  For example, the
+application might interact with a native file system in ways described by
+classes including:<A NAME=114>&#160;</A>
+<P>
+<PRE>class File ...
+  op write(c: char) ...;
+end
+class Directory is File ... end
+</PRE>
+<P>
+Effects, constraints, and the like can still be described, but
+the actual composition and computation cannot be determined without
+committing to a particular programming language, operating system,
+etc.
+<P>
+These techniques are especially useful for isolating common
+utility services, which may then be specialized for particular
+machines, operating systems, and configurations.  In particular, a
+hierarchy of abstract classes can describe particular operating system
+functions, and a set of concrete classes can be defined to encapsulate
+system-dependent functionality. For example:
+<P>
+<PRE>class OpSystemInterface ... end
+
+class MC68000UnixSysInterface is OpSystemInterface ... end
+</PRE>
+<P>
+Atkinson [<A HREF="#atkinson">1</A>] provides a more detailed account of
+strategies for designing heterogeneous interface classes using the
+<i> Ada</i> OO shell language <i> DRAGOON</i>. Most of the ideas may be
+applied to interface design in general.  Similar design steps may be
+necessary to deal with heterogeneous foreign subsystems with which the
+system may communicate.
+<P>
+<H3><A NAME=SECTION00022200000000000000> Legacies</A></H3>
+<P>
+<A NAME=119>&#160;</A>
+The same basic strategies hold for designing-in old non-OO software
+that may be at least partially <em> converted</em> to become a component
+of the current system.  In such cases, the front end of this software
+may be first encapsulated as a set of class interfaces, along with a
+bit of internal processing to link internal and external views and
+conventions.  Perhaps over time, internals of the legacy may be
+``objectified'' layer by layer, as far as necessary or desirable.
+<P>
+The most common general form of foreign interface layering is a set of
+classes that encapsulates arguments, global variables, and other
+data used in foreign functions as class components, along with relay
+operations that gather arguments together as necessary to submit to the
+external components.
+<P>
+For example, if a foreign <tt> fileOpen</tt> procedure required file
+names, directories, and access modes as arguments, and returned
+success or failure on completion, the interface <tt> File</tt> class might
+have <tt> name, dirname, mode, isOpen</tt> attributes, along with an
+argumentless <tt> open</tt> operation which sends the right arguments
+(perhaps after some data format conversion) to the <tt> fileOpen</tt>
+procedure and records the results.
+<P>
+A second layer of conversion might then replace <tt> fileOpen</tt> by
+directly incorporating its functionality in <tt> open(File)</tt> and/or
+other components. This strategy could be continued down to the level
+of operating system file handling primitives, surely using subclassing
+to manage the different ways of doing things across different
+operating systems and computers:
+<P>
+<PRE>class UnixFile is File ...
+   op write(c: char) ...;
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION00023000000000000000> Clusters and Object Identity</A></H2>
+<P>
+<A NAME=129>&#160;</A><A NAME=130>&#160;</A>
+Clustering may lead to <em> overencapsulated</em> objects. Embedded
+objects cannot always communicate in the manner in which they were
+originally designed. Previously visible objects become hidden within
+clusters.  This is <em> not</em> all bad. The inability of foreign objects
+to exploit internal identities improves security and provides
+effortless enforcement of <tt> local</tt>/non-<tt> local</tt> distinctions.
+However, when communication is required, it must be supported.
+<P>
+<A NAME=135>&#160;</A>
+Communication via object identities need not be a problem.  In a
+single-process design, object identity is implemented by
+ultimately (perhaps through several layers) associating identities
+with <em> addresses</em> of some kind or another.  Similarly, operation and
+class identities are mapped into code and bookkeeping table addresses
+or surrogates.  But any object that is visible <em> across</em> clusters
+(including dedicated persistent data managers, if employed) must
+have an identity that holds outside of the current process.
+<P>
+Process boundaries do not always correspond to near versus far
+identities. On systems with <em> lightweight processes</em> (LWPs),
+different processes may share address spaces. This greatly simplifies
+mappings and transformations.  But lightweight processes are only
+useful for clusters decomposed for functional reasons. Except on
+shared-memory multiprocessors, LWPs share a CPU, and thus are hardly
+ever useful for supporting clusters divided for resource
+reasons.<A NAME=139>&#160;</A><A NAME=140>&#160;</A> Operating
+systems and hardware technology may someday solve such problems on a
+wider scale.  For example, computers with 64-bit addresses might hold
+near or far identities using the same internal representations.
+Object-oriented operating systems may someday help automate address
+mappings and translations.
+<P>
+You cannot currently depend on a system to reliably support
+system-wide identity mappings.  However, the representation and
+management of system-wide identities may be among the services offered
+by object-oriented databases and other object management systems.
+There are few reasons for not relying on such services when putting
+together a system in which object identities may be passed between
+clusters.
+<P>
+Unless using a system enabling the common representation of both
+clusters and embedded objects, cluster interfaces should minimize or
+eliminate operations that somehow refer to the identities of embedded
+objects. However, this is not always possible.  When external objects
+send messages originally meant to be received by objects that have
+been embedded in a cluster, they must first discover which cluster to
+send a message to, and then send some kind of subidentifier as an
+argument in the cluster-level message.  The recipient cluster must
+then somehow decode this and then emulate the desired processing.
+<P>
+<A NAME=141>&#160;</A><A NAME=142>&#160;</A>
+There are many ways to form such internal identities and resulting
+``fat pointer'' tuples of (<em> clusterID</em>, <em> localID</em>) needed to
+identify internal objects uniquely. Ready-made formats may be
+available through tools and services. Other choices range from simple
+unprotected (<em> MachineID</em>, <em> processID</em>, <em> virtualAddress</em>)
+tuples to <em> port</em><A NAME=149>&#160;</A> constructs to securely mapped
+pseudo-IDs for both clusters and objects.  In any case, all external
+messages originally of the form:<BR>
+<tt> x.meth</tt><BR>
+must be converted into a form such as:<BR>
+<tt> x's-cluster.meth(x's-local-id)</tt>,<BR>
+which in turn is translated into the format required by the host language
+
+and interprocess communication tools.  As mentioned, <em> proxy</em>
+mechanisms make this substantially easier by localizing and hiding at
+least parts of these conversions.
+<P>
+Even in 100% OO system environments, these measures cannot normally
+solve the problem of dealing with <em> all</em> foreign objects that a
+system may deal with. Different OO services may employ different ID
+representations and conventions. IDs received from nonconforming
+foreign systems must be used in a pure black-box fashion. For example,
+it may be impossible even to perform identity tests among two foreign
+IDs to see if they refer to the same object. Two IDs that compare as
+equal may not actually refer to the same object if they were generated
+by two different foreign systems. Two that compare as different may
+reflect different encodings of IDs referring to the same object.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00030000000000000000> System Tools and Services</A></H2></center>
+<P>
+<A NAME=157>&#160;</A>
+<P>
+The overall physical architecture of a system may depend in part on
+requirements-level constraints, but more commonly depends on the
+availability of system-level tools and services.  Points on this space
+include the following.
+<P>
+<H4><A NAME=SECTION00030010000000000000> Traditional.</A></H4>
+<P>
+Assuming that minimal interprocess communication services are
+available, designs can be mapped to the most common and traditional
+architectures and services using a fixed number of known processes,
+using impermeable cluster interfaces, only admitting interprocess
+messages directed at clusters, using hard-wired point-to-point
+interprocess message strategies, limiting interprocess message
+formats, and mapping persistence support to a non-OO database service.
+<P>
+<H4><A NAME=SECTION00030020000000000000> Brokered.</A></H4>
+<P>
+If a centralized interprocess message handling service is available,
+then some of these restrictions may be lifted.  Process interfaces may
+take a standard form, guided by tools that provide protocols for
+dealing with the service.  Processes may be dynamically constructed
+and register their interfaces.  All or some interprocess messages may
+be mediated by the broker service.  At least some transmission of
+object identities may be supported.
+<P>
+<H4><A NAME=SECTION00030030000000000000> OODB-based.</A></H4>
+<A NAME=161>&#160;</A><A NAME=162>&#160;</A>
+If an object-oriented database is employed (perhaps in addition to, or
+in cooperation with brokering), then full OO communication is likely
+to be supportable without significant design transformations.  OODBs
+also typically provide support for locking, caching, versioning,
+long-term checkin/checkout, crash recovery, security, heterogeneous
+data formats, transaction control, and other necessary and useful
+features of persistent storage management.
+<P>
+<H4><A NAME=SECTION00030040000000000000> Ideal.</A></H4>
+<P>
+An ideal OO support system would make most of this chapter irrelevant.
+Systems that provide infrastructure to automatically and transparently
+cluster, dispatch, maintain, and manage distributed objects appear to
+be within the realm of technical feasibility. But they do not exist
+outside of experimental projects as of this writing.<BR>
+<BR>
+<P>
+In the remainder of this section, we survey some basic considerations
+governing the ways in which processes may be constructed and managed.
+Even at coarse design levels, strategies are often bound to the use of
+particular tools and support systems that will be used in subsequent
+implementation.  We will restrict ourselves to general issues.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Process Shells</A></H2>
+<P>
+<A NAME=165>&#160;</A><A NAME=166>&#160;</A><A NAME=167>&#160;</A>
+<P>
+A layer of care-taking capabilities must underly clusters in order to
+deal with issues that escape the bounds of the virtual system
+constructed during class design.  One way to address these matters is
+to assume that clusters have an associated <em> shell</em>.  This shell is
+an interface of sorts between the virtual system and the operating
+system (or bare hardware) on which it resides.  As far as the virtual
+system is concerned, there might be one shell overseeing all clusters,
+one per cluster, or anything in between.  Shells are merely
+abstractions of low-level services.  There may not be any one software
+component that is identifiable as a <tt> shell</tt> object.  Instead, the
+required capabilities are most likely obtained through collections of
+language based run-time systems, operating system services and even
+hardware support.
+<P>
+Unless you are building an operating system, you cannot actually
+design a shell, but instead must learn to live with the peculiarities
+of existing capabilities.  The nature of common hardware and operating
+systems demands that shells be considered intrinsically interruptible.
+But they must deal with interruptions in a magical way, somehow saving
+and restoring state as necessary.  Shells are also privileged with the
+ability to interrupt, probe, stop, suspend, resume, and/or restart
+cluster objects, perhaps even if they are otherwise conceptually
+uninterruptible. Given this, we might define some of the capabilities
+of a generic shell:
+<P>
+<PRE>class Shell ...
+  own proc: Any;     % the cluster object
+  op start;          % (re)initialize proc
+  op shutdown;       % gracefully shutdown proc
+  op halt;           % immediately halt proc
+  op suspend;        % stop proc and save state
+  op resume;         % resume proc from last suspended state
+  op ping: Packet;   % tell sender whether proc is alive
+  op rcv(p: Packet); % decode message packet and send to proc
+end
+</PRE>
+<P>
+This is a pure black-box description.  All of these capabilities must
+be implemented through <em> magic</em>. Again, there will probably not be
+any single software object or service that implements this interface.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Process Control</A></H2>
+<P>
+<A NAME=172>&#160;</A><A NAME=173>&#160;</A><A NAME=174>&#160;</A>
+System-wide process control software resides one level below cluster
+shells.   A wide range of services may be available, spanning
+from none to all of the following:
+<UL><LI> process construction
+<LI> process deletion
+<LI> moving processes across processors
+<LI> replicating processes across machines
+<LI> shutting down processes while persistently saving their states
+<LI> restarting apparently dead processes
+<LI> authentication and access control facilities
+<LI> system-level fault tolerance support through redundant processes
+<LI> logging facilities for recording interprocess message traffic
+<LI> registries reporting the identities of system processes
+<LI> centralized catastrophic system error handlers
+<LI> determining the best machines on which to create new processes
+<LI> highly reliable messaging facilities
+<LI> probes for discovering whether processes are still alive
+<LI> probes for discovering how busy (loaded) particular machines are
+<LI> probes for determining routing information across processes
+<LI> probes for detecting deadlock and initiating recovery
+<LI> time-out and retry facilities for failed interprocess messages
+<LI> information sharing for coordinated intercluster storage management
+<LI> services to broadcast and/or synchronize <tt> time</tt> across processes
+</UL>
+<P>
+\
+<P>
+Design and implementation of a complete set of such services is
+tantamount to the construction of a distributed operating system.
+However, tools and services handling most tasks exist for most
+systems.  Small-scale process management can be performed by directly
+invoking relevant system services when necessary.  This may be
+approached by building classes and special-purpose tools that isolate
+the interfaces to such services.
+<P>
+<H2><A NAME=SECTION00033000000000000000> Interprocess Communication Support</A></H2>
+<P>
+<A NAME=179>&#160;</A><A NAME=180>&#160;</A><A NAME=181>&#160;</A>
+<P>
+Interprocess communications services minimally support
+pass-by-description style messages routed to their immediate
+recipients.  On heterogeneous systems, state values may be passed among
+processes using intermediaries that interconvert basic value type
+representation formats across machines.  This is normally accomplished
+with the help of tools and conventions that convert concrete value
+representations into canonical forms, <em> marshall</em> them into
+interprocess message packets, and decode them at the other end.
+<P>
+OO designs require services that support one-way point-to-point
+messages and/or synchronous bidirectional interprocess protocols.
+Other protocols may be layered on top of these, but only with
+substantial design effort and/or tool support.  Of course, the more
+protocols supported, the easier the implementation.  Standard remote
+procedure call (RPC), as well as RPC-with-time-out mechanisms are
+widely available.  These may or may not be integrated with special
+facilities for interacting with timers and I/O devices.<A NAME=183>&#160;</A>
+<P>
+<H3><A NAME=SECTION00033100000000000000> Proxies</A></H3>
+<A NAME=185>&#160;</A><A NAME=186>&#160;</A>
+Proxies are within-process objects that serve as local stand-ins for
+remote clusters.  Proxy classes are best generated by tools that
+accept descriptions of cluster interfaces, and simultaneously
+construct entities representing both the internal and external
+views.  The internal version is embedded only in the single process
+implementing the interface; all others get external versions.  If
+proxy <em> classes</em> cannot be generated automatically, non-OO tools
+that generate proxy <em> procedures</em> are usable after making some
+minor compromises and/or building corresponding veneers.
+<P>
+<H3><A NAME=SECTION00033200000000000000> Lightweight Processes</A></H3>
+<P>
+<A NAME=190>&#160;</A><A NAME=191>&#160;</A>
+<P>
+For clusters that are isolated for non-performance-based reasons,
+lightweight processes are a simpler alternative. Because LWPs share
+address spaces, there may be no need to use proxies for interprocess
+communication.  In the best case messages may be sent directly to
+the principal object(s) in other clusters.  However, for uniformity,
+lightweight process communication may still go through proxies that
+are specially implemented to take advantage of LWP communication
+optimizations.
+<P>
+<H3><A NAME=SECTION00033300000000000000> Topologies and Dispatching</A></H3>
+<P>
+<A NAME=193>&#160;</A><A NAME=194>&#160;</A>
+The basic rules by which cluster processes know of each other's
+existences and capabilities must be selected.  Interprocess
+communication topologies corresponding to the routing structures
+described in Chapter <A NAME=tex2html57 HREF="ch21.html">21</A> are supported to varying
+extents by contemporary software services, utilities, and management
+facilities.
+<P>
+<H2><A NAME=SECTION00034000000000000000>  CORBA</A></H2>
+<A NAME=198>&#160;</A>
+<A NAME=199>&#160;</A>
+The <i> OMG</i> Common Object Request Broker Architecture [<A HREF="#corba">8</A>]
+is an example of a system-level framework assisting in some of the
+design and implementation tasks described in this chapter. As of this
+writing, CORBA implementations are not widely available, but it is
+predicted to be among the most commonly employed services for OO
+systems in the near future. Also, because it is new, we have no
+significant first-hand experience with details. We will restrict
+ourselves to describing a few features that illustrate how <i> CORBA</i>
+supports distributed OO system design and corresponding
+programming tasks.
+<P>
+<A NAME=203>&#160;</A>
+The Object Request Broker (ORB) is a semicentralized brokering
+(dispatching) service that is generally structured as a <em> relay</em>.
+It is ``semicentralized'' in that accommodations are made for
+coordinating multiple brokers, but it may be treated as a central
+service by applications.
+<P>
+Process-level objects register their class interfaces with the ORB in
+order to receive messages from other objects.  Messages from clients
+are then relayed through the ORB to their recipients. Clients normally
+communicate with the ORB through proxies (or ``adaptors'') generated
+by <i> CORBA</i> tools geared to particular languages (including <i>
+C++</i><A NAME=207>&#160;</A>).  These in turn ordinarily invoke native
+interprocess communication services.  However, the <i> CORBA</i>
+specification includes provisions that make it possible to support
+efficient lightweight process communication and even within-process
+messaging.
+<P>
+<A NAME=209>&#160;</A>
+Class interfaces are specified using the Interface Definition Language
+(<i> IDL</i>).  <i> IDL</i> is similar in structure to the
+declarative aspects of <i> C++</i>.  Interfaces may be described as
+subclasses of others. The rules generally follow the same abstract
+subclassing conventions as <i> ODL</i>.  IDL supports approximately the
+same primitive types as <i> ODL</i>, but with the usual provisions for
+specific word sizes, different character sets, etc.  It also includes
+<i> C</i>-like unions, enumerations, and structures.  A process-level
+object reference (ID) type is defined and used to support OO messaging
+conventions of point-to-point messages with copy-in/copy-out or
+process-object-reference arguments and results.  Object references
+have pure black-box semantics.  Reference identity tests are not
+explicitly supported. They may be hand-crafted for the ID
+representations used in any given system.
+<P>
+Two kinds of operations may be declared.  Operations marked as <tt> oneway</tt>
+correspond to <i> ODL</i> one-way <tt> op</tt>s. Others are defined as
+RPC-style blocking <tt> op</tt>s that may be declared to raise any
+number of named, structured, exceptions.  Simple <tt> set/get</tt>
+procedures are automatically generated for IDL <tt> attribute</tt>
+declarations.  Only <tt> get</tt>s are generated for <tt> readonly
+attribute</tt>s.  These map well to stored <i> ODL</i> <tt> fn</tt>s.  For
+example, a process that maintains a simple buffer of integers may be
+defined in <i> IDL</i> as:<A NAME=227>&#160;</A>
+<P>
+
+<P>
+<PRE>interface Buffer
+{
+  readonly attribute boolean empty;
+  readonly attribute boolean full;
+  oneway   put(long item);
+  long     take();
+};
+</PRE>
+<P>
+<i> IDL</i> is, by design, ``weaker'' than notations such as <i> ODL</i>.
+It is not computationally complete. It is used to generate proxies and
+related structures that are then bound to code written in other
+languages. At the declarative level, it does not contain detailed
+semantic annotations such as invariants, effects, and triggering
+conditions. It does not allow declaration of internal (<tt> local</tt>)
+structure, the existence of links to other objects, or constraints
+among such objects. When translating <i> ODL</i>, classes that share the
+same interface but differ across such dimensions may be treated as
+variant instances of the same interface class. Conversely, one
+process-level <i> ODL</i> object may be defined to support multiple
+interfaces in <i> IDL</i>.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00040000000000000000> Persistence</A></H2></center>
+<P>
+<A NAME=235>&#160;</A><A NAME=236>&#160;</A><A NAME=237>&#160;</A>
+Rather than individually listing <tt> packed</tt> components, clusters may
+be described as containing one or more <em> repositories</em> that in turn
+hold all passive within-cluster objects.  Recall from
+Chapter <A NAME=tex2html67 HREF="ch18.html">18</A> that repositories are objects that both
+generate and track objects.  Repositories form natural venues for
+managing the storage requirements of component objects in a cluster.
+In the next chapter, we describe <em> internal</em> storage management
+techniques in which a repository or other agent tracks lifetimes of
+embedded cluster objects.  Here we discuss situations where managed
+objects must live on even when a cluster and its repository (or
+repositories) are killed, suspended, and/or restarted. In these cases,
+objects must be maintained persistently.
+<P>
+Our <em> design</em> attitude about persistence is a little backward from
+some others.  We consider the ``real'' objects to be active.
+Persistent media merely hold snapshots of state information needed to
+reinitialize or reconstruct functionally identical objects in case the
+current ones somehow fail or must be made dormant. This is in
+opposition to the database-centric view that the ``real data'' live in
+a database, and are transiently operated on by a database manager and
+other programs.
+<P>
+The interaction between any given object and its persistent
+representation is a form of constraint dependence.  State changes must
+be mirrored on persistent media.  This can be simplified by
+standardizing on a simple get/set protocol for interacting with the
+persistent representation. This meshes well with most database update
+facilities.
+<A NAME=244>&#160;</A><A NAME=245>&#160;</A><A NAME=246>&#160;</A>
+<P>
+There are several options.  Objects may send update messages to
+persistence managers themselves whenever they change state, or only at
+selected intervals.  Alternatively, repositories or other agents may
+intercept messages and forward them both to the internal objects as
+well as to caretakers that perform the associated updates on the
+shadow database representations.  These may be further combined with
+locking mechanisms, replication, failure detection, and related
+control strategies.  For example, updates need not be directly
+shadowed if it is OK to employ a locking check-out/check-in protocol
+in which objects are constructed from their persistent
+representations, exclusively operated on, and then later checked back
+in by transferring their states back to the database.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Saving and Restoring Objects</A></H2>
+<P>
+<A NAME=248>&#160;</A><A NAME=249>&#160;</A>
+The simplest form of persistence is a save/restore mechanism.  A
+repository may support <tt> save(f:File)</tt> and <tt> restore(f:File)</tt>
+operations to read and write all held objects to a file. These may be
+triggered automatically by timers or other events (for saving) and
+re-initialization or error recovery routines (for restoring).  They may
+be buttressed with history log files that keep track of changes to
+objects between saves.  Because of their complexity and limitations,
+<em> ad hoc</em> save/restore strategies are limited to occasional,
+small-scale use.
+<P>
+<H4><A NAME=SECTION00041010000000000000> Dealing with links.</A></H4>
+<P>
+Persistent storage formats may be based on the description <tt>
+record</tt>s discussed in Chapter <A NAME=tex2html73 HREF="ch17.html">17</A>.  Saving and restoring
+objects that are fully describable through attribute description
+records is relatively straightforward.  However, relational and
+composite objects are visibly dependent on links to other objects that
+must be maintained across saves and restores.
+<P>
+<A NAME=257>&#160;</A><A NAME=258>&#160;</A><A NAME=259>&#160;</A>
+The mechanics of saving and restoring such objects interact in the
+usual ways with object identity.  The only thing that can be saved to
+a file is a <em> description</em> of an object, not an active object itself.
+Upon restoration, the description may be converted to a <em> new</em>
+object with the same state but possibly a different identity. The
+repository must shield the rest of the system from such philosophical
+dilemmas, perhaps using variants of pseudo-identities and  smart
+links discussed in Chapters <A NAME=tex2html77 HREF="ch18.html">18</A> and <A NAME=tex2html78 HREF="ch22.html">22</A>.  A
+<tt> TABLE</tt> may be constructed to provide an integer (or whatever)
+pseudo-ID for each saved object. Links may then be output using
+pseudo-ID equivalents.  During restoration, the table may be
+dynamically reconstructed, but with pseudo-IDs mapped (or
+``swizzled'') to the new internal
+equivalents.<A NAME=267>&#160;</A><A NAME=268>&#160;</A>
+<P>
+<H4><A NAME=SECTION00041020000000000000> Persistent object stores.</A></H4>
+<A NAME=270>&#160;</A><A NAME=271>&#160;</A>
+Tools exist to simplify and extend basic persistence support.  As
+noted in Chapter <A NAME=tex2html83 HREF="ch22.html">22</A>, <i> Kala</i> provides persistence
+mechanisms specifically geared to OO systems. Conceptually, it uses a
+<em> write once</em> strategy in which each desired state (or version) of
+each object may be persistently stored and recovered. Inaccessible
+versions are garbage collected.  Related access, locking, and
+transaction control services are also provided.
+<P>
+<H4><A NAME=SECTION00041030000000000000> Reifying classes.</A></H4>
+<A NAME=277>&#160;</A><A NAME=278>&#160;</A><A NAME=279>&#160;</A>
+Persistence support requires that <em> class</em> descriptions be
+represented persistently. A hunk of bits representing an object on
+disk does you no good unless you know its class type in a form that
+allows interpretation and reconstruction of the object. Thus,
+representational conventions must be established for describing
+attributes, operations, messages, and so on, as briefly described in
+Chapter <A NAME=tex2html87 HREF="ch18.html">18</A>. However, these must be extended to deal
+with concrete code bodies if they are not already part of the
+executable image.  Binary executable code implementations may differ
+across hardware architectures.  The support mechanics are not only
+target language dependent but also machine dependent.
+<P>
+<A NAME=283>&#160;</A>
+<H4><A NAME=SECTION00041040000000000000> Evolution and versioning.</A></H4>
+<A NAME=285>&#160;</A><A NAME=286>&#160;</A>
+Among the most difficult issues in persistent object management of any
+form is <em> schema evolution</em>: What do you do when someone changes
+the definition of a class?  The basic OO paradigm nicely supports
+restructurings, refinements and other improvements to classes
+throughout the software development, maintenance, and evolution
+process.  However, when classes describing persistently managed
+objects are modified, it can be difficult to cope with all of the
+resulting system problems. These are not limited to the need to
+redesign and/or reimplement persistent support structures.  For
+example, some clients may only work with previous definitions of
+classes. Outdated classes and objects may be kept around in order to
+minimize impact.  However, this requires a <em> versioning</em> facility,
+in which version indicators are attached to each class and object,
+perhaps along with mechanisms to upgrade versions in-place.
+<P>
+<H4><A NAME=SECTION00041050000000000000> Introducing classes.</A></H4>
+<P>
+Both of the previous  concerns apply, even more so, when a running system must
+be able to accommodate instances of classes that were not even defined
+when the system started running. If the system cannot be restarted, it
+is necessary to introduce infrastructure to interpret, represent,
+allocate, and execute new descriptions of classes and objects.
+<P>
+<H4><A NAME=SECTION00041060000000000000> Security.</A></H4>
+<A NAME=291>&#160;</A><A NAME=292>&#160;</A>
+Persistent representations may require qualitatively different access
+control and authentication mechanisms than active objects.  Because
+they typically reside in file structures and/or other media accessible
+outside of the running application, general-purpose system or
+database policies and mechanisms must be relied on.
+<P>
+<H2><A NAME=SECTION00042000000000000000> Relational Databases</A></H2>
+<P>
+<A NAME=294>&#160;</A><A NAME=295>&#160;</A><A NAME=296>&#160;</A>
+Relational databases (RDBs) operate solely on values, not objects.  In
+order to use an RDB for persistence support, identities <em> must</em> be
+mapped to pseudo-ID values. When an RDB is used extensively for such
+purposes, it is a good idea to build these into objects themselves, as
+<tt> unique</tt> key values.  These pseudo-IDs may then simultaneously
+serve as database indexing keys, as well as key arguments that may be
+sent to relays and name servers to determine internal identities.
+<P>
+Although many snags may be encountered, the design of database relations
+underlying a set of objects is conceptually straightforward.
+Several alternative approaches and increasingly many tools are available
+for designing RDBs to support OO applications.
+<P>
+When persistence is supported using a stand-alone database service,
+implementation is usually based on a structured interface to the
+database's native data definition and manipulation facilities.  For
+example, in the case of relational databases, an interface class may
+be defined to mediate <i> SQL</i><A NAME=300>&#160;</A> commands.
+<P>
+The simplest situations occur for concrete entities that behave as
+``data records'' (e.g., our <tt> MailingLabel</tt> classes).  Any class
+with an interface that sets and gets values from <tt> own</tt>ed internal
+components transparently translates into an RDB table with updatable
+``value fields'' corresponding to the components.
+<P>
+Classes with essential or visible links must represent these links
+through pseudo-IDs. When these links are fixed and refer to other
+<tt> concrete</tt> objects, these may then key into the appropriate
+tables.  But in the much more typical cases where they are rebindable
+and/or refer only to abstract classes, secondary tags and tables must
+be employed that ``dispatch'' an ID to the appropriate concrete
+table.  For example, a link listed with type <tt> Any</tt> might actually
+be bound to some <tt> MailingLabelV1</tt> object. This may be handled via
+a layer of processing in the database interface that maintains a table
+of IDs along with concrete type-tags, and re-issues RDB requests based
+on tag retrievals. Without tools, the normalization problems stemming
+from such schemes are difficult to resolve.
+<P>
+<H2><A NAME=SECTION00043000000000000000> Object-Oriented Databases</A></H2>
+<P>
+<A NAME=307>&#160;</A><A NAME=308>&#160;</A>
+OODBs normally provide the most natural mechanisms for persistently
+maintaining objects. OODB design and OO design amount to nearly the
+same activities. OODBs use the same kinds of constructs as the other
+parts of OO systems.  While models and their details vary widely
+across different OODBs, all of them support basic constructs including
+classes, attributes, objects, and collections. Certain OO-like
+``extended relational'' database systems provide similar constructs.
+All are designed to maximize performance for typical OO operations.
+<A NAME=309>&#160;</A>
+<P>
+OODBs vary significantly in how they are accessed and used.  Many
+OODBs are designed as supersets of particular OO programming
+languages.  Additional persistence constructs are supported on top of
+the base language, enabling more transparent programming and usage.
+Others are stand-alone services, accessed via ``object-oriented <i>
+SQL</i>'' (<i> OSQL</i>) and corresponding language-based interfaces.
+<P>
+<H3><A NAME=SECTION00043100000000000000>  OSQL</A></H3>
+<P>
+<A NAME=313>&#160;</A>
+We will illustrate using <i> OSQL</i>. Several variants exist.  The
+examples here are based on one supported by at least early versions
+of <i> Iris</i>/<i> OpenODB</i><A NAME=317>&#160;</A><A NAME=318>&#160;</A> [<A HREF="#iris">6</A>].
+They are phrased in the user-oriented <i> OSQL</i> language rather than
+the language-based interfaces that would actually be employed within a
+system.
+<P>
+Like <i> ODL</i>, <i> OSQL</i> separates value (<tt> LITERAL</tt>) types
+from object types (links).  Unlike <i> ODL</i> classes (<tt> TYPE</tt>s)
+and subclasses (<tt> SUBTYPE</tt>s) are always defined independently
+from attributes.  Attributes (and most everything else) are defined as
+<tt> FUNCTIONS</tt>.  Stored attributes are so annotated. Computed
+attributes may be coded as other <i> OSQL</i> statements.
+<P>
+Queries are class-based.  The most common general form of a query is:
+<P>
+<PRE>SELECT x, y                             (vars to be returned)
+FOR EACH X x, Y y, Z z                  (all participants)
+WHERE R(x, y, z) AND S(x, y) AND T(x)   (predicates)
+</PRE>
+<P>
+Any query may result in a <em> bag</em> of objects. The individual
+elements are sequentially traversable using a cursor mechanism.
+Indices may be requested for particular attributes in order to speed
+up access for otherwise slow attribute-based queries.<A NAME=330>&#160;</A>
+Other constructs are illustrated in the following examples:
+<P>
+<PRE>CREATE TYPE Counter;
+CREATE FUNCTION val(Counter) -&gt; INTEGER AS STORED;
+
+CREATE TYPE Person;
+CREATE FUNCTION name(Person) -&gt; CHAR(20) AS STORED
+CREATE FUNCTION gender(Person) -&gt; CHAR AS STORED
+CREATE FUNCTION nicknames(Person) -&gt; SET(CHAR(20)) AS STORED;
+CREATE FUNCTION parent(Person) -&gt; Person AS STORED;
+
+CREATE FUNCTION parentName(Person p) -&gt; Person AS OSQL
+  BEGIN RETURN name(parent(p)); END;
+
+CREATE FUNCTION mother(Person child) -&gt; Person AS OSQL
+  SELECT m
+  FOR EACH Person m
+  WHERE parent(child) = m AND gender(m) = &quot;f&quot;;
+
+CREATE TYPE Employee SUBTYPE OF Person;
+CREATE FUNCTION salary(Employee) -&gt; INTEGER AS STORED;
+</PRE>
+<P>
+Instances are constructed by binding initial values to all stored
+attributes (in a <tt> CREATE</tt> <tt> INSTANCE</tt> statement).  Types,
+functions, and instances may all be deleted.  All stored <i> OSQL</i>
+attribute changes are performed through set/put mechanics. For
+example:
+<P>
+<PRE>CREATE FUNCTION ChangeName(Person p, CHAR(20) newname) AS
+  UPDATE name(p) := newname;
+</PRE>
+<P>
+Updates to set-valued attributes and functions are performed using
+the operations <tt> ADD</tt> and <tt> REMOVE</tt>. These are analogous to <i> ODL</i>
+collection operations.  A few simple arithmetic functions are also
+provided. All other computational operations are performed through
+bindings to user-supplied external operations.
+<P>
+All updates implicitly generate locks.  Sets of updates are committed
+only when explicitly requested (through <tt> COMMIT</tt>).  <tt> ROLLBACK</tt>
+commands abort uncommitted updates.  Intermediate <tt> SAVE-POINTS</tt>
+may be requested and rolled back to.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00050000000000000000> Summary</A></H2></center>
+<P>
+Clustering objects into processes is an ill-defined problem.
+Heuristic criteria may be employed to good effect.  While clustering
+has no impact on the general forms of designs, it does not usually
+have beneficial effects on concrete details.
+<P>
+Clusters must be connected to the underlying computational substrate
+through a range of system services that may be abstracted as <em>
+shells</em>.  Numerous services may be required to realize clusters. They
+range from those requiring low-level ``magical'' powers, to those in
+which interface classes to foreign services provide the necessary
+coupling and functionality, to those that are in full control of the
+constructed system itself.
+<P>
+Reliability is enhanced through persistence. Although OODB services
+provide the best vehicles for managing persistence, most other schemes
+can be accommodated.  Subclassing and the need to preserve object
+identity separate OO persistence, storage management, and related
+support services from those of most non-OO systems.
+<P>
+<H2><A NAME=SECTION00051000000000000000> Further Reading</A></H2>
+<P>
+Distributed object management services and object-oriented operating
+systems are surveyed by Chin and Chanson [<A HREF="#chin">4</A>].  Comparable
+non-OO system design strategies are described, for example, by Shatz
+[<A HREF="#shatz">10</A>].  Atkinson
+[<A HREF="#atkinson">1</A>] discusses OO physical system design in <i> Ada</i>.
+Fault tolerant system support is discussed in more depth by Cristian
+[<A HREF="#cristian">5</A>].   System-specific manuals remain the best guides for
+most process management issues.  Schmidt [<A HREF="#schmidt">9</A>] presents
+examples of class veneers on system services. Cattell
+[<A HREF="#cattell">2</A>] (among others) provides a much fuller introduction to
+OO and extended relational database systems.  As of this writing, <em>
+automated</em> object clustering is just beginning to be studied as a
+research topic; see, e.g., [<A HREF="#chatterjee">3</A>].
+<P>
+<H2><A NAME=SECTION00052000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Most non-OO accounts of distributed processing concentrate on
+        <em> splitting</em>, not <em> clustering</em>. Why?
+<P>
+  <LI> How would you cluster the ATM system if there were 100 ATM
+        stations, each with an associated IBM PC, and 1000 other IBM
+        PCs (but nothing else) available? Why would you want  more
+        details of the class designs before answering?
+<P>
+  <LI> List some advantages and disadvantages of clusters
+        having any knowledge of between-cluster dispatching
+        matters.
+<P>
+  <LI> Describe how to build proxy classes using only RPC stub
+        generator tools.
+<P>
+  <LI> A cluster residing on a small non-multitasking machine
+        <em> is</em>, in a sense, the machine itself. Explain how to deal
+        with this.
+<P>
+  <LI> The described  version of <i> OSQL</i> contains no
+        access control features. Is this an asset or a liability?
+<P>
+  <LI> Write the <i> OSQL</i> declarations necessary to
+        provide persistent support for the <tt> Account</tt> class.
+<P>
+</OL>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=atkinson><STRONG>1</STRONG></A><DD>
+C. Atkinson.
+ <em> Object-Oriented Reuse, Concurrency AND Distribution</em>.
+ Addison-Wesley, 1991.
+<P>
+<DT><A NAME=cattell><STRONG>2</STRONG></A><DD>
+R. Cattell.
+ <em> Object Data Management</em>.
+ Addison-Wesley, 1991.
+<P>
+<DT><A NAME=chatterjee><STRONG>3</STRONG></A><DD>
+A. Chatterjee.
+ The class as an abstract behavior type for resource allocation of
+  distributed object-oriented programs.
+ In <em> OOPSLA Workshop on Object-Oriented Large Distributed
+  Applications</em>, 1992.
+<P>
+<DT><A NAME=chin><STRONG>4</STRONG></A><DD>
+R. Chin and S. Chanson.
+ Distributed object based programming systems.
+ <em> Computing Surveys</em>, March 1991.
+<P>
+<DT><A NAME=cristian><STRONG>5</STRONG></A><DD>
+F. Cristian.
+ Understanding fault-tolerant distributed systems.
+ <em> Communications of the ACM</em>, February 1991.
+<P>
+<DT><A NAME=iris><STRONG>6</STRONG></A><DD>
+D. Fishman, J. Annevelink, E. Chow, T. Connors, J. Davis, W. Hasan, C. Hoch,
+  W. Kent, S. Leichner, P. Lyngbaek, B. Mahbod, M. Neimat, T. Risch, M. Shan,
+  and W. Wilkinson.
+ Overview of the iris dbms.
+ In W. Kim and F. Lochovsky, editors, <em> Object-Oriented Concepts,
+  Databases AND Applications</em>. ACM Press, 1989.
+<P>
+<DT><A NAME=garey><STRONG>7</STRONG></A><DD>
+M. Garey and D. Johnson.
+ <em> Computers and Intractability</em>.
+ Freeman, 1979.
+<P>
+<DT><A NAME=corba><STRONG>8</STRONG></A><DD>
+OMG.
+ <em> Common Object Request Broker Architecture and Specification</em>.
+ Object Management Group, 1991.
+<P>
+<DT><A NAME=schmidt><STRONG>9</STRONG></A><DD>
+D. Schmidt.
+ An objected-oriented interface to ipc services.
+ <em> The C++ Report</em>, November/December 1992.
+<P>
+<DT><A NAME=shatz><STRONG>10</STRONG></A><DD>
+S. Shatz.
+ <em> Development of Distributed Software</em>.
+ Macmillan, 1993.
+</DL>
+<P>
+
+<a href="ch24.html">Next: Chapter 24</a>
+<center><P><P></center>
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 08:00:35 EDT 1995</I>
+</ADDRESS>
+</BODY>

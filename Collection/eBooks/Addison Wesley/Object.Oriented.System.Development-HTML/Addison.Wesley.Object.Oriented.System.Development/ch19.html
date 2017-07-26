@@ -1,0 +1,985 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Designing Transitions</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Designing Transitions">
+<meta name="keywords" value="ch19">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+
+<h2>Chapter 19: Designing Transitions</h2>
+<UL>
+<LI> <A NAME=tex2html78 HREF="#SECTION00010000000000000000"> States and Guards</A>
+<LI> <A NAME=tex2html79 HREF="#SECTION00020000000000000000"> Atomicity</A>
+<LI> <A NAME=tex2html80 HREF="#SECTION00030000000000000000"> Timing Constraints</A>
+<LI> <A NAME=tex2html81 HREF="#SECTION00040000000000000000"> Concrete Transitions</A>
+<LI> <A NAME=tex2html82 HREF="#SECTION00050000000000000000"> Summary</A>
+<LI> <A NAME=tex2html83 HREF="#SECTION00060000000000000000">References</A>
+</UL>
+</td><tr></table>
+
+
+<center><H2><A NAME=SECTION00010000000000000000> States and Guards</A></H2></center>
+<A NAME=11>&#160;</A>
+<A NAME=12>&#160;</A>
+<p>
+
+Objects may behave in different ways when they are in different
+logical states.  OOA models usually address this by defining a
+property that distinguishes states and then defining transitions using
+conditional logic that refers to this property.  These translate into
+<tt> when</tt>-guarded operations in <i> ODL</i>.  In the simplest cases,
+states and guards reference boolean attributes.  For
+example:<A NAME=15>&#160;</A>
+<P>
+
+<P>
+<PRE>class CardEater
+  holding: bool init= false;
+  latched: bool init= false;
+  local beeper: Beeper;
+  local cardLatch: CardLatch;
+  op unlatch ==&gt; ~latched' end
+  op latch   ==&gt;  latched' end
+  op eject
+     when ~latched /\ holding then
+       cardLatch.release', ~holding'
+     elsewhen ~latched /\ ~holding then
+       beeper.beep'
+     else pend end
+end
+</PRE>
+<P>
+An operation may contain any number of logically exclusive <tt> when</tt>
+clauses.  To reduce awkwardness, series of <tt> when</tt> <tt> _</tt> <tt>
+elsewhen</tt> <tt> _</tt> <tt> else</tt> <tt> _</tt> <tt> end</tt> guards in <i> ODL</i>
+are treated analogously to <tt> if</tt> <tt> _</tt> <tt> elsif</tt> <tt> _</tt> <tt>
+else</tt> <tt> _</tt> <tt> end</tt> constructs in that each guard in the series
+assumes the negation of all previous guards.  However, this does not
+in any sense imply that they are evaluated sequentially.  (They are
+not ``evaluated'' at all. Like ``<tt> inv</tt>'' and ``<tt> ==&gt;</tt>'', they
+are descriptive, not computational constructs.)
+<P>
+<A NAME=34>&#160;</A><A NAME=35>&#160;</A><A NAME=36>&#160;</A><A NAME=37>&#160;</A>
+<P>
+In all cases, guards split operations into clauses, each with a state
+based triggering condition and corresponding actions and/or effect
+statements.  Requests that are received when the object is <em> not</em>
+in any of the action states may be listed as ``pending'', and
+are triggerable at some point if and when the object enters the state.  If
+more than one request is present when the object is ready, triggerable
+requests are processed in some order.
+The order in which pended requests are processed is a design decision.
+We assume first-in-first-out processing order as a default.  Later
+examples describe ways of obtaining other disciplines.
+<P>
+Here, an <tt> eject</tt> request will stay pending until the <tt>
+CardEater</tt> is in an unlatched state. When it becomes unlatched, it
+will either beep or release the card, depending on its current <tt>
+holding</tt> state.  For example, if a <tt> CardEater</tt> receives three <tt>
+eject</tt> messages from an angry customer while the card is being latched
+in the course of a transaction, it will eventually, after an <tt>
+unlatch</tt> request from some controller object, release the card and
+then beep twice. Of course, to be more realistic, we probably should
+have designed it to behave differently.
+<P>
+<H2><A NAME=SECTION00011000000000000000> State Predicates</A></H2>
+<P>
+Guards often refer to macroscopic states defined in terms of
+particular settings of various attributes.  For example, we can
+transform the version of the ATM machine presented in
+Chapter <A NAME=tex2html11 HREF="ch5.html">5</A> that used the following table to describe
+states:
+<A NAME=48>&#160;</A>
+<P>
+<table border=5>
+<tr>
+<td>state </td><td> Mn  </td><td> Id   </td><td> S1   </td><td> S2  </td><td> S3  </td><td> Fi</td></tr><tr><td>
+
+<em> available?</em> </td><td> n   </td><td> y    </td><td> y    </td><td> y   </td><td> y   </td><td> y </td></tr><tr><td>
+<em> cardIn? </em> </td><td> n   </td><td> n    </td><td> y    </td><td> y   </td><td> y   </td><td> y </td></tr><tr><td>
+<em> stripInfo</em></td><td> nil </td><td> nil  </td><td> nil  </td><td> ok  </td><td> ok  </td><td> nil </td></tr><tr><td>
+<em> PINInfo</em>  </td><td> nil </td><td> nil  </td><td> nil  </td><td> nil </td><td> ok  </td><td> nil </td></tr><tr><td>
+<em> finished?</em>  </td><td> n   </td><td> n    </td><td> n    </td><td> n   </td><td> n   </td><td> y </td></tr>
+
+</table>
+
+
+<P>
+These states may be used to guide some of the actions
+described in Chapters <A NAME=tex2html13 HREF="ch5.html">5</A> and <A NAME=tex2html14 HREF="ch6.html">6</A>:
+<P>
+<PRE>class ATM
+  locals
+    available: bool;
+    cardIn: bool;
+    OKStripInfo: bool;
+    OKPINInfo: bool;
+    finished: bool;
+
+    fn mn = ~available /\ ~cardIn /\ ~OKStripInfo /\ ~PinInfo /\ ~finished;
+    fn id = ... % similar; also s1, s2, s3, fi
+
+    auth: Authenticator;
+    stripInfo: opt StripInfo;
+    pinInfo: opt PinInfo;
+    fn verifyStripInfo(stripInfo): bool ...;
+    op ejectAndReinit ... ;
+    op displayPinReq: () ... ;
+    op displayMenu: () ... ;
+  end
+
+  when mn then
+    op maintenanceAction(k: MaintReq) ==&gt; mn' end;
+    op makeAvailable ==&gt; id' end
+  elsewhen id then
+    op cardIn(si: StripInfo) ==&gt; stripInfo' = si, s1',
+       if verifyStripInfo(stripInfo) then self.stripOK''
+       else  self.stripBad'' end end
+  elsewhen s1 then
+    op stripOK ==&gt;  displayPinReq', s1' end
+    op stripBad ==&gt; ejectAndReinit' end
+    op kb(pi: PinInfo) ==&gt; pinInfo' = pi, s2', auth.PINCheck(pi,si)'' end
+    op cancel ==&gt; ejectAndReinit' end
+  elsewhen s2 then
+    op pinOK(pi, si) ==&gt; displayMenu', s3' end
+    op pinBad(pi, si) ==&gt; ejectAndReinit' end
+  ...
+  end
+end
+</PRE>
+<P>
+Postcondition predicates referring to states may be considered as
+shorthands for updates to the corresponding attributes. For example,
+<tt> s3'</tt> in <tt> pinOK</tt> indicates only that <tt> OKPINinfo</tt> should be
+set to <tt> true</tt>, since that is the only difference between <tt> s2</tt>
+and <tt> s3</tt>.
+<P>
+In this example, the <tt> when</tt> clauses do not spell out what to do
+when inappropriate messages occur (for example, receiving <tt> cardIn</tt>
+when in state <tt> mn</tt>).  These must be fully laid out in a complete
+design.
+<P>
+Our clauses only list event-driven transitions.
+OOA-level transitions that are enabled by internal state-based guards
+without any corresponding events are here transformed in two different
+ways:
+<P>
+<DL ><DT><b> Expansion:</b>
+<DD> Eventless actions may be
+    ``expanded out'' under the appropriate conditions.  Here, the
+    internal actions that lead from the <tt> fi</tt> (finished) to <tt>
+    id</tt> (idle) state are locally triggered via <tt> ejectAndReinit</tt>
+    whenever the analysis model specifies a transition to <tt> fi</tt>
+    (which leads in turn to <tt> id</tt>).
+<P>
+<DT><b> Self-notification:</b>
+<DD> An object may
+    ``artificially'' send an event to itself that will trigger the
+    corresponding action. Here, the <tt> id</tt> state generates messages
+    that are caught by <tt> self</tt> to propel actions triggered when the
+    <tt> stripInfo</tt> can or cannot be read. <A NAME=83>&#160;</A>
+<P>
+ </DL>
+<P>
+<P>
+<H2><A NAME=SECTION00012000000000000000> States as Classes</A></H2>
+<P>
+<A NAME=86>&#160;</A><A NAME=87>&#160;</A>
+<P>
+<em> Classes</em> may be used to organize states and transitions.  For example,
+consider yet another lamp
+design:<A NAME=89>&#160;</A><A NAME=90>&#160;</A>
+<P>
+<PRE>class VoltageLevel                   fn level: real; end
+class ActiveVoltage is VoltageLevel inv level &gt;= 2.5 end
+class Ground is VoltageLevel        inv level &lt;  2.5 end
+inv VoltageLevel = oneOf(ActiveVoltage, Ground)
+
+class Lamp3 is Lamp
+  active: fixed ActiveVoltage;
+  ground: fixed Ground;
+  switch: VoltageLevel init= ground;
+  on: bool = (switch in ActiveVoltage);
+  op flip ==&gt; switch' = if on then ground else active end end
+end
+</PRE>
+<P>
+Here, the state change in <tt> flip</tt> is performed by rebinding the
+<tt> switch</tt> link back and forth between a constant-active object and
+a constant-ground one described by the ``state-classes'' <tt>
+ActiveVoltage</tt> and <tt> Ground</tt>. This might strike you as being
+analogous to the physical act of throwing an electrical switch. It may
+also be seen as an instance of delegation in which the lamp uses the
+object at the other end of <tt> switch</tt> to help compute the <tt> on</tt>
+attribute.  Rebindability of delegates is an often-exploited property
+of composite objects. Any state change can be performed by some
+combination of interactions with existing component objects and/or
+link changes to different objects.
+<P>
+When classes represent macroscopic states, a state value may be
+described in terms of the class membership of an object on the other
+side of a link. In <i> ODL</i>, the <em> obj</em> <tt> in</tt> <em> class</em>
+``type test'' <A NAME=101>&#160;</A> construct may be used for such
+purposes, as seen in the <tt> inv</tt> constraint here.  This predicate is
+true when the indicated object possesses all of the features listed in
+the indicated class.  It must be used with care.  For example, ``<tt>
+x in Any</tt>'' is true of <em> any</em> object.
+<A NAME=105>&#160;</A>
+<P>
+<H3><A NAME=SECTION00012100000000000000> State Class Controllers</A></H3>
+<P>
+<A NAME=107>&#160;</A> <A NAME=108>&#160;</A>
+Changing state by changing components is often easiest when the
+components form little state-class hierarchies that partition logical
+states.  The states-as-classes view is in turn most useful when each
+state has fixed, but different properties, that <em> always</em> covary.
+These classes thus reify the notion of <em> state abstraction</em>
+described in Chapter <A NAME=tex2html24 HREF="ch5.html">5</A>.  For example, we might define
+a set of classes describing icons for displaying faces
+as:<A NAME=113>&#160;</A>
+<P>
+<PRE>class FIcon            mouthAngle: int;       eyesOpen: bool;       end
+class FState is FIcon  mouthAngle: fixed int; eyesOpen: fixed bool; end
+class HappyF is FState inv mouthAngle =  45,  eyesOpen = true;      end
+class SleepF is FState inv mouthAngle =   0,  eyesOpen = false;     end
+class SadF   is FState inv mouthAngle = -45,  eyesOpen = true;      end
+
+class MutableFIcon is FIcon
+  local switch: FState;
+  inv mouthAngle = switch.mouthAngle;
+  inv eyesOpen   = switch.eyesOpen;
+  op happy!    ==&gt; switch' in HappyF end
+  happy: bool    = switch  in HappyF;
+  op sad!      ==&gt; switch' in SadF end
+  ...
+end
+</PRE>
+<P>
+It is useful and sensible here to define an abstract superclass
+(<tt> FIcon</tt>) that branches off in two directions, one side for
+state classes describing immutable objects, and the other for mutable,
+``controlling'' objects.  The states and controllers are <em> not</em>
+subclasses of each other, but can be written to share this blander
+superclass. This way, clients that do not care whether features are
+mutable or not can accept either.
+<P>
+These designs form good first-level defenses against incomplete or
+inconsistent attempts to change state. For example, it is impossible
+to change the state of a <tt> FIcon</tt> to <tt> happy</tt> without also
+changing mouth curvature. In fact, the technique might be seen as a
+simpler way of expressing dependencies that would be awkward to
+describe and maintain using <tt> inv</tt> constraints in the controller
+itself.  In many cases, this leads to relatively simple ways to
+translate analysis models with complex state logistics. If any or all
+of the behavior-controlling states can be isolated as classes, it
+becomes easier to decompose and/or group operations [<A HREF="#bear">2</A>].
+<P>
+<H2><A NAME=SECTION00013000000000000000> Delegating State Dependent Behavior</A></H2>
+<P>
+<A NAME=121>&#160;</A>
+Consider the car cruise control (CCC) example from
+Chapter <A NAME=tex2html27 HREF="ch5.html">5</A>. This controller just managed the logical
+states representing otherwise ungiven operations.  There are many
+possible translations into a design form. Suppose the underlying
+operations have been partitioned into classes, each of which supports
+some kind of services appropriate to its macroscopic state. For
+illustrative purposes, we will assume that they support operation
+<tt> control</tt><tt> Cruise</tt> as a stand-in.
+<A NAME=126>&#160;</A>
+<P>
+All client components involved with cruise control operations will
+interact with <tt> CC</tt><tt> Con</tt><tt> trol</tt><tt> ler</tt>s via an
+intermediary controlling class, <tt> CCC</tt>.  The <tt> CCC</tt> class itself just
+controls state transitions by switching among state-classes.
+<P>
+Taking a few liberties to assume that the events with no associated
+transitions are just ignored, giving transitions nicer names, and
+omitting most details other than the state logic, we obtain:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch19-img2.gif"><P>
+<P>
+<PRE>class CCController  ...  op controlCruise: (); end
+
+class On  is CCController ... end
+class Off is CCController ... end
+class SIM is CCController ... end
+
+class CCC
+  locals
+     switch: CCController; init switch in Off
+     desiredSpeed: Int;
+     threshold: int = 30;
+  end
+
+  op controlCruise: () ==&gt; switch.controlCruise' end
+
+  when switch in Off then
+    op turnOn
+        when speedSensor.current &gt; threshold then
+          desiredSpeed'? = speedSensor.current, switch' in SIM
+        else  end
+    op resume  ==&gt; end
+    op brake   ==&gt; end
+    op turnOff ==&gt; end
+    op set     ==&gt; end
+  elsewhen switch in SIM then
+    op turnOn  ==&gt; end
+    op resume  ==&gt; switch' in On end
+    op brake   ==&gt; end
+    op turnOff ==&gt; switch' in Off end
+    op set     ==&gt; end
+  else % switch in On %
+    op turnOn  ==&gt; end
+    op resume  ==&gt; end
+    op brake   ==&gt; switch' in SIM end
+    op turnOff ==&gt; switch' in off end
+    op set     ==&gt; desiredSpeed? = speedSensor.current end
+  end
+end
+</PRE>
+<P>
+
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00020000000000000000> Atomicity</A></H2></center>
+<P>
+<A NAME=157>&#160;</A><A NAME=158>&#160;</A><A NAME=159>&#160;</A><A NAME=160>&#160;</A>
+<P>
+The analysis models in Part I assume that each object contains a
+``membrane'' that protects and guides processing, causing operations to
+be atomic and exclusive with respect to observers.  Objects
+noninterruptibly perform at most one publicly listed operation
+(transition) at a time.  Noninterruptibility is one form of
+state-dependent operation availability. It expresses the constraint
+that all other operations are unavailable while the object is engaged
+in some particular action.  In design, we normally add internal
+structure (scripted concrete actions) to obtain the effects of
+OOA-level transitions, so actions are not ``truly'' atomic.  However,
+atomicity with respect to external observers generally needs to be
+maintained to obtain listed transition effects.
+<P>
+These dynamic concerns are mirror-images of structural ones. In the
+same way that essentially all design-level objects would be viewed as
+ensembles at the analysis level, essentially all design-level actions
+would be viewed as scripts (transition sequences). In both cases,
+external observers must be shielded from these facts unless it is
+known that adding visible substructure is acceptable.
+<P>
+When analysis models are known to be incomplete and/or inexact, the
+refinement of transitions into visible smaller-granularity steps may
+indeed be warranted.  For example, an analysis model might have listed
+<em> Fly from New York to California</em> as a single transition, omitting
+intervening states and transitions including <em> Drive to Airport</em>,
+<em> Board Airplane</em>, <em> Reboard in Chicago</em>, and so on, where each
+of these may in turn be further subdivided.  It is unlikely that the
+analysis model really intended that the coarse-grained transition be
+treated as atomic.  Moreover, the lack of intervening states precludes
+descriptions of intervening actions (such as changing flights if one
+is canceled) that may be needed in this or future systems.  These are
+among the issues that should be addressed during analysis model
+reviews (Chapter <A NAME=tex2html33 HREF="ch15.html">15</A>).  If atomicity is not required,
+designers may reanalyze, adding appropriate visible states and
+transitions.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Preemption</A></H2>
+<P>
+<A NAME=168>&#160;</A><A NAME=169>&#160;</A>
+<A NAME=170>&#160;</A><A NAME=171>&#160;</A>
+<P>
+Some operations appear to be intrinsically interruptible by clients.
+Classic examples include operations on multimedia software objects.
+Multimedia objects are used to manage and control video, audio, and
+other displays. They commonly require interruptibility in order to
+break out of (usually hardware-related) ``continuous play loops''.
+<P>
+Atomicity requirements look problematic in such designs.  Without
+them, one could define a <tt> stop</tt> operation that would allow an
+object to halt the play or display of its data, and then perhaps do
+something else.  However, this would only be a good idea if it were OK
+to simply <em> kill</em> the object (and then perhaps generate another
+one).  Otherwise, when it returned from the interruption, how would it
+know that it was supposed to halt? The only answer available from
+within our framework is that (1) the interruption should modify a
+state attribute, say, <tt> playing</tt>, and (2) the object should
+``continuously'' (e.g., after every few suboperations) check to see if
+<tt> playing</tt> remains true.
+<P>
+This is essentially the solution described in
+Chapter <A NAME=tex2html38 HREF="ch5.html">5</A>.  The object may split its chores into
+little pieces, listening for interrupts between steps.  However, this
+tactic is much too difficult to live with at the design level for
+systems where cancellation, pausing, and resumption capabilities are
+routinely required. While one could define operations listing all of
+the possible listening points, this is very error prone.
+<P>
+As an abbreviation, we can predefine a special pseudo-operation <tt>
+interrupt</tt> that is considered to be immediately receivable at any time
+by an object listing it in its interface. The operation immediately
+places the object in a ``listening'' mode where it may process new
+requests, but makes no guarantees that the object is in a particular
+or even coherent state. However, individual classes may make further
+guarantees, as established by some kind of low-level hardware or
+implementation magic.  Given this, a prototypical multimedia class
+might be declared:
+<A NAME=179>&#160;</A>
+<P>
+<PRE>class Player ...
+  data: blob;
+  playing: bool;
+  op play ==&gt; playing' end
+  op interrupt ==&gt; ~playing' end
+  op restart;    % seek to beginning
+  op resume;     % continue from where left off
+end
+</PRE>
+<P>
+More fine-grained control over interruptible objects may be
+obtained through layering. For example, the idea of
+``play until a <tt> trap</tt> signal is received'' may be
+translated by building an object that sets a <tt> Player</tt>
+in motion and then sends an <tt> interrupt</tt> when it receives
+message <tt> trap</tt> and the <tt> Player</tt> is <tt> playing</tt>.
+<P>
+As seen here, multimedia objects sometimes need to carry completely
+uninterpreted bunches of bits.<A NAME=186>&#160;</A> These might include
+graphics images, video signals, sounds, and so on.  In <i> ODL</i> we
+describe these as <tt> blob</tt>s. They are immutable and passed around as
+copies.  However, their inner structures cannot be defined from within
+<i> ODL</i>.  (If they could be described, they would not be <tt>
+blob</tt>s.) They may, however, be wrapped up in classes that are then used
+in a normal way.
+<P>
+<H2><A NAME=SECTION00022000000000000000> Internal Actions</A></H2>
+<A NAME=192>&#160;</A>
+<A NAME=193>&#160;</A>
+<P>
+Even in more ordinary designs, interruptibility is not always seen as
+a liability. For example, the concept of <em> procedural
+recursion</em><A NAME=195>&#160;</A> is based on the idea that an object may
+suspend itself inside one procedure by issuing a blocking call for the
+same procedure, but with different arguments. Resumptions unwind in a
+stack-based fashion.  All state changes effected in the inner call
+hold when the outer one is resumed. Similarly, an object may want to
+suspend one operation while it performs another. It is very common to
+write operations that include internal calls to perform various
+utility functions.
+<P>
+There is no reason at all to preclude many such constructions as long
+as designs are clear about their intent.  Atomicity need only be
+maintained with respect to <em> external</em> agents.  There is a
+difference between a public operation and an internal reference to
+something defined as a <tt> local</tt>.  In <i> ODL</i>, actions defined
+within <tt> local</tt>s are always available within otherwise atomic
+operations. We have been  using <tt> local</tt>s in this way routinely.
+<P>
+These inner references cannot go through an object's ``outer
+membrane'', so they cannot be treated as possibly externally generated
+events in which an object just happens to be its own client.  Not only
+are <tt> local</tt>s not part of an external interface, but, in a very
+real sense, they are not even part of the ``controlling'' object <em>
+per se</em>. They are components of the ``controlled'' part of an object.
+In fact, these local operations might as well belong to other
+delegated objects, and could be so converted if necessary.
+<P>
+This notion that objects may stand back to investigate and invoke
+inner features is a form of <em> reflection</em><A NAME=204>&#160;</A>.  It is
+less exotic than it may sound. Reflection is an intrinsic part of
+guard evaluation.  When any object receives a message requesting an
+operation with a <tt> when</tt> clause, it must evaluate its own state
+while deciding whether to engage in a corresponding action.
+Similarly, if an object needs to employ a little utility routine in
+the midst of some other operation, it may do so without having to act
+as its own external client. At a mechanical level, this may require
+that such objects be implemented using a ``local control stack''.
+Alternatively, the local wait states and notification techniques
+described in Chapter <A NAME=tex2html45 HREF="ch20.html">20</A> may be employed.
+<P>
+An implementation-level view of this distinction is that in a
+distributed system, <tt> local</tt> access normally corresponds to
+operations within a process's own address space, and external access
+corresponds to remote messages.  For emphasis and ease of subsequent
+translation, we list any message <tt> m</tt> in which an object explicitly
+serves as its own external client as <tt> self.m</tt>.  Unless a class
+defines mechanics for interrupting, suspending, and resuming public
+operations, usage is restricted to one-way sends.
+<P>
+Similarly, we <em> could</em> also explicitly list both inner and outer
+forms of inspective <tt> fn</tt>s. But because they are purely
+state-preserving, we have treated them as usable in either sense.  If
+desired, <tt> local</tt>s may be used to define inner-only versions.  For
+example, in Chapter <A NAME=tex2html46 HREF="ch17.html">17</A>, we mentioned that a <tt> Point</tt>
+object might cache its polar coordinates when asked about them via an
+external <tt> fn</tt>, but must be able to inspect its state internally
+without performing this caching.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00030000000000000000> Timing Constraints</A></H2></center>
+<P>
+<A NAME=219>&#160;</A><A NAME=220>&#160;</A>
+<A NAME=221>&#160;</A>
+<P>
+In Chapter <A NAME=tex2html50 HREF="ch11.html">11</A>, we discussed specification strategies for
+bounding the durations of services and transitions. We employ similar
+strategies in (abstract) design.  Any <em> effect</em> may include a
+time-of prefix ``<tt> @</tt>''. These may be mixed in expressions with
+<tt> time</tt> literals indicating elapsed times since operation
+triggering.  For example:<A NAME=227>&#160;</A>
+<P>
+
+<PRE>class Renderer
+  op fastRender(s: Scene): () ==&gt;
+     @(diff(displayedLuminance(s), luminance(s)) &lt; 0.1) &lt; 1sec end
+  op slowRender(s: Scene): () ==&gt;
+     1hr &lt; @(diff(displayedLuminance(s), luminance(s)) &lt; 0.0001) &lt; 2hr end
+end
+</PRE>
+<P>
+This says that the <tt> fastRender</tt> effect occurs within one second of
+the operation being triggered, and the <tt> slowRender</tt> effect occurs
+between one and two hours.  This notation allows finer specification
+than possible using our prime and double-prime annotations that
+indicate effects only at the points of operation completion (prime)
+and <em> any</em> time after triggering (double-prime).  This notation may
+also be used to make stronger claims about the <em> ordering</em> of
+effects.
+<P>
+Time expressions are declarative constraints, which must somehow be
+met by implementations.  To be meaningful, all implementations must
+conform to the effects, the transit time of messages to and from the
+objects must be known or bounded, and the <tt> pend</tt> times of messages
+once received must be known or bounded.  Timing constraints are
+generally only useful in applications in which enough hardware and
+software properties are hard-wired that such estimates can be
+realistically achieved.  However, given that they do hold, they may be
+employed in the design of other classes. For example:
+<P>
+<PRE>class RenderButton ...
+  r: Renderer;
+  op render { ...
+     if battery.estimatedLife &lt; 2hr then
+          r.fastRender(currentScene)
+     else r.slowRender(currentScene) end ...}
+end
+</PRE>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00040000000000000000> Concrete Transitions</A></H2></center>
+<A NAME=234>&#160;</A>
+<P>
+The transformation of guarded actions into concretely executable
+statements can be difficult.  A guard may list any number of
+conditions that must be <em> simultaneously</em> true in order for an
+operation to execute.  Unfortunately, guard evaluation and triggering
+normally involve <em> sequential</em> computation (even within distributed
+frameworks).
+<P>
+This is not a problem for many classes.  When guards and effects refer
+only to <em> exclusively</em> controlled properties of the recipient
+object, attribute evaluations may proceed sequentially. Here, if a
+state predicate holds true at the beginning of an evaluation sequence,
+it will still hold true when the operation commences. Guards that look
+only at nonexported <tt> own</tt> attributes fit this model.  Among the
+most important reasons for using <tt> own</tt> attributes is to ensure
+simple translation of state transitions into concrete form.  For
+example, a concrete <tt> CardEater</tt> class may be defined
+as:<A NAME=241>&#160;</A>
+<P>
+<PRE>class CardEaterV1 is CardEater
+  own h: Bool &lt;&gt;;  own l: Bool &lt;&gt;
+  local beeper: Beeper &lt;&gt;
+  local cardLatch: CardLatch &lt;&gt;
+  holding: bool { h? }
+  latched: bool { l? }
+  op unlatch { l.f! }
+  op latch   { l.t! }
+  op eject {
+     if ~l? /\ h? then cardLatch.release; h.f!
+     elsif ~l? /\ ~h? then beeper.beep
+     else pend end }
+end
+</PRE>
+<P>
+Because the objects representing state information are exclusively held,
+the guards and actions for <tt> eject</tt> may be computed in a straightforward
+manner.
+<P>
+However, guards that reference objects that are not under the
+exclusive control of the receiver object must be handled much more
+carefully.  We postpone discussion of the requisite mechanics to
+Chapter <A NAME=tex2html54 HREF="ch22.html">22</A>, where we describe the coordination
+of joint actions in a more general setting.<A NAME=245>&#160;</A>
+<P>
+<H2><A NAME=SECTION00041000000000000000> Self-notifications</A></H2>
+<P>
+<A NAME=247>&#160;</A><A NAME=248>&#160;</A>
+<A NAME=249>&#160;</A>
+Local self-notification techniques can simplify within-object state
+tracking for transitions that are specified to fire only after only a
+<em> set</em> of microtransitions.
+<P>
+For example, suppose that a specification states that an <tt>
+ImageCell</tt> object should update its brightness attribute whenever it
+is sent values from all four of its neighbors.  As is typical in such
+specifications, this description fails to list all possible
+intermediate states that lead to firing.  There may be no substitute to
+a painstaking decomposition of these states in design.  However, minor
+simplifications may be based on inner self-notifications that allow an
+object to ``tell itself'' that a transition is potentially
+triggerable.  In this example, the different combinations of the
+boolean <tt> have</tt><em> X</em> values track all of the possible state
+configurations that can ultimately lead to
+firing:<A NAME=254>&#160;</A>
+<P>
+<PRE>class ImageCellV1 is ImageCell
+  locals
+    brightness: Real;
+    northV: Real; southV: Real; eastV: Real; westV: Real;
+    haveNorth: Bool; haveSouth: Bool; haveEast: Bool; haveWest: Bool;
+    northNbr: ImageCell; southNbr:ImageCell; ...
+    op update {
+       if haveNorth? /\ haveSouth? /\ haveEast? /\ haveWest? then
+          brightness.set((northV? + southV? + eastV? + westV?)/4.0);
+          haveNorth.f!; haveSouth.f!; ...
+          NorthNbr.SouthVal(brightness?);
+          SouthNbr.NorthVal(brightness?); ...
+       end }
+  end
+  op NorthVal(x: real) {
+       if ~haveNorth? then northV.set(x); haveNorth.t!; update
+       else pend end }
+  op SouthVal(x: real); % similar; also EastVal, WestVal
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION00042000000000000000> Queuing</A></H2>
+<A NAME=256>&#160;</A><A NAME=257>&#160;</A>
+<P>
+To be implementable, any class containing <tt> pend</tt> operations must
+be fitted with some kind of buffering mechanism to hold requests that
+cannot yet be honored.  We will approach this by first discussing the
+design of stand-alone ``external'' queues that are not treated as
+parts of the objects using them to maintain requests. Generally, any
+combination of internal and external queues may be designed to
+support buffering.
+<P>
+<H3><A NAME=SECTION00042100000000000000> External Queues</A></H3>
+<P>
+Stand-alone queues may be constructed to hold requests serviced by one
+or more objects.  Wrappers may be employed to represent the requests.
+For example, suppose we wanted to queue up a list of operations to be
+done later when triggered by a timer or some other event:
+<P>
+<PRE>class Jobs
+  q: QUEUE[Wrapper];
+  op store(t: Wrapper) { q.put(t) }
+  op process { while ~q.empty do q.take.call end }
+end
+...
+jobs.store(WRAP(transfer(acct1, acct2)));
+jobs.store(WRAP(print(logfile)));
+jobs.process;
+</PRE>
+<P>
+<H4><A NAME=SECTION00042110000000000000> Untyped events.</A></H4>
+<A NAME=261>&#160;</A>
+In <i> ODL</i>, we use named, typed operations and messages and guards
+that may refer to their properties.  However, sometimes the range of
+messages (events) that must be received by an object is unknowable or
+unbounded. When all other tactics fail, this effect can be obtained by
+adopting much blander and harder to check strategies that employ
+unconditionally received ``message packets'' somehow describing the
+requested operations and arguments.  For example:<A NAME=263>&#160;</A>
+<P>
+<PRE>class MessagePacket
+  opName: String;
+  args: SEQ[Any];
+end
+</PRE>
+<P>
+<PRE>class Agent ...
+  q: QUEUE[MessagePacket];
+  worker: Worker;
+  op msg(m: MessagePacket) {
+     if worker.canDo(m.opName) then  worker.do(m)
+     else ... q.put(m); end }
+end
+</PRE>
+<P>
+These requests may be manually queued, decoded, and so on.  At some
+level(s) of any distributed system there are agents of this general
+form, if only those that send and receive packets across a network.
+<P>
+<H3><A NAME=SECTION00042200000000000000> Scheduling</A></H3>
+<A NAME=265>&#160;</A><A NAME=266>&#160;</A>
+<P>
+These basic strategies apply to a range of queue-based
+designs.  For example, a printer might be defined using a manually
+designed ``passive'' wrapper class that merely reports the text to be
+printed (perhaps along with other print
+parameters):<A NAME=267>&#160;</A>
+<P>
+<PRE>class PrintRequest ...  text: ARRAY[Char];  end
+
+class PrinterDaemon
+  q: BUFFER[PrintRequest];
+  local op print(r: PrintRequest); ...
+  op mainLoop { while true do print(q.take) end }
+  ...
+end
+
+class Printer
+  q: BUFFER[PrintRequest];
+  daemon: PrinterDaemon;
+  op print(m: PrintRequest) { q.put(m) }
+end
+
+op mkPrinter p: Printer {
+   local printQueue: BUFFER[PrintRequest] := mkBuffer...;
+   local printDaemon: PrinterDaemon := new PrinterDaemon(q := printQueue);
+   p := new Printer(q:= printQueue, daemon := printDaemon);
+   printDaemon.mainLoop;
+   reply p }
+</PRE>
+<P>
+We used <tt> BUFFER</tt> instead of <tt> QUEUE</tt> in this example to permit
+further variations in processing.  This opens up additional options
+for managing and scheduling activities.  We could use the same basic
+design to different effect by defining subclasses of <tt>
+BUFFER[PrintRequest]</tt> and/or other changes, including the following:
+<P>
+<UL><LI> The <tt> BUFFER::put</tt> operation could be reparameterized to
+        send back an explicit acknowledgment to its sender.
+  <LI> A clause could be added in <tt> BUFFER::put</tt> to disregard or refuse
+        new requests when the queue is full.
+  <LI> A ``balking'' version of the <tt> BUFFER::take</tt> operation could be
+        defined to always immediately return, sometimes reporting back
+        a sentinel saying that the queue is empty.
+        The print daemon could then do some
+        other work and try again later (see Chapter <A NAME=tex2html67 HREF="ch20.html">20</A>.)
+  <LI> The queue could be maintained in priority order.
+        Ordering could be based on such properties as:
+<OL><LI>  Increasing page length of the print requests.
+<LI>  Requested priority or deadline as indicated in
+        the <tt> PrintRequest</tt>.
+<LI>  Time-stamps indicated in the <tt> PrintRequest</tt> reflecting
+        the time of request.
+<LI>  The sender of the request.
+<LI>  Shortest estimated time to completion.
+</OL>
+<P>
+  <LI> Multiple <tt> PrintDaemon</tt>s may be constructed, one
+        per physical printer.
+<P>
+  <LI> The buffer might hold several independent queues
+        matched to different kinds (perhaps subclasses) of
+        <tt> PrintRequest</tt>s. This makes it easier for <tt> PrintDaemon</tt>s
+        to share in scheduling chores, <tt> take</tt>'ing
+        those kinds of requests they service best.
+</UL>
+<P>
+The careful crafting of such policies is a central task in many
+designs.  Common policies may be reflected in the common use of
+special queue classes across different applications and subsystems.
+Detailed descriptions of the enormous range of available scheduling
+policies and techniques are beyond the scope of this book. Other texts
+describing real-time constraints and scheduling issues from an
+object-oriented perspective include Levi and Agrawala [<A HREF="#levi">4</A>] and
+Atkinson [<A HREF="#atkinson">1</A>].
+<P>
+Notification techniques (as seen, for example, in <tt> ImageCell</tt>)
+are also useful in the design of queuing mechanics.  The firing of
+queued messages may be controlled by sending ``wake-up'' notifications
+that recheck guards and possibly trigger corresponding actions.  One
+strategy is to check for queued messages after every public operation.
+Another is to maintain separate queues, and only notify those whose
+firing conditions are impacted by the operation.
+<P>
+<H3><A NAME=SECTION00042300000000000000> Internal Queues</A></H3>
+<P>
+These strategies may be internalized within individual objects by
+localizing inside one class the three basic components of queue-based
+designs:
+<P>
+
+<OL><LI> A controller/manager.
+  <LI> One or more ``passive'' (queueless) service components.
+  <LI> One or more queues holding unserviced requests.
+</OL>
+
+<P>
+For example, the <tt> Printer</tt>, <tt> PrintDaemon</tt>, and <tt> BUFFER</tt>
+serve these roles in the printer design.
+<P>
+Each of these three kinds of components requires attention when
+translating classes into implementable form.  However, they need not
+be present in each class. The notion of ``implementable form'' can
+vary across system architectures, implementation languages, and tools.
+For example, in Chapters <A NAME=tex2html68 HREF="ch23.html">23</A> and <A NAME=tex2html69 HREF="ch24.html">24</A> we
+will describe the need for <em> combining</em> queues of possibly many
+objects in order to meet resource and performance constraints.  Also,
+the ``primitives'' and corresponding techniques available for
+implementing queue mechanics can differ widely.  Queue processing may
+be implemented using simple <tt> Semaphore</tt>s,<A NAME=301>&#160;</A> <em>
+monitor</em> constructs, or just about any other similar mechanism
+available on a system.
+<P>
+We will avoid introducing any particular mechanics until we have
+addressed the corresponding design issues.  However, nearly all
+approaches are based on refinements of the following basic
+tactics.
+<P>
+A queue (usually called a ``condition queue'' or ``delay queue'') may
+be associated with each distinct state, including topmost state <tt>
+ready</tt>.  Because of state abstraction, requests associated with each
+particular (nonabstract) state may be distributed across queues.  When
+an object is quiescent, an incoming message triggers the corresponding
+operation if it is available in the current state, else it is queued.
+After every public operation, the queue(s) associated with the current
+state may be checked.  This may entail evaluation of additional guards
+to ensure that the queued operations are actually triggerable.  Guards
+associated with message arguments and other relational constraints
+normally cannot be divided among a small finite number of condition
+queues, so require additional checks on receipt and reinspection.
+<P>
+Queue structure and guard (re)evaluation interact more generally.  For
+example, it is inconceivable to associate a queue with each possible
+value of an <tt> Account</tt> <tt> balance</tt>. In
+Chapter <A NAME=tex2html71 HREF="ch5.html">5</A>, we confined ourselves to only the two states
+<tt> overdrawn</tt> and <tt> ok</tt>.  Correctness may be maintained using an
+even coarser state mapping at the design level.  A single queue may be
+associated with topmost state <tt> ready</tt>.  This queue is checked
+after each public operation. However, all guards (including current
+state evaluation) associated with each requested operation must then
+be rechecked upon inspection.  The message is requeued if the guards
+fail.
+<P>
+Single <tt> ready</tt> queues also simplify handling of messages that
+arrive when objects are in the midst of other operations. In most
+systems, incoming messages are queued via preemptive mechanisms.  Any
+requests arriving when an object is not <tt> ready</tt> may be placed on
+the queue.
+<P>
+Again, because the detailed mechanics for designing and implementing
+queue processing differ across systems, configurations, tools, and
+languages, we avoid further commitments. We will continue to use <tt>
+when</tt> and <tt> pend</tt> to express designs until
+Chapter <A NAME=tex2html72 HREF="ch24.html">24</A>.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00050000000000000000> Summary</A></H2></center>
+<P>
+Guards control both the <em> availability</em> and <em> choice</em> of
+state-dependent behaviors.  Attributes, aggregate state functions, and
+helper classes may be used to organize and maintain logical state
+information used in guards and effects.
+Our normal model of object computation assumes that objects are
+uninterruptible while in the midst of observable operations.
+Interruptible objects may also be designed, but must be controlled.
+<P>
+Untriggerable requests may wait in per-object queues until objects
+are ready to deal with them.  Special-purpose queues and queuing
+disciplines may be added on top of this framework.  These allow
+requests to be passed around and manipulated as regular objects.
+<P>
+<H2><A NAME=SECTION00051000000000000000> Further Reading</A></H2>
+<P>
+Dispatching strategies based on temporal information are discussed by
+Takashio and Tokoro [<A HREF="#takashio">5</A>].  The collection [<A HREF="#rttp">3</A>]
+includes several descriptions of real-time specification languages and
+systems containing additional constructs that may be adapted to OO
+frameworks.  Design issues for multimedia objects are presented in
+several papers in the collections edited by Tsichritzis
+[<A HREF="#tsich1">6</A>,<A HREF="#tsich2">7</A>,<A HREF="#tsich3">8</A>].
+<P>
+<H2><A NAME=SECTION00052000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Design a more serious <tt> CardEater</tt> class.
+<P>
+  <LI> Design all of the simple transitions present in the
+        refrigerator models in Chapters <A NAME=tex2html73 HREF="ch5.html">5</A>
+        and <A NAME=tex2html74 HREF="ch6.html">6</A>.
+<P>
+  <LI> Finish the ATM controller design.
+<P>
+  <LI> Explain the similarities and differences between
+        state-<em> classes</em> and state<em> Charts</em>.
+<P>
+  <LI> Convert the <tt> CCC</tt> class to use <tt> when</tt> clauses
+        embedded in <tt> op</tt> specifications rather than
+        the given ``outer'' form. Which is easier
+        to understand?
+<P>
+  <LI> Is it sensible for a state-object to tell its controller
+        to change state?
+<P>
+  <LI> Design a <tt> PriorityQueue</tt> suitable for use with
+        a <tt> Printer</tt>.
+<P>
+  <LI> Describe in <i> ODL</i> the time constrained <em> Phone</em>
+        transitions presented in Chapter <A NAME=tex2html75 HREF="ch11.html">11</A>.
+<P>
+</OL>
+
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=atkinson><STRONG>1</STRONG></A><DD>
+C. Atkinson.
+ <em> Object-Oriented Reuse, Concurrency AND Distribution</em>.
+ Addison-Wesley, 1991.
+<P>
+<DT><A NAME=bear><STRONG>2</STRONG></A><DD>
+S. Bear, P. Allen, D. Coleman, and F. Hayes.
+ Graphical specification of object-oriented systems.
+ In <em> OOPSLA '90</em>. ACM, 1990.
+<P>
+<DT><A NAME=rttp><STRONG>3</STRONG></A><DD>
+J. de Bakker, C. Huizing, W. de Roever, and G. Rozenberg, editors.
+ <em> Real-Time: Theory in Practice</em>.
+ Springer Verlag, 1992.
+<P>
+<DT><A NAME=levi><STRONG>4</STRONG></A><DD>
+S. Levi and A. Agrawala.
+ <em> Real Time System Design</em>.
+ McGraw-Hill, 1990.
+<P>
+<DT><A NAME=takashio><STRONG>5</STRONG></A><DD>
+K. Takashio and M. Tokoro.
+ Drol: An object-oriented programming language for distributed
+  real-time systems.
+ In <em> OOPSLA '92</em>. ACM, 1992.
+<P>
+<DT><A NAME=tsich1><STRONG>6</STRONG></A><DD>
+D. Tsichritzis, editor.
+ <em> Object Management</em>.
+ University of Geneva, 1990.
+<P>
+<DT><A NAME=tsich2><STRONG>7</STRONG></A><DD>
+D. Tsichritzis, editor.
+ <em> Object Composition</em>.
+ University of Geneva, 1991.
+<P>
+<DT><A NAME=tsich3><STRONG>8</STRONG></A><DD>
+D. Tsichritzis, editor.
+ <em> Object Frameworks</em>.
+ University of Geneva, 1992.
+</DL>
+<P>
+
+<a href="ch20.html">Next: Chapter 20</a>
+<center><P><P></center>
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:58:52 EDT 1995</I>
+</ADDRESS>
+</BODY>

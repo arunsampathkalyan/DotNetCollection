@@ -1,0 +1,534 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Ensembles</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Ensembles">
+<meta name="keywords" value="ch9">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 9: Ensembles</h2>
+<UL>
+<LI> <A NAME=tex2html27 HREF="#SECTION00010000000000000000"> Ensembles</A>
+<LI> <A NAME=tex2html28 HREF="#SECTION00020000000000000000"> Exposing Constituents</A>
+<LI> <A NAME=tex2html29 HREF="#SECTION00030000000000000000"> Other Decomposition Constructs</A>
+<LI> <A NAME=tex2html30 HREF="#SECTION00040000000000000000"> Ensembles as Systems</A>
+<LI> <A NAME=tex2html31 HREF="#SECTION00050000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<P>
+<A NAME=9>&#160;</A>
+<A NAME=10>&#160;</A>
+<A NAME=11>&#160;</A>
+<A NAME=12>&#160;</A>
+<p>
+The bottom-up flavor of the object-oriented paradigm sometimes causes
+the analysis of large systems to be problematic. While inheritance
+provides <em> property</em> abstraction and decomposition mechanisms not
+available in other methods, it does not provide <em> task</em>
+decomposition mechanisms equivalent to those found in structured
+analysis (SA).  Every process in an SA data flow diagram (DFD) can be
+``naturally'' decomposed into a sub-DFD in which the subprocesses
+together achieve the required top level data transformations. In this
+chapter, we describe constructs offering these decomposition
+advantages while at the same time preserving the inheritance and
+behavior modeling advantages of OO.
+<P>
+Decomposition serves several related needs in software development.
+Large problems must be subdivided so they may be addressed by multiple
+analysts. Independence among the pieces of decomposed problems leads
+to more tractable modeling and reasoning. Also, the practical design
+and implementation of systems is possible only when these different
+pieces can be constructed independently of others.  We can appreciate
+the need for decomposition when we look at some of the entities
+occurring in some large systems:
+<P>
+<DL ><DT><b> A large corporation:</b>
+<DD> a division, a department, an employee, a
+project, a production unit, a product, an order, a floor in a building, a
+location code, etc.
+<DT><b> An airline system:</b>
+<DD> a flight, an airplane, a flight attendant, a
+client, a flight schedule, a special meal order, a service schedule, a
+luggage door, a payment scale, etc.
+<DT><b> A bank:</b>
+<DD> an interest rate, a branch office, a teller machine, a
+corporate account, a loan officer, the overseas department, a monthly
+statement, etc.
+<P>
+ </DL>
+<P>
+One cannot deny objecthood to any of these notions.  However, their
+juxtaposition imparts an uneasy feeling.  The notions and methods
+described in previous chapters do not provide the requisite means for
+decomposing problems into relatively independent pieces.  To resolve
+this situation, we introduce different abstraction levels via special
+objects, <em> ensembles</em>, whose properties facilitate task
+decomposition and a top-down analysis mode.
+<P>
+
+
+<center><H2><A NAME=SECTION00010000000000000000> Ensembles</A></H2></center>
+<P>
+Ensembles share with other objects the modeling apparatus  outlined
+in previous chapters. An ensemble has attributes, has an associated
+state-transition machine, and has the ability to interact with other
+objects.
+<P>
+An ensemble differs from the kinds of objects described in
+Chapter <A NAME=tex2html7 HREF="ch3.html">3</A> in that it stands for a cluster or bundle of
+less abstract entities that are each either objects or lower level
+subensembles. These <em> constituents</em> are described as <em> internal</em>
+to the ensemble, thus ``hidden'' from other objects.  Constituents
+interact only among each other or within the encompassing ensemble.
+In other words, the ensemble acts as a gateway or manager between its
+constituents and the rest of the system and its context.
+<P>
+While the dynamics of an ordinary object may be conceptualized as a
+sequential machine, an ensemble connotes an entity with internal
+parallelism.  For example, in the bank domain, we can see an account
+as an object when only one transaction at a time is permitted.  On the
+other hand, a loan department with several loan officers would be an
+ensemble because its constituents, the loan officers, may be operating
+in parallel.
+<P>
+An ensemble hides details of its constituent objects and subensembles
+that are irrelevant outside the ensemble, somewhat analogous to an
+object in OO programming that hides its internal implementation
+details.  We have previously ignored these aspects of OO <em>
+encapsulation</em> to focus on the declarative structure of objects
+and classes. As illustrated below, many objects that we have previously
+modeled using unencapsulated classes are more appropriately described
+as ensembles.
+<P>
+<A NAME=27>&#160;</A>
+<P>
+<H2><A NAME=SECTION00011000000000000000> Describing Ensembles</A></H2>
+<P>
+In the same way that we like to deal with classes of objects instead
+of individual objects, we will deal with classes of ensembles instead
+of individual ensembles.
+<P>
+Attributes can describe the constituent objects and subensembles of an
+ensemble. Invariant constraints may relate constituents with <em>
+self</em> of the ensemble to elaborate the relationship between the two.
+The relationship between an ensemble and its constituents may be
+thought of as subsuming a particular sense of the <em> PartOf</em>
+relation.<A NAME=31>&#160;</A>
+<P>
+Additional attributes may describe features that apply to the cluster
+of constituents as a whole; e.g., the number of constituents.  We can
+also capture information that applies to each of the constituents.
+Consider a fleet of ships that is represented by an ensemble.  The individual
+ships share the direction in which they are heading.  Thus, <em>
+direction</em> can be introduced as an attribute of the fleet itself.
+<P>
+When an ensemble has nonconstituent attributes, it may have a ``life
+of its own''. This permits development of a state-transition model.
+As an example, we can maintain in a fleet an attribute that records the
+distance of the fleet to its home port.  This allows us, for example,
+to introduce states <em> nearTheHomePort</em>, <em>
+remoteFromTheHomePort</em>, and <em> farAwayFromTheHomePort</em>, along with
+the transition <em> refuel</em> that refers to these attributes.
+<P>
+If an ensemble has been equipped with a state-transition model, we can
+also describe ensemble-to-ensemble and/or ensemble-to-object
+interactions.  For example, an ensemble <em> fleet</em> may communicate
+with ensemble <em> homeFleet</em> representing the different home ports of
+the ships in the fleet.  An interaction initiated by <em> homeFleet</em>
+could represent a command for the ships in the fleet to dock into
+their respective home ports.  An example of an ensemble-to-constituent
+interaction would be the fleet giving a directive specifically to one
+of its ships.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Summary Definition</A></H2>
+<P>
+<OL><LI> An <em> ensemble</em> is an object with other objects and/or subensembles
+    as its functional constituents.
+<LI> A constituent is a part of at least one and at most one ensemble.
+      (Thus the constituent-ensemble relationship is <em> not</em> transitive.)
+<LI> An ensemble mediates all
+        interaction between constituents and entities outside the ensemble.
+<LI> Constituents may interact among each other. In other words,
+        constituents may bear <em> acquaintance</em> relations
+        among one another, but not among objects outside their ensembles.
+<LI> An ensemble is
+        responsible for the construction and deletion of constituents.
+</OL><H2><A NAME=SECTION00013000000000000000> Examples</A></H2>
+<A NAME=47>&#160;</A>
+<A NAME=sectensatm>&#160;</A>
+<P>
+<A NAME=49>&#160;</A>
+We use double-vectors to denote ensemble constituents.  For example,
+we can describe a bank as an ensemble, with its branches (and possibly
+other entities) as constituents:<BR>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch9-img1.gif"><P>
+<P>
+<A NAME=59>&#160;</A>
+<P>
+ATM machines may also be described as ensembles.  Properties that we have
+previously described as attributes may be relabeled as
+constituents:<BR>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch9-img2.gif"><P>
+<P>
+In order for a constituent to ``talk'' to its enclosing ensemble, the
+constituent needs to have a handle on this ensemble. <A NAME=100>&#160;</A> This
+applies to any constituent.  Thus we can create a class <em>
+Constituent</em> with the attribute <em> constituentOf</em> of domain <em>
+Any</em>.  We can then introduce a subclass <em> ATMConstituent</em> where the
+domain is refined to <em> ATM</em>, and then use <em> ATMConstituent</em> as a
+mixin<A NAME=107>&#160;</A> class.  For instance, we can
+intersect a generic <em> Input</em> class with <em> ATMConstituent</em> to
+produce our <em> ATMInput</em> (or a superclass version of it); similarly
+for the other constituents.  We show <em> ATMConstituent</em> as a mixin
+with <em> Input</em> to yield <em> ATMInput</em>.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch9-img3.gif"><P>
+<P>
+<A NAME=141>&#160;</A>
+<P>
+Similarly, we may consider an ATM to be a constituent of a branch:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch9-img4.gif"><P>
+<P>
+(Note that the zero lower multiplicity bound still allows branches not
+to have an ATM.)
+<P>
+Whether it is wise to see ATMs as constituents of branches is another
+matter.  If we do, all interaction between an ATM and external
+entities, such as nonlocal accounts, other banks, etc., will have to be
+mediated by the branch.  This will entail exposing and exporting part
+of the ATM functionality to its branch.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Exposing Constituents</A></H2></center>
+<P>
+<A NAME=152>&#160;</A><A NAME=153>&#160;</A><A NAME=154>&#160;</A>
+<P>
+Constituent encapsulation shields the complexity of the inside world
+of an ensemble.  However, sometimes it is necessary or desirable to
+partially expose the behavior component of a particular constituent.
+<P>
+We do not need special notational apparatus to do this.  An ensemble
+(like any object) can have multiple disjoint transition networks.
+Exposure of (part of) a constituent can be achieved by ``copying'' and
+``elevating'' a coherent part of a transition network of a constituent
+as a behavior component of the ensemble.  The copied fragment must be
+adjusted for the fact that the ensemble itself does not do the work,
+but instead <em> forwards</em> incoming triggers and messages to the
+delegated constituent.  Similarly, an event produced by the
+constituent directed to an external recipient must be modified such
+that it is directed instead to the ensemble. The ensemble will take
+care of the subsequent transmission to the intended external recipient.
+<P>
+As an example, consider a vacuum cleaner with constituents <em>
+switch</em> and <em> engine</em>:<A NAME=158>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch9-img5.gif"><P>
+<P>
+The class <em> OnOffButton</em> is a subclass of the class <em> Button</em>
+with generic transition network:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch9-img6.gif"><P>
+<P>
+This transition network is generic in the sense that both transitions are
+uncommitted to what they control.  For example, the <em> TurnOn</em>
+transition is not more than:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch9-img7.gif"><P>
+<P>
+In general, we do not know how a button is turned on. <em> TurnOn</em> is
+a placeholder for an incoming event in the guard.  Similarly, we
+do not know what device will be affected by the TurnOn transition.
+<P>
+The subclass <em> OnOffButton</em> of the class <em> Button</em> will know
+more about the situation in which it participates, so we may
+specialize the transition.  Let us assume that it has an attribute
+<em> vcEngine</em> representing the motor of the vacuum cleaner.
+Consequently, its <em> Turn On</em> transition can be refined into:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch9-img8.gif"><P>
+<P>
+We assume that the motor has a transition network with a
+transition <em> OnEngine</em> in order to respond to the event <em>
+OnEngine(vcEngine)</em>.
+<P>
+We may finally return to the main issue of partially exporting the
+transition network of the <em> OnOffButton</em> constituent to the <em>
+VacuumCleaner</em> ensemble.  Instead of turning on a button (which can
+be deep down inside a vacuum cleaner), the vacuum cleaner itself is
+turned on.  This should forward the proper effect to the <em>
+OnOffButton</em> constituent.  Thus, we can give the vacuum cleaner a
+transition network:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch9-img9.gif"><P>
+<P>
+However, these transitions are merely forwarding activities.  For example,
+the <em> TurnOn</em> transition expands into:
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Other Decomposition Constructs</A></H2></center>
+<P>
+<H2><A NAME=SECTION00031000000000000000> Aggregation</A></H2>
+<A NAME=274>&#160;</A>
+<A NAME=275>&#160;</A>
+<P>
+Several analysis methods approach decomposition by describing
+``aggregates'' that are defined using <em> PartOf</em> relations.  <em>
+PartOf(q, p)</em> stands for the notion that an object <em> q</em> is in some
+sense a component of another object <em> p</em>.  These methods treat a
+<em> PartOf</em> connection as an intrinsic concept to model applications
+and domains.
+<P>
+Unfortunately, <em> PartOf</em> is in practice quite underdefined.
+Mathematicians usually assume that <em> PartOf</em> is transitive.
+Transitivity means:
+<P>
+<em> PartOf(a, b)</em> and <em> PartOf(b, c)</em> implies <em> PartOf(a, c)</em>.
+<P>
+However, can we entertain the following?
+<blockquote> Plato's stomach is part of Plato, and <BR>
+Plato is part of the Greek population, thus <BR>
+Plato's stomach is part of the Greek population.
+</blockquote>
+<P>
+One can object that this example is not fair.  <em> PartOf</em> has been
+used here in two different senses, physical <em> PartOf</em> and a version
+of metaphorical <em> PartOf</em>.  This kind of error is easy to make,
+especially when in large systems involving multiple analysts. Most
+cases do not include quite as obvious misnomers as seen in this example.
+<P>
+Without care, <em> PartOf</em> might mean nothing more than ``is somehow
+related to''.  Nearly any use invites clarification.  Do we want <em>
+PartOf</em> to be transitive?  If so, are we prepared to do transitivity
+inference?  Will our development tools help us enforce transitivity?
+Will an implementation realizing <em> PartOf</em> enforce and exploit
+transitivity?
+<P>
+Rumbaugh et al [<A HREF="#rumbaugh">5</A>]<A NAME=295>&#160;</A> provide a more specific
+interpretation of aggregates: If <em> p</em> is an aggregate of <em> q1</em>, <em> q2</em>,
+..., <em> qn</em>, then there is a behavioral connection between <em> p</em> and
+its constituents (possibly recursively so).  To achieve a particular
+operation <em> O</em> on <em> p</em>, <em> p</em> will forward this operation <em> O</em> to its
+components <em> qi</em>, and will perhaps perform some integration operation.
+This requires that all elements reachable from an aggregate via the
+transitive closure of the <em> PartOf</em> relationship should support
+this operation.
+<P>
+As an example, consider asking a physical entity <em> e</em> for its weight.
+When <em> e</em> knows that it is composed of <em> f1</em>, <em> f2</em>, and <em> f3</em>, it can ask
+for their weights and reply with the sum of their answers.  Similarly,
+consider the task of copying a chapter.  A chapter consists of
+sections.  A section consists of paragraphs ... consists of
+characters.  Thus when all the notions in this chain support the
+notion of copying, then chapters can be copied ``by transitivity''.
+<P>
+This version of aggregation still leaves open several matters of
+interpretation. Circularity is certainly out.  But what about a
+component being part of more than one aggregate (apart from being
+implied by transitivity)?  Do we want that?  Does the destruction of
+an aggregate imply the destruction of the components?  Does the
+destruction of a component imply the destruction of the aggregate?
+<P>
+Ensembles were defined to provide answers to such questions:
+<P>
+<UL><LI>  The
+    constituent-to-ensemble relationship is explicitly <em> not</em>
+    transitive. Ensembles introduce abstraction layers.  The constituents
+    of layer <em> N+1</em> reside in layer <em> N</em> and certainly do <em> not</em> reside
+    also in layer <em> N-1</em>.
+<P>
+  <LI> While an ensemble manages construction and deletion of
+    constituents, the issue of whether a constituent
+    is a <em> physical</em> part of the ensemble is otherwise incidental.
+    If this fact happens to contribute to the model, it must
+    be expressed separately.
+<P>
+  <LI> Ensembles must explicitly forward events to constituents.
+        Ensembles thus allow but do not require transitive propagation of
+        operations. The development of models that do maintain
+        transitivity remains a useful option in appropriate situations.
+</UL><H2><A NAME=SECTION00032000000000000000> Subsystems</A></H2>
+<P>
+Ensembles are closer to the notion of subsystems<A NAME=321>&#160;</A>
+developed by Wirfs-Brock et al [<A HREF="#wirfs">7</A>], who motivate them in a
+similar fashion. However, they treat subsystems as pure analysis
+constructs, without any implementation consequences:
+<P>
+<blockquote>
+	A <em> subsystem</em> is a set of ... classes (and possibly other
+	subsystems) collaborating to fulfill a common set of
+	responsibilities....
+<P>
+Subsystems are a concept used to simplify a design.  The complexity of a
+large application can be dealt with by first identifying subsystems within
+it, and treating those subsystems as classes....
+<P>
+Subsystems are only conceptual entities; they do not exist during execution.
+</blockquote>
+<P>
+We take the opposite position about implementation consequences for
+ensembles.  Like all analysis constructs, particular ensembles
+introduced in the analysis phase may indeed be ``compiled away'' in a
+subsequent design phase.  However, ensembles with regular attributes
+in addition to constituent attributes can persist into the
+implementation and become ``managerial'' objects.  In fact, ensembles
+may be seen as declarative analysis-level versions of the
+communication-closed layered compositional OO design constructs that
+play a central role in Part II (or vice versa).  The encapsulation and
+forwarding properties of ensembles (which are not necessarily shared
+by subsystem notions) play central roles in the design phase.
+<A NAME=326>&#160;</A>
+<P>
+Still, the notion of a subsystem bears a useful additional connotation
+with respect to development task decomposition, without commitment to
+other definitional aspects of ensembles. We will continue to use the
+term when highlighting this sense of decomposition.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Ensembles as Systems</A></H2></center>
+<P>
+Since we have defined an ensemble to be an object (with additional
+features) and since an object has a single thread of control, we may
+wonder whether we can model an entire <em> system</em> faithfully as an
+ensemble.  Consider the example of a <em> Branch</em> ensemble having
+multiple <em> ATM</em>s as constituents.  How do we ensure with this setup
+that multiple interactions can occur at the same time?
+<P>
+We give two answers.  First, we can simply expose appropriate parts of
+the transition networks of the ATMs through the <em> branch</em>es to a
+<em> bank</em>.  Alternatively, we can add to the class <em> Branch</em> an
+attribute <em> user</em> with the same multiplicity <em> [0:M]</em> as for
+<em> atm</em> and we express through a constraint that <em> user<sub>i</sub></em>
+interacts with <em> atm<sub>i</sub></em>.  The users may be modeled explicitly as
+``stubs''.
+<center><P><P>
+
+
+<H2><A NAME=SECTION00050000000000000000> Summary</A></H2></center>
+<P>
+Ensembles are generally ``large'' encapsulated objects with a
+
+connotation of internal parallelism.  They are similar in nature to
+subsystems.  Ensembles introduce multiple layers of abstraction
+necessary for dealing with large target systems.  These multiple
+layers of abstraction complement the bottom-up flavor of the OO
+paradigm with a top-down component.  This allows a divide-and-conquer
+development strategy where multiple analysts deal with relatively
+independent subsystems.
+<P>
+Ensembles encapsulate their constituents.  Inner objects and
+subensembles cannot directly interact with external entities.
+Ensembles have the exclusive responsibility to create and delete their
+constituents.
+<P>
+<H2><A NAME=SECTION00051000000000000000> Further Reading</A></H2>
+<P>
+Ensembles were introduced in [<A HREF="#ch2">2</A>].  Much of Booch's
+[<A HREF="#boochbook">1</A>] treatment of ``decomposition'' may be seen as an
+account of ensemble definition.  Subsystems are given ample attention
+in [<A HREF="#wirfs">7</A>], [<A HREF="#sm4">6</A>] and
+[<A HREF="#jacobson">4</A>]. Other methods (especially Rumbaugh et al
+[<A HREF="#rumbaugh">5</A>]) postpone subsystem development to the design phase.
+Alternative high-level class constructs that are less geared toward
+problem decomposition are discussed in [<A HREF="#kurtz">3</A>].
+<P>
+<H2><A NAME=SECTION00052000000000000000> Exercises</A></H2>
+<P>
+<OL><LI>  Discuss whether the following pairs of notions can be in the
+ensemble -- constituent relation:
+<OL><LI> A hand and a finger.
+<LI> A country and a capital.
+<LI> IBM and its marketing department (assume that it has one).
+<LI> USA and its defense forces.
+<LI> The USA government and its defense forces.
+<LI> A bicycle and a wheel.
+<LI> The 20th century and 1950.
+<LI> Your feet and a smell.
+<LI> A keyboard and a key.
+<LI> A billiard ball and spherical.
+</OL>
+<P>
+<LI>  Formulate some ensemble -- constituent pairs in the domain of banks.
+<P>
+<LI>  Formulate some ensemble -- constituent pairs in the domain of
+    airline reservation systems.
+<P>
+<LI>  Describe a fragment of a transition network of an ATM that must be
+exposed to a branch when we consider an ATM to be a constituent of a branch.
+<P>
+<LI> An architecture of a system may be seen as consisting of a high level
+decomposition in functional subsystems.  What role, if any, could ensembles
+play in architectural descriptions?  (Consider that sometimes a distinction
+is made between logical architecture and physical architecture.)
+<P>
+<LI> We have been critical regarding aggregates and its <em> PartOf</em>
+relationship.  Investigate a domain with which you are familiar and see how
+<em> PartOf</em> can play a role in it.  Is <em> PartOf</em> transitive in this
+domain?  If so, what are the ramifications?  How would <em> PartOf</em> be
+handled in the design? In the implementation?
+<P>
+</OL>
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=boochbook><STRONG>1</STRONG></A><DD>
+G. Booch.
+ <em> Object Oriented Design with Applications</em>.
+ Benjamin/Cummings, 1990.
+<P>
+<DT><A NAME=ch2><STRONG>2</STRONG></A><DD>
+D. de Champeaux.
+ Object-oriented analysis and top-down software development.
+ In <em> ECOOP '91</em>. Springer Verlag, 1991.
+<P>
+<DT><A NAME=kurtz><STRONG>3</STRONG></A><DD>
+D.W. Embley, B. Kurtz, and S.N. Woodfield.
+ <em> Object-Oriented Systems Analysis</em>.
+ Yourdon Press/Prentice Hall, 1992.
+<P>
+<DT><A NAME=jacobson><STRONG>4</STRONG></A><DD>
+I. Jacobson, M. Christerson, P. Jonsson, and G. Overgaard.
+ <em> Object-Oriented Software Engineering</em>.
+ Addison-Wesley, 1992.
+<P>
+<DT><A NAME=rumbaugh><STRONG>5</STRONG></A><DD>
+J. Rumbaugh, M. Blaha, W. Premerlani, F. Eddy, and W. Lorensen.
+ <em> Object-Oriented Modeling and Design</em>.
+ Prentice Hall, 1991.
+<P>
+<DT><A NAME=sm4><STRONG>6</STRONG></A><DD>
+S. Shlaer and S.J. Mellor.
+ <em> Object Life Cycles: Modeling the World in States</em>.
+ Yourdon Press, 1991.
+<P>
+<DT><A NAME=wirfs><STRONG>7</STRONG></A><DD>
+R. Wirfs-Brock, B. Wilkerson, and L. Wiener.
+ <em> Designing Object-Oriented Software</em>.
+ Prentice Hall, 1990.
+</DL>
+<P>
+
+<a href="ch10.html">Next: Chapter 10</a>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed Jan 10 07:54:51 EST 1996</I>
+</ADDRESS>
+</BODY>

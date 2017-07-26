@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>From Design to Implementation</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="From Design to Implementation">
+<meta name="keywords" value="ch26">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 26: From Design to Implementation</h2>
+<UL>
+<LI> <A NAME=tex2html26 HREF="#SECTION00010000000000000000"> Testing</A>
+<LI> <A NAME=tex2html27 HREF="#SECTION00020000000000000000"> Performance Assessment</A>
+<LI> <A NAME=tex2html28 HREF="#SECTION00030000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<P>
+The goal of the implementation phase is to implement a system
+correctly, efficiently, and quickly on a particular set or range of
+computers, using particular tools and programming languages.  This
+phase is a set of activities with:
+<P>
+<DL ><DT><b> Input:</b>
+<DD> Design, environmental, and performance requirements.
+  <DT><b> Output:</b>
+<DD> A working system.
+  <DT><b> Techniques:</b>
+<DD>  Reconciliation, transformation, conversion,
+        monitoring, testing.
+<P>
+ </DL>
+<P>
+Designers see objects as software abstractions. Implementors see them
+as software realities. However, as with the transition from analysis
+to design, structural continuity of concepts and constructs means that
+design and even analysis notions should flow smoothly and traceably.
+<A NAME=19>&#160;</A>
+<P>
+The chief inputs from design to implementation may be categorized in a
+manner similar to those of previous phases. Again, while the headings
+are the same, the details differ.
+<P>
+<DL ><DT><b> Functionality:</b>
+<DD> A computational design of the system.
+<DT><b> Resource:</b>
+<DD> The machines, languages, tools, services,
+    and systems available to build the system.
+<DT><b> Performance:</b>
+<DD> The expected response times of the system.
+<DT><b> Miscellaneous:</b>
+<DD> Quality, scheduling, compatibility with
+    other systems, etc.
+<P>
+ </DL>
+<P>
+Implementation activities are primarily <em> environmental</em>. They deal
+with the realities of particular machines, systems, languages
+compilers, tools, developers, and clients necessary to
+translate a design into working code.
+<P>
+Just as the design phase may include some ``analysis'' efforts
+approached from a computational standpoint, the implementation phase
+essentially always includes ``design'' efforts.  Implementation-level
+design is a <em> reconciliation</em> activity, where in-principle
+executable models, implementation languages and tools, performance
+requirements, and delivery schedules must finally be combined, while
+maintaining correctness, reliability, extensibility, maintainability
+and related criteria.
+<P>
+While OO methods allow and even encourage design iteration, such
+activities must be tempered during the implementation phase.  In
+analogy with our remarks in Chapter <A NAME=tex2html9 HREF="ch25.html">25</A>, if everything can
+change, then nothing can be implemented reliably. Implementation phase
+changes should ideally be restricted to occasional additions rather
+than destructive modifications.
+<P>
+Implementation activities may be broken across several dimensions,
+including the construction of intracluster software, intercluster
+software, infrastructure, tools, and documentation, as well as
+testing, performance monitoring, configuration management and release
+management.  Most of these were touched on briefly in
+Chapter <A NAME=tex2html10 HREF="ch15.html">15</A>.
+<P>
+Many excellent texts, articles, manuals, etc., are available on OO
+programming in various languages, on using various tools and systems,
+and on managing the implementation process.  In keeping with the goals
+and limitations of this book, we restrict further discussion of the
+implementation phase to a few comments about testing and assessment
+that follow from considerations raised in Parts I and II.
+<P>
+<center><P><P>
+
+<H2><A NAME=SECTION00010000000000000000> Testing</A></H2></center>
+<P>
+<A NAME=33>&#160;</A>
+A design must be <em> testable</em>. An implementation must be <em>
+tested</em>. Tests include the following:
+<P>
+<DL ><DT>Code Inspections.
+<DD> Reviews and walk-throughs.<A NAME=37>&#160;</A>
+  <DT>Self tests.
+<DD> The tests created during the design
+    phase can almost always be built into implemented classes
+    and invoked during test runs and/or during actual system
+    execution.
+  <DT>White-box tests.
+<DD> Tests that force most or all computation
+    paths to be visited, and especially those that place components
+    near the edges of their operating conditions form classic test
+    strategies.
+ <DT>Portability tests.
+<DD> Tests should be applied across the
+    range of systems on which the software may execute.
+    Tests may employ suspected nonportable constructions
+    at the compiler, language, tool, operating system,
+    or machine level.
+  <DT>Integration tests.
+<DD> Tests of interobject and interprocess
+    coordination should be built at several granularity levels.
+    For example, tests of two or three interacting objects,
+    dozens of objects, and thousands of them are all needed.
+  <DT>Use cases.
+<DD> Use cases laid out in the analysis phase
+    should actually be run as tests.<A NAME=38>&#160;</A>
+  <DT>Liveness tests.
+<DD> Tests may be designed to operate
+    for hours, days, or months to determine the
+    presence of deadlock, lockup, or nontermination.<A NAME=39>&#160;</A>
+  <DT>Fault tolerance tests.
+<DD> Hardware and software
+    errors may be infused into systems before or during testing in
+    order to test response to faults.<A NAME=40>&#160;</A><A NAME=41>&#160;</A>
+  <DT>Human factors tests.
+<DD>
+    While we do not concentrate much in this book on user interface
+    design, <em> any</em> system, even one without an interactive interface,
+    must meet basic human factors requirements. Tests and observations with
+    potential users form parts of any test strategy.
+  <DT>Beta tests.
+<DD> Use by outsiders rather than developers often
+    makes up for lack of imagination about possible error paths by testers.
+  <DT>Regression tests.
+<DD> Tests should never be thrown out (unless
+    the tests are wrong). Any changes in classes, etc., should
+    be accompanied by a rerun of tests. Most regression tests
+    begin their lives as bug reports.
+<P>
+ </DL>
+<P>
+When tests fail, the reasons must be diagnosed.  People are
+notoriously poor at identifying the problems actually causing
+failures.  Effective system-level debugging requires instrumentation
+and tools that may need to be hand-crafted for the application at
+hand. Classes and tasks may be armed with tracers, graphical event
+animators, and other tools to help localize errors.
+<P>
+<P>
+<center><P><P>
+
+<H2><A NAME=SECTION00020000000000000000> Performance Assessment</A></H2></center>
+<P>
+<A NAME=45>&#160;</A>
+<P>
+Analysis-level performance requirements may lead to design-phase
+activities to insert time-outs and related alertness measures in cases
+where performance may be a problem. However, often, designers cannot
+be certain whether some of these measures help or hurt.
+<P>
+Thus, while designers provide plans for building software that ought
+to pass the kinds of performance requirements described in
+Chapter <A NAME=tex2html18 HREF="ch11.html">11</A>, their effects can usually only be evaluated
+using live implementations.  Poorer alternatives include analytic
+models, simulations, and stripped-down prototypes.  These can sometimes
+check for gross, ball-park conformance, but are rarely accurate enough
+to assess detailed performance requirements.
+<P>
+Performance tests may be constructed using analogs of any of the <em>
+correctness</em> tests listed in the previous section. In practice, many
+of these are the very same tests.  However, rather than assessing
+correctness, these check whether steps were performed within
+acceptable timing constraints.
+<P>
+The most critical tests are those in which the workings of the system
+itself are based on timing assumptions about its own operations.  In
+these cases performance tests and correctness tests completely
+overlap. For example, any processing based on the timed transition
+declarations described in Chapters <A NAME=tex2html19 HREF="ch11.html">11</A> and
+ <A NAME=tex2html20 HREF="ch19.html">19</A> will fail unless the associated code performs within
+stated requirements.<A NAME=53>&#160;</A>
+<P>
+As with correctness tests, the reasons for performance test failures
+must be diagnosed. Again, people are notoriously poor at identifying
+the components actually causing performance problems.  Serious tuning
+requires the use of performance monitors, event replayers,
+experimentation during live execution, and other feedback-driven
+techniques to locate message traffic and diagnose where the bulk of
+
+processing time is spent and its nature.
+<P>
+Performance tuning strategies described in Chapter <A NAME=tex2html22 HREF="ch25.html">25</A> may be
+undertaken to repair problems.  Alternatively, or in
+addition, slower objects may be recoded more carefully, coded in
+lower level languages, moved to faster processors, and/or moved to
+clusters with faster interprocess interconnections.<A NAME=56>&#160;</A>
+<P>
+If all other routes fail, then the implementors have discovered
+an infeasible requirement. After much frustration,  many conferences,
+and too much delay, the requirements must be changed.
+<P>
+<P>
+
+<center><P><P>
+
+<H2><A NAME=SECTION00030000000000000000> Summary</A></H2></center>
+<P>
+Ideally, object-oriented implementation methods and practices
+seamlessly mesh with those of design. Implementation activities
+transform relatively environment independent design plans into
+executable systems by wrestling with environment dependent issues
+surrounding machines, systems, services, tools, and languages.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Further Reading</A></H2>
+<P>
+As mentioned, many good accounts of implementation processes and
+activities are available. For example, Berlack [<A HREF="#berlack">2</A>]
+describes configuration management. McCall et al [<A HREF="#mccall">4</A>] provide
+a step-by-step approach to tracking reliability.  OO-specific testing
+strategies are described more fully by Berard [<A HREF="#berard">1</A>]. System
+performance analysis is discussed in depth by Jain [<A HREF="#jain">3</A>].  Shatz
+[<A HREF="#shatz">5</A>] describes monitoring techniques for distributed systems.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> The borders between analysis, design, and implementation are
+        easy to specify in a general way but ``leak'' a bit here and
+        there. Does this mean the distinctions are meaningless?
+<P>
+  <LI> How do OO programming language constructs ensuring secure access
+        protection make testing (a) easier (b) harder?
+<P>
+  <LI> Describe how to arm classes with <tt> trace</tt> operations.
+<P>
+  <LI> Which of the following is the path to OO utopia?
+<OL><LI> better hardware
+    <LI> better OO development methods
+    <LI> better OO development tools
+    <LI> better OO programming languages
+    <LI> better OO system software support
+    <LI> better OO software process management
+    <LI> better economic conditions
+    <LI> none of the above.
+</OL></OL><BR>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=berard><STRONG>1</STRONG></A><DD>
+E. Berard.
+ <em> Essays in Object-Oriented Software Engineering</em>.
+ Prentice Hall, 1992.
+<P>
+<DT><A NAME=berlack><STRONG>2</STRONG></A><DD>
+H. Berlack.
+ <em> Software Configuration Management</em>.
+ Wiley, 1991.
+<P>
+<DT><A NAME=jain><STRONG>3</STRONG></A><DD>
+R. Jain.
+ <em> The Art of Computer Systems Performance Analysis</em>.
+ Wiley, 1991.
+<P>
+<DT><A NAME=mccall><STRONG>4</STRONG></A><DD>
+J. McCall, W. Randell, J. Dunham, and L. Lauterbach.
+ Software reliability measurement and testing guidebook.
+ Technical Report RL-TR-92-52, Rome Laboratory USAF, 1992.
+<P>
+<DT><A NAME=shatz><STRONG>5</STRONG></A><DD>
+S. Shatz.
+ <em> Development of Distributed Software</em>.
+ Macmillan, 1993.
+</DL>
+<P>
+
+<a href="ch27.html">Next: Appendix</a>
+<center><P><P></center>
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 08:01:44 EDT 1995</I>
+</ADDRESS>
+</BODY>

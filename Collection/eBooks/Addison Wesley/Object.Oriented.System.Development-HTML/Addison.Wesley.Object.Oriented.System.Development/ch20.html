@@ -1,0 +1,916 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Interaction Designs</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Interaction Designs">
+<meta name="keywords" value="ch20">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 20: Interaction Designs</h2>
+<UL>
+<LI> <A NAME=tex2html73 HREF="#SECTION00010000000000000000"> Callbacks</A>
+<LI> <A NAME=tex2html74 HREF="#SECTION00020000000000000000"> Replies</A>
+<LI> <A NAME=tex2html75 HREF="#SECTION00030000000000000000"> Invocations</A>
+<LI> <A NAME=tex2html76 HREF="#SECTION00040000000000000000"> Control Flow</A>
+<LI> <A NAME=tex2html77 HREF="#SECTION00050000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<P>
+<A NAME=9>&#160;</A>
+<A NAME=10>&#160;</A><A NAME=11>&#160;</A>
+<P>
+In this chapter, we focus on the design of object interaction
+scenarios.  In previous chapters, we distinguished call/reply-style
+<tt> op</tt>s from asynchronous one-way sends. We singled out
+bidirectional <tt> op</tt>s in part to obtain a simple foothold on
+structured bidirectional message passing, as opposed to raw
+notifications from one object to another.
+<P>
+A synchronized bidirectional <tt> op</tt> represents the most familiar
+framework for interaction between objects, procedural invocation. A
+client asks a server to do something and waits until it is done,
+obtaining back any results the receiver is willing to provide.
+<P>
+The object-oriented paradigm supports a much richer set of
+communications strategies and protocols than can be expressed using
+blocking procedures. In this chapter we discuss several variations,
+while also demonstrating underlying techniques enabling the design
+of additional protocols and idioms.
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Callbacks</A></H2></center>
+<A NAME=16>&#160;</A>
+<P>
+The most basic form of bidirectional interaction is for some object
+<tt> a</tt> to send a one-way message to another object <tt> b</tt>,
+who in turn sends back a message to <tt> a</tt>, and so on.
+<P>
+These designs are often termed <em> callback</em> protocols, since the
+recipient of a message ``calls back'' its sender by issuing a message
+to it.  They are also very similar to designs based on <em>
+continuations</em> in programming languages such as <i> scheme</i><A NAME=23>&#160;</A>
+[<A HREF="#abelson">1</A>].  In fact, the usages are for most purposes
+identical.<A NAME=25>&#160;</A> A good example is interaction with a
+timer:<A NAME=26>&#160;</A>
+<P>
+<PRE>class BeeperTimer
+  delayer: Delayer;
+  op alarm(secs: time, b: DelayedBeeper) {
+     delayer.delay(secs); b.beep };
+end
+
+class DelayedBeeper
+  t: BeeperTimer;
+  op beep ... ;
+  op beepAfter(secs: time) { t.alarm(secs, self) }
+end
+</PRE>
+<P>
+Here, the <tt> DelayedBeeper</tt> object is free to do other things after
+processing <tt> beepAfter</tt>. It is later told by the <tt> BeeperTimer</tt>
+when it should <tt> beep</tt>.
+<P>
+This is a useful strategy for designing interactions that involve
+timers of any sort. However, it is difficult to extend this example
+for such purposes, since the exact message to send back (<tt> beep</tt>)
+is hard-wired into the definition of the timer.  In keeping with
+the analysis tactics of Chapter <A NAME=tex2html10 HREF="ch6.html">6</A>, this
+operation should be decoupled so the timer may be used
+for purposes other than controlling beepers.  This can be arranged via
+wrappers:<A NAME=34>&#160;</A><A NAME=35>&#160;</A><A NAME=36>&#160;</A>
+<A NAME=37>&#160;</A>
+<P>
+
+<P>
+<PRE>class Timer ...
+  op alarm(secs: time, action: Wrapper) {
+       delayer.delay(secs); action.send }
+end
+
+class DelayedBeeper ...
+  op beepAfter(secs: time) { t.alarm(secs, WRAP(beep)) }
+end
+</PRE>
+<P>
+A beneficial by-product of this wrapping is that the sender does not
+need to reveal its identity to the receiver.  Similarly, if one object
+replies to a callback argument regardless of who the actual sender of
+an operation was, then sets of objects may more securely interact,
+assuming design conventions are set up accordingly.
+<P>
+Callbacks may be ``passed through'' intermediaries.  For example, if
+we wanted <tt> Dispenser</tt> objects to notify senders when their
+controlled <tt> DispenserDoor</tt>s were opened, we might write it
+using the abstract classes:<A NAME=40>&#160;</A>
+<P>
+<PRE>class DispenserDoor
+  isOpen: bool;
+  op close ==&gt; ~isOpen' end
+  op raise(ack: Wrapper) ==&gt; isOpen', ack.call' end
+end
+
+class Dispenser ...
+  door: DispenserDoor;
+  op raiseDoor(ack: Wrapper)  ==&gt; door.raise(ack)'' end
+end
+</PRE>
+<P>
+This strategy makes it easier to express designs in which an object
+delegates<A NAME=41>&#160;</A> tasks to helper objects.  The helper,
+rather than the host may send back any results associated with an
+operation.
+<P>
+<H2><A NAME=SECTION00011000000000000000> Emulating Procedures</A></H2>
+<P>
+While they may look a bit esoteric, callbacks are actually <em> lower</em>
+level constructs than those underlying standard procedure-style
+interaction. In fact, it is possible to replace all blocking
+procedure-style interactions with callbacks.  The mechanics for doing
+so are not much fun, but they are in part automatable through tools.
+Such maneuvers might even be necessary design steps if the system
+needs to be implemented using distributed frameworks supporting only
+one-way primitives.
+<P>
+For a prototypical example, consider an interaction in which an object
+of some class <tt> Client</tt> requests and receives something from an object
+of class <tt> Server</tt>. To avoid illustrating too many things at once, we will
+hard-wire the messages:
+<P>
+<PRE>class Server
+  op get: int          { reply 17 }
+end
+
+class Client
+  op ask(s: Server)    { print(s.get) }
+end
+</PRE>
+<P>
+This may be transformed into:
+<P>
+<PRE>class Server_2
+  op get(c: Client_2)  { c.use(17) }
+end
+
+class Client_2
+  op ask(s: Server_2)  { s.get(self) }
+  op use(i: int)       { print(i) }
+end
+</PRE>
+<P>
+The general strategy is to split out each ``sequence point'' in a
+series of blocking operations as a separate operation, and then to use
+callbacks to thread them together. It is the very same idea as
+using self-propagation messages for looping and/or sequencing
+operations discussed in Chapter <A NAME=tex2html17 HREF="ch19.html">19</A>.  But here, two
+objects pass the propagations back and forth.
+<P>
+<H3><A NAME=SECTION00011100000000000000> Blocking</A></H3>
+<P>
+<A NAME=49>&#160;</A>
+Actually, in order to completely mirror procedure semantics, the
+<em> wait states</em> in the receiver must be explicitly tracked.  Assuming
+noninterruptibility, in the first version a <tt> Client</tt> object gets an
+<tt> int</tt> and prints it in a single atomic operation.  Our
+first transformation did not meet this guarantee. The <tt> Client</tt> could do
+something else (e.g., start another <tt> ask</tt>) in between the <tt>
+ask</tt> and <tt> use</tt>. Unless this is known to be acceptable, these
+operations should be protected with wait-state guards that represent
+transient forms of <em> locks</em><A NAME=58>&#160;</A> (see
+Chapter <A NAME=tex2html20 HREF="ch22.html">22</A>):
+<P>
+<PRE>class Client_3
+  own waiting: Bool &lt;&gt; init ~waiting?
+  ...
+  when ~waiting? then
+    op ask(s: Server)  { waiting.t!; s.get(self) }
+  else
+    op use(i: int)     { print(i); waiting.f! }
+  end
+end
+</PRE>
+<P>
+Sometimes protocols may be loosened a bit to allow multiple concurrent
+operations. If each request and reply also contains a given ``task
+ID'', the issuer may keep track of which reply corresponds to which
+request. For example, using simple integers as IDs:
+<P>
+
+<P>
+<PRE>class Client_4
+  own tIDGen: Counter &lt;&gt;
+  own outstandingRequests: TABLE[Action] &lt;&gt;
+  ...
+  op ask(s: Server) {
+     tIDGen.inc; outstandingRequests.put(new Action...);
+     s.get(self, tIDGen.count) }
+  op use(i: int, tID: int) {
+     outstandingRequests.at(tID).send; ... }
+end
+</PRE>
+<P>
+The use of <em> time-stamps</em><A NAME=62>&#160;</A> rather than task IDs
+allows actions to be coordinated according to send and/or receive
+times.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Tracking Services</A></H2>
+<P>
+<A NAME=64>&#160;</A><A NAME=65>&#160;</A><A NAME=66>&#160;</A><A NAME=67>&#160;</A>
+<P>
+So far we have taken an object-centric view of interaction. An
+alternative perspective is to focus on the <em> services</em> or tasks
+being performed rather than the possibly many objects involved in
+providing them. Since most operations on most objects are designed in
+support of useful services, this view helps provide conceptual and
+computational checks on their nature and correctness, especially when
+using callbacks and other constructs that can be hard to track.
+<P>
+A <em> timethread</em> [<A HREF="#buhr2">5</A>] may be defined as a sequence of
+messages and related processing instigated from a single request to a
+single object. Timethreads are design-level versions of use
+cases, event-traces, and scripts.  The traversal of a timethread
+through a set of objects describes a service.  Timethreads themselves
+may be reified. Rather than identifying interactions using task IDs,
+entire objects may track the different messages supporting a
+service. For example:
+<P>
+<PRE>class TaskInfo ...
+  creationTime: time;
+  parentTask: TaskInfo;
+  messageLog: SEQ[Message];
+  invCheck: bool;
+end
+</PRE>
+<P>
+A new instance of such a class may be created during a service call,
+and then propagated as an argument for all further messages.  New
+subtask objects may be generated whenever a task ``forks'' in multiple
+directions, usually as a result of one-way sends.  These may later join
+the main task.  Task bookkeepers are useful for monitoring and
+debugging these processes.  They also provide a means of tracking and
+controlling service deadlines.
+<P>
+These classes may hold the trace checks<A NAME=71>&#160;</A> described in
+Chapter <A NAME=tex2html27 HREF="ch16.html">16</A>. A <tt> TaskInfo</tt> object may evaluate
+sets of per-task invariants that must hold across all points in a
+service. For example, an authentication service may promise to involve
+only messages to a predetermined set of objects.  Holding the
+checks in the task itself, rather than in all participating objects,
+simplifies expression and testing. Some or all participants may then
+invoke the check during processing.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00020000000000000000> Replies</A></H2></center>
+<P>
+Callbacks and their refinements provide entry points to the design of
+specific protocols that enhance reliability, security, concurrency,
+and/or fault-tolerance of bidirectional interaction. A complete survey
+of such protocols is beyond the scope of this book. (See the further
+readings.) In this and the next section, we describe common
+interaction constructions that lie midway between the straitjacket of
+procedural interaction and the chaos of unstructured one-way sends. We
+focus first on variations on reply mechanisms, and then on
+invocations.  Of course, designers are by no means obligated to use
+<em> all</em> (or even any) of the described constructs.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Early Replies</A></H2>
+<P>
+<A NAME=78>&#160;</A>
+<A NAME=79>&#160;</A><A NAME=80>&#160;</A>
+<P>
+<H4><A NAME=SECTION00021010000000000000> Acknowledgments.</A></H4>
+<P>
+Acknowledgment protocols block senders only until messages are
+triggered. Senders are then free to continue asynchronously.  Assuming
+that the sender is structured to wait for the acknowledgment before
+proceeding, this is equivalent to a callback-based design in which an
+<tt> ack</tt> message is sent back to the client before any work is
+performed:
+<P>
+<PRE>  op work(sender: A) { sender.ack; dowork }
+</PRE>
+<P>
+One application is the support of temporally ordered or <em> causal</em>
+one-way messages.  Blocking only until delivery has been acknowledged
+is a simple way to deal with requirements assuming that messages are
+received in exactly the same order that they are sent.  For example,
+the specifications for an electronic mail service might require that
+messages be given serial numbers that reflect (per-site) sending
+order. In distributed systems using asynchronous sends and where
+arrival order need not correspond to sending order, some such protocol
+is required to obtain this guarantee.<A NAME=84>&#160;</A>
+<P>
+The logic of early reply protocols may be extended to allow
+servers to ``release'' blocking clients at any point in an operation,
+not just at the beginning (as with acknowledgments) or the end (as
+with most service <tt> reply</tt>s).  An <i> ODL</i> <tt> reply</tt> is
+different than a ``return'' statement in most languages in that a <tt>
+reply</tt> does not terminate the enclosing operation (unless, of course,
+it is the last statement of an operation). For example, we could
+rewrite the previous construction as:
+<P>
+<PRE>  op work: () { reply; dowork }
+</PRE>
+<P>
+This construct may be used to obtain <em> rendezvous</em> semantics
+(Chapter <A NAME=tex2html32 HREF="ch6.html">6</A>) even in otherwise asynchronous
+environments.  This is much more convenient than hand-crafting
+acknowledgment protocols. If necessary, the construct may be
+implemented by first recasting it into the original callback
+mechanisms.
+<P>
+Early replies are also useful in data structure update
+operations that return elements to clients but then asynchronously
+proceed with internal bookkeeping.  For example:
+<P>
+<A NAME=92>&#160;</A>
+<PRE>class PriorityQueue[T] ...
+  locals least: T; op findNextLeast...; end
+  op take: T { reply least; findNextLeast }
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION00022000000000000000> Named Replies</A></H2>
+<P>
+<A NAME=94>&#160;</A>
+Multiple named replies for a blocking procedure allow expression of
+different kinds of results by giving them labels. Instead of issuing
+a <tt> reply</tt>, an <i> ODL</i> operation may ``invoke'' different labeled
+reply forms. Clients must <tt> catch</tt> the corresponding messages.
+Catch clauses are computational versions of <tt> when</tt> clauses that
+apply only to wait states on blocking calls.  For example:
+<P>
+<PRE>class Slave ...
+  op compute(t: Task): done(x: Result), fail(r: Reason)  {
+     if canDo(t) then
+        done(new Result...)
+     else fail(aReason) end }
+end
+</PRE>
+<P>
+<PRE>op useSlave(s: Slave, t: Task) {
+   catch s.compute(t)
+     op done(x: Result) { use(x) }
+     op fail(r: Reason) { print(r) }
+   end }
+</PRE>
+<P>
+Named replies are among the easiest-to-use integrations of procedural
+and asynchronous interaction constructs.  They restrict more general
+protocols only in that the replies must be caught by senders, not any
+other objects.  They conveniently hide and localize blocking mechanics
+by creating local operations (e.g., <tt> done</tt>) that are only valid
+during particular wait states of other operations.  If necessary,
+these may be implemented via translation into equivalent guarded
+callback constructs.
+<P>
+<H3><A NAME=SECTION00022100000000000000> Sentinels</A></H3>
+<P>
+<A NAME=101>&#160;</A>
+Some ``abnormal'' conditions are expected to occur often. These need
+not be treated as exceptional events but as likely results of
+normal interaction protocols.  A classic application is for the
+result of an <tt> op</tt> to be declared <tt> opt</tt>. When abnormal
+conditions occur, the result is unbound. Unboundedness serves as a
+<em> sentinel</em>, indicating that the usual result could not be
+obtained.  For example, <tt> MAP::at(key)</tt> has its result listed as
+optional so that it need not return anything when the item is not in
+the map.  Any client of a procedure returning an optional link must be
+prepared to receive an unbound result. However, named replies provide a
+more structured mechanism. <A NAME=106>&#160;</A>
+<P>
+<PRE>class MAP[Key, Cont] ...
+  op at(k: Key): contents(c: Cont), noSuchKey() { ... }
+end
+</PRE>
+<P>
+<H3><A NAME=SECTION00022200000000000000> Balking</A></H3>
+<P>
+<A NAME=108>&#160;</A>
+Another application of sentinels is to recast operations that may not
+be able to return a result at the moment they are invoked because they
+are not in the right state. Rather than pending, ignoring, or
+triggering an exception handler, the receiver may just return a
+notification to the sender.  For example, a <tt> Queue</tt> might support
+a <tt> balkingTake</tt> operation that immediately returns a null result
+when the buffer is empty.  This can simplify designs in which clients
+poll many such queues.  Again, named replies may be
+employed:<A NAME=111>&#160;</A>
+<P>
+<PRE>class CentralPrintingService ...
+  queues: ARRAY[PrintQueue];
+  op mainLoop  {
+     while true do
+       local i: int := 0;
+       while i &lt; queues.size do
+         catch queues.at(i).balkingTake
+           op item(job: PrintRequest) { print(job) }
+           op noItem { }
+         end;
+         i := i + 1
+     end end }
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION00023000000000000000> Exceptions</A></H2>
+<P>
+<A NAME=113>&#160;</A><A NAME=114>&#160;</A>
+The term <em> exception</em> has been applied to a number of variations on
+the same basic protocol.  From our framework, the best way to describe
+standard exception mechanisms is as a variant of named replies.  Named
+replies provide multiple return points for standard <tt> op</tt>s.
+Extensions of this protocol lead to classic exception mechanisms as
+found, for example, in <i> Ada</i><A NAME=118>&#160;</A>: (1) Exception replies
+should always terminate the server operation. (2) If a catcher for a reply is
+not defined in a sender, the sending invocation is canceled, and
+the process is repeated for <em> its</em> sender. (3) If there is no catcher
+listed in a chain of calls, a system error handler is invoked.
+<P>
+This protocol is easier to use in <i> ODL</i> after adding a few
+conventions: (1) The ``normal'' reply uses standard <tt> reply</tt> rules.
+(2) The normal reply is considered to be the only one caught if no
+others are listed (i.e., if there is no <tt> catch</tt> clause). (3)
+Intermediaries need not declare uncaught downstream exceptions. The
+last convention is dangerous but sometimes difficult to avoid in
+practice.  For example:<A NAME=123>&#160;</A>
+<P>
+<PRE>class Probability...
+  op set(r: real): (), PrOutOfBounds(p: Probability) {
+     if 0.0 &lt;= r /\ r &lt;= 1.0 then _val.set(r); reply
+     else PrOutOfBounds(self) end }
+end
+</PRE>
+<P>
+<PRE>op user(p: Probability, x: real): () { p.set(x) }
+</PRE>
+<P>
+<PRE>op userUser(p: Probability, x: real) {
+   catch(user(p, r))
+     op PrOutOfBounds(q: Probability) { p.set(0.0) }
+   end }
+</PRE>
+<P>
+Variations on this form of exception mechanism are supported in
+several object-oriented programming languages and system support tools
+(e.g., <i> C++</i><A NAME=125>&#160;</A>, <i> CORBA</i><A NAME=127>&#160;</A>, <i>
+Eiffel</i><A NAME=129>&#160;</A>).  For example, in <i> C++</i>, exception messages
+are declared as instances of <em> classes</em>.  Otherwise, the protocols
+are the same.
+<P>
+Exception constructs may be translated into straight messaging form
+using variants of callback mechanisms. Several schemes exist. All are
+too messy to detail.  Generally, an <tt> op</tt> declaring a <tt> catch X</tt>
+may be transformed into a wrapper object with an <tt> X</tt> operation.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00030000000000000000> Invocations</A></H2></center>
+<P>
+<H2><A NAME=SECTION00031000000000000000> Waiters</A></H2>
+<P>
+<A NAME=137>&#160;</A>
+<A NAME=138>&#160;</A>
+<A NAME=139>&#160;</A>
+<P>
+Even if an object only supports a blocking version of a resultless
+operation, a client may still craft a one-way form and invoke it.  <tt>
+Wrappers</tt> may be used to access a blocking procedure in one-way mode.
+For example, if we wanted to access <tt> op</tt> <tt> Bool::t!</tt>
+asynchronously, we could write:
+<P>
+<PRE>op boolUser { ... waiter := WRAP(mybool.t!); waiter.send; ... }
+</PRE>
+<P>
+The effect of this construction is to create a little object that
+``waits out'' the blocking <tt> t!</tt> procedure without holding up
+<tt> boolUser</tt>.  The existence of this transform is one reason why
+blocking versions of operations tend to be more prevalent than
+one-way sends. It is much easier to employ this transform than the reverse
+one.  If an object only supports a nonblocking version of an
+operation, but a client must wait until its effects hold, the only
+recourse is for the client to poll for these effects itself.
+<P>
+From this viewpoint, a wrapper is a kind of <em> protocol object</em>.  It
+encapsulates a certain protocol without having any meaningful role in
+the actual task being carried out. More general forms of protocol
+objects are useful whenever the nature of a command or service may be
+separated completely from situation-specific protocols connecting
+senders and receivers.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Futures</A></H2>
+<P>
+<A NAME=147>&#160;</A>
+<P>
+Suppose a client invokes an operation, but does not want to block
+waiting for the results until they are actually needed.  The best
+established means for expressing such designs involve <em> futures</em>.
+Several variants exist.  We will illustrate a less-than-first-class
+version that is simply translatable to other <i> ODL</i> constructs.
+The basic idea is to create wrapper objects that wait out procedures,
+while also blocking <em> their</em> callers until they are ready. For
+example:<A NAME=151>&#160;</A><A NAME=152>&#160;</A>
+<P>
+<PRE>class ATMTeller
+  db: ClientDB;
+  op processCredit(cid: clientID, acct: Account, amt: Cash) {
+     local c: Client := FUTURE(Client(db.getClient(cid)));
+     credit(acct, amt);
+     c.notifyAboutCredit(acct, amt) }
+end
+</PRE>
+<P>
+The conceptual view of this is that any actions involving the <tt>
+FUTURE</tt> (here, just <tt> notifyAboutCredit</tt>) are delayed until the
+invoked procedure (<tt> getClient</tt>) actually returns.  Without
+futures, we would have had to write a special version of <tt>
+getClient</tt> in <tt> ClientDB</tt> that accepted a callback argument, and
+then manually factored the <tt> processCredit</tt> operation to split out
+the called-back continuation.
+<P>
+Futures themselves suffice as interaction ``primitives''.  All one-way
+<tt> op</tt>s may be described as futures waiting on unused dummy objects,
+and all bidirectional <tt> op</tt>s may be recast to use futures that are
+used immediately.  Thus, futures may be relied on exclusively for all
+operations.  This is a perfectly fine design option, especially when
+targeted for the many <i> Lisp</i><A NAME=162>&#160;</A>-based systems supporting
+first-class futures as programming constructs.  To decide whether to
+use them, you may wish to examine more detailed and extensive examples
+of future-based programming (e.g., [<A HREF="#caromel">7</A>]).
+<P>
+<H4><A NAME=SECTION00032010000000000000> Underlying transformations.</A></H4>
+<P>
+Several transformations are possible. In the easiest, the <tt> FUTURE</tt>
+qualifier may be viewed as a macro that expands to use a wrapper
+class similar to the ones generated via <tt> WRAP</tt>.  This otherwise
+useless class manages the intervening manipulations. In this
+particular case:
+<P>
+<PRE>class futureClient453 is Client
+  local c: opt Client;
+  own ready: Bool &lt;&gt; init ~ready?;
+  ...
+  op initC(db: Clientdb, cid: clientID) {
+     c := db.getClient(cid); ready.t! }
+  op notifyAboutCredit(acct: Account, amt: Cash) : ()
+     when ready? then { c.notifyAboutCredit(acct, amt) } else pend end
+end
+op mkFutureClient453 ... % invoke initC % ... ;
+</PRE>
+<P>
+<H4><A NAME=SECTION00032020000000000000> Parallel sends.</A></H4>
+<P>
+Groups of futures or other waiter objects may be used to obtain the
+equivalents of ``cobegin ... end'' constructs common in
+fine-grained parallel programming languages. An object may construct a
+number of future objects, each waiting out different computations, and
+then proceed only when all of them are ready. We discuss such
+constructions in more detail in Chapter <A NAME=tex2html53 HREF="ch22.html">22</A>.<A NAME=170>&#160;</A>
+<P>
+<H2><A NAME=SECTION00033000000000000000> Time-outs</A></H2>
+<P>
+<A NAME=172>&#160;</A><A NAME=173>&#160;</A>
+Time-outs are specified in OOA models to handle a range of
+possible hardware problems, software errors, and other failures.  They
+also play a role in performance and alertness requirements.  The
+fundamental idea is for a client to send two messages, both of which
+require replies. One is sent to perform the main operation of interest
+and the other to a timer.  Suppose the main operation replies by
+issuing operation <tt> result</tt>, and the timer replies by sending
+<tt> timeout</tt>. There are two  outcomes:
+<P>
+<OL><LI> <tt> result</tt> is received, followed by <tt> timeout</tt>, in which
+        case the result is used, and the timer ignored.
+  <LI> <tt> timeout</tt> is received, followed by <tt> result</tt>. Normally,
+        the time-out leads to some kind of destructive recovery,
+        after which the result can no longer be used, and is
+        therefore ignored.
+</OL>
+<P>
+There are other possibilities; for example, that only <tt> timeout</tt> is
+<em> ever</em> received. But this is generally indistinguishable from the
+second case.  However, it is possible and even necessary to guard
+against the case that a <em> previously</em> requested time-out  is received
+while waiting for the result.  It is very convenient if the timer
+supports a <tt> cancel</tt> operation in order to avoid this.  A better
+solution is to pass and return a time-command ID that uniquely identifies
+the current time request. All time-outs not carrying the current ID
+may be ignored.  If neither can be arranged, then the object might
+need to wait out a previous request before proceeding.  These actions
+might be controlled through attributes representing the different wait
+states.  For example:<A NAME=186>&#160;</A>
+<P>
+<PRE>class ServiceUser
+  locals
+    service: Service;  timer: Timer;
+    own gotResult: Bool; init gotResult? = false;
+    own timedOut: Bool;  init timedOut? = true;
+  end
+  op result(r: Result) { gotResult.t!;
+     if ~timedOut? then % use r % end }
+  op timeout  { timedOut.t!;
+     if ~gotResult? then % recover % end }
+  op request { if ~timedOut? then timer.cancel end;
+     gotResult.f!; timedOut.f!;
+     service.svc; timer.alarm(timeOutVal) }
+end
+</PRE>
+<P>
+Finding the right time value to use for time-outs often requires some
+empirical guidance. Time-out values need to be long enough to give
+possibly slow and busy servers a chance to reply. However, excessively
+long time-outs may cause other requests to pile up, forming
+bottlenecks.
+<P>
+<H4><A NAME=SECTION00033010000000000000> Integrating calls with time-outs.</A></H4>
+<P>
+Raw time-out mechanics are not much fun to work with. Time-based
+processing may be made more usable and at the same time better
+decoupled via intermediaries that perform these mechanics on behalf of
+clients.  For example, the following sketches a ``call with
+time-out'' mechanism employing protocol objects with named replies:
+<P>
+<PRE>class SvcWrapper  op get: Any; end
+
+class TimeOutCaller ...
+  op try(svc: SvcWrapper, maxTime: time): Result(a: Any), TimedOut() {
+     % variations of above tactics ... % }
+end
+
+class Printer_3
+  printQueue: QUEUE[PrintRequest];
+  op tryToPrint {
+     catch TimeOutCaller$try(SVCWRAP(printQueue.take), 10sec)
+       op Result(a: Any) { print... }
+       op TimedOut { }
+     end }
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION00034000000000000000> Alertness</A></H2>
+<P>
+<A NAME=189>&#160;</A>
+Alertness requirements (Chapter <A NAME=tex2html59 HREF="ch11.html">11</A>) force attention to
+be paid to the lack of input events that were not even specifically
+requested in the first place. An object dealing with input events
+merely expects that input will be forthcoming from the outside world
+without having set up a software protocol to mandate it.
+<P>
+For example, the digit-processing specification in
+Chapter <A NAME=tex2html60 HREF="ch11.html">11</A> contained alertness requirements:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch20-img1.gif"><P>
+<P>
+These are somewhat easier to deal with than time-outs tied to other
+software protocols because there are fewer constraints to get in the
+way.  The core of the design includes:
+<P>
+<A NAME=223>&#160;</A>
+<PRE>class DigitGrabber ...
+  op start { timer.replyAfter(1m, WRAP(reminder)) }
+  op digit(c: char) { ...; timer.cancel; ... }
+  op reminder { display.printReminder; ... }
+end
+</PRE>
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00040000000000000000> Control Flow</A></H2></center>
+<P>
+<A NAME=225>&#160;</A><A NAME=226>&#160;</A>
+Combinations of the mechanisms described in this chapter provide
+alternative strategies for implementing standard control flow
+constructs.  For example, we may design yet another version of a
+boolean class, this one possessing only ``raw behavior'' without
+recourse to values:<A NAME=227>&#160;</A>
+<P>
+<PRE>class TF
+  op cond(truePart: Wrapper, falsePart: Wrapper)
+     ==&gt; (truePart.send') \/ (falsePart.send') end
+end
+
+class True is TF
+  op cond(truePart: Wrapper, falsePart: Wrapper) ==&gt; truePart.send' end
+end
+
+class False is TF
+  op cond(truePart: Wrapper, falsePart: Wrapper) ==&gt; falsePart.send' end
+end
+
+class Bool
+  local switch: TF;
+  val: TF    =  switch;
+  op f!     ==&gt; switch' in False end
+  op t!     ==&gt; switch' in True  end
+  op cond(truePart: Wrapper, falsePart: Wrapper)
+            ==&gt; switch.cond(truePart, falsePart)' end
+end
+</PRE>
+<P>
+The effect listed for <tt> TF</tt> indicates that one or the other effect
+holds, but without making a commitment to either one.  The <tt> True</tt>
+class promises that only the <tt> truePart</tt> will be invoked; similarly
+for <tt> False</tt> and <tt> falsePart</tt>.  Finally, the mutable <tt> Bool</tt>
+class can act like either <tt> True</tt> or <tt> False</tt>.  These constructs
+might be used, for example, in a class that either flashed or beeped
+when asked to indicate an error:
+<P>
+<PRE>class ErrorIndicator ...
+  switch: Bool;
+  op beep;
+  op flash;
+  op indicate { switch.cond(WRAP(beep), WRAP(flash)) }
+  op setToBeep { switch.t! }
+end
+</PRE>
+<P>
+This example illustrates the fact that flow-of-control statements
+(e.g., ``<tt> if</tt>'') may always be replaced with messages. This is a
+fine strategy for replacing <tt> if</tt>s inside concrete code bodies with
+messages. We could have applied it in all previous examples.
+<P>
+In fact, if this logic is carried far enough, there becomes no need
+for ``primitive'' value types such as <tt> bool</tt> in OO systems.  As
+here, the ``value'' <em> true</em> might be interpreted as referring to
+<em> any</em> object of a class supporting those operations described in
+class <tt> True</tt>. (As noted in Chapter <A NAME=tex2html65 HREF="ch17.html">17</A>, abstraction over
+identity is among the main differences between value and object
+frameworks.) It is even possible to extend this framework to <tt> int</tt>
+and other value types [<A HREF="#palsberg">10</A>]. But the mechanics become too
+messy and impractical to take seriously in everyday design.  However,
+the special case of boolean objects supporting a <tt> cond</tt> operation
+is very useful and convenient. It forms the heart of several control
+structure strategies in <i> Smalltalk</i><A NAME=248>&#160;</A>.
+<P>
+<H3><A NAME=SECTION00040100000000000000> Unifying Constructs</A></H3>
+<P>
+We have seen that the combination of <tt> op</tt>s, wrappers,
+subclassing, and guards provide ways of unifying a number of design
+constructs:
+<UL><LI> Bidirectional <tt> op</tt>s are callbacks to senders protected with
+        wait state guards.
+  <LI> Attribute <tt> fn</tt>s are special restricted forms of <tt> op</tt>s.
+  <LI> Conditionals are wrapper-based operations.
+  <LI> Values may be described in purely behavioral terms via classes.
+  <LI> Scripted operations may be encapsulated in their own classes.
+</UL>
+<P>
+These observations are usually of more theoretical than pragmatic
+utility.  Even though they are all related, it is useful to keep
+constructs separate in order to organize and reason about designs.
+However, whenever the individual constructs fail to capture design
+intentions, you can always step up to this level of abstraction and
+create your own protocols from scratch.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00050000000000000000> Summary</A></H2></center>
+<P>
+The simple notion of object interaction expands into a range of forms,
+styles, and idioms including the following:
+<P>
+<UL><LI> Callbacks provide fine-grained control over two-party
+        interaction protocols.
+  <LI> Wrappers allow interaction partners to be
+        statically decoupled.
+  <LI> Early replies ``release'' clients from blocking when
+        the results they need are ready.
+  <LI> Named replies combine the flexibility of different callback
+        channels with the certainty that a
+        call will return to its sender.
+  <LI> Exceptions provide opportunities to perform
+        nonlocal recovery from errors.
+  <LI> Futures allow expression of intermediate degrees of
+        client-side blocking.
+  <LI> Time-outs and other time-based interactions may be
+        used for fault detection and to implement alertness
+        requirements.
+  <LI> Patterns of messages may be used to replace standard
+        control constructs.
+</UL><H2><A NAME=SECTION00051000000000000000> Further Reading</A></H2>
+<P>
+<A NAME=260>&#160;</A>
+Nierstrasz [<A HREF="#nierstraszcoop">9</A>]  surveys of some of the
+interaction constructs described in this chapter.  Several accounts of
+distributed, concurrent, and parallel design and programming
+techniques discuss other selected forms and protocols. See, e.g.,
+[<A HREF="#hermes">12</A>,<A HREF="#atkinson">4</A>,<A HREF="#andrews">3</A>,<A HREF="#ananda">2</A>,<A HREF="#jaja">8</A>].
+<i> ODL</i> named replies are similar to the <em> termination</em>
+construct found in ANSA <i> DPL</i> [<A HREF="#ansa">11</A>]<A NAME=267>&#160;</A>.  Techniques for
+structuring and using exception protocols are discussed by Burns
+[<A HREF="#burns">6</A>]. Futures play a central role in <i> ABCL</i><A NAME=270>&#160;</A>
+[<A HREF="#yonezawa">13</A>].  Several promising graphical
+techniques for displaying timethreads are described by Buhr and
+Casselman [<A HREF="#buhr2">5</A>].
+<P>
+<H2><A NAME=SECTION00052000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Some people advocate that one-way operations should <em> never</em>
+        be used, and that bidirectional synchronous communication
+        serve as the basis for all interaction. Give an argument for
+        and against this position.
+<P>
+  <LI> When would it be OK if a <tt> future</tt> were <em> never</em> ready?
+<P>
+  <LI> Explain how to devise early reply mechanisms using
+        only an exception construct.
+<P>
+  <LI> In Chapter <A NAME=tex2html70 HREF="ch18.html">18</A>, we mentioned that invoked
+        operations do not have identities, while objects do. Yet we
+        have often added task and message IDs as stand-ins. Should
+        operation identity be primitively supported in OO systems
+        after all?
+<P>
+  <LI> Finish the sketch of the call-with-time-out design.
+<P>
+  <LI> Should ``simple'' operations on ``simple'' objects
+        (e.g., <tt> Bool::t!</tt>) really be defined as nonblocking?
+<P>
+  <LI> Design a <tt> whileDo</tt> construct based on <tt> Bool::cond</tt>.
+<P>
+</OL>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=abelson><STRONG>1</STRONG></A><DD>
+H. Abelson and G. Sussman.
+ <em> Structure and Interpretation of Computer Programs</em>.
+ MIT Press, 1985.
+<P>
+<DT><A NAME=ananda><STRONG>2</STRONG></A><DD>
+A. Ananda, B. Tay, and E. Koh.
+ A survey of asynchronous remote procedure calls.
+ <em> Operating Systems Review</em>, April 1992.
+<P>
+<DT><A NAME=andrews><STRONG>3</STRONG></A><DD>
+G. Andrews.
+ <em> Concurrent Programming: Principles and Practice</em>.
+ Benjamin Cummings, 1991.
+<P>
+<DT><A NAME=atkinson><STRONG>4</STRONG></A><DD>
+C. Atkinson.
+ <em> Object-Oriented Reuse, Concurrency AND Distribution</em>.
+ Addison-Wesley, 1991.
+<P>
+<DT><A NAME=buhr2><STRONG>5</STRONG></A><DD>
+R. Buhr and R. Casselman.
+ Architecture with pictures.
+ In <em> OOPSLA '92</em>. ACM, 1992.
+<P>
+<DT><A NAME=burns><STRONG>6</STRONG></A><DD>
+A. Burns.
+ <em> Concurrent Programming in Ada</em>.
+ Cambridge University Press, 1985.
+<P>
+<DT><A NAME=caromel><STRONG>7</STRONG></A><DD>
+D. Caromel.
+ Concurrency: An object-oriented approach.
+ In <em> 1991 TOOLS Conference</em>. IDE, 1991.
+<P>
+<DT><A NAME=jaja><STRONG>8</STRONG></A><DD>
+J. Jaja.
+ <em> An Introduction to Parallel Algorithms</em>.
+ Addison-Wesley, 1992.
+<P>
+<DT><A NAME=nierstraszcoop><STRONG>9</STRONG></A><DD>
+O. Nierstrasz.
+ The next 700 concurrent object-oriented languages.
+ In D. Tsichritzis, editor, <em> Object Composition</em>. University of
+  Geneva, 1991.
+<P>
+<DT><A NAME=palsberg><STRONG>10</STRONG></A><DD>
+J. Palsberg and M. Schwartzbach.
+ Object-oriented type inference.
+ In <em> OOPSLA '91</em>. ACM, 1991.
+<P>
+<DT><A NAME=ansa><STRONG>11</STRONG></A><DD>
+Advanced Networked Systems Architecture Project.
+ <em> The ANSA Programmers' Manual</em>.
+ Architecture Projects Management Limited, 1991.
+<P>
+<DT><A NAME=hermes><STRONG>12</STRONG></A><DD>
+R. Strom, D. Bacon, A. Goldberg, A. Lowry, D. Yellin, and S. Yemeni.
+ <em> Hermes: A Language for Distributed Computing</em>.
+ Prentice Hall, 1991.
+<P>
+<DT><A NAME=yonezawa><STRONG>13</STRONG></A><DD>
+A. Yonezawa and M. Tokoro, editors.
+ <em> Object-Oriented Concurrent Programming</em>.
+ MIT Press, 1988.
+</DL>
+<P>
+
+<a href="ch21.html">Next: Chapter 21</a>
+<center><P><P></center>
+
+<BR> <HR>
+
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:59:27 EDT 1995</I>
+</ADDRESS>
+</BODY>

@@ -1,0 +1,1006 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Constructing a System Model</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Constructing a System Model">
+<meta name="keywords" value="ch10">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+
+<h2>Chapter 10: Constructing a System Model</h2>
+
+<UL>
+<LI> <A NAME=tex2html40 HREF="#SECTION00010000000000000000"> Requirements Fragment</A>
+<LI> <A NAME=tex2html41 HREF="#SECTION00020000000000000000"> Use Cases</A>
+<LI> <A NAME=tex2html42 HREF="#SECTION00030000000000000000"> Subsystems</A>
+<LI> <A NAME=tex2html43 HREF="#SECTION00040000000000000000"> Vocabulary</A>
+<LI> <A NAME=tex2html44 HREF="#SECTION00050000000000000000"> Classes</A>
+<LI> <A NAME=tex2html45 HREF="#SECTION00060000000000000000"> Ensembles</A>
+<LI> <A NAME=tex2html46 HREF="#SECTION00070000000000000000"> Model</A>
+<LI> <A NAME=tex2html47 HREF="#SECTION00080000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+<A NAME=9>&#160;</A>
+<A NAME=10>&#160;</A><A NAME=11>&#160;</A><p>
+<p>
+
+In this chapter, we illustrate the synthesis of a target system model
+using the building blocks described in previous chapters.
+<P>
+The reader may wonder whether such an activity is necessary and,
+moreover, whether such an activity is still ``analysis'' or a
+transgression into the computational realm of design.  It cannot be
+denied that constructing a model of an intended system has the flavor
+of design, at least to the extent that some commitments are made with
+respect to (logical) system architecture.  At the same time, the
+relative concreteness of a model is an advantage for all parties
+involved.  Analysts are forced to think through the demands of the
+customer from yet another perspective.  The validity of a model can be
+checked by having analysts and customers mentally execute scenarios.
+Designers will obtain an abstract model that may be transformed into
+an executable realization.
+<P>
+We will present a ``vertical slice'' of an OO analysis, in a sequence
+corresponding to steps described in more detail in
+Chapter <A NAME=tex2html6 HREF="ch12.html">12</A>. We discuss:
+<OL><LI> A requirements fragment.
+<LI> A few scenarios (use cases).
+<LI> A few subsystems.
+<LI> A vocabulary.
+<LI> A precise expansion of some elements in the vocabulary.
+<LI> A model consisting of (prototypical) instances, specialized classes,
+ensembles and relationships, and a class interaction diagram that
+summarizes object interactions.
+</OL>
+<P>
+<A NAME=16>&#160;</A>
+<A NAME=17>&#160;</A>
+
+<center><H2><A NAME=SECTION00010000000000000000> Requirements Fragment</A></H2></center>
+<A NAME=19>&#160;</A>
+<P>
+We envision an ATM transaction menu that will be pulled up by a
+customer using a certain designated key.  The menu will list several
+transaction services the branch offers.  We will discuss several
+choices: an automated payments service, automatic overflow
+management, and overdraft protection.  The customer will select
+one and run through a series of submenus to clarify and describe a
+specific transaction.  We assume the usual (<em> circa</em> 1993) ATM
+hardware configuration, minimally including a numeric keypad and a
+small CRT.
+<P>
+<em> ATM</em> as a subsystem refers to the user interface events on the
+actual ATM machine.  The actions of putting in a card, collection and
+verification of same, plus entering the PIN number as additional
+verification of account person validity are examples.  The
+transactions available on an ATM include deposits, withdrawals,
+balance verification and so on.  In our vertical slice of the ATM
+subsystem, we will discuss card and PIN entry verification and the
+section of the menu system dealing with our set of transactions.
+<P>
+<em> Bank</em> as a subsystem is a repository for data and an agent of
+events from the perspective of the ATM subsystem.  In this example, we
+will look at the data and events centered around the three
+transactions being modeled, automated payment service, automatic
+overflow management, and overdraft protection.  The bank will play a
+server role in a client/server relationship, where the ATM is the
+client and the bank is the server.  The bank will also maintain a
+registry of all account verifications involved in transactions as well
+as registering billing for the three services.
+<P>
+<H4><A NAME=SECTION00010010000000000000> Automated payments service.</A></H4>
+<P>
+A customer can pay bills through an automated payment plan.  The
+automated payment service offers a series of submenus by which
+the customer can initiate a payment plan where fixed amount and
+variable amount bills are paid automatically.  The latter can occur by
+empowering a recipient to specify an amount due.  The customer will be
+able to set time and amount constraints on all automated payments.
+<P>
+When clients select the automated payment service, they are asked to
+key in the account number of a payment recipient.  Once this is
+verified, a client specifies fixed or variable payment, the timing of
+the payment (e.g., one time only, biweekly, weekly, monthly, yearly,
+any time), and if appropriate, the payment amount or a maximum
+limit amount.  A series of submenus will be provided to further refine
+these choices if necessary.  For example, if the customer specifies
+variable monthly, the customer would have an opportunity to set a
+payment date and to set a payment amount limit (a payment would have
+to be under this amount).  After everything has been verified, the
+client will be asked to specify a start time (now, or some future
+date).
+<P>
+The bank plays a central role in the automated payment service. It
+will manage payments from the checking account on the appropriate
+designated dates.  It will register and track all variable payment
+amounts, including registering the appropriate amount from the
+recipient, checking it against any constraints and paying it on the
+designated date (an event-driven transaction).  The bank will also
+make regular or one-time-only payments of customer-stipulated amounts
+to designated recipients on designated dates (a stipulated
+transaction).
+<P>
+<H4><A NAME=SECTION00010020000000000000> Automatic overflow management.</A></H4>
+<P>
+Customers may specify an account as a recipient of a payment using an
+automatic overflow management menu series. This enables a
+customer's savings account, another checking account, a child's trust
+account, a money market account, etc., to be the recipient of overflow
+amounts in the checking account.  The client would enter a maximum
+checking account balance that, when reached, would trigger an automatic
+payment of the overage into the specified account.
+<P>
+The bank will again manage checking account balance constraints for
+automatic overflow management.  This time a transaction resulting in a
+maximum overage will result in a triggered withdrawal/deposit into the
+designated account (wherever that may be).
+<P>
+<H4><A NAME=SECTION00010030000000000000> Overdraft protection plan.</A></H4>
+<P>
+A customer's checking account may be paid from a designated savings
+account in order to maintain a minimum balance. The client would enter
+an account number that acts as the ``protector'' account (i.e., the
+account that will pay the checking account each time a transaction
+would bring the balance below the minimum).  Provided the protector
+fund continues to be well endowed with money, the balance will never
+fall below the minimum.  This account will, of course, be verified.
+Then the minimum checking balance will be entered.  If a pending
+transaction will put the account balance below this figure (which
+could be $500 or $0.05 or whatever), the designated ``protector''
+account will immediately transfer funds up to the specified minimum
+maintenance amount.
+<P>
+The bank will keep track of the account checking balance and the
+balance minimum (and maximum if it exists).  It will also keep track
+of the designated ``protector'' account balance.  Additionally, it
+will register any transactions coming in against the checking account.
+If a transaction will put the checking account balance below its
+minimum, the transaction registry will immediately notify and withdraw
+the correct balance from the ``protector'' account.  If the
+``protector'' account does not have the necessary funds, it will
+register the notification for later action.
+<P>
+When the protector account does not have enough money to maintain the
+minimum checking balance, it will register this situation.  When funds
+are available, it will immediately transfer the amount necessary to
+maintain the minimum if the condition still exists.  An error will be
+registered as soon as the minimum is not maintained. When a
+transaction occurs and there is not enough in the checking account
+<em> and</em> the protector account cannot cover the minimum, an error
+will be registered leading to a charge by the bank for the overdraft.
+This will proceed on a transaction-by-transaction basis.  When the
+protector account again has money it will automatically check the
+checking account balance and replenish it to the specified minimum.
+<P>
+A customer may ``protect'' the protector account.  An example of this might
+be a checking account that is protected by another checking account, which
+in turn is protected by a trust account.  Protection ``cycles'' where an
+account is protected by another account which is protected by the
+first account will not be allowed.
+<P>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Use Cases</A></H2></center>
+<A NAME=28>&#160;</A>
+<P>
+The narrative in the previous section explains the functionality to be
+supported in a high-level fashion, perhaps as produced by a marketing
+department.  A first step in analysis is to extract scenarios, or <em>
+use cases</em> that describe the behavior of a system from an external
+user's perspective.  (A user need not be human. It might be another
+system as well.)  Use cases were introduced by Jacobson
+[<A HREF="#jac87">2</A>,<A HREF="#jacobson">3</A>], who describes them as follows:
+<blockquote> A use case is a specific way of using the system by using some part of the
+functionality.  Each use case constitutes a complete course of events
+initiated by an actor and it specifies the interaction that takes place
+between an actor and the system.  A use case is thus a special sequence of
+related transactions performed by an actor and the system in a dialogue.
+The collected use cases specify all the existing ways of using the system.
+</blockquote>
+<P>
+There are two forms of use cases.  The ones illustrated here have the
+form of <em> linear sequences</em> or <em> timethreads</em>
+[<A HREF="#buhr2">1</A>]<A NAME=36>&#160;</A> describing the course of typical system-context
+interactions.  An alternative version gives the interactions in the
+form of a <em> tree</em>.  The branch points correspond to choices made by
+the user, with alternative continuations chosen by the intended
+system.  These are more accurate for capturing all possibilities, and
+are necessary for capturing worst case performance requirements.  The
+sequential format eliminates ``pathological'' continuations and is
+more likely to illustrate how a user's intention is to be achieved.
+<P>
+We provide minimal sketches of the three principal use cases.  The
+details are mainly dreamed up, educated guesses that are not strictly
+justified by the requirements.  In reality, approval from a customer
+for such extensions is to be obtained early on to avoid more costly
+rework in a later stage.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Automated Payment Service</A></H2>
+<A NAME=39>&#160;</A>
+<P>
+<OL><LI> Customer puts card into ATM card slot and enters PIN number.
+<P>
+<LI> Card verified and main menu presented.
+<P>
+<LI> Customer selects the transaction services  menu and the
+corresponding menu is displayed.
+<P>
+<LI> Customer selects ``automated payment service'' and is prompted for
+the recipient's account number.
+<P>
+<LI> Customer enters recipient's account number.
+<P>
+<LI> Account verified and a menu with payment schedules is presented.
+<P>
+<LI> Customer selects monthly payment schedule from one-time, biweekly,
+weekly, bimonthly, monthly, yearly, etc., and a submenu refining the
+payment schedule is presented.
+<P>
+<LI> Customer provides the day of the month for the periodic payment. A
+submenu asking for an amount comes up with options such as a fixed amount
+or a maximum amount.
+<P>
+<LI> Customer selects the maximum amount option and provides as the
+maximum, $75.  A menu asking for the start date comes up with options
+such as ``now'' or a supplied future date.  (Choosing a maximum amount
+signifies that this is a variable payment amount and that the
+recipient will supply the required amount.  The date will be used as
+the payment date.  The recipient must supply the amount of payment by
+this date.  If a recipient specifies a payment above the maximum
+amount, only the maximum will be paid.)
+<P>
+<LI> Customer selects ``now'' as the start date.
+<P>
+<LI> Transaction is verified and approved and the main menu is displayed.
+</OL>
+<P>
+<P>
+<H2><A NAME=SECTION00022000000000000000> Automatic Overflow Management</A></H2>
+<A NAME=43>&#160;</A>
+<P>
+<OL><LI> Same as steps 1 and 2 in the first use case.
+<P>
+<LI> Customer selects ``transaction services'' menu and the corresponding menu
+is displayed.
+<P>
+<LI> Customer selects ``automatic overflow management'' and is prompted
+for an overflow account number.
+<P>
+<LI> Customer enters overflow account number.
+<P>
+<LI> Account verified.
+<P>
+<LI> Customer enters a maximum balance in checking account.
+This maximum balance cannot be less or equal to a minimum balance
+established on the account. (A customer request for a maximum
+balance just $1 over the minimum balance would be allowed with this
+constraint.  The customer may have to be constrained to a greater
+difference.)
+<P>
+<LI> Customer may select start date as ``now'' or fill in date.
+<P>
+<LI> Transaction is verified and approved.
+<P>
+<LI> Customer selects ``main menu'' or ``exit''.
+</OL><H2><A NAME=SECTION00023000000000000000> Overdraft Protection</A></H2>
+<A NAME=47>&#160;</A>
+<P>
+<OL><LI> Same as steps 1 and 2 in the first use case.
+<P>
+<LI> Customer selects ``transaction services''.
+<P>
+<LI> Customer selects ``overdraft protection'', and is prompted for the
+choices of ``bank'' or ``protector account''.
+<P>
+<LI> Customer selects ``protector account''.
+<P>
+<LI> Customer enters protector account number.
+<P>
+<LI> Account verified.
+<P>
+<LI> Customer enters minimum balance in checking account.
+This cannot be more or equal to a maximum balance established
+   on the account.
+<P>
+<LI> Customer selects  ``now'' as start date.
+<P>
+<LI> Transaction is verified and approved.
+<P>
+<LI> Customer selects ``main menu'' or ``exit''.
+<P>
+</OL>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Subsystems</A></H2></center>
+<P>
+We use templates for structuring the predominantly English
+descriptions.  These ``structured'' reformulations of a requirements
+document help prepare for more precise graphical descriptions.
+<P>
+<H2><A NAME=SECTION00031000000000000000> ATM Subsystem</A></H2>
+<A NAME=52>&#160;</A>
+<P>
+<DL ><DT> Parent system(s)
+<DD> <BR>
+The ATM system that consists of the sum of the physical machinery and
+our software component.
+<P>
+<DT> Internal subsystems
+<DD> <BR>
+     Communication input system<BR>
+     Communication output system<BR>
+     Deposit control system<BR>
+     Customer card control system<BR>
+     Dispenser control system<BR>
+     Bank communication system<BR>
+     Other account entities
+<P>
+<DT> Generic functionality
+<DD> <BR>
+Controls the interactions between a customer and
+either the bank to which the ATM belongs or a third party financial
+institution.
+<P>
+<DT> Clients of subsystem
+<DD> <BR>
+    Customers,<BR>
+    Service personnel
+<P>
+<DT> Servers of subsystem
+<DD> <BR>
+    Customers,<BR>
+    Service personnel,<BR>
+    Bank system and other account entities.
+<P>
+<DT> Other subsystems
+<DD> <BR>
+(None)
+<P>
+ </DL>
+<P>
+<P>
+<H2><A NAME=SECTION00032000000000000000> Bank Subsystem</A></H2>
+<A NAME=62>&#160;</A>
+<P>
+<DL ><DT> Parent system(s)
+<DD> <BR>
+A Bank system encompassing the central bank offices and all the
+branches. It includes all the distributed hardware and software that makes
+up the bank's automated system.
+<P>
+<DT> Internal subsystems
+<DD> <BR>
+    Account tracking system<BR>
+     Deposit control<BR>
+     Withdrawal control<BR>
+     Communication notification<BR>
+     Communication input/output system<BR>
+     Gateway communication system<BR>
+     Payment calendar control<BR>
+     Billing control
+<P>
+<DT> Generic functionality
+<DD> <BR>
+Data repository for account and billing information.<BR>
+Communicates with other account system entities.<BR>
+Acts as the transaction manager for the client.
+<P>
+<DT> Clients of subsystem
+<DD> <BR>
+    ATM<BR>
+     Customer
+<P>
+<DT> Servers of subsystem
+<DD> <BR>
+    (None)
+<P>
+<DT> Other subsystems
+<DD> <BR>
+    (None)
+<P>
+ </DL>
+<P>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Vocabulary</A></H2></center>
+<A NAME=72>&#160;</A>
+<P>
+A <em> vocabulary</em> superficially corresponds to a data dictionary.
+However, while a data dictionary prepares for the definition of data
+structures, a vocabulary prepares for the definitions of classes and
+related constructs.
+<P>
+We provide structured descriptions of some classes as preparation for
+their characterization in our graphic formalism.  (We omit for now
+similar treatments of ensembles, relations, and parametric instances.)
+Later on, in design, we will reformulate graphic notations in our
+textual <i> ODL</i> design language, which will in turn be reformulated
+into a target programming language.  All these reformulations force us
+to rethink, each time from a different perspective, what the task is
+and how it is to be solved.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Client Class</A></H2>
+<A NAME=76>&#160;</A>
+<P>
+<DL ><DT> Parent class(es)
+<DD> <BR>
+Person
+<P>
+<DT> Generic functionality
+<DD> <BR>
+Uses ATM,  produces checks, receives statements, etc.
+<P>
+<DT> Clients of class
+<DD> <BR>
+(None)
+<P>
+<DT> Servers of class
+<DD> <BR>
+(None)
+<P>
+<DT> Other interaction classes
+<DD> <BR>
+Statement, Check, ...
+<P>
+<DT> Salient features
+<DD> <BR>
+name, ssn, address, ...
+<P>
+<DT> Salient states
+<DD> <BR>
+standing: [new, below average, average, above average, excellent]
+<P>
+<DT> Salient transitions
+<DD> <BR>
+change address, add account, close account, change standing
+<P>
+ </DL><H2><A NAME=SECTION00042000000000000000> Account Class</A></H2>
+<A NAME=88>&#160;</A>
+<P>
+<DL ><DT> Parent class(es)
+<DD> <BR>
+(None)
+<P>
+<DT> Generic functionality
+<DD> <BR>
+This is a record of financial assets.  The usual operations, including deposit,
+withdrawal, balance inquiry are supported in addition to advanced actions.
+<P>
+<DT> Clients of class
+<DD> <BR>
+Customer, ATM, Other accounts
+<P>
+<DT> Servers of class
+<DD> <BR>
+Bank, Other accounts
+<P>
+<DT> Other interaction classes
+<DD> <BR>
+ATM, Other accounts
+<P>
+<DT> Salient features
+<DD> <BR>
+clientId, type, balance, balance constraints,
+date and type of transaction
+<P>
+<DT> Salient states
+<DD> <BR>
+new, open, closed, constrained
+<P>
+<DT> Salient transitions
+<DD> <BR>
+created, ongoing transactions, limiting
+<P>
+ </DL><H2><A NAME=SECTION00043000000000000000> Menu Class</A></H2>
+<P>
+<DL ><DT> Parent class(es)
+<DD> <BR>
+Main menu
+<P>
+<DT> Generic functionality
+<DD> <BR>
+The menu subsystem is the user interface for
+the customer.  It has a series of
+question and/or answers and information
+to be conveyed to the customer.
+<P>
+<DT> Clients of class
+<DD> <BR>
+Customer
+<P>
+<DT> Servers of class
+<DD> <BR>
+Account
+<P>
+<DT> Other interaction classes
+<DD> <BR>
+Account, Client, Customer
+<P>
+<DT> Salient features
+<DD> <BR>
+transaction type menu, questions, answers, dates, submenu items
+<P>
+<DT> Salient states
+<DD> <BR>
+question, answer, informational
+<P>
+<DT> Salient transitions
+<DD> <BR>
+query, information collecting, display, traversal
+<P>
+ </DL>
+<P>
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00050000000000000000> Classes</A></H2></center>
+<P>
+A systematic attack on class specifications would describe in turn
+each relevant class, providing for each a static and dynamic
+characterization.  Instead, we proceed by elaborating material in a
+``natural'' way, driven by the use cases.  These examples illustrate
+how an analyst may traverse the analysis space in an associative
+manner.  A CASE tool would help track and order these activities.
+<P>
+To begin, we exploit and extend the description of an ATM as given in
+Chapter <A NAME=tex2html20 HREF="ch5.html">5</A>.  The following fragment of the transition
+network is relevant for dealing with our use cases:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img1.gif"><P>
+<P>
+In the <em> S2</em> -- <em> S3</em> transition, we can do more than just
+display the general menu.  Since the ATM card has been read
+successfully and a correct PIN has been provided, the owner of the
+card (the client) may be determined.  Other information, including
+which bank issued the card and which branch is the ``home'' of the
+client may be determined as well.  At this point, a session log is
+created that contains the client/customer, the date-time, and all
+transactions.  All these initializations are done by <em>
+InitAtmSession</em>.  Each menu choice in <em> S3</em> by the customer will
+lead into a subtransition network that will ultimately lead back to
+<em> S3</em>:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img2.gif"><P><H2><A NAME=SECTION00051000000000000000> Automated Payment Service</A></H2>
+<A NAME=160>&#160;</A>
+<P>
+When the customer has chosen the Automated Payment Service (APS)
+option, an instance is created that describes the desired payment
+service.  There are two similar, but slightly different services; one
+in which the paying client determines a fixed amount that should be
+transferred each time, and the other one in which the recipient
+stipulates each time what the to-be-transferred amount should be:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img3.gif"><P>
+<P>
+The class structure bundles commonalities in the class APS.
+This allows us to create two subclasses that represent, respectively,
+the fixed and variable payment schedules.  The subclasses <em>
+APSFixed</em> and <em> APSVariable</em> exclude each other (on the <em>
+fix/var</em> attribute), and together form a partitioning of <em> APS</em>.
+The two classes also differ in whether a fixed amount or a maximum
+amount is indicated per transfer.
+<P>
+<H3><A NAME=SECTION00051100000000000000> Fixed Automatic Schedule</A></H3>
+<P>
+Next we deal with the machinery that will trigger the proper
+transfers, starting with the fixed case.  For each automatic schedule,
+an instance of FAS (Fixed Automatic Schedule) is created:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img4.gif"><P>
+<P>
+An instance of this class has a clock triggered transition that will
+rejuvenate itself at each activation.  The initial value of the attribute
+<em> nextTransfer</em> will be obtained from the customer during the ATM
+interaction.  The transition network of a <em> FAS</em> is:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img5.gif"><P>
+<P>
+The expression $DateTime$ in the guard refers to the current time.
+When the current time has progressed beyond the time indicated
+by <em> nextTransfer</em> the transition Create Transaction will fire
+up.
+The activity <em> ResetNextTransfer</em> expands into the description:<BR>
+<em> nextTransfer' = nextTransfer + self.schedule.schedule</em>
+<P>
+The <em> CreateTransfer</em> activity may consist of creating an instance of
+the class <em> Transfer</em>  introduced in
+Chapter <A NAME=tex2html22 HREF="ch3.html">3</A>:<A NAME=257>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img6.gif"><P>
+<P>
+<em> CreateTransfer</em> has access to all the information to
+properly initialize a new instance of <em> Transfer</em>.  A naive transition
+network for <em> Transfer</em> illustrates how the transaction can be
+effectuated:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img7.gif"><P>
+<P>
+This approach assumes that the <em> Account</em> class transition network
+supports a <em> Subt(ract)</em> and an <em> Add</em> transition.
+<P>
+An instance of <em> Transfer</em> is prototypical of transient objects.  It has
+been initialized when it is entering <em> S1</em>, it executes during the
+<em> S1</em> -- <em> S2</em> transition, and then it disappears.
+<P>
+This story is a simplification.  System and/or network failures have
+not been dealt with.  Also, logging of a transfer (in addition to logs
+maintained by the accounts) has been omitted.  Observe as well that we
+have ignored the little detail of how to handle the situation when an
+account has insufficient funds for a transfer.  When we discuss the
+overdraft protection use case, we will expand the transition network
+of <em> Transfer</em> to be more realistic.
+<P>
+<H3><A NAME=SECTION00051200000000000000> Variable Automatic Schedule</A></H3>
+<P>
+The VAS (Variable Automatic Schedule) is similar to the FAS:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img8.gif"><P>
+<P>
+Again we have a similar transition network:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img9.gif"><P>
+<P>
+The only difference is that the action <em> CreateTransfer</em> must access
+the <em> self.to</em>-account through a service transition invocation of the
+form<BR>
+<em> nextPaymentFrom(self.to, self.from)</em><BR>
+in order to determine what to fill in for <em> amount</em> in a <em>
+Transfer</em> instance.  Thus we assume that a certain subclass of <em>
+Account</em> supports the <em> nextPaymentFrom</em> transition as a service
+that produces the amount to be transferred by the requesting account.
+<P>
+In summary, the transition subnetwork of <em> ATM</em> that deals with this
+use case either  needs to generate an instance of <em> APSFixed</em> together
+with an instance of <em> FAS</em> for the case of fixed periodic payments, or
+needs to generate an instance of <em> APSVariable</em> together with an
+instance of <em> VAS</em> for the case of variable payments.
+<P>
+<H2><A NAME=SECTION00052000000000000000> Automatic Overflow Management</A></H2>
+<A NAME=354>&#160;</A>
+<P>
+We assume here that the customer has set up a session with an ATM and that
+a subtransition network has been entered as a result of selecting the
+Automatic Overflow Management option.  The use case requires the customer
+to provide an overflow account and a maximum amount to be maintained by the
+account.  A reasonable choice for recording this information is to add
+optional attributes to <em> Account</em>:<A NAME=356>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img10.gif"><P>
+<P>
+Instead of adding these optional attributes, we could have created a
+subclass of <em> Account</em>, such as <em>
+AccountWithOverflowManagement</em>, and added these fixed attributes to
+this subclass.  The customer's regular account would be discontinued
+after copying over all attributes into a new instance of <em>
+AccountWithOverflowManagement</em>.
+<P>
+The desired functionality is obtained by adding the following
+transition network:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img11.gif"><P>
+<P>
+The action <em> CreateTransfer</em> again has access to all the information to
+initialize an instance of <em> Transfer</em> that will take care of the actual
+operation.  The amount to be transferred is obviously:<BR>
+<em> self.balance - self.maxForAccnt</em>.
+<P>
+<H2><A NAME=SECTION00053000000000000000> Overdraft Protection</A></H2>
+<A NAME=398>&#160;</A>
+<P>
+An account must be protected so that it cannot fall below a certain
+level.  The level is determined by the bank as a default or can be
+strengthened by the client.  For example, a limit set by a bank for a
+checking account is usually $0.  The limit can be negative as is the
+case for credit lines.  However, a client can stipulate that an
+overdraft protection service should be activated at a higher level
+than the bank's limit, for instance to avoid penalties.  At the same
+time a level specified by a customer should be less than an overflow
+level, if this service is used.  Thus, we have as an invariant:<BR>
+bank-minimum-level &lt;= client-minimum-level &lt; client-overflow-level.
+<P>
+This service will work provided a protecting account is able to
+transfer funds.  Since a protecting account may itself be protected, we
+will model a transfer from a protecting account as a request that is
+generated when a balance falls below either the minimum level specified
+by the client or the minimum level specified by the bank.
+<P>
+We are assuming that an <em> Account</em> has an attribute <em> bankMin</em> that
+expresses the minimum set by the bank and an optional attribute <em>
+clientMin</em> that expresses the minimum specified by the client.  By adding
+an optional protecting account, we obtain:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img12.gif"><P>
+<P>
+In order to model the desired behavior, we revisit the
+transition network of a <em> Transfer</em>. The guard in
+the Adjust-Accounts transition must be strengthened and
+the transition must be embedded in a network.
+<P>
+To simplify the diagrams, we ignore a minimum specified by a
+client.  Thus the overdraft protection service will be triggered here
+only when the minimum specified by the bank would be surpassed.
+By strengthening the guard from <em> True</em> into: <BR>
+<em> (self.from.balance - self.from.bankMin) &gt;= self.amount</em><BR>
+we get the guarantee that the Adjust-Accounts transition does not produce
+an overdraft. The resulting transition network is as follows:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img13.gif"><P>
+<P>
+The dynamic waiting in state <em> S4</em> may be surprising. But
+remember that while doing analysis, the desired functionality is
+described concisely without worrying about performance.
+<P>
+In summary, the transition subnetwork of <em> ATM</em> that deals with
+this use case needs to fill in the optional attributes into an <em>
+account</em> in order to start the service.
+<P>
+<H2><A NAME=SECTION00054000000000000000> Account</A></H2>
+<A NAME=451>&#160;</A>
+<P>
+Several extensions to class <em> Account</em> have already been described.
+Here, we will look at the extensions that must be made in order for an
+account to be the recipient of automated payments.
+<P>
+First we give the class <em> Account</em> the optional attribute <em>
+nextCharge</em>.  This attribute associates for each account in the set
+what its next payment should be.  This information is accessed
+periodically via the service transition <em> nextPaymentFrom</em>.  We
+omit the mechanism that determines the amount that is to be
+transferred for every account in the set and for every pay period:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img14.gif"><P>
+<P>
+An example transition specifies that every pay period, requests from
+accounts that have automated variable periodic payments are serviced:
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00060000000000000000> Ensembles</A></H2></center>
+<P>
+We have many ensembles in our domain of interest.  For example, we
+have so far been quite casual regarding accounts.  We have suggested
+that accounts are residing in an unstructured ``ocean''.  To be more
+realistic, we could have made distinctions between locally maintained
+accounts, accounts belonging to the American Bank, or another bank's
+accounts.  These distinctions enable different services to be invoked
+for different types of accounts.
+<P>
+<H2><A NAME=SECTION00061000000000000000> ATM</A></H2>
+<A NAME=488>&#160;</A>
+<A NAME=secatms3>&#160;</A>
+<A NAME=secmodelensatm>&#160;</A>
+<P>
+In Chapter <A NAME=tex2html29 HREF="ch9.html">9</A> we described an ATM from an ensemble
+perspective. Here, we will add some details, beginning with
+a few new properties necessary to support the use cases.
+First, class <em> ATM</em> must be equipped with the following new attributes:
+<DL ><DT><em> stripData</em>,
+<DD> the information read in from an ATM card.
+<DT><em> PIN</em>,
+<DD> the data provided by the customer for authentication.
+<DT><em> customer</em>,
+<DD> the client that has initiated a session.
+<DT><em> account</em>,
+<DD> an account of a client; either the account for which
+    overflow management is to be installed or the account for which overdraft
+    protection is to be installed.
+<P>
+ </DL>
+<P>
+All use cases are realized via subtransition networks that start in
+<em> S3</em> and that lead back to <em> S3</em>.  They all follow the pattern of:
+<OL><LI> Obtain the relevant information from the customer.
+<LI> Validate the data if appropriate and/or have the customer confirm
+    choices.
+<LI> Generate new objects if necessary, as is the case for the automated
+    payment service.
+<LI> Assign the information obtained to attributes of objects.
+<LI> Abort the subnetwork at the customer's request or because the customer
+    cannot provide valid data.
+</OL><H3><A NAME=SECTION00061100000000000000> Ensemble Properties</A></H3>
+<P>
+So far, our characterizations in the dynamic model
+have been high level, essentially ignoring the details where
+ensembles have to be acknowledged.  For instance, in the transition network
+of an ATM in Chapter <A NAME=tex2html30 HREF="ch6.html">6</A>, we wrote bluntly:<BR>
+Take in card,<BR>
+Read strip &amp;<BR>
+Display PIN request<BR>
+At the same time, we described an ATM as an ensemble
+with constituents (among others):<BR>
+<em> ATMInput</em>,<BR>
+<em> ATMOutput</em>,<BR>
+<em> CardReader</em>.<BR>
+A more careful and precise elaboration of ``Take in card'' requires
+describing these activities through interactions via events between an <em>
+atm</em> and its constituents.
+<P>
+We will illustrate an interaction inside an <em> ATM</em> ensemble, using the
+<em> Idle</em> -- <em> S1</em> transition from Chapter <A NAME=tex2html31 HREF="ch6.html">6</A>.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img16.gif"><P>
+<P>
+None of the actions on this transition are actually performed by the <em>
+ATM</em> ensemble.  They are controlled by its constituents.  The <em> ATM</em>
+ensemble itself need not to be involved in manipulating the card.  The only
+data of interest to the <em> ATM</em> is the strip information.  The display
+operation is delegated to another constituent.  Consequently, we arrive at the
+following interactions with the constituents:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img17.gif"><P>
+<P>
+We assume here that the expectation <em> Get(stripInfo)</em> is matched by an
+event generated by the <em> ATMInput</em> constituent, and dually the <em>
+Out(PINRequest)</em> will be picked up by the <em> ATMOutput</em> constituent.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00070000000000000000> Model</A></H2></center>
+<P>
+Although the context has been quite sketchy, we have assembled most
+of the salient ingredients of a model of an ATM.
+<P>
+<H2><A NAME=SECTION00071000000000000000> Parametric Instances</A></H2>
+<P>
+<A NAME=560>&#160;</A>
+<P>
+Constructing a model requires the definition of some (parametric)
+instances.  The use cases apply to any ATM and to any eligible set of
+accounts.  A minimal model consists only of <em> ATM</em>s and <em>
+Account</em>s. <em> ATM</em>s may be described as parametric instances:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img18.gif"><P>
+<P>
+In order to flesh out the model, we must provide at least stubs for
+the constituents of <em> atm_X</em>.  We leave this as an exercise.
+Additionally, the constituents of <em> atm_X</em> and the <em> atm_X</em>
+ensemble itself have to be ``welded'' together.  Their interactions
+should be described as point to point communications instead of
+broadcasted events.  For details, see the interaction diagrams in
+Chapter <A NAME=tex2html33 HREF="ch6.html">6</A> where they have been introduced and
+applied to an
+ATM.
+<P>
+The next step is to add parametric instances of <em> Account</em>, adjoining
+all relevant classes, ensemble, and relationship descriptions.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch10-img19.gif"><P>
+<P>
+The account <em> account_X</em> will play the role of the primary account
+selected by the customer for respective uses cases.  Similarly, we
+will have <em> account_Y</em> as recipient for periodic payments and <em>
+account_Z</em> for overflow account and protector account.
+<P>
+<H2><A NAME=SECTION00072000000000000000> Use Case Satisfaction</A></H2>
+<A NAME=586>&#160;</A>
+<P>
+The final step of analysis is model validation.  However, machine
+execution of the model is not possible.  Transition actions in the
+networks have not been formulated as algorithms but are instead in
+English (sometimes as structured English precondition and
+postcondition formulations).
+<P>
+To show that the model satisfies the use case scenarios, we may role
+play the objects in mental walk-throughs.  The use cases we formulated
+earlier are only the bare minimum.  Exception situations and corner
+cases have to be investigated.  How does the model behave when a
+customer indicates that the recipient account is the same account as
+the one that will be charged for the automated payment service?  Is it
+acceptable to have automated payment services between two pairs of
+accounts in both directions?
+<P>
+Stress testing the model may reveal ambiguities or incompleteness in
+the requirements.  Identifying these errors in an early stage will
+save substantial repair costs later.  Prototyping efforts may be
+employed when there are doubts about correctness.  These activities
+may result in the iteration of various analysis tasks, especially when
+analysis (or development generally) has been performed in vertical
+slices.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00080000000000000000> Summary</A></H2></center>
+<P>
+In this chapter, we have outlined an approach to the construction of a
+model for a desired system using notions developed in the previous
+chapters.  The phase in which semiformal classes, ensembles, and
+relationships are developed is preceded with a phase that relies on
+structured English to describe use cases, subsystems and a vocabulary.
+Of course, we do <em> not</em> claim that these two phases (and their
+subactivities) necessarily be performed in a breadth-first, waterfall
+manner.  Vertical slices and iterations can be done as necessary
+(see Chapter <A NAME=tex2html35 HREF="ch12.html">12</A>).
+<P>
+The model produced by an analysis relies on carefully constructed
+building blocks.  When classes have been defined with reuse in mind,
+then they often need to be subclassed to fit the needs of a particular
+target system (see Chapter <A NAME=tex2html36 HREF="ch8.html">8</A>).
+<P>
+<H2><A NAME=SECTION00081000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Provide the subtransition networks of an ATM that deal with the
+three use cases. They start in <em> S3</em> and lead back into <em> S3</em>; see
+Chapter <A NAME=tex2html37 HREF="ch10.html">10</A>.
+<P>
+<LI> Assume that we have extended the use case for automated payment
+service such that the customer can supply optionally an expiration date for
+the service.  Extend the models to capture this additional functionality.
+<P>
+<LI> We simplified the modeling of the overdraft protection use case.  We
+omitted a client-specified minimum level.  We also ignored the fact
+that a protecting account, which cannot replenish another account but which
+obtains funds later, should ``remember'' its obligation.  Extend the models
+that we presented to deal with these omissions.
+<P>
+<LI> Modify the overdraft protection use case such that members of
+Congress cannot subscribe to this service.  Expand the models to
+detail what happens when an overdraft occurs.  Introduce different
+categories of clients where the different categories are penalized
+differently for overdrafts.  Make sure that members of Congress always get
+the most severe penalties.
+<P>
+<LI> An account can play the role of a protector account provided it is
+owned by the client that sets up an overdraft service.  Give the details of
+the transition network (of an ATM?) that enforces this constraint.  An
+account cannot protect itself, which is a special case of circular protection
+links.  Where is this constraint formulated in the models?
+<P>
+<LI> Expand the ATM model to include other services.
+<P>
+<LI> Construct a distributed bank model.
+<P>
+<LI> Devise the ``ultimate'' bank services model -- the one that replaces
+the ATM.  (It might use interactive television from your home, and include
+new services such as registering and paying everything automatically with
+no customer intervention, the five minute home loan interview without
+paperwork, etc.).
+<P>
+</OL>
+<P>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=buhr2><STRONG>1</STRONG></A><DD>
+R. Buhr and R. Casselman.
+ Architecture with pictures.
+ In <em> OOPSLA '92</em>. ACM, 1992.
+<P>
+<DT><A NAME=jac87><STRONG>2</STRONG></A><DD>
+I. Jacobson.
+ Object-oriented development in an industrial environment.
+ In <em> OOPSLA '87</em>. ACM, 1987.
+<P>
+<DT><A NAME=jacobson><STRONG>3</STRONG></A><DD>
+I. Jacobson, M. Christerson, P. Jonsson, and G. Overgaard.
+ <em> Object-Oriented Software Engineering</em>.
+ Addison-Wesley, 1992.
+</DL>
+<P>
+
+<a href="ch11.html">Next: Chapter 11</a>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:47:40 EDT 1995</I>
+</ADDRESS>
+</BODY>

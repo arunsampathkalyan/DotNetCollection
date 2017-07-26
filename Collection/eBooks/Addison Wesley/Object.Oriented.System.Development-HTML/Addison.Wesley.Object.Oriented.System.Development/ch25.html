@@ -1,0 +1,687 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Performance Optimization</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Performance Optimization">
+<meta name="keywords" value="ch25">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 25: Performace Optimzation</h2>
+<UL>
+<LI> <A NAME=tex2html40 HREF="#SECTION00010000000000000000"> Optimization and Evolution</A>
+<LI> <A NAME=tex2html41 HREF="#SECTION00020000000000000000"> Algorithmic Optimization</A>
+<LI> <A NAME=tex2html42 HREF="#SECTION00030000000000000000"> Performance Transformations</A>
+<LI> <A NAME=tex2html43 HREF="#SECTION00040000000000000000"> Optimization in C++</A>
+<LI> <A NAME=tex2html44 HREF="#SECTION00050000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<A NAME=9>&#160;</A>
+<A NAME=10>&#160;</A><A NAME=11>&#160;</A>
+<p>
+In this chapter, we describe some techniques for improving the
+performance of object-oriented systems.  While most of the ideas are
+fairly general, making good on them can be environment, language,
+compiler, and tool dependent. However, for most of this chapter, we
+maintain the illusion of implementation independence.  As a prelude,
+Table <A HREF="ch25.html#opttab">1</A> lists without comment a set of trade-offs that may be
+applied in performance optimization.
+<P>
+<P><A NAME=19>&#160;</A><A NAME=opttab>&#160;</A>
+<center>
+<table border=5>
+<tr><td>
+<b>&nbsp;Usually Faster&nbsp;</b> </td><td> <b>&nbsp;Usually Slower&nbsp;</b> </td><td>&nbsp;</td><td><b>&nbsp; Usually Faster&nbsp;</b> </td><td> <b>&nbsp;Usually Slower&nbsp;</b></td></tr><tr><td>
+Internal </td><td> External </td><td>&nbsp; </td><td>Hardware </td><td> Software</td></tr><tr><td>
+Storage </td><td> Computation </td><td>&nbsp; </td><td>Direct </td><td> Indirect</td></tr><tr><td>
+Unmediated </td><td> Mediated </td><td>&nbsp; </td><td>Fixed </td><td> Variable</td></tr><tr><td>
+Implicit </td><td> Explicit </td><td>&nbsp; </td><td>Special Purpose </td><td> General Purpose</td></tr><tr><td>
+One Layer </td><td> Two Layers </td><td>&nbsp; </td><td>One Message </td><td> Two Messages</td></tr><tr><td>
+Unguarded </td><td> Guarded </td><td>&nbsp; </td><td>Immediate </td><td> Queued</td></tr><tr><td>
+Unconditional </td><td> Conditional </td><td>&nbsp; </td><td>Computed </td><td> Symbolic</td></tr><tr><td>
+Approximate </td><td> Exact </td><td>&nbsp; </td><td>Compile-Time </td><td> Run-Time</td></tr><tr><td>
+Optimistic </td><td> Pessimistic </td><td>&nbsp; </td><td>Transient </td><td> Persistent</td></tr><tr><td>
+Control </td><td> Coordination </td><td>&nbsp; </td><td>Event-Driven </td><td> Polled</td></tr><tr><td>
+Cooperation </td><td> Coordination </td><td>&nbsp; </td><td>Point-to-Point </td><td> Routed</td></tr><tr><td>
+Dispatching </td><td> Forwarding </td><td>&nbsp; </td><td>Local Call </td><td> Remote Call</td></tr><tr><td>
+Inline expansion </td><td> Call </td><td>&nbsp; </td><td>Reply </td><td> Exception</td></tr><tr><td>
+Signaling </td><td> Blocking </td><td>&nbsp; </td><td>Update </td><td> Construction</td></tr><tr><td>
+Invocation </td><td> Construction </td><td>&nbsp; </td><td>Recycling </td><td> Construction</td></tr><tr><td>
+Chunked </td><td> One-at-a-time </td><td>&nbsp; </td><td>Binding </td><td> Evaluation</td></tr><tr><td>
+Indexing </td><td> Searching </td><td>&nbsp; </td><td>Lazy </td><td> Eager</td></tr><tr><td>
+Reference </td><td> Copy </td><td>&nbsp; </td><td>Better Algorithm </td><td> Better Code</td></tr>
+</table>
+</center>
+<p>
+<p>
+
+
+<center><H2><A NAME=SECTION00010000000000000000> Optimization and Evolution</A></H2></center>
+<A NAME=23>&#160;</A><A NAME=24>&#160;</A>
+<P>
+Optimization techniques discover special cases and make associated
+trade-offs in order to improve performance. Some methods trade off
+other software quality criteria (especially coupling) for
+the sake of efficiency.  Since performance requirements are usually
+``hard'' and quality requirements ``soft'', such trade-offs must
+sometimes be made.
+<P>
+But one would like to optimize systems without <em> completely</em>
+removing the possibility for them to evolve, be repaired, and be
+reused.  As OO systems become larger and run longer, these concerns
+become increasingly important, especially considering that one of the
+reasons that OO systems are replacing non-OO ones is because the old
+ones could not be made to adapt.
+<P>
+General OO design methods usually ensure that performance tuning
+measures are at least <em> feasible</em>.  They leave room for as wide a
+variation in lower-level design and implementation decisions as
+logically possible. Any concrete implementation class that obeys the
+required interface of its abstract superclass can be plugged in at any
+time in development.  The best optimization techniques are those that
+continue to allow for at least some kinds of evolutionary changes
+without completely sacrificing performance. But if everything can
+change, then you cannot optimize anything.  While there is a fine line
+here, some good compromises are available.
+<P>
+<A NAME=27>&#160;</A>
+The stance most compatible with OO design methods is to support
+explicitly only those changes representing <em> extension by
+addition</em>. This preserves the ability to adapt to changes resulting
+from the addition of new objects, operations, and classes, but not
+destructive modifications of existing ones.  Thus, some modifications
+may break optimized designs, but extensions and improvements will not.
+Generally, this implies avoidance of optimizations that take advantage
+of constraints that just so happen to hold, without being
+declaratively guaranteed to hold.  These incidental constraints are
+the ones that may change. Thus, the declarative constraints,
+conditions, and effects listed for abstract classes are at least as
+useful for guiding optimization as are concrete-level considerations.
+In this sense, optimization is simply ``more design''.
+<P>
+Except where noted, the techniques described in the remainder of this
+chapter maintain at least limited opportunities for extensibility.
+However, even though these tactics are locally safe and permit
+extension, they are not without cost to overall design integrity.
+They may accentuate the extent to which future destructive changes
+propagate throughout a system.
+<P>
+
+<center><P><P>
+
+<H2><A NAME=SECTION00020000000000000000> Algorithmic Optimization</A></H2></center>
+<P>
+<A NAME=30>&#160;</A>
+OOA descriptions may contain information useful for helping to locate
+plausible spots where clever algorithms and data structures might make
+a big difference.  Probabilistic descriptions of ranges, use cases, and
+other qualitative information can direct attention to expected
+execution profiles.  These may be used in a qualitative way during
+optimization efforts, directing attention to concrete components that
+may need redesign before being committed to. Analytic models and
+execution profiles of prototypes serve similar roles.
+<P>
+The usual route to algorithmic optimization in OO designs is
+subclassing.  Any concrete implementation class that obeys the
+interface of its abstract superclass can be plugged in at any time in
+development.  Thus, slow list-based concrete collection classes can be
+replaced with ones based on fast balanced trees, classes with naively
+constructed numerical operations may be replaced by ones based on more
+serious algorithms, and so on.
+<P>
+This strategy must be used with care for components geared toward
+reuse across many applications or subsystems.  Different applications
+will have different invocation profiles.  Fast processing times in one
+operation cannot always be traded for slow execution in another. However,
+subclassing may be employed to create different concrete classes that
+make different trade-offs.  Each application may then select the one
+that is best suited to its profile.
+<P>
+Sometimes more efficient representations and algorithms may be
+employed only after defining <em> super</em>classes that define fewer
+and/or weaker operations.  For example, very efficient algorithms
+exist for implementing <tt> UnionFindSET</tt>s defining only <tt>
+has(elem)</tt> and <tt> destructivelyUnion(otherSet)</tt> operations
+[<A HREF="#aho">1</A>].  This is not a pure superclass of our <tt> SET</tt> class, but
+is a subclass of a superclass containing just <tt> has</tt>. There are
+many similar twists and variations, especially for data structure and
+numerical classes.  These kinds of structural modifications enable
+exploitation of the many known efficient representations and
+algorithms developed for such purposes.
+<P>
+<center><P><P>
+
+<H2><A NAME=SECTION00030000000000000000> Performance Transformations</A></H2></center>
+<P>
+<H2><A NAME=SECTION00031000000000000000> Caching</A></H2>
+<P>
+<A NAME=40>&#160;</A>
+In designs full of relays, name servers, and other mediators
+that perform multistage routing, the identities of ultimate recipients
+of routed messages may be reported to and cached by senders
+to streamline future communication. For example, in a model-view
+design that is mediated by a relay, the viewer can send back an
+identity-revealing message to the model on receiving its first change
+notice. From that point onward, the model may send notices directly to
+the viewer, without mediation.
+<P>
+Caching is used to construct <em> proxy</em> objects.  Proxies are
+designed as relays that transform local requests into interprocess
+messages.  However, they may be implemented in a way that locally holds at
+least some state information, allowing them to reply quickly to internal
+<tt> fn</tt>s probing simple attributes.<A NAME=43>&#160;</A>
+<P>
+Caching always requires backup strategies to recover and adapt when
+properties of external entities change. This normally requires
+notification protocols so that cached entities may inform their
+cachers when they change.  Some OODBs provide a great deal of
+infrastructure supporting local caching of persistently held
+objects.  When available, this infrastructure may be used to
+exploit other caching opportunities.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Embedding</A></H2>
+<P>
+<A NAME=45>&#160;</A>
+An extreme version of these tactics is to force an otherwise nonlocal
+passive object to become local by embedding it in another.  For
+example, in <i> ODL</i>, concrete passive helper objects are accessed
+through links from their hosts.  In some cases, these objects can be
+directly embedded within their enclosures, in a manner similar to
+``records'' in procedural programming languages.  Passive components
+declared as <tt> own</tt> are always safe for embedding, thus may be
+relabeled as <tt> packed</tt>.  This saves a level of indirection on
+access and sometimes simplifies storage management.
+<P>
+Most design methods actually preclude thoughtless application of this
+measure. Since links always refer to <em> abstract</em> types, the
+storage space needed to embed corresponding concrete objects is
+not knowable, so embedding is impossible.  However special subclasses
+may be designed in order to enable embedding.  Any class declaring
+<tt> fixed</tt> links to other abstract components may be subclassed
+with versions specifying <em> concrete</em> links for each kind of
+concrete class actually used.  These may then be <tt> packed</tt> safely.
+While the new subclasses are not very extensible, their parents remain
+so.
+<P>
+<H4><A NAME=SECTION00032010000000000000> Replication.</A></H4>
+<A NAME=54>&#160;</A>
+Transient embedding or caching may be obtained through <em>
+replication</em> of immutable objects across processes or even across
+objects.  As is the case for proxies of any sort, no client processing
+may visibly depend on the <em> identities</em> of replicas, just their
+states and behaviors.
+<P>
+<H4><A NAME=SECTION00032020000000000000> Homogeneous collections.</A></H4>
+<A NAME=58>&#160;</A>
+Embedding strategies may be extended to collections, in which case
+they are normally labeled as <em> homogeneous</em>. The particular case of
+homogeneous <tt> ARRAY</tt>s of built-in types (e.g., <tt> ARRAY[REAL]</tt>)
+is generally well worth special attention. These not only improve
+performance, but are also useful in constructing interfaces to
+numerical routines implemented in non-OO languages.  However, except
+in the special case of primitives, homogeneous structures cannot be
+made to operate in safe ways. They run against standard policies
+stating that every class may be subclassed. The reason they work for
+primitives is that we happen to secretly know that built-ins such as
+<tt> REAL</tt> are not subclassable.
+<P>
+<H2><A NAME=SECTION00033000000000000000> Protocol Strength Reduction</A></H2>
+<P>
+Communication constructs come in many ``strengths''. For example, <em>
+futures</em> are more expensive than bidirectional operations, which are
+in turn more expensive than one-way sends.<sup>1</sup> Splitting bidirectional interactions into
+further-optimizable callback and continuation protocols has been found
+to provide substantial speed improvements [<A HREF="#draves">6</A>].
+<blockquote>
+ <sup>1</sup>Footnote:<br>
+This is not always
+true. In some systems, one-way sends are actually built out of wrappers
+around bidirectional ones.
+</blockquote>
+<P>
+Similarly, exceptions are usually more expensive than sentinels.
+Messages that require resolution, dispatching, and/or multicast are
+more expensive than fixed point-to-point messages. The cheapest
+workable protocol should always be employed.  The cheapest
+communication is no communication at all.
+<P>
+<H3><A NAME=SECTION00033100000000000000> Locking</A></H3>
+<A NAME=68>&#160;</A>
+<P>
+Locks and similar interference control measures inhibit concurrency,
+generate overhead, and sometimes lead to deadlock.  These problems may be
+minimized through static analysis. For example, if an object is used
+in only two joint operations that cannot ever interfere with each
+other (i.e., if all possible interleavings are known to be either safe
+or impossible), then locking is unnecessary. More generally,
+operations may be divided into <em> conflict sets</em> that describe those
+pairs or sets of operations that may interfere. Locking schemes may be
+adjusted accordingly. The literature on such techniques is extensive;
+see, for example [<A HREF="#cellary">5</A>].
+<P>
+<H3><A NAME=SECTION00033200000000000000> Specialization</A></H3>
+<P>
+<A NAME=72>&#160;</A>
+Program implementations are at the mercy of native dispatchers and
+dispatching rules for most execution support.  Different languages
+even have different rules (as well as different subclassing rules,
+argument formats, and so on). They do not always map precisely to design
+constructs.  However, languages supporting dispatching are amenable to
+optimizations based on relatively high-level design information.
+These optimizations eliminate run-time uncertainty about the
+particular operations that need to be performed given some message.  At
+least some messages can be resolved at design-time.  These cases
+may be determined through static analysis of the information sitting
+in a given design.
+<P>
+This is something that a clever compiler or static analysis tool might
+be able to do. In fact, most of these techniques were originally
+reported by researchers implementing experimental compilers for the OO
+language <i> SELF</i> [<A HREF="#self">9</A>]<A NAME=75>&#160;</A>. Except for such
+experimental systems, contemporary design and implementation tools do
+not undertake such analysis, so it is useful to know how to do this
+manually.
+<P>
+In an <i> ODL</i> framework, the required analyses may be seen as sets
+of logical inferences based on declarative class information. To
+illustrate, suppose there is an abstract class that is implemented by
+only one concrete class. In this situation, any client of the abstract
+class must actually be using the concrete version:
+<P>
+<PRE>class AbstractA
+  v: int;
+end
+
+class ConcreteA is AbstractA
+  v: int { ... }
+  inv v = 1
+end
+
+op useA(a: AbstractA) { if a.v = 1 then something else otherthing end }
+</PRE>
+<P>
+It is clear that in <tt> useA</tt>, <tt> something</tt> will <em> always</em> be
+invoked. This fact can be hard-wired at design time.  Surprisingly,
+this can be done in a relatively nondisruptive manner, by overloading
+another <em> customized</em> version of <tt> useA</tt>:
+<P>
+<PRE>op useA(a: ConcreteA) { something }
+</PRE>
+<P>
+Resolution-based dispatching is still required to route a call of <tt>
+useA</tt> to the concrete version. (This may require further conversions
+to selection-based dispatching; see Chapter <A NAME=tex2html20 HREF="ch21.html">21</A>.) But
+once it is invoked, the internals are streamlined away.  This applies
+even if there is another concrete class. For example:
+<P>
+<PRE>class AnotherConcreteA is AbstractA
+  v: int { ... }
+  inv v = 0
+end
+
+op useA(a: AnotherConcreteA) { otherthing; }
+</PRE>
+<P>
+These optimizations have no other execution cost except storage of
+additional customized versions of operations.  Some kind of dispatch
+is needed anyway to invoke the right version of an operation with
+multiple specializations.  The heart of the trick is to replace
+conditionals with class membership tests and dispatches.  Another way
+of viewing this is that customization synthesizes finer-granularity
+operations and classes than are otherwise present in a design, and
+adjusts dispatching requirements accordingly.
+<P>
+These improvements require far less global analysis than do other
+optimization techniques.  You do not have to be sure that only one path
+is taken; you just have to notice that if it is taken, further
+simplifications are possible since they are all conditional on the
+same properties that lead to it being taken in the first place.
+<P>
+These forms of specialization <em> only</em> work when there are no
+subclassing errors.  For example, if there were a class <tt>
+SubConcreteA</tt> that redefined <tt> v</tt> to return <tt> 3</tt>, the strategy
+would fail.  But this subclass would also break the <tt> v=1</tt>
+invariant.  Of course, it would have been much better to create an
+intervening abstract class, say, <tt> AbstractAWithVEQ3</tt>.  This would
+reflect and advertise the subclass constraints rather than adding them
+directly to a concrete class, or worse (but temptingly) leaving the
+constraints entirely implicit.  However, this is the right stance only
+when the subclass constraints <em> must</em> hold, and not when they
+``just happen'' to be true, and are thus overridable in subclasses.
+<P>
+There are several further variations on the basic idea.  For example,
+consider the collection operation <tt> applyC</tt>, which takes an operation
+and applies it to all elements. This can be customized by defining
+individual operations that directly apply the operation to all
+members.  Rather than calling <tt> aSet.applyC(WRAP(print))</tt>, a <tt>
+printAll</tt> operation can be added to a concrete <tt> SET</tt> subclass, and
+invoked from clients.
+<P>
+<H2><A NAME=SECTION00034000000000000000> Encapsulation</A></H2>
+<A NAME=97>&#160;</A><A NAME=98>&#160;</A>
+<P>
+At least at the within-process programming level, caching, embedding,
+strength reduction, and customization techniques are (only) sometimes
+more effective when the ``insides'' of target objects can be opened up
+to their clients.  When operations are made more complex and
+inefficient than they would be if internal components were not hidden
+(e.g., due to extra forwarding and dispatching), encapsulation may be
+broken for the sake of performance. However, blind, random removal of
+encapsulation barriers may cause irreparable harm to designs.  Less
+disruptive mechanisms exist.
+<P>
+<H4><A NAME=SECTION00034010000000000000> Open subclassing.</A></H4>
+<P>
+<A NAME=100>&#160;</A>
+As discussed in Chapter <A NAME=tex2html24 HREF="ch17.html">17</A>, constructs such as <tt> opens</tt>
+can be effective in removing certain encapsulation barriers in a
+structured fashion.  These mechanisms embed (or share) concrete helper
+class features in ways that allow direct access by hosts, thus
+avoiding forwarding and indirection. Most OO programming languages
+support some variant of this construct. For example, in <i> C++</i>,
+<tt> private</tt> subclassing (sometimes in conjunction with <tt> friend</tt>
+constructs) may be used to this effect.
+<P>
+<H4><A NAME=SECTION00034020000000000000> Inlining.</A></H4>
+<A NAME=108>&#160;</A>
+<em> Inlining</em> is among the most extreme forms of structured
+encapsulation breakdown.  Inside passive components, it is sometimes
+possible to obtain desired effects without the overhead of a message
+send.
+<P>
+Inspection of the basic structure of an OO kernel (e.g., in
+Chapter <A NAME=tex2html26 HREF="ch15.html">15</A>) shows that most of the real execution of
+internal actions occurs only when operating on primitives. All
+composite operations just coordinate and relay further requests,
+usually ultimately reducing to primitive operations. While the notion
+of ``primitive'' is somewhat arbitrary, it may be safely assumed that
+primitive operations are executed relatively quickly.
+<P>
+Any program should run faster when paths to primitives are shorter. In
+the best case, these primitives can be directly computed by their
+clients through inlining. This avoids all resolution and procedure
+call overhead, and causes the code to run at ``machine speed'', modulo
+language-specific factors. In fact, inlining often results in OO
+programs running faster than predicted on the basis of reduced
+indirection overhead, since it creates code patterns that are further
+optimizable through standard compilation techniques.  Inlining may be
+available in the native language or may be manually encoded.
+<P>
+Of course, full inlining is only possible and/or desirable in limited
+contexts.  However, inlining opportunities often occur inside the
+bottlenecks representing the bulk of the ``90-10'' rule of thumb for
+efficiency: 90% of the time is spent in 10% of the code in most
+programs. (Or maybe it's 80-20 or 70-30, but still ...) Selective
+application of inlining techniques has been found to provide
+order-of-magnitude speed improvements in some programs and none at all
+in others. The best means of detecting inlinable calls is
+customization analysis.
+<P>
+<H2><A NAME=SECTION00035000000000000000> Other Measures</A></H2>
+<P>
+<H4><A NAME=SECTION00035010000000000000> Hiding Computation.</A></H4>
+<P>
+It is almost always possible to obtain better user-visible interactive
+response times by arranging for slower processing to occur at less
+visible times.  Time-outs and other related mechanisms may be used to
+control this.
+<P>
+<H4><A NAME=SECTION00035020000000000000> Rebinding.</A></H4>
+<P>
+It is usually faster to change logical state by rebinding a link than
+by mutating a set of components. Isolating sets of related values in
+state-classes can clear up bottlenecks filled with excessive
+modification of value attributes.<A NAME=115>&#160;</A>
+<P>
+<H4><A NAME=SECTION00035030000000000000> Rolling and unrolling operations.</A></H4>
+<P>
+Transformations from top-level operations to relational classes may be
+run either backward or forward, depending on the relative speeds of
+object construction versus invocation of multiparameter operations.
+The backward transformation forces all participants to be listed as
+arguments. Care is needed to ensure that these sets of participants
+are always sent in the right way.
+<P>
+<H4><A NAME=SECTION00035040000000000000> Precondition screening.</A></H4>
+<A NAME=118>&#160;</A>
+Overhead for argument error protocols may be bypassed via
+transformations that provide screening functions that <em> must</em> be
+invoked before calling the operation of interest.  This often opens up
+further opportunities for simplification and optimization on the
+client side.
+<P>
+<H4><A NAME=SECTION00035050000000000000> Component factoring.</A></H4>
+<P>
+Components that are redundantly held in many objects may be coalesced.
+For example, collections and repositories may hold single copies of
+components accessed by all elements.
+<P>
+<H4><A NAME=SECTION00035060000000000000> Recycling objects.</A></H4>
+ <A NAME=122>&#160;</A>
+A constructor may re-initialize and recycle an otherwise unused
+object rather than creating a fresh one via <tt> new</tt>. When
+objects are maintained in a repository, this is both natural and
+effective.  The repository may place <tt> remove</tt>d objects on a
+special recycling list for use in later constructors. This works
+well even in a garbage-collection environment. Classes
+must be fitted with special <tt> reInit</tt> methods to
+support this.
+<P>
+<H4><A NAME=SECTION00035070000000000000> Sharing stateless objects.</A></H4>
+<P>
+Sometimes it suffices to use only one instance of truly stateless
+immutable classes.  A generator class may simply keep passing out the
+same object as a constructor result rather than making fresh ones.
+However, this technique is <em> only</em> safe when clients do not test
+links for object identity. If two clients hold two conceptually
+distinct objects, but they are actually the same and the clients are
+able to determine this fact through identity tests, then the technique
+cannot be used.  <A NAME=128>&#160;</A>
+<P>
+<H4><A NAME=SECTION00035080000000000000> Sharing stateful objects.</A></H4>
+<A NAME=130>&#160;</A>
+<em> Copy-on-write</em> and related techniques may be used to share objects
+while they are in the same state. The same concerns about identity
+apply.
+<P>
+<H4><A NAME=SECTION00035090000000000000> Finite structures.</A></H4>
+<P>
+Most collection classes are designed to be boundless. (This means, of
+course, that insertions only fail when the system fails, not that they
+have truly infinite capacity.)  Many applications only require
+predeterminable finite capacities.  Implementations of finite capacity
+structures are usually faster than those for unbounded ones.
+<P>
+<H4><A NAME=SECTION000350100000000000000> Storage management.</A></H4>
+<P>
+Replacing the storage management infrastructure (GC, system memory
+allocators, etc.) with faster algorithms and implementations speeds up
+the construction of <em> all</em> objects.
+<P>
+<H4><A NAME=SECTION000350110000000000000> Preconstruction.</A></H4>
+<A NAME=136>&#160;</A>
+Many object-oriented programs spend significant time initializing
+objects before getting around to using them.  Examples include
+programs making extensive use of collection classes that build up
+complex data structures at system initialization time. This can be
+avoided by writing a version of the program that initializes these
+objects and persistently stores their states.  The normal, usable
+version of the program may then more quickly initialize objects by
+directly reconstructing them from the saved state information.
+<P>
+<H4><A NAME=SECTION000350120000000000000> Reclustering.</A></H4>
+ As discussed in
+Chapter <A NAME=tex2html33 HREF="ch23.html">23</A>,<A NAME=140>&#160;</A> repacking objects into
+different clusters on the basis of monitoring and experience is very
+likely to improve performance.  Intercluster messages are normally
+orders of magnitude slower than within-cluster messages, so there is a
+lot of room for improvement. <em> Dynamic reclustering</em> strategies
+that move heavily communicating objects ``nearer'' to each other for
+the duration of an interaction sequence may have dramatic effect.
+<P>
+<center><P><P>
+
+<H2><A NAME=SECTION00040000000000000000> Optimization in C++</A></H2></center>
+<A NAME=143>&#160;</A>
+<A NAME=144>&#160;</A>
+Of course, individual programming languages may offer special
+optimization opportunities. We illustrate a few such techniques for
+<i> C++</i>.  <i> C++</i> is a highly tunable language. Most of the
+optimization strategies described earlier in this chapter may be
+applied.
+<P>
+Many bottlenecks in <i> C++</i> programs occur in operations on simple
+``lightweight'' objects. Lightweightness is in the eye of the
+beholder, and differs across applications. However, generally, classes
+that may be transformed to possess the following properties may be
+segregated for special treatment:<A NAME=148>&#160;</A>
+<UL><LI> only embedded components
+  <LI> mostly inlinable methods
+  <LI> mostly transient, local client usage
+  <LI> no need for representation independence.
+  <LI> no need for subclassability (either upwards or downwards).
+</UL>
+<P>
+Common examples include complex numbers, graphics primitives, and
+fixed-length strings. (Variable-length strings almost fall in
+this category, but cannot have their representations completely
+embedded.)
+<P>
+Here, several good design criteria are traded off for the sake of
+performance.  Killing off representation independence and
+subclassability means that no methods need be declared as <tt>
+virtual</tt>, at the likely expense of padding class interfaces with
+operations normally introduced in subclasses. This then enables
+compile-time message resolution and inlining. The emphasis on embedded
+components and mostly local use allows the optimization of copy
+construction.  Local copy-construction is usually already optimized by
+<i> C++</i> compilers, so need not be specifically coded.
+<center><P><P>
+
+<H2><A NAME=SECTION00050000000000000000> Summary</A></H2></center>
+<P>
+Some object-oriented systems are reputed to be slow. They need not be.
+A number of purely technical manipulations are available to improve
+performance. However, it is good practice to limit optimizations to
+those that maintain other software quality criteria.  Most OO
+optimization techniques are <em> specialization</em>-driven.  They first
+discover predeterminable message resolutions, representation
+strategies, and usage patterns. They then hard-wire these special
+cases before execution.
+<P>
+<H2><A NAME=SECTION00051000000000000000> Further Reading</A></H2>
+<P>
+Bentley [<A HREF="#bentley">4</A>], Sedgewick [<A HREF="#sedgewick">8</A>], and related texts
+should be consulted for more thorough treatments of the basic
+techniques available for writing efficient algorithms and programs.
+The performance enhancements attempted by some compilers have analogs
+at coarser design and programming levels. See, for example, Aho et al
+[<A HREF="#dragon">2</A>], Lee [<A HREF="#lee2">7</A>], and Appel [<A HREF="#appel">3</A>].  The <i>
+SELF</i> papers [<A HREF="#self">9</A>] present several OO program optimization
+techniques beyond those described here.
+<P>
+<H2><A NAME=SECTION00052000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Many ``intrinsically efficient'' designs are also
+        good when measured by other criteria. Why?
+<P>
+  <LI> Give an example demonstrating the application of each
+        entry in the table of trade-offs.
+<P>
+  <LI> One way to categorize optimization measures is whether
+        they trade more space for less time, or vice
+        versa. Categorize the measures described in this
+        chapter.
+<P>
+  <LI> There is a slogan among some compiler writers that a compiler
+        should never postpone to run-time anything that may be done at
+        compile time. Explain how this slogan has more consequences
+        and requires a great deal more effort in OOPL compilers than
+        those for procedural programming languages.
+<P>
+  <LI> One reason that some OO languages limit representation options
+        for built-in types is to guarantee that corresponding
+        attributes may be embedded in their hosts. Use a language
+        supporting both embedding and nonembedding options to see
+        what difference this really makes.
+<P>
+  <LI> Conversion of abstract links to embeddable concrete form
+        replaces instance generation with subclassing. Why should
+        this form of subclassing be postponed as long as possible?
+<P>
+  <LI> Why would optimization be more difficult if objects were
+        allowed to dynamically rebind concrete code associated with
+        operations?
+<P>
+  <LI> Would optimization be easier if classes could be
+        specifically denoted as <em> nonsubclassable</em>?
+<P>
+</OL>
+<P>
+
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=aho><STRONG>1</STRONG></A><DD>
+A. Aho, J. Hopcroft, and J. Ullman.
+ <em> The Design and Analysis of Computer Algorithms</em>.
+ Addison-Wesley, 1974.
+<P>
+<DT><A NAME=dragon><STRONG>2</STRONG></A><DD>
+A. Aho, R. Sethi, and J. Ullman.
+ <em> Compilers: Principles, Techniques AND Tools</em>.
+ Addison-Wesley, 1986.
+<P>
+<DT><A NAME=appel><STRONG>3</STRONG></A><DD>
+A. Appel.
+ <em> Compiling with Continuations</em>.
+ Cambridge University Press, 1992.
+<P>
+<DT><A NAME=bentley><STRONG>4</STRONG></A><DD>
+J. Bentley.
+ <em> Writing Efficient Programs</em>.
+ Prentice Hall, 1982.
+<P>
+<DT><A NAME=cellary><STRONG>5</STRONG></A><DD>
+W. Cellary, E. Gelenbe, and T. Morzy.
+ <em> Concurrency Control in Distributed Database Systems</em>.
+ North-Holland, 1988.
+<P>
+<DT><A NAME=draves><STRONG>6</STRONG></A><DD>
+R. Draves, B. Bershad, R. Rashid, and R. Dean.
+ Using continuation structures to implement thread management and
+  communication in operating systems.
+ In <em> 13th ACM Symposium on Operating Systems Principles</em>. ACM,
+  1991.
+<P>
+<DT><A NAME=lee2><STRONG>7</STRONG></A><DD>
+P. Lee, editor.
+ <em> Advanced Language Implementation</em>.
+ MIT Press, 1991.
+<P>
+<DT><A NAME=sedgewick><STRONG>8</STRONG></A><DD>
+R. Sedgewick.
+ <em> Algorithms</em>.
+ Addison-Wesley, 1990.
+<P>
+<DT><A NAME=self><STRONG>9</STRONG></A><DD>
+D. Ungar.
+ The self papers.
+ <em> Lisp and Symbolic Computation</em>, 1991.
+</DL>
+<P>
+
+<a href="ch26.html">Next: Chapter 26</a>
+<center><P><P></center>
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 08:01:13 EDT 1995</I>
+</ADDRESS>
+</BODY>

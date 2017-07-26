@@ -1,0 +1,1059 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Designing Passive Objects</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Designing Passive Objects">
+<meta name="keywords" value="ch24">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 24: Designing Passive Objects</h2>
+<UL>
+<LI> <A NAME=tex2html96 HREF="#SECTION00010000000000000000"> Transformations</A>
+<LI> <A NAME=tex2html97 HREF="#SECTION00020000000000000000"> Storage Management</A>
+<LI> <A NAME=tex2html98 HREF="#SECTION00030000000000000000"> Passive Objects in  C++</A>
+<LI> <A NAME=tex2html99 HREF="#SECTION00040000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<A NAME=9>&#160;</A><A NAME=10>&#160;</A>
+<A NAME=11>&#160;</A>
+<P>
+Clustering objects into processes yields a two-tiered architecture.
+The system as a whole appears as a relatively small number of
+interacting process-level active objects. Within each cluster lie all
+the passive objects that have been packed inside it. Internal
+cluster design activities perform necessary and desirable
+transformations applicable to those unfortunate objects that find
+themselves operating in a nonautonomous computational environment.
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Transformations</A></H2></center>
+<A NAME=13>&#160;</A><A NAME=14>&#160;</A>
+<P>
+Each process-level cluster serves as an <em> agent</em>, conceptually including:
+<UL><LI> mechanisms to receive messages from other clusters
+  <LI> mechanisms to send messages to other clusters
+  <LI> a repository of embedded passive objects
+  <LI> a message queue
+  <LI> an interpreter (CPU).
+</UL>
+<P>
+This is just a small variation of our basic object model. Each of
+these properties <em> could</em> be ascribed to any object at all.  In
+fact, each cluster serves as an OO simulation kernel as described in
+Chapter <A NAME=tex2html8 HREF="ch15.html">15</A>.  But there are now two additional
+considerations reflecting the fact that clusters communicate with
+others.  The queue must be able to receive messages from other
+clusters.  Incoming messages that conform to those listed in the
+cluster's external interface are placed on the queue via system level
+magic.  Also, the agent must be able to send external messages to
+other clusters, normally as isolated via proxies or related
+mechanisms.
+<P>
+The addition of intercluster messaging transforms each cluster into a
+special kind of joint action coordinator (Chapter <A NAME=tex2html9 HREF="ch22.html">22</A>).  Not
+only are the states of all external objects beyond its control, but
+all internal objects are purely passive and unprotected.  However,
+from a suitably abstract perspective, cluster agents still perform
+basic interpretation in the manner described in Chapter <A NAME=tex2html10 HREF="ch15.html">15</A>:
+<P>
+<P>
+<UL><LI> Take from the queue any action that has all of its triggering
+        constraints satisfied and process it:
+    <UL><LI> If it is an object construction event, create a new
+            (passive) object with the required initial states and
+            attributes.
+      <LI> Else if it is an elementary state change operation on a
+            primitive object, then directly compute it.
+      <LI> Else place all component events listed in the
+            body of the transition on an appropriate queue (perhaps
+            that of a remote cluster).
+    </UL></UL>
+
+<P>
+The nature and form of internal passive objects still meet our
+definition of objecthood in Chapter <A NAME=tex2html11 HREF="ch1.html">1</A>.  Any object and
+its class may be cast in a form that enables passive simulation by a
+cluster agent.  We do not need new <i> ODL</i> constructs to distinguish
+passive zero-threaded objects from active ones. In fact, we adopt the
+best pragmatic notation later in this chapter, where we transform such
+classes into common OO programming language constructs that <em> only</em>
+support definition of passive objects.
+<P>
+<H2><A NAME=SECTION00011000000000000000> Single-Threaded Clusters</A></H2>
+<P>
+<A NAME=34>&#160;</A><A NAME=35>&#160;</A>
+<A NAME=36>&#160;</A>
+<P>
+Clusters may be classified into two basic categories, <em>
+single-threaded</em> and <em> multithreaded</em>.  Single-threaded clusters
+are pure <em> servers</em>, containing nothing but guardless blocking
+service operations and/or functional attributes.  All others are
+multithreaded.
+<P>
+Actions within single-threaded clusters can be fully <em> serialized</em>.
+Each event can be made to lead to a single unique next-event within
+the cluster.  For this reason, single-threaded clusters are
+substantially easier to design and implement than others.  With only a
+few minor snags, most classes retain their forms when moving from
+active to passive status.
+<P>
+Single-threaded clusters are essentially identical to standard
+sequential programs.  Only one thread of control is ever active within
+the cluster.  When a cluster agent receives a request, it may invoke
+an operation on the appropriate embedded object using a sequential
+procedure call, ultimately receiving the result in the same fashion.
+<P>
+Single-threaded clusters may be constructed by transforming all
+internal operations and messages into <tt> local</tt> procedures and
+procedure calls.  There may still be outbound one-way messages in
+single-threaded clusters, most typically to ``sinks'' including
+loggers, I/O devices, and notification relays.
+<P>
+Internal one-way <tt> op</tt>s may be proceduralized.  Since only one
+thread may execute at any given time, it is harmless for the client to
+simply wait out an invoked one-way operation.  External one-way calls
+should be handled (usually through proxy mechanisms) so that they
+return immediately to the internal senders. All other interaction
+constructs (e.g., early replies) may need to be translated into these
+more primitive forms before applying the transformations.
+<P>
+Our analysis and design level atomicity guarantees have no
+consequences at this level. Since no operation will ever be
+interrupted, there is no need to implement any kind of protection
+mechanism. Of course, the cluster itself must be protected via <em>
+shell</em>-level mechanics.<A NAME=44>&#160;</A><A NAME=45>&#160;</A>
+<P>
+<H3><A NAME=SECTION00011100000000000000> Protocols</A></H3>
+<P>
+While the cluster itself may contain a queue to hold requests received
+while it services others, passive objects residing within
+single-threaded clusters cannot possibly contain any <tt> pend</tt>s
+associated with tests for internal conditions.  (Guards that reference
+external objects should be converted into other forms described in
+Chapter <A NAME=tex2html17 HREF="ch22.html">22</A>.)  In purely sequential environments, if a guard
+referencing internal state is not true when a message is invoked, it
+will not <em> ever</em> become true if the sender is blocked waiting for it.
+For example, if a sender invokes <tt> s.top</tt> for some <tt> s:Stack</tt>
+when it is empty, it is senseless to wait. The process will simply
+lock up.  Thus, this situation ought to be transformed into an error
+condition.  This is, of course, standard practice in the design of
+sequential stacks, where attempts to read from an empty stack are
+treated as exception conditions.
+<P>
+Thus, error protocols in objects designed to operate in pure
+sequential environments are sometimes defined differently than for
+those that may operate concurrently.  However, this has little to do
+with passivation in general.  The reason that an empty sequential
+stack <tt> top</tt> access should lead to an error is that we <em> know</em>
+it is pointless to wait, and (implicitly) we <em> believe</em> that it is
+better to enter an error protocol than face certain infinite
+postponement. If we discovered that nothing could unblock a <tt> top</tt>
+request in a concurrent design, we might make the same choice.
+<A NAME=57>&#160;</A>
+<P>
+However, different screening protocols are more widely useful in
+sequential designs. In a single-threaded cluster, a client of a stack
+may itself test whether the stack is empty before calling <tt> top</tt>.
+The client may be confident that if the stack was not empty when
+tested, the request cannot fail.  In a concurrent setting, other
+messages may intervene between the test and the <tt> top</tt> request
+unless locking protocols are employed.
+<P>
+<P>
+<H2><A NAME=SECTION00012000000000000000> Multithreaded Clusters</A></H2>
+<P>
+<A NAME=61>&#160;</A><A NAME=62>&#160;</A>
+<A NAME=63>&#160;</A>
+<P>
+Multithreaded clusters contain only passive objects, However, at any
+given time, the component objects may be in states reflecting
+participation in several partially completed timethreads.
+Multithreading is possible by virtue of the first-class active status
+of the cluster agent itself. The continuum of possibilities ranging
+from one-process-per-object to one-process-per-system rests on the idea
+that one active object can ``swallow up'' and service any number of
+others:
+<P>
+<UL><LI> Per-object message queues may be combined.
+  <LI> Guard evaluation may be centralized.
+  <LI> Any (so privileged) computational agent may execute operation code
+        on behalf of any other.
+</UL>
+<P>
+The most general passivation strategy is extremely simple to describe,
+but extremely painful to perform.  All possible ``microstates'' of all
+objects must be converted into a canonical form executable by means of
+the interpretation mechanism described at the beginning of this
+chapter.  This entails converting conditionals to messages,
+transforming blocking calls and sequences of operations to wait-state
+guarded callback protocols, adding attributes for each object
+indicating whether it is logically <tt> ready</tt> (not engaged in a public
+operation), and so on.  These are the same transforms needed in order
+to implement the simulator described in Chapter <A NAME=tex2html22 HREF="ch15.html">15</A>, as
+extended to allow multiple concurrent interpreters.  Without tools,
+canonical conversion is impossibly difficult and error-prone.
+<P>
+Moreover, even if these conversions could be performed automatically,
+the resulting system would not be very useful.  Without extensive
+manual optimization, the overhead required for interpreting objects in this
+fashion is too high to take seriously for production software.
+Instead, these mechanisms must be resorted to only when strictly
+necessary.
+<P>
+<H2><A NAME=SECTION00013000000000000000> Task Scheduling</A></H2>
+<P>
+<A NAME=70>&#160;</A><A NAME=71>&#160;</A><A NAME=72>&#160;</A><A NAME=73>&#160;</A>
+<A NAME=74>&#160;</A>
+<P>
+Objects and sequences of computation in multithreaded clusters may be
+converted into procedural form using the strategies listed for
+single-threaded clusters.  The scheduling capabilities of the cluster
+agent need be invoked only when linear proceduralization fails.
+<P>
+This style of processing is sometimes termed ``thread'' or ``task''
+programming. Effective design relies on a service-centered rather than
+object-centered approach.  The basic idea is to map out all possibly
+concurrent timethreads, or sequences of operations that may come into
+play in the servicing of cluster-level messages.  All objects that may
+be involved in multiple threads must be protected using locks, queues,
+and scheduling mechanisms to avoid interference and lockup.
+<P>
+The ``directionality'' of this approach makes it more tractable and
+familiar, but also somewhat more dangerous than canonical conversion.
+Instead of starting with an assumption of full protection and then
+loosening mechanisms as optimizations, these methods attempt to
+determine the minimum set of protection mechanisms necessary for
+correct functioning.  In the worst case, a full conversion to
+canonical interpretive form may be necessary. However, this never
+happens in practice.
+<P>
+Thus, even here, most classes retain their original design structure
+when converted from active to passive forms.  However, faithfulness of
+converted classes to their original active designs can be difficult to
+assess.  Success relies on finding all situations in which objects
+could possibly interfere, block, or loop.  Testing is imperative.
+<P>
+Many tools, support packages, and even programming language constructs
+(e.g., <i> Ada</i> <tt> task</tt>s)<A NAME=77>&#160;</A> exist to aid implementation.
+Details vary widely, and many special techniques apply to only certain
+tools.  We describe only some common capabilities.
+<P>
+<H3><A NAME=SECTION00013100000000000000> Locks</A></H3>
+ <A NAME=79>&#160;</A>
+Standard semaphore-based locking mechanisms may be used to indicate
+whether objects are logically <tt> ready</tt><A NAME=81>&#160;</A>, and thus to enforce
+atomicity requirements.  These may employ the same locking techniques
+described in Chapter <A NAME=tex2html31 HREF="ch22.html">22</A>. In fact, semaphore locks may
+be used to implement those arranged in earlier design steps.
+Otherwise, only those objects that may participate in multiple tasks
+need be lockable.
+<P>
+For lockable objects, operations may be converted to invoke <tt>
+LOCK(self)</tt> on entry and <tt> RELEASE(self)</tt> on exit. A less
+disruptive strategy is to wrap the original inside a view class (see
+Chapter <A NAME=tex2html32 HREF="ch17.html">17</A>):
+<P>
+<PRE>class X ...   op a: () { ... } end
+
+class ManagedX
+  own x: X;
+  op a: () { LOCK(x); x.a; RELEASE(x) }
+end
+</PRE>
+<P>
+<H3><A NAME=SECTION00013200000000000000> Queues</A></H3>
+<A NAME=89>&#160;</A><A NAME=90>&#160;</A>
+<A NAME=91>&#160;</A><A NAME=92>&#160;</A>
+<P>
+As described in Chapter <A NAME=tex2html37 HREF="ch19.html">19</A>, one or more delay queues may
+be used to hold waiting operations.  Boolean conditions may be
+associated with each queue.  If queues are associated with the above
+<tt> ready</tt> locks, then locking and queuing may be combined.  Queue
+maintenance is most often performed using <em> monitor</em> and/or <em>
+port</em> constructions.  These queues are not boundless.  Queue overflow
+may lead to either process-level blocking or failure, requiring
+associated error protocols.
+<P>
+Queue checking in task packages is normally entirely event-driven.
+Operations that affect conditions must call the appropriate queue
+management facilities.  Any operation that changes a condition must
+(perhaps conditionally) trigger processing.  For example:
+<P>
+<PRE>class X
+  stat: Bool;
+  local op doB;
+  op b: () { if stat? then doB else pend end }
+  op c: () { stat.t! }
+end
+</PRE>
+<P>
+This might be converted to use a delay queue:
+<P>
+<PRE>  op b: () { if stat? then doB else DELAY(XStatQ, doB) end }
+  op c: () { stat.t!; SIGNAL(XStatQ) }
+</PRE>
+<P>
+Again, we have used these constructions before. These are the same
+self-notification and queuing strategies described in
+Chapter <A NAME=tex2html38 HREF="ch19.html">19</A>.  Alternatives may be based on several of the
+designs discussed in Chapter <A NAME=tex2html39 HREF="ch22.html">22</A>; for example, versions of
+blackboard schemes
+<A NAME=102>&#160;</A> in which each passive object uses a polling loop to
+obtain stored operation requests.
+<P>
+<H3><A NAME=SECTION00013300000000000000> Scheduling</A></H3>
+<P>
+An operation may request itself to be suspended in a special queue.
+This frees the CPU to check other delay queues and/or execute other
+suspended tasks.  Associated timers and predefined policies are
+typically available to aid in scheduling details.  All polling loops
+and other potentially infinitely looping operations must be broken up
+with occasional suspension requests to prevent process lockup.
+Finding all of these situations can be difficult.  This is a disguised
+version of the classic problem of infinite loop detection, which can
+be unsolvable in theory, but usually conquered through hard work in
+practice.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00020000000000000000> Storage Management</A></H2></center>
+<P>
+<A NAME=105>&#160;</A><A NAME=106>&#160;</A><A NAME=107>&#160;</A>
+<A NAME=108>&#160;</A>
+<P>
+As described in Chapter <A NAME=tex2html45 HREF="ch23.html">23</A>, clusters may be viewed as
+containing one or more <em> repositories</em> holding passive
+within-cluster objects.  In this section, we outline some basic
+internal storage management techniques based on repositories.
+However, storage management services are sufficiently complex and
+sufficiently dependent on quality-of-implementation factors that it is
+almost always best to <em> adopt</em> services rather than design them
+yourself unless you really need to.
+<P>
+So far, we have been tacitly assuming the standard OO lifetime policy
+that objects somehow live ``as long as they are useful''. We need to
+further dissect this statement to focus in on management
+strategies.  We start with the easiest case. Consider a repository
+that:
+<UL><LI> always outlives its components;
+  <LI> logically serves as a <tt> SET</tt> or similar collection possessing
+        both logical insertion and logical removal;
+  <LI> internally constructs the objects it inserts (never
+        imports them); and
+  <LI> never exports component identities or internally
+        references them except via the collection structure.
+</UL>
+<P>
+In this case, logical management may be equated with physical
+management.  In other words, under these conditions, the repository
+can be sure that a logical <tt> remove</tt> operation may be accompanied by a
+storage deallocation. In <i> ODL</i>, the storage deletion
+operation <tt> delete(</tt><em> link</em><tt> )</tt> irrevocably recovers the
+resources occupied by the object referred to by the link.  Here, a
+<tt> remove</tt> operation may in turn invoke <tt> delete</tt> on the removed
+object.  Similarly, under such circumstances, deletion of the
+repository itself may trigger deletion of all held objects.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Garbage Collection</A></H2>
+<P>
+<A NAME=124>&#160;</A>
+While this framework can be extended in various ways, when object
+identities are imported and/or exported from a repository,
+useful-lifetime tracking becomes a <em> nonlocal</em> issue. A single
+repository cannot itself determine whether any of the held objects may
+be safely deleted.  Similar remarks hold even when identities are not
+exported, but internally managed objects contain cross-links (e.g.,
+accounts and clients with links to each other).
+<P>
+The analysis of storage management requirements is a special form of
+dependency tracking. The useful lifetime of each object is dependent
+on those of all others that may ever try to communicate with it.  A
+dependency graph could be constructed showing the lifetime
+dependencies of all objects in a system. At any point during system
+execution, all of those objects that are not ultimately reachable from
+one or more ``main'' system objects may be deallocated.
+<P>
+<A NAME=126>&#160;</A>
+Establishing storage management methods based on such a graph would be
+a good idea, except that it is impossible. The dependencies are
+defined on dynamically constructed objects. Normally, information about
+exactly which objects will be created in a system cannot be determined
+without executing or simulating it.  In those cases where upper bounds
+may be determined in advance, the storage for each object may be
+preallocated before execution time. This is a realistic option in
+real-time systems and other designs in which resources are fully laid
+out before execution.
+<P>
+It is conceivable to create run-time mechanisms that implicitly
+maintain dependency graphs and perform the associated management.  For
+example, if a repository were notified each time one of its held
+objects were (1) needed and (2) no longer needed by each other client
+in the system, then it may record clients in a set, and delete the
+object when the set becomes empty. It must also deal with cases in
+which, say, each of a pair of objects needs the other, but neither is
+needed by any other live client.  But this kind of tracking is usually
+completely impractical.  The notifications and corresponding
+bookkeeping operations would swamp a system.
+<P>
+The only alternative is automatic storage management, or garbage
+collection (GC).  GC is an ``infrastructure'' task that normally
+needs to be implemented with the help of some system magic. The basic
+idea is to track lifetimes without requiring explicit
+notifications. This is performed using methods that track <em>
+reachability</em> by secretly inspecting and traversing links during
+execution.
+<P>
+There are two basic approaches to GC.  Most older methods use
+variations of <em> mark and sweep</em> algorithms. They start with one or
+more main objects and then mark all objects transitively reachable
+from them as live.  After this pass, all unmarked objects are
+deallocated.  Most newer methods are based on <em> copying
+collection</em>. Memory is divided into two or more regions. At any given
+time, only one is used for allocation. When space runs out, only the
+still-live objects are copied from one region to another. Among the
+advantages of this strategy is that it may be implemented in smaller
+steps, avoiding situations in which the system appears to be ``shut
+down'' for noticeable periods while performing collection.
+<P>
+<H2><A NAME=SECTION00022000000000000000> Manual Storage Management</A></H2>
+<P>
+If garbage collection facilities are not available and cannot be
+constructed, then manual storage management strategies must be
+applied. The two most common cases occur when (1) dealing with
+programming languages that do not provide within-cluster garbage
+collection, and (2) performing process-level management (i.e.,
+deleting no-longer-needed clusters), for which few tools are currently
+available.
+<P>
+Manual storage deallocation is highly error prone, and errors are
+terribly dangerous. A call to <tt> delete(ob)</tt> may kill off an object
+that is still potentially useful.  Any further invocation of any
+operation on <tt> ob</tt> will result in system failures requiring
+recovery mechanisms that are best avoided.
+<P>
+Despite this, there are many cases in which one object <em>
+can</em> easily tell that another is no longer needed. For example, one
+object may kill off a component when it is known to be exclusively
+held but no longer used. Nonexported links qualified by <tt> own</tt>
+have this property. This may include the case where the outer object
+
+itself is deleted. All components with necessarily coexistent
+lifetimes may also be killed.  It is convenient to wrap these cascades
+inside ``destructor'' operations, that are then invokable in one fell
+swoop.<A NAME=135>&#160;</A><A NAME=136>&#160;</A><A NAME=137>&#160;</A>
+<P>
+Primary reliance on this strategy amounts to standardization on
+particular lock-style acquire/release protocols in which a constructor
+acquires the resources necessary to generate an object, but the object
+itself releases them when it is about to die.  Similar reasoning
+applies to many ``functional'' objects; e.g., most objects constructed
+via <tt> WRAP</tt>. These are deletable after being used (invoked) once.
+Doing so manually simulates standard programming language level
+run-time mechanisms that delete storage for procedure activations
+after they return.<A NAME=139>&#160;</A>
+<P>
+While such schemes typically cover many deletion cases, they do not
+hit all of them. Objects cannot delete others that remain accessible
+through other means.  No single object knows whether there are still
+other shared links.  In such situations, backup strategies are
+necessary.
+<P>
+<H2><A NAME=SECTION00023000000000000000> Controlling Shared Resources</A></H2>
+<P>
+The notion of manual lifetime tracking may be generalized a bit to
+apply to other aspects of resource control.  Sharable, volatile
+resources are those that must be created on first access, maintained
+while being accessed by possibly many other objects, and destroyed
+when they are no longer being accessed.  This is just a small
+narrowing of basic automatic storage management rules.  The main
+difference is that destruction is triggered as soon as the resource is
+no longer being used.
+<P>
+<H3><A NAME=SECTION00023100000000000000> Reference Counting</A></H3>
+<P>
+The standard approach is based on an acquire/release protocol.  Client
+objects must cooperate by explicitly requesting access to a resource,
+and explicitly releasing it when they are done.  An agent merely keeps
+track of how many objects have requested the resource, and maintains
+things accordingly.  For example:<A NAME=142>&#160;</A><A NAME=143>&#160;</A>
+<P>
+<PRE>class CountedResource
+  local r: opt Resource;
+  own refCount: Counter &lt;&gt; init refCount? = 0
+  op acquire: Resource {
+      if refCount.isZero then r := new Resource... end;
+      refCount.inc; reply r }
+  op release: () {
+     refCount.dec; if refCount.isZero then delete(r) end }
+end
+</PRE>
+<P>
+This is a simplification of the general scheme described earlier.
+Instead of keeping track of users in a <tt> SET</tt>, the agent only
+maintains a count. A zero count corresponds to an empty set.
+<P>
+Reference counting is a somewhat fragile protocol. Any such design
+should include additional provisions to enhance safety.  All access to
+resources must, of course go through <tt> CountedResource</tt>s,
+normally managed through a repository.  This may in turn be made more
+robust by defining a secondary interface in which all operation requests
+are mediated through pseudo-IDs.
+<P>
+Reference counting has a more serious limitation. If two objects
+each maintain a reference to each other, but both are otherwise
+unreachable, then neither will be killed even though they are
+both useless.
+<P>
+<H3><A NAME=SECTION00023200000000000000> Copy-On-Write</A></H3>
+<A NAME=147>&#160;</A>
+An extension of reference counting is copy-on-write <em> sharing</em>, in
+which clients share objects as long as they do not change
+them. However, before they attempt to send a transition request, they
+must obtain their own local version of an object. This protocol is
+fragile enough to <em> demand</em> intervention from a repository agent that
+intercepts mutative requests and performs the required actions.
+<P>
+<H3><A NAME=SECTION00023300000000000000> Fixed Resources</A></H3>
+<P>
+A repository may provide access to fixed numbers of functionally
+identical objects and provide access to <em> any</em> one of them
+on request. For example:<A NAME=152>&#160;</A>
+<P>
+<PRE>class FixedResourceMgr
+  own pool: ARRAY[Resource];
+  own inuse: ARRAY[Bool];
+  allInUse: bool;
+  op acquire: Resource when ~allInUse then
+              % mark and return an unused resource % end
+  op release(x: Resource); % record as free
+end
+</PRE>
+<P>
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00030000000000000000> Passive Objects in  C++</A></H2></center>
+<A NAME=154>&#160;</A><A NAME=155>&#160;</A>
+<P>
+Most class designs survive embedding and passivization relatively
+intact.  To demonstrate the effects of this, we sketch the syntactic
+conversion of sequential, passive <i> ODL</i> classes into corresponding
+<i> C++</i> constructs that enable clusters of passive <i> ODL</i> objects
+to be implemented.
+<P>
+We will not describe <i> C++</i> or how to program in it.  In fact, we
+will assume you know the basics or will find them out before applying
+the mechanics described here.  There are several good ``standard''
+accounts of <i> C++</i>. These include introductory
+[<A HREF="#lippman">12</A>], intermediate [<A HREF="#stroustrup">15</A>,<A HREF="#meyers">13</A>], and
+advanced [<A HREF="#coplien">7</A>] texts, as well as a reference manual
+[<A HREF="#ellisStroustrup">9</A>].
+<P>
+We use here only a subset of <i> C++</i> and stress mechanics over
+cosmetics.  We concentrate on translating <em> computational</em>
+information.  We include declarative constructs only when they are
+available in the language.  For example, <i> C++</i> does not support
+declarative <tt> inv</tt> constraints, ``<tt> ==&gt;</tt>'' effects or anything
+mappable to them.  We also ignore the possible need to employ locks,
+queues, and scheduling.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Basic Types</A></H2>
+<P>
+<i> ODL</i> value types map into <i> C++</i> with a few obvious,
+easily-addressable snags. For example, <i> ODL</i> uses only <tt> int</tt>
+for integer values. This must be translated into any of <tt> short</tt>,
+<tt> int</tt>, <tt> long</tt>, or even special multiprecision representations,
+on a case-by-case basis.  Similar rules apply for <tt> real</tt> versus
+<tt> float</tt>, <tt> double</tt>, <tt> long double</tt>.  Booleans are
+conventionally defined as <tt> typedef</tt> <tt> bool</tt> <tt> int</tt>. The type
+<tt> time</tt> maps into whatever types are required to represent times on
+a system.  Fixed vectors are easiest to translate as little <tt>
+structs</tt> (for example, <tt> struct</tt> <tt> string50</tt> <tt> {char
+s[50];}</tt>).  This forces copy based calling conventions when they are
+passed as values.  The <tt> blob</tt> type may be represented as arrays of
+bytes (<tt> char</tt>).  <i> ODL</i> <tt> record</tt>s may be translated as <tt>
+const struct</tt>s.
+<P>
+Like most procedurally-based languages (but unlike <i> ODL</i>), <i>
+C++</i> does not distinguish between built-in value types and built-in
+object types at the declaration level. Thus, <i> ODL</i> <tt> INT</tt>s also
+map to <i> C++</i> <tt> int</tt>. However, there is no <i> C++</i> analog of
+the representation-independent <tt> Int</tt> type. There are only the
+concrete, nonsubclassable versions.  For the moment, we will assume
+that <tt> Int</tt> also translates to <i> C++</i> <tt> int</tt>. Unlike most
+other procedural languages, <i> C++</i> contains mutator operations on
+built-in object types. For example, <i> ODL</i> <tt> c.inc</tt> may be
+mapped to <i> C++</i> <tt> c++</tt>.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Classes</A></H2>
+<P>
+<A NAME=212>&#160;</A>
+<A NAME=213>&#160;</A>
+Abstract classes may be translated into <i> C++</i> ``abstract base
+classes'' declaring pure virtual features.  Generally, <tt> fn</tt>s
+in <i> ODL</i> translate into ``const methods'' in <i> C++</i> abstract
+classes, and <tt> op</tt>s into class-based methods. For example:<A NAME=219>&#160;</A>
+<P>
+<PRE>class Counter {
+public:
+  virtual int  count() const = 0;
+  virtual bool isZero const { return count() == 0; };
+  virtual void inc() = 0;
+  virtual void dec() = 0;
+  virtual void clear = 0;
+  virtual bool InvCheck()   { return count() &gt;= 0; }
+};
+</PRE>
+<P>
+The <tt> invCheck</tt> operation is a simple example of a self-test, as
+described in Chapter <A NAME=tex2html61 HREF="ch16.html">16</A>.
+<P>
+The computed attribute <tt> isZero</tt>, which was given a constant
+abstract definition in Chapter <A NAME=tex2html62 HREF="ch16.html">16</A>, is provided
+here with a concrete definition. Since there are no abstract
+constraint constructs in <i> C++</i>, this is the best we can do. It is
+partly a matter of taste whether to declare it <tt> virtual</tt>.  If
+non<tt> virtual</tt>, then it is known to compute the right value, but it
+may not compute it in the best way. For example, if a concrete
+subclass were based on a list of some sort, it might be easy to tell
+if it were empty, but harder to find out the exact count.
+<P>
+<H3><A NAME=SECTION00032100000000000000> Links</A></H3>
+<P>
+<A NAME=230>&#160;</A><A NAME=231>&#160;</A>
+Internal links correspond to <i> C++</i> pointer types, and <tt> fixed</tt>
+links to <tt> const</tt> pointers.  Generally, <tt> local</tt> access conventions
+correspond to <i> C++</i> <tt> private</tt>.  In fully concrete
+classes, stored links may be represented as member variables.  The
+<tt> Lamp</tt> example might look like this:<A NAME=239>&#160;</A>
+<P>
+<PRE>class Lamp {
+public:
+  virtual bool on() const = 0;
+  virtual void flip() = 0;
+};
+
+class LampV1 : public Lamp {
+private:
+  bool* switch;
+public:
+  bool on() const { return *switch; }
+  void flip() { invertSet(switch, *switch); }
+};
+
+void invertSet(bool* dest, bool v) { *dest = !v; }
+</PRE>
+<P>
+As an extremely common application of the optimizations to be
+described in Chapter <A NAME=tex2html66 HREF="ch25.html">25</A>, any component of a built-in type that is
+qualified as <tt> packed</tt> may be directly embedded in its host object.
+This applies to <tt> own</tt> attributes manufactured by <i> ODL</i>
+``<tt> &lt;&gt;</tt>'' conventions. For example:<A NAME=246>&#160;</A>
+<P>
+<PRE>class LampV2 : public Lamp {
+private:
+  bool switch;
+public:
+  bool on() const { return switch; }
+  void flip() { switch = !switch; }
+};
+</PRE>
+<P>
+Standard export policies include never taking the address of such objects.
+<P>
+Value-holding classes generally transform to a special set of idioms
+in <i> C++</i>.  These classes may employ overloaded operators,
+value-based assignment, copy-constructors, etc., in order to make the
+resulting objects look as close to built-in values as desirable.
+Strategies for doing so are described in the standard accounts.  These
+techniques may be used to obtain object status for built-in types,
+using a variant of the strategy described in Chapter <A NAME=tex2html68 HREF="ch17.html">17</A>:
+<P>
+<PRE>class RealVal {  virtual const float val() const = 0; };
+
+class RealValV1 : public RealVal {
+private:
+  float _val;
+public:
+  const float val() const { return _val; };
+  RealValV1(float s) : _val(s) {}
+};
+</PRE>
+<P>
+These kinds of classes may be used to simulate raw value types when
+the assumed characteristics of built-in types do not hold (e.g., for
+multiple precision integers).
+<P>
+<H3><A NAME=SECTION00032200000000000000> Inheritance</A></H3>
+<P>
+<A NAME=251>&#160;</A>
+Abstract <i> ODL</i> subclass constructions translate into <i> C++</i>
+``public'' derivation, with all features (even links) declared as <tt>
+virtual</tt> methods.  Rather than using property inheritance rules,
+<i> C++</i> requires strict signature matching for redeclared versions
+of operations within subclasses, which may lose information about
+return types.  However, <i> C++</i> provides a way for <em> clients</em> of
+``mistyped'' procedures to recover lost information.  Pointers may be
+``downcast'' to more specific types.  There is no run-time check to
+determine that the cast type conforms to the actual type, so
+correctness depends on the programmer. (This situation may change in
+the upcoming <i> C++</i> standard.) There is no <tt> Any</tt> root to the
+<i> C++</i> type system.  However, <tt> void*</tt> is normally used for
+analogous purposes.  All usages must be downcast into specific class
+pointer types on dereference.
+<P>
+<H2><A NAME=SECTION00033000000000000000> Construction</A></H2>
+<P>
+<A NAME=263>&#160;</A>
+In <i> C++</i>, constructors are listed within the class declarations of
+the objects they construct.  It is not hard to recast this <i>
+ODL</i>-style if desired. A single constructor may be defined that binds
+all pointers to supplied objects and/or initializes embedded objects
+to initial values:
+<P>
+<PRE>class LampV1 : public Lamp { ...
+public:
+  LampV1(bool* init_sw) switch(init_sw) {};
+};
+
+class LampV2 : public Lamp { ...
+  LampV2(bool initstate) switch(initstate) {};
+};
+...
+Lamp* l1 = new LampV1(new bool(0));
+Lamp* l2 = new LampV2(0);
+</PRE>
+<P>
+Construction may be assigned to a generator by making the
+constructor private, but declaring its manager as a  <tt> friend</tt>:
+<P>
+<PRE>class LampV1 : public Lamp { ...
+  friend class LampV1Gen;
+private:
+  LampV1(bool* init_sw) switch(init_sw) {};
+};
+
+class LampV1Gen { ...
+  Lamp* dflt() { return new LampV1(new bool(0)); }
+};
+...
+Lamp* l3 = aLampGen-&gt;dflt();
+</PRE>
+<P>
+<H2><A NAME=SECTION00034000000000000000> Other Constructs</A></H2>
+<P>
+<H4><A NAME=SECTION00034010000000000000> Multiple inheritance.</A></H4>
+<A NAME=269>&#160;</A>
+<i> C++</i> multiple <em> abstract</em> inheritance works in the expected
+fashion, but only if all superclasses are declared as <tt> public
+virtual</tt>, rather than just <tt> public</tt>. We downplayed the idea of
+multiple concrete inheritance at the design level.  Several authors
+(e.g., [<A HREF="#cargill">5</A>,<A HREF="#sak">14</A>]) argue for avoidance of the corresponding
+<i> C++</i> constructs.
+<P>
+<H4><A NAME=SECTION00034020000000000000> Generics.</A></H4>
+<A NAME=277>&#160;</A>
+<A NAME=278>&#160;</A><A NAME=279>&#160;</A>
+Parameterized classes and operations may be implemented using
+macros, <tt> template</tt>s, and/or simple preprocessor tools.
+<P>
+<H4><A NAME=SECTION00034030000000000000> Open reuse.</A></H4>
+<A NAME=282>&#160;</A>
+<i> C++</i> <tt> private</tt> subclassing is roughly similar to <i> ODL</i>
+<tt> opens</tt>. The main difference is that pure <tt> private</tt>
+subclassing does not fully ``open'' the reused declaration. The
+<tt> private</tt> parts of the class remain inaccessible. Also, the
+reused parts are not reinterpreted in the new context.
+<P>
+<H4><A NAME=SECTION00034040000000000000> Partitioning.</A></H4>
+<A NAME=290>&#160;</A>
+<i> C++</i> does not support a <tt> oneOf</tt> subclassing constraint.
+Regular subclassing may be used instead. Because the set of <tt>
+oneOf</tt> classes cannot change, each class may carry an ``type tag''
+<tt> enum</tt> referenced in <tt> switch</tt> statements.  Recall that <tt>
+oneOf</tt> is only useful when the partitions are based on logical
+necessity, not convenience. Only in these cases are nonextensible tags
+and switches always OK.
+<P>
+<H4><A NAME=SECTION00034050000000000000> Type tests.</A></H4>
+<A NAME=298>&#160;</A>
+In <i> ODL</i> we use type membership predicates <tt> x in X</tt> mainly as
+<em> specification</em> devices, rather than as run-time type tests.  But
+some constructs are easier to express using dynamic type testing.  As
+of this writing, it is unclear whether <i> C++</i> will ``officially''
+support run-time type tests. Many work-around strategies are known and
+described in the standard accounts.
+<P>
+<H4><A NAME=SECTION00034060000000000000> Dispatching.</A></H4>
+<A NAME=304>&#160;</A>
+Of the three senses of dispatching described in
+Chapter <A NAME=tex2html79 HREF="ch21.html">21</A>, <i> C++</i> directly supports only the
+first, selection, through <tt> virtual</tt> methods.  The second,
+resolution, may be simulated using type tests and/or double
+dispatching transformations, as described in
+Chapter <A NAME=tex2html80 HREF="ch21.html">21</A>.  For the third, static class methods may be
+used in the special but most common case where object dispatching
+always dispatches to the exact same <i> ODL</i>-level object. In these
+cases, <i> ODL</i> ``<tt> $</tt>'' translates to <i> C++</i> ``<tt> ::</tt>''.
+All other cases must be implemented using explicit name servers and
+relays. (Similar reasoning leads to the use of <tt> static</tt> class
+methods to translate <i> ODL</i> <tt> common</tt> attributes.)
+<P>
+<H4><A NAME=SECTION00034070000000000000> Wrappers.</A></H4>
+<A NAME=320>&#160;</A>
+While not quite equivalent, <i> C++</i> pointers to member functions may
+be used to approximate wrappers.  A tedious alternative is to predefine
+all <tt> Wrapper</tt> subclasses that will be used in a program. We
+defined the <i> ODL</i> <tt> WRAP</tt> macro just to eliminate such tedium.
+This is difficult to simulate using <i> C++</i> macros since a new class
+<em> name</em> may need to be generated for each wrapper.  A very simple
+preprocessor tool could handle this and related macros.
+<P>
+<H4><A NAME=SECTION00034080000000000000> Exceptions.</A></H4>
+<A NAME=328>&#160;</A>
+Although implementations are not yet widely available as of this
+writing, the <i> C++</i> standard incorporates a form of exceptions (see
+[<A HREF="#ellisStroustrup">9</A>]).  If they are available, the corresponding
+<i> ODL</i> constructs may be transparently mapped to them. Exceptions
+may also be used to implement named replies and related constructs
+discussed in Chapter <A NAME=tex2html83 HREF="ch20.html">20</A>.
+<P>
+<H4><A NAME=SECTION00034090000000000000> Collections.</A></H4>
+<A NAME=335>&#160;</A>
+Libraries of collection classes similar to those described in
+Chapter <A NAME=tex2html85 HREF="ch18.html">18</A> are commonly available in <i> C++</i>. They
+may be based on <tt> templates</tt>, macros, or simple tools.
+Implementation strategies may be found in the standard accounts. Many
+<i> C++</i> collections are actually structured as repositories. This is
+often a better fit to storage allocation schemes.
+<P>
+<H2><A NAME=SECTION00035000000000000000> Storage Management</A></H2>
+<P>
+<A NAME=342>&#160;</A>
+<i> C++</i> does not provide automatic storage management.
+Because of <i> C</i><A NAME=345>&#160;</A>-based pointer insecurities, it is
+difficult to design your own program-wide garbage collector.
+Good ones exist, but they are either <em> conservative but leaky</em> (e.g.,
+[<A HREF="#boehm2">3</A>]), meaning that they may fail to deallocate some
+storage<sup>1</sup>, or they are <em> tight but
+restricted</em> (e.g., [<A HREF="#edelson">8</A>]), meaning that they may only be used
+if certain programming conventions are flawlessly held to.  Failing
+adoption of such a collector, a multi-tiered approach is taken to
+implement storage management.
+<blockquote>
+ <sup>1</sup>Footnote:<br>
+Widespread anecdotal experience suggests that leaks
+are so rare as to not be an issue.
+</blockquote>
+<P>
+As discussed earlier, destructor methods may be defined that kill off
+all <tt> own</tt> and <tt> unique</tt> components held by a host object.  (No
+special destructor code is needed for <tt> own</tt> components that have
+been directly embedded in their hosts.)  This helps manage
+deallocation by distributing responsibility for it. A call to <tt>
+delete ob</tt> kills off <tt> ob</tt> and all of the other objects that it
+knows it can safely destroy.  Destructors may also be called for <tt>
+unique</tt> objects in the course of rebinding. For example:
+<P>
+<PRE>class X { // ...
+  Y* y;   // ODL unique
+  void rebindY(Y* newY) { if (y != newY) { delete y; y = newY; } }
+}
+</PRE>
+<P>
+Any object that must only be used in the enclosing procedure
+scope may be declared as a ``local'' by invoking a constructor rather
+than <tt> new</tt>, so that its destructor will be automatically invoked
+at procedure exit.  Supporting this requires changes in
+construction conventions.  ``Direct'' construction calls should go
+directly to the class constructor operations, not through generator
+objects.
+<P>
+Additional infrastructure is needed for handling the many cases where
+objects cannot tell whether or when to issue destructor calls.  Any of
+the methods described earlier in this chapter may be adapted for use.
+One implementation strategy is to use <em> counted pointers</em> via
+classes that behave as pointers for others, while also maintaining
+reference counts whenever the pointer is used.  Such classes are
+variants of <em> smart links</em> described in Chapter <A NAME=tex2html89 HREF="ch22.html">22</A>.  They
+may be generated through templates, macros and tools.  Details are
+described by Coplien [<A HREF="#coplien">7</A>], which we thoroughly recommend.
+<P>
+<center><P><P>
+
+<H2><A NAME=SECTION00040000000000000000> Summary</A></H2></center>
+<P>
+Passive, embedded objects residing in clusters may be constructed
+using classic within process constructs including semaphores, queues,
+scheduling, and interprocess messaging.  Typically, the vast majority
+of objects in a cluster need little explicit transformation from their
+active forms. Unfortunately, successful conversion is not at all
+mechanical. Effective exploitation of special cases remains crucial
+for arranging efficient execution.
+<P>
+Translations of <i> ODL</i> constructions describing passive sequential
+objects are available in <i> C++</i>. Similar translation schemes may be
+devised to convert this subset of <i> ODL</i> into other OO
+languages.  Translations lose some, but by no means all abstract
+declarative information.  The listed translation techniques provide
+only a start to full implementation efforts.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Further Reading</A></H2>
+<P>
+User guides for specific thread and task packages (e.g., under <i>
+Mach</i><A NAME=369>&#160;</A>, <i> SunOS</i>) remain among
+the best references for both design and mechanics.  Buhr and Ditchfield
+[<A HREF="#pbuhr">4</A>] and Bershad
+[<A HREF="#presto">1</A>] describe <i> C++</i> extensions and tools containing
+requisite features.  An alternative to thread packages is to use
+self-contained systems such as <i> Linda</i>
+[<A HREF="#carriero">6</A>]<A NAME=376>&#160;</A> or <i> ISIS</i> [<A HREF="#isis2">2</A>]<A NAME=379>&#160;</A>.
+A number of other <i> C++</i>-specific tools and techniques have been
+described in <em> Usenix C++</em> conference proceedings. Garbage
+collection algorithms are described in more detail in Lee [<A HREF="#lee2">10</A>].
+<P>
+<H2><A NAME=SECTION00042000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Estimate how much slower a simple fully queue-based
+        cluster interpreter would be compared to (a) interpreted
+        OOPL code (e.g., <i> Smalltalk</i>), (b) compiled OOPL
+        code (e.g., <i> C++</i>), (c) assembly code, and (d) specially
+        designed massively parallel MIMD hardware.
+<P>
+  <LI> If a <tt> Stack</tt> object is (indirectly) accessible
+        from an external object, is it (a) always (b) ever justifiable
+        to convert <tt> pend</tt>s to errors?
+<P>
+  <LI> Sketch out the structure of a cluster containing
+        the ATM device-control objects (e.g., <tt> CardEater</tt>).
+<P>
+  <LI> Describe the transformations required to convert an externally
+        directed message originally phrased using an <tt> op</tt> with a
+        callback <tt> Wrapper</tt>.
+<P>
+  <LI> If <i> ODL</i> so easily translates to <i> C++</i>, then
+        why didn't we use <i> C++</i> throughout Part II?
+<P>
+  <LI> Explain the different senses of  <tt> const</tt> in
+        <i> C++</i> and their relations to <i> ODL</i> constructs.
+<P>
+  <LI> Measure the difference in performance between applications
+        using classes such as <tt> RealVal</tt> versus simple <tt> float</tt>s.
+<P>
+  <LI> Show the <i> C++</i> version of the <tt> Balance</tt> class
+        described in Chapter <A NAME=tex2html93 HREF="ch17.html">17</A>.
+<P>
+  <LI> Exactly what are the <i> C</i> pointer insecurities
+        that preclude simple garbage collection?
+<P>
+  <LI> Stored attributes may not be redefined in subclasses
+        in <i> C++</i>. Explain why this is not a major impediment
+        in converting most <i> ODL</i> designs.
+<P>
+  <LI> Compare the kinds of <i> C++</i> constructs generated by our
+        translation techniques with those most commonly employed in a
+        large <i> C++</i> application program or framework you have
+        available (e.g., <i> InterViews</i> [<A HREF="#linton">11</A>]).
+<P>
+  <LI> List three <i> C++</i> constructs that cannot be described
+        in <i> ODL</i>.
+</OL>
+<P>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=presto><STRONG>1</STRONG></A><DD>
+B. Bershad.
+ The presto user's manual.
+ Technical Report 88-01-04, University of Washington Department of
+  Computer Science, 1988.
+<P>
+<DT><A NAME=isis2><STRONG>2</STRONG></A><DD>
+K. Birman.
+ <em> ISIS User Guide and Reference Manual</em>.
+ Isis Distributed Systems, 1992.
+<P>
+<DT><A NAME=boehm2><STRONG>3</STRONG></A><DD>
+H.J. Boehm and M. Weiser.
+ Garbage collection in an uncooperative environment.
+ <em> Software -- Practice and Experience</em>, 1988.
+<P>
+<DT><A NAME=pbuhr><STRONG>4</STRONG></A><DD>
+P. Buhr and G. Ditchfield.
+ Adding concurrency to a programming language.
+ In <em> Usenix C++ Conference</em>. USENIX, 1992.
+<P>
+<DT><A NAME=cargill><STRONG>5</STRONG></A><DD>
+T. Cargill.
+ <em> Elements of C++ Programming Style</em>.
+ Addison-Wesley, 1992.
+<P>
+<DT><A NAME=carriero><STRONG>6</STRONG></A><DD>
+N. Carriero and D. Galerntner.
+ <em> How to Write Parallel Programs</em>.
+ MIT Press, 1990.
+<P>
+<DT><A NAME=coplien><STRONG>7</STRONG></A><DD>
+J. Coplien.
+ <em> Advanced C++: Programming Styles and Idioms</em>.
+ Addison-Wesley, 1991.
+<P>
+<DT><A NAME=edelson><STRONG>8</STRONG></A><DD>
+D. Edelson and I. Pohl.
+ Copying garbage collection in c++.
+ In <em> Usenix C++ Conference</em>. USENIX, 1991.
+<P>
+<DT><A NAME=ellisStroustrup><STRONG>9</STRONG></A><DD>
+M. Ellis and B. Stroustrup.
+ <em> The Annotated C++ Reference Manual</em>.
+ Addison-Wesley, 1990.
+<P>
+<DT><A NAME=lee2><STRONG>10</STRONG></A><DD>
+P. Lee, editor.
+ <em> Advanced Language Implementation</em>.
+ MIT Press, 1991.
+<P>
+<DT><A NAME=linton><STRONG>11</STRONG></A><DD>
+M. Linton and et al.
+ <em> InterViews</em>.
+ interviews.stanford.edu, 1990.
+<P>
+<DT><A NAME=lippman><STRONG>12</STRONG></A><DD>
+S. Lippman.
+ <em> C++ Primer</em>.
+ Addison-Wesley, 1991.
+<P>
+<DT><A NAME=meyers><STRONG>13</STRONG></A><DD>
+S. Meyers.
+ <em> Effective C++</em>.
+ Addison-Wesley, 1992.
+<P>
+<DT><A NAME=sak><STRONG>14</STRONG></A><DD>
+M. Sakkinnen.
+ A critique of the inheritance principles of c++.
+ <em> Computing Systems</em>, Winter 1992.
+<P>
+<DT><A NAME=stroustrup><STRONG>15</STRONG></A><DD>
+B. Stroustrup.
+ <em> The C++ Programming Language</em>.
+ Addison-Wesley, 1991.
+</DL>
+<P>
+
+<a href="ch25.html">Next: Chapter 25</a>
+<center><P><P></center>
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 08:00:55 EDT 1995</I>
+</ADDRESS>
+</BODY>

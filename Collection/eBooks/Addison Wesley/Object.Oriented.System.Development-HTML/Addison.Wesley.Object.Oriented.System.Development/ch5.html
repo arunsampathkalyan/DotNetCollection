@@ -1,0 +1,1030 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Object Dynamics</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Object Dynamics">
+<meta name="keywords" value="ch5">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<P>
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+
+<h2>Chapter 5: Object Dynamics</h2>
+<UL>
+<LI> <A NAME=tex2html57 HREF="#SECTION00010000000000000000"> Describing Behavior</A>
+<LI> <A NAME=tex2html58 HREF="#SECTION00020000000000000000"> Transition Networks</A>
+<LI> <A NAME=tex2html59 HREF="#SECTION00030000000000000000"> Examples</A>
+<LI> <A NAME=tex2html60 HREF="#SECTION00040000000000000000"> Reducing Complexity</A>
+<LI> <A NAME=tex2html61 HREF="#SECTION00050000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+
+<P>
+In this and the next chapter, we concentrate on the characterization
+of behavior.<A NAME=9>&#160;</A> The dynamics of individual objects are
+discussed in this chapter.  The next chapter focuses on ``social''
+interactive behavior between objects. We begin with some preliminary
+considerations about what it is we are trying to describe.
+<P>
+
+<canter><H2><A NAME=SECTION00010000000000000000> Describing Behavior</A></H2></center>
+<P>
+Behavior description is a notoriously difficult problem.  Physics
+borrows from mathematics the notion of differential equations to
+describe changing entities, fluids, gases, etc.  This trick is
+unavailable to us.  The behavior of the entities in our domains of
+interest practically never satisfy differential equations.  Even a
+simple device like a piston engine is beyond the formalisms of
+differential equations.
+<P>
+Algorithmic description languages are also not available at the level
+of analysis. The strengths of these languages lie in detailing <em>
+how</em> a particular desired behavior can be realized.  That is not what
+we want in analysis.  We need only the ability to provide a precise
+description of <em> what</em> constitutes a desired system's behavior.
+For instance in the case of a prototypical system we would want to
+describe context interaction sequences.
+<P>
+Phrased compactly, <em> procedural</em> behavior descriptions should be traded
+in favor of <em> declarative</em> descriptions.
+<P>
+We face the little problem that purely declarative description languages are
+as yet still mired in theoretical problems.  It is in fact one of the core
+problems in artificial intelligence and knowledge representation.
+<P>
+<H2><A NAME=SECTION00011000000000000000> Background</A></H2>
+<P>
+The Frame Problem (identified at the end of the 1960s
+[<A HREF="#hayes">6</A>]) stands for, at least, the following questions:
+<P>
+<UL><LI> What are the necessary and sufficient preconditions for
+applying an operator?
+<P>
+In order to start a car, one needs to turn the ignition key.  Thus an
+obvious precondition is that the car key be available.  Does the
+start-the-car operator also have to mention that the car has an
+ignition lock? That the battery is not dead? That there is fuel in
+the tank?  That the spark plugs in the engine have not been removed?
+<P>
+<LI> What are the effects or postconditions of an operator?
+<P>
+An antenna pops out when a car is started.  Is that a part of the
+postcondition of starting a car?  Usually as a result of the exposed
+antenna a horrible commercial is heard. Is that also a part of
+the postcondition?  There are no set rules for limiting
+postconditions.
+<P>
+<LI> What is a state description language that allows efficient
+representation of sequences of states?
+<P>
+An operator changes the ``world''.  One cannot simply add new
+assertions that describe the new aspects to a previous world
+description.  For example, when we have the assertion that a door is
+open, and we perform an operation, close-the-door, we cannot simply
+add that the door is now closed.  The knowledge that open and close
+exclude each other would generate a contradiction.  Time or situation
+indexing of assertions does not work in practice because a successor
+state does not have access to assertions in previous states whose
+truth value obviously has not changed.  For example, if a door is
+opened while it is raining, we would know in the subsequent state that
+the door is open, but we would have lost the rainy weather condition.
+Other approaches run into similar snags.
+</UL>
+<P>
+In spite of vigorous research [<A HREF="#brown">1</A>], not much progress has been made
+to solve these issues in a generic fashion.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Characterizing Transitions</A></H2>
+<P>
+The task of analysis is usually somewhat easier than that of AI.  Most
+applications do not require support for planning or plan execution of
+robots.  It is sufficient that OOA notations disambiguate
+human-to-human communication.  At the same time, notations must not be
+sloppy. We want to have a smooth, easy transfer into design notations,
+which in principle  need the rigor of machine executability.
+<P>
+The fact that we usually deal with closed, artificial worlds provides
+further simplifications.  We are able to delineate once and for all
+what our concepts are within the scope of a system or a set of
+systems. In real life most concepts have the crispness of vapor.
+<P>
+Since a powerful, purely declarative description language is not
+available, most analysis methods use representations that are at least
+somewhat procedural.  Structured methods use data flow diagrams
+(DFDs).<A NAME=21>&#160;</A><A NAME=22>&#160;</A> A node in a DFD stands for a process,
+and can be recursively decomposed in the same manner as functions can
+be decomposed into ultimately elementary, obvious operations.
+<P>
+OOA methods mainly use augmented transition network diagrams to
+express the behavior of objects.  Transition networks are quite
+declarative, especially when states, transition guards, and transition
+actions are defined in a rigorous way.
+<P>
+Transition networks are ``state machine diagrams'' augmented
+in several ways:
+<UL><LI> The ``firing'' of a transition can be dependent on the
+    state of an object, reception of an event, and any other
+    auxiliary guards.
+  <LI> Operations of unbounded complexity may be described for
+    each transition.  For example (as discussed in
+    Chapter <A NAME=tex2html6 HREF="ch6.html">6</A>), they may include
+    bidirectional synchronized  interaction with other objects.
+  <LI> Before entering a destination
+    state, a transition may create an event that may in turn be
+    received by one or more other objects.
+</UL>
+<P>
+The ability to describe complex operations on state transitions can
+easily be misused.  For example, an analyst can create a transition
+network with one state and a single transition that connects this
+state with itself and which concentrates all functionality of the
+object into this transition.  It is unlikely that this yields a
+conceptually clear representation of an object's behavior.
+<P>
+<H2><A NAME=SECTION00013000000000000000> Parallelism</A></H2>
+<P>
+<A NAME=28>&#160;</A>
+<P>
+For the sake of discussion, we say that two activities are in parallel
+when they proceed at the same time.  Some real-life entities possess
+parallel features.  A person seen as an entity harbors an amazing
+amount of parallelism, if not at the mental level then at least at the
+physiological one.  Cars perform many activities at the same time the
+engine runs: Each wheel turns, the gears in the transmission turn, the
+wipers are on, the generator feeds the battery, lights are switched on
+and off, etc. The engine itself contains lots of parallelism.
+<P>
+In spite of these considerations, we prefer to stick to the limitation
+of having only a single thread of control per object.  We consider a
+transition to be atomic,<A NAME=29>&#160;</A> although we allow
+switches between different transition networks if an object has more
+than one.
+<P>
+How do we reconcile this restricted computational object model against
+arguments for parallelism?
+<P>
+<UL><LI> We already have an abundance of parallelism. <em> Every</em>
+    object has its own thread of control, and executes concurrently
+    with other objects.  We see it as a challenge to
+    exploit this kind of parallelism to explain and describe apparent
+    parallelism inside entities.
+<P>
+<LI> Parallel transitions inside an object make the mapping of
+    analysis outputs into design even harder.  In some low-level
+    designs, a single thread of control is
+    shared by all objects. Even in distributed systems, there will
+    be many fewer computers than objects.  Mapping analysis
+    objects with each having a single thread of control into low
+    design objects is already quite a challenge.  We prefer to avoid
+    the additional complexity of dealing with objects that have
+    internal parallelism.  The assumed atomicity and independence of
+    transitions at the analysis level allow corresponding design and
+    implementation activities to proceed in a more familiar and
+    tractable fashion.
+<P>
+<LI> Allowing parallelism inside an object is a potential source for the
+    introduction of ``magic'', ill-defined behavior, which is need of
+    analysis for clarification.  Since we are doing analysis, we will
+    avoid the magic in the first place.
+</UL>
+<P>
+We will consider apparent parallelism as an invitation to explicitly
+identify <em> multiple</em> objects operating concurrently.  Some entities
+do harbor multiple ``machines'' that act in parallel.  Our strategy
+will be to treat such an entity as an encapsulator for constituent
+machines, each of which are themselves objects.  We have labeled these
+encapsulators <em> ensembles</em> and we have devoted Chapter
+<A NAME=tex2html9 HREF="ch9.html">9</A> to their treatment.  An ensemble is an object having
+a single thread of control, while at the same time connoting an entity
+with internal parallelism.
+<P>
+<H2><A NAME=SECTION00014000000000000000> Characterizing States</A></H2>
+<P>
+<A NAME=38>&#160;</A>
+<A NAME=39>&#160;</A><A NAME=40>&#160;</A>
+<P>
+Our final preliminary issue is to nail down what counts as a <em> state</em>.
+<P>
+Two different interpretations of states are seen in OO analysis
+methods (e.g., [<A HREF="#kurtz">2</A>,<A HREF="#rumbaugh">7</A>]), <em> passive</em> and <em> active</em>.
+(This is a completely separate distinction than that between passive
+and active <em> objects</em> discussed in Chapter <A NAME=tex2html13 HREF="ch2.html">2</A>.)
+<P>
+What are their differences?  A major difference is that passive states
+can be defined precisely, while active states are as yet quite fuzzy
+notions.
+<P>
+A passive state of an object can be defined in terms of the attributes
+of the object.  An object is in such a state if, from the perspective
+of the object, nothing changes except time.  Doors being open or
+closed are examples of such states of affairs.  The openness of the
+door can be defined by referring to an attribute of the door, say,
+<em> frAngle</em>, the angle of the door with respect to its frame.  And
+similarly for its closedness.  These definitions can be used to show
+that these states exclude each other, as is required for different
+states. By any reasonable definition of state, one cannot be in two
+states at the same time.
+<P>
+In contrast, an active state refers to a situation in which an object is
+involved in an ongoing process.  The English language has a particular
+syntactic form for these situations, verb+ing.  Thus we can have a door
+that is <em> opening</em> or <em> closing</em>.  We can have a
+person that is in the active state of <em> typing</em>, <em> turning a key</em>,
+<em> writing a check</em>, etc.  In  [<A HREF="#kurtz">2</A>] these states are typified as
+``interruptible activities''.
+<P>
+The use of active states (in addition to passive ones) has the
+apparent advantage of increasing the expressive power of the
+formalism.  The problem, however, is that proponents have not
+indicated what entering an active state means.  Are these processes
+themselves objects?  If so, is another object constructed and set in
+motion? If not, does this mean that a fresh process is started?  Or
+does it mean that a suspended process is resumed?  Similar problems
+surround leaving an active state.  Does this mean that a process or
+object dies?  Or does it mean it is suspended?  Similarly, the notion
+of ``interruptible'' is quite powerful yet underdefined.
+<P>
+As a result of such questions, we will avoid active states.  However,
+we discuss in Section <A HREF="#secactstaemul">2.4</A> how to emulate active
+with passive states.  It is also possible to give an object
+self-knowledge so that it can report that it is engaged in an verb+ing
+activity.  Such an active condition can be referred to by other
+objects if necessary.
+<P>
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Transition Networks</A></H2></center>
+<A NAME=57>&#160;</A>
+<P>
+A transition network is an abstraction of a process.  It exploits our
+categorizations of behavior as sequences of identifiable and classifiable
+changes, the transitions<A NAME=58>&#160;</A>.  A state<A NAME=59>&#160;</A> is the
+abstraction that connects what ``happens'' between the end of a
+transition and the beginning of a follow-up transition.  A state also
+allows the introduction of branching. More than one transition can
+lead out of a state.  Guards<A NAME=60>&#160;</A> associated with transitions will
+determine which, if any, subsequent transition will be chosen when a state
+is entered.
+<P>
+A transition network always has a finite, usually small, number of states.
+A transition is a binary directed connection between pairs of states.
+<P>
+<H2><A NAME=SECTION00021000000000000000> State</A></H2>
+<P>
+<A NAME=sectstate>&#160;</A>
+<A NAME=63>&#160;</A>
+<P>
+A state ``bridges'' transitions, provides a choice point for
+alternative continuation transitions, and is a resting place when no
+follow-up transition qualifies.
+<P>
+This is a technical characterization of states.  The analyst's
+perspective of a state of an object should emphasize that a state
+makes sense for a customer.  It should be a part of the ``natural'',
+``public'' lifecycle of an object.  For example, <em> open</em>ness and
+<em> closed</em>ness of a <em> Door</em> are most likely indeed states that
+are relevant from a customer's viewpoint.  Similarly, a checking
+account can be in either an <em> ok</em> state or in an <em> overdrawn</em>
+state.  As another example, an ATM can be in the states <em>
+available</em> and <em> unavailable</em>.
+<P>
+Our graphical notation for a state is a circle, for example,
+state <em> closed:</em>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img1.gif"><P>
+<P>
+Identification and naming of the relevant states of an object can be
+firmed up by defining the states in terms of attributes:
+<P>
+<DL ><DT><b> Door:</b>
+<DD>
+   We assume that the class <em> Door</em> has an attribute <em> frAngle</em>
+   with value domain <em> Degrees</em> in the range [0, 180]:
+   <DL ><DT>closed
+<DD> <em> 0 = frAngle</em>
+   <DT>ajar
+<DD> <em> 0 &lt; frAngle &lt; 45</em>
+   <DT>open
+<DD> <em> 45 &lt;= frAngle &lt;= 180</em>
+<P>
+ </DL>
+<P>
+<DT><b> Checking account:</b>
+<DD>
+   We assume that <em> CheckingAccount</em> has an attribute <em> balance</em>
+   with value domain <em> number</em>:
+   <DL ><DT>ok
+<DD> <em> 0 &lt;= balance</em>
+   <DT>overdrawn
+<DD> <em> balance &lt; 0</em>
+<P>
+ </DL>
+<P>
+<DT><b> ATM:</b>
+<DD>
+   The availability of an ATM may be described by introducing
+    attribute <em> available?</em> with values
+   <em> {y, n}</em> (yes/no) as its value domain, and associated states:
+   <DL ><DT>available
+<DD> <em> available? = y</em>
+   <DT>unavailable
+<DD> <em> available? = n</em>
+<P>
+ </DL>
+   This is an example of an object that has ``self-awareness'' of where it
+   resides in the collection of its possible states.
+   The definition of these two states will become more satisfactory when we
+   elaborate (and modify) the class <em> ATM</em> later in this chapter.
+<P>
+ </DL>
+<P>
+We have been semi-formal in defining states.  States need not always
+be elaborated this deeply.  It may be preferable to first get a
+preliminary insight about the set of states, described only with
+informative names.  On the other hand, insisting on precise
+definitions in terms of attributes provides a mutual check on the
+static and the dynamic model.  In addition, it provides a preliminary
+view of the characterization of operators associated with transitions.
+<P>
+<H3><A NAME=SECTION00021100000000000000> Initial State</A></H3>
+<A NAME=104>&#160;</A>
+<P>
+A transition network needs a special state, which is the initial state
+that describes the state of affairs for a newly created object.  The
+description of this state can be facilitated when default values have
+been formulated for attributes.  An initial state has the syntactic
+feature that it has at most one inbound transition that can initialize
+the object.  Graphically, we represent an initial state with an arrow
+leading in from ``nowhere'':
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img2.gif"><P><H3><A NAME=SECTION00021200000000000000> Exit State</A></H3>
+<A NAME=110>&#160;</A>
+<P>
+A transition network may have an exit state.  Entering this
+state means that the object ceases to exist.  A single outbound
+transition can be associated with such a state to express a testament
+operation. Graphically:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img3.gif"><P><H3><A NAME=SECTION00021300000000000000> Checking State Definitions</A></H3>
+<P>
+When states are precisely described, they can be checked against one
+another to ensure that they denote mutually exclusive states of affairs.
+Consider the states <em> S1</em> and <em> S2</em> each defined respectively by the
+property <em> P1</em> and <em> P2</em>.  The states should exclude each other, since
+an object can be only in one state at a time.  This means that:<BR>
+<em> P1</em> implies not(<em> P2</em>), and <BR>
+<em> P2</em> implies not(<em> P1</em>).<BR>
+\
+<P>
+For example, in our <em> CheckingAccount</em> example: <BR>
+<em> S1 = ok, P1 = (0 &lt;= balance)</em>, <BR>
+<em> S2 = overdrawn, P2 = (balance &lt; 0)</em>.
+<P>
+Showing that <em> P1</em> implies not(<em> P2</em>) boils down to:<BR>
+<em> (0 &lt;= balance) implies not(balance &lt; 0)</em>.
+<P>
+Since we can rewrite <em> not(balance &lt; 0)</em> into <em> (0 &lt;= balance)</em>, we are
+done.
+Similarly, showing that <em> P2</em> implies not(<em> P1</em>) amounts to:<BR>
+<em> (balance &lt; 0) implies not(0 &lt;= balance)</em>.
+<P>
+Again we rewrite the right hand side: <em> not(0 &lt;= balance)</em> into
+<em> (balance &lt; 0)</em> and we are done.
+Consequently, our states are well defined in the sense that they satisfy
+the mutual exclusion<A NAME=143>&#160;</A> feature.
+<P>
+Of course, satisfaction of mutual exclusion does not mean that the
+state definitions themselves are relevant from a modeling perspective.
+It only demonstrates that when each state captures a relevant state of
+affairs for an object then these states may coexist in a transition
+network.
+<P>
+<H2><A NAME=SECTION00022000000000000000> Transitions</A></H2>
+<A NAME=145>&#160;</A><A NAME=146>&#160;</A>
+<A NAME=147>&#160;</A>
+<P>
+A transition models an object that leaves an originating state and
+goes into a target state (which may be the same as the originating
+state).  A transition is <em> atomic</em>. An object cannot be interrupted
+after it has left a state and has not yet reached the target state;
+not even during a suspension caused by an action during the
+transition.  Thus, we avoid (possibly indirect) recursive transitions.
+<P>
+Transitions have standard graphical representations as
+directed links between circles representing states; see, for example
+[<A HREF="#martin">5</A>,<A HREF="#kurtz">2</A>].  Added to the link is a box to
+represent respectively a guard, an action, and an optional event.
+A canonical example of two states connected by a transition is:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img4.gif"><P>
+<P>
+When we need a more global view of a transition network, we may suppress
+the details of the transitions:<A NAME=165>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img5.gif"><P>
+<P>
+The guard, action, and event components of a transition will be
+discussed in turn.
+<P>
+<H3><A NAME=SECTION00022100000000000000> Guard</A></H3>
+<A NAME=181>&#160;</A>
+A guard is a condition (boolean-valued function) that must be
+satisfied in order for the transition to occur.  For example, a
+transition that effects a withdrawal on an account may have as
+guard the condition that the balance have sufficient funds.  A guard
+for a transition that achieves an open door may be the condition that
+the door is not locked.
+<P>
+A guard in a transition network associated with an object may refer
+directly to any attribute of the object.  Attributes of other
+objects may be referred to as well.  This requires having a
+handle on those external objects, for instance, via a relationship or
+an attribute that has an external object as value. References may
+be repeatedly tracked through several different objects.  As an
+example, consider a guard that checks whether the sum total of balances
+of attached accounts has a certain property.  This would require
+finding an attribute or relation that describes the accounts
+and then accessing their balances.
+<P>
+A guard can optionally refer to an event. Because input events are
+intrinsically associated with object interaction, we defer details to
+Chapter <A NAME=tex2html27 HREF="ch6.html">6</A>.
+<P>
+<H4><A NAME=SECTION00022110000000000000> Checking guards.</A></H4>
+<P>
+A state can have more than one outbound transition associated with it.
+Different guards should ensure that at most one condition at the time
+can be satisfied.  For example, if a door is ajar, one can either close
+it or open it (or leave it as is), but one cannot achieve two changes
+at the same time.
+<P>
+Just as states in a transition network must be mutually exclusive,
+we have an exclusion property for the
+guards associated with transitions emanating out of a particular state
+(assuming that there is more than one transition).  More specifically,
+when there are two guards <em> G1</em> and <em> G2</em>, we should show:<BR>
+<em> G1</em> implies not(<em> G2</em>), and <BR>
+<em> G2</em> implies not(<em> G1</em>).<BR>
+\
+<P>
+For example, consider a state <em> PreDebit</em> in the state space of
+<em> Account</em> out of which two transitions emerge respectively with the
+guards:<BR>
+<em> debit &lt;= balance</em>, a regular debit, and <BR>
+<em> debit &gt; balance</em>, an overdrawn debit.
+<P>
+These guards obviously exclude each other.
+<P>
+<H3><A NAME=SECTION00022200000000000000> Action</A></H3>
+<A NAME=200>&#160;</A>
+An action description is the second component of a transition.  This action
+must be a terminating activity. It may affect the attributes
+of <em> self</em>.  Similar to the guard, an action can refer to any attribute,
+locally or remotely.  As we will see in the next chapter, an action may
+also entail bidirectional interactions with external objects.
+The form of description may vary.  We can have:
+<P>
+
+<UL><LI> informal action verbs such as ``sort'' and ``debit'';
+<LI> more elaborate informal descriptions;
+<LI> structured English descriptions;
+<LI> formal preconditions and postconditions; and
+<LI> even data flow diagrams. <A NAME=203>&#160;</A>
+</UL>
+
+<P>
+Offhand we cannot prescribe the complexity of an action within a
+transition.  That is the choice of the analyst.  However, these actions
+must be plausibly implementable without requiring an analysis after
+``all of the analysts have gone home''.
+<P>
+Formal preconditions and postconditions are certainly the scariest
+looking options in this  list.  However, when states and guards
+have been described precisely, it is likely that almost all of the work has
+been done already.  The initial state together with the guard
+constitutes the precondition.  The target state expresses most of the
+postcondition. (The situation does get a bit more complex
+under object interaction; see Chapter <A NAME=tex2html30 HREF="ch6.html">6</A>.)
+<P>
+Actions corresponding to our examples include the following.
+<P>
+<DL ><DT><b> Door:</b>
+<DD><A NAME=209>&#160;</A> The definition of states
+<em> closed</em>, <em> ajar</em> and <em> open</em> allows (among others) a
+transition that originates in <em> closed</em> and terminates in <em>
+open</em>.  The action on this transition is described by a postcondition
+that says that the <em> frAngle</em> attribute must obtain a value between
+45 and 180 degrees. (This ``action'' corresponds only to a simulation.
+In a robotic context an effectuator would have to perform the real
+action to achieve the intended effect.)
+<P>
+<DT><b> Checking Account:</b>
+<DD><A NAME=217>&#160;</A> We described
+earlier the states <em> ok</em> and <em> overdrawn</em>.  This allows, for
+example, a transition that goes from the <em> ok</em> state into the <em>
+overdrawn</em> state.  This reflects a withdrawal that surpasses the
+balance.  A likely action for this transition is
+described by the postcondition:<BR>
+<em> balance' = balance - w,</em><BR>
+where <em> w</em> is the amount withdrawn.
+The unprimed occurrence of <em> balance</em> in this assertion (not assignment!)
+stands for the value or extension of the balance attribute before the
+operation, the primed occurrence stands for the value or extension after the
+operation.
+<P>
+ </DL><H3><A NAME=SECTION00022300000000000000> Event</A></H3>
+<A NAME=228>&#160;</A>
+<P>
+Actions affect the state of affairs of the object in which the state
+transition occurs.  The reader may have wondered how a door obtains
+its new frame-angle attribute value.  Similarly, a checking account
+will not internally create withdrawal (and deposit) amounts.
+Interaction between objects is necessary. We defer further
+elaboration to Chapter <A NAME=tex2html34 HREF="ch6.html">6</A>.
+<P>
+<H2><A NAME=SECTION00023000000000000000> Exceptions</A></H2>
+<A NAME=232>&#160;</A><A NAME=233>&#160;</A>
+<A NAME=objdynexcep>&#160;</A>
+<P>
+By analogy to the notion of defensive programming, an analyst may
+build in defenses against anomalous situations.  Events, which serve
+as the gateways for data flowing into an object, are an obvious source
+for anomalies.  A guard may not be smart enough to recognize illegal
+data that are subsequently passed on to an action.  An analyst may want
+to indicate what is to be done when an action error occurs.
+<P>
+We use the following notation for dealing with
+exceptions:<A NAME=235>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img6.gif"><P>
+<P>
+This diagram shows two exception links.  The one emanating from state
+<em> S1</em> can be used for dealing with a timing constraint that
+prohibits staying in state <em> S1</em> for too long (see
+Chapter <A NAME=tex2html38 HREF="ch11.html">11</A>).  The other exception link deals with
+exceptions that arise in the transition.  The action part may, for
+instance, rely on communication with another party.  This
+interaction may produce unexpected results, yield a time-out, etc.
+Exceptions are never associated with guards or event generation.
+<P>
+<H2><A NAME=SECTION00024000000000000000> Active State Emulation</A></H2>
+<A NAME=264>&#160;</A>
+<A NAME=secactstaemul>&#160;</A>
+<P>
+As promised, we provide an emulation of active states.  The key idea is to
+exploit the fact that an active state is  interruptible ``at all times''.
+Quotes have been used to emphasize that a process is in fact interruptible
+only at discrete moments.  In between these moments, a process is ``deaf''.
+Thus an interruptible process can be represented as a loop with a transition
+that leads back into the state where it originates and that does a little
+bit of activity on the way:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img7.gif"><P>
+<P>
+Although we have argued against active states in transition networks,
+it is sometimes necessary to refer to an object that is actively
+looping.  This can be obtained by giving an object an attribute that
+expresses whether or not it is engaged in a particular cyclic
+transition.
+<P>
+For example, we may want to have a display lamp be <em> off</em> or
+<em> on</em> depending on whether an engine is <em> off</em> or is <em>
+running</em>.  This would be established by giving <em> Engine</em> the
+attribute <em> running</em>.  A <em> displayLamp</em> may consult this
+attribute provided it has a handle on the corresponding <em> engine</em>
+object.
+<P>
+
+<center><P><P>
+
+<H2><A NAME=SECTION00030000000000000000> Examples</A></H2></center>
+<P>
+<H2><A NAME=SECTION00031000000000000000> ATM</A></H2>
+<A NAME=292>&#160;</A>
+<A NAME=secexampobjdyn>&#160;</A>
+<P>
+We illustrate the main concepts and notations with our ATM machine
+example.  The following ATM transition network diagram includes an
+additional notation. The two boxes with double vertical
+boundaries represent abstracted subnetworks with the same start
+state and target state as the double-sided box.  In both occurrences
+of the double-sided boxes the start and target states just happen to
+be the same.
+<P>
+We leave these subtransitions unelaborated for now (but see
+Chapter <A NAME=tex2html41 HREF="ch10.html">10</A>).  An example of a Maintenance (<em> Mntnc</em>)
+subtransition network would be one where the bill-dispenser is
+replenished.  An example of a Menu Action is a subtransition network
+that dispenses cash.
+<P>
+The transition network is quite naive.  For example, we have omitted
+alertness constraints.  A time-out<A NAME=297>&#160;</A> transition is
+certainly warranted for the state that expects the customer to provide
+a PIN number.  All the ugly details of reading in the digits of a PIN
+are ignored as well.  The transition from <em> Finished</em> (<em> Fnshd</em>)
+to <em> Idle</em> is too coarse, and should refer to at least two
+transitions, the machine ejecting the card and the customer taking the
+card out of the machine. (We will address these and other refinements
+in later chapters.)
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img8.gif"><P>
+<P>
+This transition network is still quite high level.  We have
+characterized the states and the transition only by names.  To be more
+precise, we sketch a fragment of the <em> ATM</em> class definition.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img9.gif"><P>
+<P>
+This characterization looks different than the one  given in
+Chapter <A NAME=tex2html43 HREF="ch3.html">3</A>.  The attributes specified here can be <em>
+added</em> to the one given in Chapter <A NAME=tex2html44 HREF="ch3.html">3</A>.
+The new attribute definitions permit rigorous definitions for the
+states in our transition diagram.  The following table describes the
+states uniquely on the basis of attribute value combinations.
+<P>
+<table border=5>
+<tr>
+<td>state </td><td> Mn  </td><td> Id   </td><td> S1   </td><td> S2  </td><td> S3  </td><td> Fi</td></tr><tr><td>
+
+<em> available?</em> </td><td> n   </td><td> y    </td><td> y    </td><td> y   </td><td> y   </td><td> y </td></tr><tr><td>
+<em> cardIn? </em> </td><td> n   </td><td> n    </td><td> y    </td><td> y   </td><td> y   </td><td> y </td></tr><tr><td>
+<em> stripInfo</em></td><td> nil </td><td> nil  </td><td> nil  </td><td> ok  </td><td> ok  </td><td> nil </td></tr><tr><td>
+<em> PINInfo</em>  </td><td> nil </td><td> nil  </td><td> nil  </td><td> nil </td><td> ok  </td><td> nil </td></tr><tr><td>
+<em> finished?</em>  </td><td> n   </td><td> n    </td><td> n    </td><td> n   </td><td> n   </td><td> y </td></tr>
+
+</table>
+
+<P>
+For example, the <em> Maintenance</em> state has the <em> available?</em>
+attribute set to n(o), while all other states have this attribute set
+to y(es).  As another example, the states <em> S2</em> and <em> S3</em> differ
+with respect to the <em> PINInfo</em> attribute.  In <em> S2</em>, we have
+either that the customer has pressed the cancel button (not
+represented here) or we have an as yet unverified PIN number.  In <em>
+S3</em>, we have obtained a verified and accepted PIN number.
+<P>
+The following example transition comes into action when the card's
+strip info cannot be decoded.  Observe that the <em> finished?</em>
+attribute is set in order to conform to the properties of the <em>
+Finished</em> state.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img11.gif"><P>
+<P>
+Another transition leads from <em> S1</em> to <em> S2</em> when the card's
+strip can be decoded successfully.  Observe again that we set <em>
+stripInfo'</em> in order to conform to the characterization of <em> S2</em>.
+The action GetPIN refers to an interaction with another object and is
+beyond the current discussion; we will revisit it in the next chapter.
+Also note that the guards of the two transitions emanating from
+<em> S1</em> exclude each other, and that they cover all possibilities; thus
+an object will never get stuck in <em> S1</em>.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img12.gif"><P><H2><A NAME=SECTION00032000000000000000> Car Cruise Control</A></H2>
+<P>
+We present a fragment of the ubiquitous car cruise
+control<A NAME=439>&#160;</A> (CCC) machinery.  A
+CCC has several components that can be modeled as objects: An object
+that keeps track of a desired speed, an object that interfaces with
+the carburetor, sensor objects, objects that interface with control
+panel buttons, sliders, etc.  We will deal here with a ``brain''
+object of class <em> CCC</em> that keeps track of the different states in
+which the CCC system can be. We quote from a real manual:
+<P>
+<blockquote> When engaged, this device takes over the accelerator operation at speeds
+above 30 mph ... The controls ... consist of a speed SET button and
+a control slide.
+<P>
+<b> To Activate:</b> When the vehicle has reached the desired speed, push
+the SET button to move the control slide to the ON position.  This will
+establish memory and activate the system.  Remove your foot from the
+accelerator.  Pushing the control slide from the OFF to ON while the
+vehicle is in motion establishes memory at the speed, but does not activate
+the system.  The slide may be left in the ON position when the vehicle is
+parked.
+<P>
+<b> To Deactivate:</b> A soft tap on the brake pedal or normal brake ...
+while slowing the vehicle will deactivate speed auto control without
+erasing the memory.  Pushing the control slide to the OFF position, or
+turning off the ignition, erases the speed memory.
+<P>
+<b> To Resume Speed:</b> Push the control to the RESUME position and the
+vehicle will return to the previously memorized speed...
+<P>
+<b> To Vary the Speed Setting:</b> You can reset the control to any
+desired speed by accelerating or slowing to that speed and pressing
+the SET button...
+</blockquote>
+<P>
+The transition network for the prototypical object <em> ccc</em> in <em>
+CCC</em> has three states.  The states may be defined in terms of
+properties of the attributes in <em> CCC</em>.  Because <em> ccc</em> is the
+brain of the CCC system, we give it knowledge about the state of the
+CCC system. We give it an attribute <em> state</em> with value domain the
+set {<em> off, sim, on</em>}, where <em> sim</em> stands for <em>
+speedInMemory</em>.  Since all of the transitions depend on external
+events, with respect to <em> ccc</em>, we sketch only an abstracted
+network.  Details of the transitions, except their names, are
+suppressed:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img13.gif"><P>
+<P>
+<DL ><DT><em> t1</em>
+<DD> occurs when the vehicle's speed
+is at least 30mph and the control slide goes from the OFF to the ON
+position.
+<DT><em> t2</em>
+<DD> occurs when the SET button has been
+depressed or the control slide is pushed into the RESUME position.
+<DT><em> t3</em>
+<DD> occurs when the brake pedal is depressed.
+<DT><em> t4</em>
+<DD> occurs when either the control slide
+goes from the ON to the OFF state or the ignition is turned off.
+<DT><em> t5</em>
+<DD> occurs when the SET button is depressed. Observe
+that <em> t5</em> leads to the same state as where it comes from.
+<DT><em> t6</em>
+<DD> is like <em> t4</em> but originates in the <em> on</em> state.
+<P>
+ </DL><BR>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Reducing Complexity</A></H2></center>
+<P>
+Transition networks have the questionable reputation that their size
+can get out of hand for realistic applications. We discuss three
+strategies, state abstraction, subnet abstraction, and independent
+transition networks. A fourth, inheritance, is discussed in
+Chapter <A NAME=tex2html46 HREF="ch7.html">7</A>. These may be employed to fight
+exponential explosions.
+<P>
+<H2><A NAME=SECTION00041000000000000000> State Abstraction</A></H2>
+<A NAME=494>&#160;</A>
+<P>
+We encountered six transitions in the transition network of <em> ccc</em>.
+The transitions <em> t4</em> and <em> t6</em> are nearly the same.  The only
+difference is that they originate in different states, respectively
+<em> speedInMemory</em> and <em> on</em>.  It is always a good idea to find
+ways to factor out commonalities.  In this case, we may introduce a
+``superset'' state <em> simOrOn</em>, with interpretation that the <em>
+ccc</em> object is in either of the states <em> speedInMemory</em> or <em>
+on</em>.  Subsequently, we remove the transitions <em> t4</em> and <em> t6</em> and
+introduce instead a transition <em> t4_6</em> that leads from <em>
+simOrOn</em> to <em> off</em>.
+<P>
+Harel  [<A HREF="#harel">3</A>,<A HREF="#harel2">4</A>] has introduced a graphical notation, stateCharts,
+for this state abstraction convention.  In this notation, the <em> CCC</em>
+transition network becomes:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img14.gif"><P>
+<P>
+The transition <em> t4_6</em> leads out of <em> sim</em> and out of <em> on</em>.  A
+transition in the other direction (e.g., <em> t1</em>) cannot point to
+<em> simOrOn</em> because this would yield an ambiguity.
+<P>
+The outermost state, <em> ready</em>,<A NAME=541>&#160;</A> represents an extreme
+form of state abstraction. An object of class <em> CCC</em> is in the
+abstract state <em> ready</em> whenever it is quiescent (i.e., not engaged
+in a transition). It is possible and useful to define transitions
+leading from <em> ready</em> to <em> ready</em>. For example, there are surely
+many interactive transitions that perform the actual cruise control.
+Some of them may operate differently when the object is in states <em>
+off</em>, <em> sim</em>, or <em> on</em>. Others may operate in exactly the same
+way regardless of state, and so may be defined at this topmost level.
+By convention, a transition connecting an abstract state to itself is
+interpreted as leading back to the precise state from which it
+originated.
+<P>
+<H2><A NAME=SECTION00042000000000000000> Subnetwork Abstraction</A></H2>
+<A NAME=550>&#160;</A>
+<P>
+Sometimes we may connect two states, <em> S1</em> and <em> S2</em>, with a
+high-level transition.  Such a transition is high level in the sense
+that it represents a transition subnetwork that has a single entry,
+corresponding with <em> S1</em>, and in which all paths leads to exits that
+can be identified with <em> S2</em>. We use a ``double-bar'' notation for
+abstracted subnetworks, as was illustrated earlier for the Maintenance
+actions in the ATM example:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img15.gif"><P>
+<P>
+Abstraction may be performed prospectively (before expanding the
+individual transitions) when it is known that all transitions must
+link the indicated states. In this case, abstracted subnetworks
+serve only as placeholders for further analysis.
+<P>
+Retrospective abstraction of a subnetwork after all transitions have
+been specified is a useful simplification device.  The subnetwork that
+has been taken out may also be used as a source of inspiration for the
+design of other transitions.
+<P>
+<H2><A NAME=SECTION00043000000000000000> Independent Transition Networks</A></H2>
+<A NAME=568>&#160;</A>
+<A NAME=sectmulttn>&#160;</A>
+<P>
+A class may possess several separable sets of transitions.  This often
+arises when the transitions operate on disjoint sets of attributes.
+This situation in turn often arises when a class has multiple disjoint
+superclasses (see Chapter <A NAME=tex2html51 HREF="ch7.html">7</A>).
+<P>
+The complete transition network can be conceptualized as one large
+transition network that is made up of the Cartesian product of the
+individual, contributing networks.  A straightforward graphical
+representation of such a Cartesian product grows rapidly out of hand
+due to exponential growth of the required number of states and
+transitions.  Harel [<A HREF="#harel">3</A>,<A HREF="#harel2">4</A>] has introduced a graphical
+convention for these product spaces.  Two (or more) transition
+networks are simply enclosed in an abstracted set where the transition
+networks are separated by dashed lines.
+<P>
+For example, the following Cartesian product transition network might
+describe a refrigerator, with one network representing whether the
+motor is running or not and the other network representing whether
+the door is open or closed:<A NAME=573>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img16.gif"><P>
+<P>
+The diagram abbreviates the Cartesian product of the two independent
+sets of states and transitions that would otherwise need to be
+represented explicitly as:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch5-img17.gif"><P>
+<P>
+Here, <em> cd</em> and <em> od</em> abbreviate <em> closeDoor</em> and <em>
+openDoor</em>.  The state <em> OffOp</em> represents the motor being off and
+the door being open. The others are defined similarly.
+<P>
+The use of independent ``parallel' transition networks adds
+conciseness and understandability to models, but may be applied only
+when different parts of a transition network are truly disjoint.  As a
+safeguard, the states, guards, and actions within the transitions in
+one independent network should not refer to attributes used in the
+definition of the other networks.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00050000000000000000> Summary</A></H2></center>
+<P>
+The behavior of objects may be modeled using transition networks.
+There are no restrictions on the complexity of an action associated
+with a transition.  It is the responsibility of the analyst to avoid
+``magical'' actions that require an analysis by themselves.  For this
+and other reasons, we argued against assuming parallelism inside
+objects (but see Chapter <A NAME=tex2html53 HREF="ch9.html">9</A>).
+<P>
+The states of our transition networks are static. We avoid so-called
+``active'' states.  We advertised defining states rigorously via
+properties of attribute value configurations.  This opens the door for
+more discipline by being able to show that different states, as
+suggested by their names, are different indeed.  Transitions may be
+described in a similarly rigorous fashion.  In particular, the
+exclusion of guards associated with different transitions emanating
+out of a state may be demonstrated.
+<P>
+State abstraction, subnet abstraction and multiple
+transition networks may be employed to reduce complexity
+of transition networks.
+<P>
+<H2><A NAME=SECTION00051000000000000000> Further Reading</A></H2>
+<P>
+Most OO analysis methods use transition networks in some form or
+another to describe the behavior of objects.  The variant used by
+Shlaer and Mellor [<A HREF="#sm">8</A>,<A HREF="#sm4">9</A>] associates actions with states instead
+of with transitions as we have done (and most others do).  Their
+actions are executed when a state is entered.  They advocate using
+data flow diagrams to detail the description of an action.
+<P>
+Embley et al [<A HREF="#kurtz">2</A>] are among those arguing for parallelism
+inside objects:
+<blockquote> Besides interobject concurrency, objects in OSA may exhibit
+intraobject concurrency.  Intraobject concurrency allows an individual
+object to exhibit concurrent states or actions.  A person, for example, may
+be talking on the phone while taking notes.  A copy machine can copy and
+staple at the same time.
+</blockquote>
+<P>
+A different approach to object behavior is advocated by Wirfs-Brock et
+al [<A HREF="#wirfs">10</A>].  Their CRC method avoids modeling of prototypical
+objects independent of the role(s) played in a target system.
+Instead, behavior is formulated in terms of client-server contracts,
+responsibilities and collaborations. <A NAME=635>&#160;</A>
+<P>
+<H2><A NAME=SECTION00052000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Show the mutual exclusion property for the states <em> closed, ajar</em>
+and <em> open</em> defined for a <em> Door</em> in this chapter.
+<P>
+<LI> Assume that an <em> Account</em> has a state <em> S</em> with two emanating
+transitions <em> Withdraw</em> and <em> Deposit</em>, both leading back to <em> S</em>.
+Formulate guards for these transitions and show that they satisfy mutual
+exclusion.
+<P>
+<LI> The car cruise control machinery
+actually supports more functionality:
+<P>
+<blockquote> When the system is activated, tapping the SET button will increase the
+speed settings by small increments.
+<P>
+Holding the SET button depressed allows vehicle to coast to a lower
+setting.
+</blockquote>
+<P>
+Can this functionality be expressed by an extension of the transition
+network given in this chapter?  If so, what are these extensions?  If not,
+what has to be done instead?
+<P>
+<LI> Select another component of the CCC system and develop a static and
+dynamic model for it.
+<P>
+
+<LI> Give a static and dynamic model of:
+<OL><LI> A tube of toothpaste.
+<LI> A VCR.
+<LI> A car's 5-speed stick shift.
+<LI> A racing bike's 10-speed gear system.
+<LI> A chess game.
+<LI> A <i> LISP</i> <tt> EVAL</tt> function.
+<LI> A soccer or football match.
+</OL>
+
+</OL>
+<P>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=brown><STRONG>1</STRONG></A><DD>
+F.M. Brown, editor.
+ <em> Workshop on the Frame Problem</em>.
+ AAAI, 1987.
+<P>
+<DT><A NAME=kurtz><STRONG>2</STRONG></A><DD>
+D.W. Embley, B. Kurtz, and S.N. Woodfield.
+ <em> Object-Oriented Systems Analysis</em>.
+ Yourdon Press/Prentice Hall, 1992.
+<P>
+<DT><A NAME=harel><STRONG>3</STRONG></A><DD>
+D. Harel.
+ Statecharts: A visual formalism for complex systems.
+ <em> Science of Computer Programming</em>, 8, 1987.
+<P>
+<DT><A NAME=harel2><STRONG>4</STRONG></A><DD>
+D. Harel.
+ On visual formalisms.
+ <em> Communications of the ACM</em>, May 1988.
+<P>
+<DT><A NAME=martin><STRONG>5</STRONG></A><DD>
+J. Martin and C. McClure.
+ <em> Diagramming Techniques for Analysts and Programmers</em>.
+ Prentice Hall, 1985.
+<P>
+<DT><A NAME=hayes><STRONG>6</STRONG></A><DD>
+J. McCarthy and P.J. Hayes.
+ Some philosophical problems from the standpoint of artificial
+  intelligence.
+ In D. Michie and B. Meltzer, editors, <em> Machine Intelligence 4</em>.
+  Edinburgh University Press, 1969.
+<P>
+<DT><A NAME=rumbaugh><STRONG>7</STRONG></A><DD>
+J. Rumbaugh, M. Blaha, W. Premerlani, F. Eddy, and W. Lorensen.
+ <em> Object-Oriented Modeling and Design</em>.
+ Prentice Hall, 1991.
+<P>
+<DT><A NAME=sm><STRONG>8</STRONG></A><DD>
+S. Shlaer and S.J. Mellor.
+ <em> Object-Oriented Systems Analysis</em>.
+ Yourdon Press, 1988.
+<P>
+<DT><A NAME=sm4><STRONG>9</STRONG></A><DD>
+S. Shlaer and S.J. Mellor.
+ <em> Object Life Cycles: Modeling the World in States</em>.
+ Yourdon Press, 1991.
+<P>
+<DT><A NAME=wirfs><STRONG>10</STRONG></A><DD>
+R. Wirfs-Brock, B. Wilkerson, and L. Wiener.
+ <em> Designing Object-Oriented Software</em>.
+ Prentice Hall, 1990.
+</DL>
+<P>
+
+<a href="ch6.html">Next: Chapter 6</a>
+
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed Jan 10 07:53:06 EST 1996</I>
+</ADDRESS>
+</BODY>

@@ -1,0 +1,1242 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>The Analysis Process</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="The Analysis Process">
+<meta name="keywords" value="ch12">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 12: The Analysis Process</h2>
+
+<UL>
+<LI> <A NAME=tex2html41 HREF="#SECTION00010000000000000000"> Software Development Process</A>
+<LI> <A NAME=tex2html42 HREF="#SECTION00020000000000000000"> Default Sequence of Steps</A>
+<LI> <A NAME=tex2html43 HREF="#SECTION00030000000000000000"> OO Analysis of the OO Analysis Process</A>
+<LI> <A NAME=tex2html44 HREF="#SECTION00040000000000000000"> Alternative Processes</A>
+<LI> <A NAME=tex2html45 HREF="#SECTION00050000000000000000"> Tools</A>
+<LI> <A NAME=tex2html46 HREF="#SECTION00060000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+
+<A NAME=9>&#160;</A><A NAME=10>&#160;</A><A NAME=11>&#160;</A><A NAME=12>&#160;</A>
+<P>
+How does one proceed from the requirements to the design input?
+<P>
+In previous chapters, we have been discussing analysis notions and
+notations, culminating in the construction of a model of a target
+system.  In this chapter, we will concentrate on the process dimension
+of OOA.  We start off by investigating more general software
+development process concepts. We describe the OO analysis process
+abstractly, making it independent of particular tasks and developers.
+We informally present a partially ordered set of analysis activities
+within this framework.  We then illustrate how OOA notions themselves
+can be applied to the more precise description of fragments of this
+generic OOA process. We compare the results to alternative approaches,
+and finally discuss prospects for corresponding tools.
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Software Development Process</A></H2></center>
+<P>
+<A NAME=sectswdp>&#160;</A>
+<A NAME=15>&#160;</A>
+<P>
+The notion of a ``software development process'' can be interpreted in
+several ways:
+<P>
+<OL><LI> It can refer to the actual behaviors of a team of analysts,
+designers, implementors, and maintainers working on a particular development
+task.
+<P>
+This process emerges (provided the organization has a certain
+discipline) from a process plan,<A NAME=17>&#160;</A> as described in
+(2) below.  Such a cooperative activity can be assisted by tools that
+have knowledge about a particular development paradigm, that capture
+the output of team members, that mediate their interactions, that do
+version control, that do progress monitoring, etc.
+<P>
+<LI> It can also refer to a particular plan made for a certain development
+task.
+<P>
+Such a plan would prescribe an intended process execution as outlined
+in version (1).  A process plan is guided by the process as defined by
+the paradigm used, as in (3) below, or by features of the task at
+hand, by corporate policies, by human and other resources, etc.  Such
+a plan would be the basis for progress monitoring.  It can be used to
+allocate resources, to help decide what to do in case of plan
+execution deviations, etc.  Again we can envisage tools that assist in
+representing plans, deadlines, dependencies, critical paths, etc.
+Such tools could, of course, interact with those in version (1).
+<P>
+<LI> It can refer as well to generic, recommended, broad-brush scenarios
+for doing software development.
+<P>
+These scenarios may be seen as providing inspiration for setting up
+development plans as in (2).  Alternatively, these development
+process scenarios can act as constraints on those plans.
+<P>
+</OL>
+<P>
+There are also intermediate interpretations.  For instance, a generic,
+broad brush scenario can be refined by a commitment to a given
+analysis paradigm.  In turn, such a paradigm-specific process
+description can be narrowed to accommodate the specific properties of
+an application domain and/or of policies defined by a corporation.
+<P>
+Standard accounts ([<A HREF="#feller">5</A>,<A HREF="#swpw">10</A>], and especially
+[<A HREF="#rmfcas">9</A>]) describe the software development process in
+a generally similar fashion.  Their treatment of the development
+process is paradigm neutral.  As a result, these authors describe the
+development process only in large-granularity components including
+analysis, design, implementation, compilation, debugging, etc.  Our
+commitment to the OO paradigm allows us to be more specific.  In
+particular, we will ``open up'' the OO analysis phase in this chapter.
+(We will do the same for the design phase in Chapter <A NAME=tex2html9 HREF="ch15.html">15</A>.)
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Default Sequence of Steps</A></H2></center>
+<P>
+<A NAME=secdsos>&#160;</A>
+<A NAME=25>&#160;</A>
+In this section, we elaborate on a default sequence of steps for OO analysis:
+<OL><LI> Obtain ``complete'' requirements.
+<LI> Describe system-context interaction.
+<LI> Delineate subsystems.
+<LI> Develop vocabulary by identifying instances with their
+      classes, ensembles, and relationships.
+<LI> Elaborate classes and relationships by defining their generic
+      static structure and describing their generic dynamic dimension.
+<LI> Construct a model in which the dynamics of objects are wired together.
+</OL>
+<P>
+These steps are connected by transformation -- elaboration
+relationships.  The output of the last step, the model, feeds
+naturally into the design phase.
+<P>
+Backtracking may occur at any time. Choices made upstream may be
+revised on the basis of insights gathered downstream.  Tool support is
+obviously invaluable to help decide what must be scrapped and what can
+be salvaged.  All steps combined can also be iterated to incorporate
+feedback from the customer.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Requirements</A></H2>
+ <A NAME=29>&#160;</A>
+<P>
+Whenever a requirements document already exists, the requirements step can
+be bypassed.  It has been argued (e.g., by Ward and Brackett
+[<A HREF="#wardp">15</A>]) that the analysis phase encompasses the
+acquisition of the requirements as well.  This would entail extracting
+the requirements from the customer while transcribing them into the
+analysis formalisms.  Although this is possible, it is not necessarily
+recommended.  Reformulating a ``complete'' initial requirements
+document allows checks on these requirements.
+<P>
+The notion of completeness is relative.  A natural language
+description is usually too imprecise or too cumbersome to yield a
+watertight system characterization.  In addition there may be aspects of
+the requirements that cannot be formulated because customers simply do not
+know what they want.  Those aspects, for example, user interfaces, will have
+to be elucidated by prototyping.
+<P>
+<H2><A NAME=SECTION00022000000000000000> System-Context Interaction</A></H2>
+ <A NAME=32>&#160;</A>
+<P>
+The behavior description is, of course, a core element of the
+requirements.  Since the requirements language is usually free-form,
+any appropriate formalism can be employed.  If it has not been done
+already, prototypical interaction sequences (use cases) between the
+context and the target system should be detailed.  Corner cases and
+exception cases can be useful as well.
+<P>
+<H2><A NAME=SECTION00023000000000000000> Subsystem Delineation</A></H2>
+ <A NAME=34>&#160;</A>
+<P>
+Splitting up a target system into weakly interacting subsystems is the
+next challenge.  This step is intrinsically heuristic. An intended
+automatization of a manual system may adopt decompositions that have
+been already introduced. For example:
+<UL><LI> Acquire data / Process data / Return response.
+<LI> Ordering / Manufacturing / Delivery / Planning / Accounting.
+<LI> User interface / System logic / Persistent data.
+</UL>
+These can all be possibilities for subsystem delineation.
+<P>
+We must be prepared to revisit decisions made in this phase, either on the
+basis of subsequent interaction with the client or on the basis of newer
+insights obtained downstream.
+<P>
+Subsystems are candidates for mapping into ensembles.  We will
+introduce another bundling notion, clusters, in Part II.  Subsystems
+and clusters may or may not coincide.  Subsystems represent a bundling
+of entities that are cohesive in a logical sense. Clustering
+represents the physical cohesion of objects that will reside within
+a process on a compute server.  Accounts are an example of objects
+belonging to a subsystem of a bank that can be scattered physically in
+a distributed design and implementation.
+<P>
+Multiple subsystems create multiple options --  breadth first, depth
+first, or any combination in between.  With multiple analysts, it is
+attractive to work partially breadth first, where each analyst is
+responsible for one or more subsystems.
+<P>
+<H2><A NAME=SECTION00024000000000000000> Vocabulary Development</A></H2>
+ <A NAME=38>&#160;</A>
+<P>
+Vocabulary development may be performed for each subsystem.  When
+multiple analysts are involved and/or when a single analyst has
+introduced synonyms, several merging phases may be required to remove
+duplicates and synonyms.
+<P>
+An initial step involves the identification of classes whose instances
+will make up the system.  There are many approaches.  Several of the
+following categories are based on those described by Firesmith
+[<A HREF="#firesmith">6</A>].
+<P>
+<H4><A NAME=SECTION00024010000000000000> Abbott's noun approach.</A></H4>
+<P>
+This process relies on a requirements document and more specifically
+on a description of prototypical system -- context interaction
+sequences.  As described in Chapter <A NAME=tex2html15 HREF="ch3.html">3</A>, objects and
+their classes are identified by underlining nouns, pronouns, and noun
+phrases.  Individual (parametric) objects are located by noun phrases
+that refer to unique entities such as <em> sensor number 5</em>, <em> the
+fifth sensor</em>.  Verbs and verb phrases can be used to get an initial
+understanding of the operations associated with the objects found.
+<P>
+This technique may yield false positives and worse, may fail to locate
+relevant classes.  Another problem is that a requirements text contains an
+abundance of noun phrases.  The previous sentence, for example, contains
+four noun phrases:
+<UL><LI> another problem,
+<LI> a requirements text,
+<LI> noun phrases,
+<LI> an abundance of noun phrases.
+</UL>
+Thus one needs to prune judiciously using this approach.  Nevertheless,
+the technique provides a fertile starting point.
+<P>
+<H4><A NAME=SECTION00024020000000000000> Structured approach.</A></H4>
+<P>
+This technique has the following variants:
+<UL><LI> A context diagram shows the external entities with which a software
+system must interface.  Each external entity that is a terminator in the
+diagram corresponds to an individual object or class.
+This approach yields almost no false positive identifications, according to
+Firesmith  [<A HREF="#firesmith">6</A>].
+<P>
+<LI> A data flow diagram (DFD)<A NAME=50>&#160;</A> depicts processes, flows of data, and data
+stores.  A data store can be identified as an object or a class.  Processes
+associated with a data store can give a hint of the operations to be
+supported by the corresponding object.
+<P>
+</UL>
+<P>
+Using pre-existing DFDs is attractive from a cost perspective, but as
+observed in Firesmith [<A HREF="#firesmith">6</A>], they often have the wrong
+scope: ``Pieces of the same abstract object or class are often on
+several DFDs.''  Developing object-oriented DFDs is recommended only
+when ``you have to'' (e.g., for contractual or political
+reasons).<sup>1</sup>
+<blockquote>
+ <sup>1</sup>Footnote:<br>
+A reviewer of this book was a bit more adamant:
+``DFDs, by the admission of the very people who use them, are useless
+except to develop some kind of mysterious cult understanding.  That
+data stores can be identified as objects of classes is absolutely
+wrong on so many levels of abstraction that I can barely count them.
+First, classes should be locales of behavior: the behavioral coupling
+in a DFD does not manifest itself in data stores.  Second, classes
+reflect stable abstractions of the application domain; if they do not,
+then all these claims of OO supporting long-term maintenance are for
+naught... Bringing up DFDs here is just stupid.  Just say no!''
+</blockquote>
+<P>
+
+<H4><A NAME=SECTION00024030000000000000> State approach.</A></H4>
+<P>
+When a state of affairs is mentioned in the requirements document, a
+candidate object may be used that exhibits that state.  Since one
+object may support multiple states, we may have to merge candidate
+objects identified by this approach.  This approach may sound
+counterintuitive given the presentation sequence of the previous
+chapters.  Object identification precedes the development of
+transition networks and thus precedes the description of states in
+these transition networks.  However, when ``state'' is used in an
+imprecise sense, this approach may lead to the identification of
+useful classes.
+<P>
+<H4><A NAME=SECTION00024040000000000000> Attribute approach.</A></H4>
+<P>
+This follows the same pattern as the previous approach.  As stated in
+Firesmith [<A HREF="#firesmith">6</A>]: ``For each data abstraction, identify the
+corresponding ... class of which it is an attribute.''
+A data dictionary, if one happens to be available, might serve as
+a crude source of inspiration.
+<P>
+<H4><A NAME=SECTION00024050000000000000> Operation approach.</A></H4>
+<P>
+Another variant on the same theme and from the same source is: ``For each
+functional abstraction, identify the corresponding ... class of which it is
+an operation.''
+<P>
+<H4><A NAME=SECTION00024060000000000000> Relationship approaches.</A></H4>
+<P>
+Three variants are mentioned in Firesmith  [<A HREF="#firesmith">6</A>]:
+<UL><LI> An entity in entity-relation diagrams may be seen as a first
+    approximation of an object/class.
+<LI> Similarly, if there is a semantic net description of a domain, the
+    nodes in these nets can be identified as candidate objects/classes.
+<LI> Again, if by some miracle there are message/interaction diagrams,
+    their nodes can be identified as candidates.
+</UL>
+<P>
+Firesmith  [<A HREF="#firesmith">6</A>] observes that the construction of the
+last two diagrams relies on some early insight into at least some of the
+relevant objects/classes.
+
+CRC cards [<A HREF="#bc">1</A>] provide a more direct and fruitful vehicle for
+eliciting object relationships and collaborations.
+
+<H4><A NAME=SECTION00024070000000000000> Decomposition approach.</A></H4>
+<P>
+When large objects are found, we may want to look for component
+objects.  The issue of whether a large object can be given the status
+of an ensemble may be ignored at this stage.  Components can have
+different appearances including spatial <em> PartOf</em>, temporal <em> PartOf</em>,
+and the many versions of metaphorical <em> PartOf</em>.
+<P>
+<H4><A NAME=SECTION00024080000000000000> Reuse approach.</A></H4>
+<P>
+This entails investigating repositories that capture the ingredients
+of earlier and similar systems.  We can obtain inspiration from class
+libraries (possibly produced by a domain analysis) and/or <em>
+frameworks</em>. Frameworks are organized sets of classes and related
+constructs, usually self-contained hierarchies, that intentionally
+fall short of specifying those subclasses needed for particular
+systems and applications.  They are skeletons that must be
+supplemented by system-specific subclasses and operations.  A
+framework can be an overall ``wrapper'' or it can be a structure for a
+major subresponsibility such as persistence or graphical user
+interaction (see Chapters <A NAME=tex2html18 HREF="ch13.html">13</A> and  <A NAME=tex2html19 HREF="ch15.html">15</A>).
+<P>
+<H4><A NAME=SECTION00024090000000000000> Abstraction approach.</A></H4>
+<P>
+If ``mechanical'' approaches fail, we must rely on original thinking.
+A requirements document and auxiliary sources of domain knowledge must
+be scrutinized for the identification of unique and subsequently
+prototypical objects and their relationships.
+<P>
+Firesmith  [<A HREF="#firesmith">6</A>] suggests looking for the following kinds of
+items (or sets of them):
+<UL><LI> Aggregates or devices.
+<LI> Persons or roles.
+<LI> Organizations.
+<LI> Locations.
+<LI> Events.
+<LI> Interactions.
+</UL>
+<P>
+Shlaer and Mellor  [<A HREF="#sm4">13</A>] present a similar list:
+<UL><LI> Tangible objects, things that exist in the physical world.
+<LI> Roles, purposes or assignments of people, pieces of equipment, or
+    organizations.
+<LI> Incidents, some happening or occurrence.
+<LI> Interactions, associations between objects.
+<LI> Specification objects that capture rules, standards, or quality
+    criteria.
+</UL>
+\
+<P>
+In a new domain, an OO analyst has a great amount of freedom to pick and
+choose candidate objects, classes, and relationships.  Since not much is at
+stake at such an early stage, it pays to play around.  Mapping
+physical entities onto objects and physical events onto events is an obvious
+choice.  However, an analyst also has the freedom to objectify
+physical or abstract events.  Fitness for use is the general guideline.
+Minimality of notions, orthogonality of concepts, naturalness, and
+unbundledness of functionality are obviously desirable although
+potentially conflicting desiderata.
+<P>
+In this early stage, it is better to have false positives that will be
+weeded out in subsequent refinements than it is to overlook key
+concepts.  Although we may ultimately need (parametric) instances in
+the last step of the analysis phase (model construction), every object
+should be generalized into a class, even when the model contains only
+one instance of a class.
+<P>
+<H2><A NAME=SECTION00025000000000000000> Class and relation elaboration</A></H2>
+ <A NAME=82>&#160;</A><A NAME=83>&#160;</A>
+<P>
+An overview of this phase is represented in the diagram introduced in
+Chapter <A NAME=tex2html22 HREF="ch2.html">2</A>:
+<P>
+<table border=5>
+<tr><td>
+</td><td> <b>inside object</b> </td><td> <b>between objects</b> </td></tr><tr><td>
+
+<b>static</b> </td><td> attribute<br> constraint  </td><td>
+relationship <br> acquaintanceship  </td></tr><tr><td>
+
+<b>dynamic</b> </td><td> state net and/or <br> interface </td><td>
+interaction and/or <br> causal connection </td></tr><tr><td>
+
+</table>
+
+<P>
+This table is enclosed in a hidden quantifier:
+<PRE>For every identified class do:
+    Fill in the entries of the table
+</PRE>
+<P>
+In a naive interpretation, we would for each class in turn completely
+fill in this table.  The right-hand entries in the table already imply
+that this is not feasible.  We need to have some overview of the
+collection of classes in the system to describe relationships and
+inheritance.  Similarly, it is useful to have a preliminary insight
+into potential interaction partners when the interaction capabilities
+of class instances are formulated.  A more realistic approach for this
+phase is captured by:
+<P>
+<PRE>For every entry of the table do:
+    For each class do:
+        Elaborate the class as prescribed by the table entry
+</PRE>
+<P>
+In what sequence do we traverse the entries in the table?
+There is no right answer.   As we have seen, static
+and dynamic descriptions are strongly intertwined.  To summarize:
+<UL><LI> Attributes define an overall universe representing the cartesian product
+    of the attribute value domains.
+<LI> Constraints define a subuniverse space.
+<LI> State predicates describe disjoint subspaces that correspond to the
+    states in transition networks.
+<LI> A guard in a transition further narrows a state subspace. When
+    multiple transitions emanate from a state, their guards will define
+    disjoint subspaces inside that state space.
+<LI> An action on a transition yields a state that is consistent with
+    the properties that define the target state.
+</UL>
+<P>
+Still, as discussed in Chapter <A NAME=tex2html23 HREF="ch2.html">2</A>, we prefer to go from
+left to right in the first row and then the second row. (See
+Section <A HREF="#secalternproc">4</A> for alternative traversals suggested by
+other methodologists.)  However, inheritance cuts across all steps.
+Elaborations and models constructed during any of these activities may
+reveal a commonality in structure and behavior between two or more
+classes.  This commonality can be factored out by a (multiple)
+inheritance relationship between classes.  Such commonalities can also
+emerge with respect to classes residing in a library of analysis
+concepts.
+<P>
+<H3><A NAME=SECTION00025100000000000000> Class Statics</A></H3>
+<P>
+The vocabulary development phase produces candidate classes and
+relationships.  After selecting concise and evocative names we must
+describe each class with attributes.  Although each class must have a
+unique name, classes should be distinguishable on the basis of their
+attribute characterizations.  A rule of thumb is if two classes have
+identical attributes, then they are most likely the same.  (We have
+seen exceptions in Chapters <A NAME=tex2html24 HREF="ch3.html">3</A> and <A NAME=tex2html25 HREF="ch5.html">5</A>.)
+<P>
+An attribute expresses an essential definitional feature that is
+shared by all instances of a class.  A minimal characterization of an
+attribute consists of the value domain of the attribute and a name
+that explains the role or relationship that an attribute value has
+with respect to the instance to which it belongs.  Multivalued
+attributes may be annotated with multiplicity characterizations.
+Defaults for an attribute value and/or multiplicity description
+can be formulated in this phase as well.  Constraints can restrict
+attribute value combinations and/or refer to multiplicity
+descriptions.
+<P>
+<H3><A NAME=SECTION00025200000000000000> Relationships</A></H3>
+<P>
+Relationships help capture target system-specific knowledge by
+describing connections among different objects. Relationships may also
+be used to modify descriptions in the previous step.  For example, when
+an attribute has a multiplicity range that includes zero, one may
+eliminate the attribute and represent this information as a
+relationship instead.
+<P>
+<H3><A NAME=SECTION00025300000000000000> Class Dynamics</A></H3>
+<P>
+A transition network can be rigorously developed for a prototypical
+class instance as soon as the static attribute characterization is
+available.  Postponing transition specifications until after
+inheritance class connections are established sometimes produces an initial
+transition network ``for free'' via inheritance.
+<P>
+States and transitions are dual notions.  Whether one enumerates and
+defines the states or a mixture of the two depends on the available
+data.  Beyond its name, a state is preferably defined in terms of a
+predicate on the space of value combinations of the attributes.  An
+operation on a transition is preferably defined not only by its name
+but also by preconditions and postconditions.
+<P>
+<H3><A NAME=SECTION00025400000000000000> Interaction</A></H3>
+<P>
+``Hard-wiring'' interaction connections between prototypical class
+instances should be avoided.  Object interactions may instead be
+described through relationships that can later be captured as
+attributes (or not) as the target system model is constructed.
+<P>
+Synchronous interaction may be described on the server side with an
+interface description that details what is expected from the client
+and what, if anything, will be delivered.  This may consist of
+signature descriptions, preconditions and postconditions.  Similarly,
+on the client side, a dual description should be formulated to
+describe the data to be sent to the server and what is expected from
+the server.  Asynchronous interaction proceeds in a similar fashion,
+via descriptions of events, their producers, and consumers.
+<P>
+<H2><A NAME=SECTION00026000000000000000> Model Construction</A></H2>
+ <A NAME=107>&#160;</A>
+<P>
+The previous activities provide the key building blocks for assembling a
+model of the target system.  The overall structure, the architecture, is
+guided by:
+<UL><LI> The architecture of a similar, previously developed system, if any.
+<LI> A generic framework, if any applies.
+<LI> A specific framework (such as a user interface) that can play the role
+    of a generic framework, if any can be found.
+<LI> An ensemble object that can represent the whole system.
+<LI> A family of ensembles or objects that can represent the whole system in
+    a ``democratic'' fashion.
+</UL>
+<P>
+The model is subsequently constructed by recursively filling in the details
+of this architecture up to the level at which it becomes obvious that the
+design phase can construct a computational realization of this descriptive
+model.
+<P>
+When objects are chosen to interact with each other, we must ascertain
+that the mutual expectations and obligations for events and for
+client-server interactions match.  If necessary, application-specific
+subclasses must be introduced to pin down interaction partner
+commitments at this stage.
+<P>
+Model construction may reveal that areas are underconstrained,
+inconsistent, or simply ill defined.  If interaction with the customer
+does not resolve this situation, prototyping may be used to gather
+more insights into such unresolved areas.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> OO Analysis of the OO Analysis Process</A></H2></center>
+<P>
+<A NAME=111>&#160;</A><A NAME=112>&#160;</A>
+<P>
+The presentation in this section is in a sense a <em> meta</em> activity.
+Meta is an ambiguous notion that needs clarification.  We will <em>
+not</em> use OOA to describe <i> OAN</i> syntax.  Neither will we describe the
+semantics of the OOA constructs.  Instead we will sketch the pragmatic
+dimension of the OO analysis process.  Of course, we will avoid the
+process aspects that are team- and project-specific.  We will limit
+ourselves to the abstract, generic interpretation as defined in
+Section <A HREF="#sectswdp">1</A>.
+<P>
+We stated earlier that a development activity may change the
+requirements.  New insights can be obtained that will fill in
+omissions, add additional constraints, eliminate constraints, or
+replace existing constraints with others.  We ignore this aspect of the
+analysis process and focus on the transformation of some frozen
+version of the requirements into an analysis model of the target
+system.  However our model does have a traceability infrastructure for
+dealing with changes to the requirements.
+<P>
+The first step of an analysis process demands that we obtain
+requirements and complete them as necessary.  In our case, we want to
+describe the OOA process, so we can refer to the previous section
+describing default steps and activities as the requirements document
+for this enterprise.  Subsequently, we ought to provide for
+system-context interaction, subsystem delineation and vocabulary
+development.  However, we will bypass these steps.  Our abstraction
+level eliminates the analyst. We cannot effectively discuss
+system-context interaction or model construction.  Additionally, the
+
+OOA process is too abstract to allow subsystems to be distinguished.
+The vocabulary consists of concepts such as class, relationship,
+instance, attribute, constraint, transition network, state,
+transition, etc., so we can go straight into class elaboration.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Graphical Overview</A></H2>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img2.gif"><P>
+<P>
+This diagram may be interpreted as follows:
+<DL ><DT>Boxes.
+<DD> The IDEAS box represents external input to the analysis process.
+    The DESIGN box denotes the next phase in the development process.
+<DT>Ovals:
+<DD> The ovals denote the artifacts that are constructed in the
+analysis process.  If complete requirements are initially available
+then the Requirements oval resides outside the analysis process boundary
+as well.
+<DT>Horizontal arcs.
+<DD>  These arcs represent input and output
+dependencies.
+<DT>Other lines.
+<DD> The other lines in the diagram denote dependencies
+between the artifacts.  For example, a class definition depends on at
+least one item in the vocabulary and similarly the model depends on
+classes, instances and relations.  Phrased differently, an item lower
+in the diagram is obtained through <em> elaboration</em> of an item or
+items higher up in the diagram.
+<P>
+ </DL>
+<P>
+This diagram resembles a class interaction diagram.  But while the
+arcs in an interaction diagram represent synchronous or asynchronous
+object interaction capabilities, those lines here denote ``manual''
+interventions by analysts.  During analysis, we reformulate and expand
+an informal set of requirements into a more formal description.  This
+transformation is done gradually.  UseCases, SubSystems and Vocabulary
+are still informal in the sense that they rely on natural language,
+but at the same time they structure the characterizations by providing
+templates.  The crossover point is in the elaboration of the items in
+the Vocabulary into items in Classes, Instances, and Relations.
+<P>
+These items may be further expanded. For example, class development
+may be represented using the following diagram:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img3.gif"><P>
+<P>
+The diagrams contain a few simplifications. For example,
+``Vocabulary'' represents several different kinds of categories --
+classes, ensembles, relationships and their instances.  Also, the main
+diagram does not capture a validation step in which a constructed
+model is checked to ascertain that it satisfies the behaviors
+expressed by the use cases.
+<P>
+We have <em> not</em> explicitly represented the introduction of
+inheritance connections among classes and relationships via
+abstraction and specialization.  Abstraction of commonalities among
+classes and relationships may be performed at any time.  Consequently,
+this operation is global to all the elaboration activities depicted in
+the diagrams.  Specialization occurs after a preliminary version
+of a class or relationship has been formulated and it is recognized
+that the intended class is already partially realized.  Thus this
+operation can be associated with the behavior of the class <em> Class</em>.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Statics</A></H2>
+<P>
+Since <em> analysis</em> is a key concept for us, we start with the class
+<em> Analysis</em>.  An instance of class <em> Analysis</em> is a repository for a
+particular analysis task.
+<P>
+When an <em> Analysis</em> instance is created, a <em> requirements</em>
+attribute must be initialized with information that has been ``chopped
+up'' into a sequence of ``bite-size'' fragments labeled <em> Text*</em>.
+Preferably, each <em> Text*</em> fragment embodies a single idea, in the
+form of a <em> Figure</em>, <em> Table</em>, or simple <em> Text</em>.
+<P>
+These requirements fragments are described as things to be elaborated.
+Elaboration of analysis fragments is the core notion that will be
+expanded when we address the dynamic dimension of these classes.
+<P>
+An <em> agenda</em> attribute registers the elaboration tasks still
+remaining for a particular analysis project.  This attribute will be
+initialized as a copy of the <em> requirements</em> attribute. During the
+course of analysis, it will be elaborated to include other instances
+of class <em> AComp</em> (Analysis Component).
+<P>
+An <em> instances</em> attribute refers to identified stable instances of
+classes, ensembles and relations. The corresponding classes and
+relations themselves are represented through attributes <em> classes</em>
+and <em> relations</em>.  Most other attributes are self explanatory. The
+associated classes will be further detailed as we proceed.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img4.gif"><P>
+<P>
+In order to establish trace links between the constituents of an
+analysis, we introduce the four classes <em> AComp</em>, <em>
+ACompL</em>, <em> ACompR</em>, and <em>
+ACompLR</em>.
+<P>
+The class <em> AComp</em> captures overall commonalities
+among <em> Text*</em>, <em> UseCase</em>, <em> SubSystem</em>, <em>
+AnalysisConcept</em>, <em> Class</em> and <em> Relation</em>.  We represent the
+traceability connections with the attributes <em> elaborates</em> and <em>
+elaboratedIn</em>.  Alternatively, we could have introduced a binary
+relationship <em> Elaborate</em>.
+<P>
+Most constituents have both backward and forward elaboration links.
+However the <em> requirements</em> captured in <em> Text*</em> do not have
+backward links, and a <em> Model</em>, which brings everything together,
+does not have any elaboration links.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img5.gif"><P>
+<P>
+Where:
+<DL ><DT><em> belongsTo</em>
+<DD> provides a backward
+    reference to the instance of <em> Analysis</em> to which this artifact
+    item belongs.
+<P>
+<DT><em> rationale</em>
+<DD> allows registration of why a particular
+    elaboration is chosen.
+<P>
+<DT><em> completed?</em>
+<DD> records whether the current component
+    is considered to be complete.
+<P>
+<DT><em> locked?</em>
+<DD> is superfluous for the task at hand,
+    but could  be used by a CASE tool to prevent contention
+    across multiple analysts.
+<P>
+ </DL>
+<P>
+Class <em> AComp</em> is refined into <em> ACompLR</em>
+via <em> ACompL</em> and <em> ACompR</em>.  Classes
+<em> ACompL</em> and <em> ACompR</em> differ only in
+whether they <em> must</em> have predecessors or successors.  This refinement
+captures the idea that <em> ACompL</em> instances must have
+predecessors, that <em> ACompR</em> instances must have successors,
+and that <em> ACompLR</em> instances must have both elaboration chains.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img6.gif"><P>
+<P>
+When we create an instance of <em> ACompLR</em> (and hence an
+instance of <em> ACompR</em>) we may not yet know what its
+successors will be.  Thus we must give its <em> elaboratedIn</em>
+attribute a dummy value and add this artifact onto the agenda to
+ascertain that this attribute will be filled in properly later.
+<P>
+<P>
+<P>
+The <em> requirements</em> (of class <em> Text*</em>) represent the start of
+the traceability chain:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img7.gif"><P>
+<P>
+An instance of the class <em> UseCase</em> describes in a pseudo-formal way a
+prototypical interaction sequence with a target system:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img8.gif"><P>
+<P>
+<P>
+<P>
+Where:
+<DL ><DT><em> actionList</em>
+<DD> describes a <em> UseCase</em> as a sequence of the form:<BR>
+<em>&lt;Event<sub>1</sub>, State<sub>1</sub>&gt; &lt;Event<sub>2</sub>, State<sub>2></sub>&gt; ... &lt;Event<sub>n</sub>, State<sub>n</sub>&gt;</em>
+
+<P>
+<DT><em> initState</em>
+<DD> provides a characterization of the
+    initial state of the interaction sequence.
+    An instance of <em> TextState</em> is text that explains a particular
+    external state of affairs in which someone/something can act, yielding an
+    instance of <em> TextEvent</em> upon which the system can act, which will
+    yield yet another instance of <em> TextState</em>.
+<P>
+ </DL>
+<P>
+The class <em> SubSystem</em> is used to introduce decompositions of the target
+system.  To simplify the situation, we call the target system itself a <em>
+SubSystem</em>.  Its parent attribute would simply be missing; this effect is
+achieved by exploiting the permitted zero multiplicity of the <em>
+parentSystem</em> attribute.  The setup of this multiplicity description
+permits a <em> SubSystem</em> to be a constituent of more than one subsystem.
+Whether this freedom is to be exploited or, alternatively, whether the
+subsystem hierarchy should be a tree is up to the analyst.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img10.gif"><P>
+<P>
+<P>
+<P>
+The <em> Text**</em> class  captures structured text to annotate a subsystem,
+much as we provided for annotations in the class <em> UseCase</em>.  We
+will use <em> Text**</em> in other classes as well.  To provide more
+guidance for annotations, we could define specialized versions of <em>
+Text**</em> that correspond to context-specific templates.
+<P>
+The <em> vocabulary</em> attribute in class <em> Analysis</em> is a set of
+<em> AnalysisConcept</em>s. The class <em> AnalysisConcept</em> captures the
+commonalities of, and is partitioned by, the classes <em> ACClass,
+ACEnsemble, ACRelationship, ACCI, ACEI</em> and <em> ACRI</em>.  <em>
+ACClass</em>, <em> ACEnsemble</em>, and <em> ACRelationship</em> provide
+structured but not yet formal descriptions of their respective
+classes, ensemble classes, and relationships.  <em> ACCI</em>, <em> ACEI</em>
+and <em> ACRI</em> capture the kinds of instances (<em> CI</em>, <em> RI</em>, and
+<em> EI</em>, respectively) in the realm of the target system. The
+inheritance structure of these classes exploits the fact that an
+ensemble has been conceptualized as a special instance.
+<P>
+The only work done inside <em> AnalysisConcept</em> is that eligible
+instances of the attribute value restrictions of <em> elaborates</em> and
+<em> elaboratedIn</em> are constrained:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img11.gif"><P>
+<P>
+<em> AnalysisConcept</em>s provide focused descriptions of the
+constituents of an analysis.  Of the six (indirect) subclasses of <em>
+AnalysisConcept</em>, we give the diagrammatic expansions of only <em>
+ACClass</em> and <em> ACCI</em>, along with the the associated class <em>
+Class</em>.  (The others follow similarly.) A class description in <em>
+ACClass</em> is captured textually in <em> Text**</em> and formally in a <em>
+Class</em>.  Distinguished <em> instances</em> are recorded as <em> ACCI</em>s.
+Class <em> ACCI</em> includes the attribute <em> instanceOf</em> providing an
+upward reference to the corresponding <em> ACClass</em>.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img12.gif"><P>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img13.gif"><P>
+<P>
+<P>
+<P>
+Note the similarity between class <em> Class</em> and the metaclass
+framework discussed in
+Chapter <A NAME=tex2html29 HREF="ch8.html">8</A>.<A NAME=546>&#160;</A><A NAME=547>&#160;</A>
+<P>
+The binary inheritance relationship between classes is absorbed in the
+<em> Class</em> attribute <em> parentClass</em>.  Alternatively, we could
+have used an <em> Inherit</em> relationship:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img14.gif"><P>
+<P>
+Elaboration of the other classes needed in class <em> Class</em> requires
+commitment to particular representations of class features.  A first
+approximation of the class <em> AttributeDescription</em> has the form:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img15.gif"><P>
+<P>
+Where:
+<DL ><DT><em> role</em>
+<DD> is either a descriptive name for the attribute
+or a reference to an attribute in a parent class that is made more
+specific.
+<DT><em> valueRestriction</em>
+<DD> is a description of a class from which
+instances can be attribute values or a description of non-object
+values.
+<DT><em> defaultValue</em>
+<DD> is the default value or a probability description of
+    attribute values.
+<DT><em> multiplicity</em>
+<DD> is a ``repetition count'' of the attribute.
+<DT><em> defaultMultiplicity</em>
+<DD> is a default count or a probability
+    description of the multiplicity feature.
+<DT><em> ValueDistribution</em>
+<DD>
+    is either a  set of pairs of
+    the form (value, probability) or a genuine probability distribution
+    function describing the distribution of values.
+<DT><em> MultiplicityDistribution</em>
+<DD>  similarly describes
+    the probability distribution of multiplicities.
+<P>
+ </DL>
+<P>
+Rather than digressing into other representational matters, we present
+the other <em> Class</em>-related classes only as brief sketches:
+<P>
+<DL ><DT><em> ConstraintDescription</em>
+<DD> represents constraints using
+    a formal characterization of a formal language such as the predicate
+    calculus.  In short, a constraint consists of an expression in
+    which attributes and optionally <em> self</em> occur as parameters.
+<P>
+<DT><em> TN</em>
+<DD>  represents transition networks.  Its main attributes are
+    <em> states</em> with domain <em> State</em>, and <em> transitions</em>, with
+    domain <em> Transition</em>.  Constraints should express that states
+    and guards in a <em> TN</em> are disjoint unless the class has
+    multiple <em> TN</em>s.
+<P>
+<DT><em> Transition</em>
+<DD> represents transitions within <em> TN</em>s.
+    The class has the attributes <em> fromState, toState, name, guard,
+    action</em>, and <em> event</em> among others.
+<P>
+<DT><em> State</em>
+<DD> represents states within <em> TN</em>s.
+    The class has attributes including a characteristic name and an
+    expression that refers to the value domains.  The expression
+    should demarcate a nonempty subset in the cartesian product
+    spanned by the value domains.
+<P>
+<DT><em> CI</em>
+<DD> represents class instances in terms of attribute
+    values, etc., based on the above representations.
+<P>
+ </DL>
+<P>
+All the components of the analysis are used for the construction of a
+model.  Instances and classes are specialized, if necessary, to
+express object interaction commitments.  A model consists of a set of
+instances corresponding to stable objects, and a set of classes and
+relationships that act as generators for transient entities:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img16.gif"><P>
+<P>
+The attributes in the class <em> Model</em> suggest that we do not use
+classes, relationships, etc., as is, but instead use refined or
+specialized versions.  This is a consequence of our philosophy that
+the classes, relationships, etc., originally developed should be
+generalized, as if they were the result of a domain analysis.  Then
+they must be specialized to fit the needs of an intended system.  We
+elaborate on the nature of these specializations while discussing the
+dynamic view.
+<P>
+<H2><A NAME=SECTION00033000000000000000> Dynamics</A></H2>
+<P>
+We will present some fragments of the transition networks associated
+with these classes.  Every analysis activity starts by selecting an
+item from the <em> agenda</em> attribute inside an instance of <em>
+Analysis</em>.  A random choice from this agenda would be:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img17.gif"><P>
+<P>
+(For simplicity, we ignore empty agendas, and temporarily ignore
+check-out operations on selected agenda elements.)
+<P>
+The agenda selection operation may be refined in several ways.  At a
+minimum, random selection could be replaced with mechanisms allowing
+the analyst to select which tasks to pick from the agenda.  Other
+policies may be supported by making certain tasks ``invisible'' and/or
+only accessible in particular ways. For example:
+<P>
+<UL><LI> A top-down approach for the treatment of subsystems and
+    ensembles would require that these be elaborated first.
+  <LI> A reuse policy might require searching for relevant analysis
+    artifacts in a domain-specific library before an analyst addresses a
+    particular task.
+</UL>
+<P>
+For the class <em> AComp</em> we can set up the following minimal
+transition network:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img18.gif"><P>
+<P>
+The <em> checkOut</em> transition can be triggered by the <em>
+selectAgendaItem</em> transition inside <em> Analysis</em>. Alternatively, it
+can be invoked as a client-server operation in the action part of <em>
+selectAgendaItem</em>.  The guard in <em> checkOut</em> can depend on whether
+an instance of <em> AComp</em> has its <em> locked?</em> attribute
+set; if not, it can be set in the action part.  This transition
+network may be extended in the (indirect) subclasses of <em>
+AComp</em>.  For example, the class <em> ACompR</em> may
+support transition:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img19.gif"><P>
+<P>
+The expression <em> create-instance-vr(ElaboratedIn)</em> creates an
+instance of the value restriction of the attribute <em> elaboratedIn</em>.
+Inside the class <em> ACompR</em> the value restriction is the
+class <em> ACompL</em>, but for an instance of <em> UseCase</em> we
+would obtain an instance of <em> AnalysisConcept</em>.
+<P>
+The newly created instance should also be added to the value
+restriction of the attribute <em> elaboratedIn</em>.  The instance construction
+operation should additionally be extended in order to initialize
+attributes.  For example, the <em> elaborates</em> attribute can be given
+as its value the identity of the object that instigates its creation.
+<P>
+We can extend this transition network further for subclasses of <em>
+AnalysisConcept</em>.  For example, in the class <em> UseCase</em> we can
+introduce transitions that set the values of the attributes <em>
+initState</em> and <em> actionList</em> via interaction with an analyst:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch12-img20.gif"><P>
+<P>
+Although an analyst would have to take the initiative to select such a
+transition, the transition could help the analyst by displaying
+templates identifying  the information to be provided by the analyst.
+These templates would be defined by the attributes in <em> UseCase</em>.
+<P>
+Most of the transition networks for other classes can be patterned
+similarly.  For example, a transition network for <em> Class</em> should
+have a transition that helps the analyst fill in attribute values.
+The backward elaboration pointers give access to the relevant semantic
+information.  The value domain of such an attribute helps to define an
+acquisition template.
+<P>
+An exception is the transition network for the class <em> Model</em>.  In
+a sense, we need all the power of the OOA process inside a <em> Model</em>
+since we have to customize classes to join their interaction patterns
+together.  While a generic class can specify a communication
+unilaterally via an event, a prototypical instance of a specialized
+class should be equipped with the knowledge of its communication
+partners.  Either we must introduce acquaintance relationship
+instances and provide ``hooks'' inside objects that consult such
+relationship instances to figure out what the communication partners
+are, or we must bypass the indirection of acquaintance relationships
+and ``hard-wire'' knowledge of the communication partner inside the
+objects.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Alternative Processes</A></H2></center>
+<P>
+<A NAME=secalternproc>&#160;</A>
+<A NAME=755>&#160;</A>
+<P>
+To place this version of the analysis process in perspective, we sketch
+the analysis procedures proposed by some other methodologists.
+<P>
+Gibson gives the five steps of Object Behavior Analysis (OBA)  [<A HREF="#gibson">7</A>]
+as follows:<A NAME=757>&#160;</A>
+<P>
+<OL><LI> Understand the application; identify behaviors.
+<LI> Derive objects using the behavioral perspective.
+<LI> Start classifying objects.
+<LI> Identify relationships among objects.
+<LI> Model processes.
+</OL>
+<P>
+Ignoring the preliminary aspects of step (1) we can plot these steps
+in our table:
+<P>
+
+<table border=5>
+<tr><td>
+</td><td><b> inside object </b> </td><td> <b>between objects</b> </td></tr><tr><td>
+
+<b>static</b> </td><td> Derive objects (2)      </td><td> Classify objects (3)<br> Identify relations (4) </td></tr><tr><td>
+<b>dynamic</b> </td><td> Identify behavior (1) </td><td> Model processes (5) </td></tr>
+</table>
+
+<P>
+In contrast, the OOA method of Shlaer et al [<A HREF="#sm">12</A>,<A HREF="#sm2">14</A>] and the OSA
+method of Embley et al [<A HREF="#kurtz">4</A>] move from left to right first in
+the top row and then in the bottom row, although the vertical
+separation is less apparent in [<A HREF="#kurtz">4</A>].  A similar route is
+followed by Coad and Yourdan [<A HREF="#CoadYourdan">3</A>]:
+<P>
+<blockquote> Rather than jumping right into a study of functions and sequencing, the OOA
+analyst first focuses on Objects, Structures, Attributes (and Instance
+Connections) -- and then finally gets around to a consideration of Services
+(and Message Connections).
+</blockquote>
+<P>
+The OMT<A NAME=773>&#160;</A> method of Rumbaugh et al [<A HREF="#rumbaugh">11</A>] describes
+a quite elaborate sequence of steps. Still, interpretations of each
+can be seen in the process described in this chapter:<BR>
+<P>
+Object Modeling
+<UL><LI> Identify objects and classes.
+<LI> Prepare a data dictionary.
+<LI> Identify associations (including aggregations) between objects.
+<LI> Identify attributes of objects and links.
+<LI> Organize and simplify object classes using inheritance.
+<LI> Verify that access paths exist for likely queries.
+<LI> Iterate and refine the model.
+<LI> Group classes into modules.
+</UL>
+<P>
+Dynamic Modeling
+<UL><LI> Prepare scenarios of typical interaction sequences.
+<LI> Identify events between objects.
+<LI> Prepare an event trace for each scenario.
+<LI> Build state diagrams.
+<LI> Match events between objects to verify consistency.
+</UL>
+<P>
+Functional Modeling
+<UL><LI> Identify input and output values.
+<LI> Build data flow diagrams showing functional dependency.
+<LI> Describe functions.
+<LI> Identify constraints.
+<LI> Specify optimization criteria.
+</UL>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00050000000000000000> Tools</A></H2></center>
+ <A NAME=782>&#160;</A><A NAME=783>&#160;</A>
+<P>
+Analysis tools may be classified along several dimensions:
+<DL ><DT>Tool integration.
+<DD> Is the tool a stand-alone point tool or is it
+(potentially) integrated in a set of tools that covers the life cycle?
+<DT>Data integration.
+<DD> Are the artifacts produced by a customer stored in a
+proprietary database or in a format that is compatible with  emerging
+standards?
+<DT>Control integration.
+<DD> Is the tool able to generate events to be picked
+up by other tools? Dually is the tool able to respond to events
+generated by other tools?
+<P>
+<DT>Team support.
+<DD> Does the tool support only a single user or are the
+proper hooks in place to support teams?
+<P>
+<DT>Minimality.
+<DD> Is the tool extensible?  Is the tool customizable?  Does
+the tool support capturing metrics?  Does the tool have the flexibility to
+support and guide novices but at the same time does not impede experts?
+Does the tool support the (OOA) process in the multiple interpretations
+outlined in Section <A HREF="#sectswdp">1</A>?
+<P>
+<DT>Interface.
+<DD> Can the user interface be adjusted to provide a
+consistent appearance with other tools?
+<P>
+ </DL>
+<P>
+This shopping list is daunting, as has been observed by Humphrey
+[<A HREF="#humphrey">8</A>]: ``Such comprehensive environments will likely be very
+large, possibly rivaling or even surpassing the largest operating
+systems.''
+<P>
+There are not as yet many tools that support OO analysis
+(although surprisingly many vendors claim their tools to be in some
+ill-specified sense OO-ish).  Cadre has a product that implements the
+OOA method of Shlaer and Mellor
+[<A HREF="#sm">12</A>,<A HREF="#sm4">13</A>].  Rational has a product called ROSE that implements the
+method of Booch [<A HREF="#boochbook">2</A>].  This tool supports analysis as well
+as design.  Hewlett-Packard has developed an in house prototype of
+Embley's et al [<A HREF="#kurtz">4</A>] OSA<A NAME=791>&#160;</A>.  The companies MarkV and
+ProtoSoft have developed meta-tools providing generic support for
+classes, relationships, transition diagrams, interaction diagrams,
+etc.  These are highly parameterized so that the notions and graphical
+representations of ``any'' method can be emulated.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00060000000000000000> Summary</A></H2></center>
+<P>
+A software development process is guided by broad scenarios,
+particular plans, and situation-dependent factors. A generic
+recommended scenario for the OO analysis phase includes default
+steps:
+<P>
+<OL><LI> Obtain ``complete'' requirements.
+<LI> Describe system-context interaction.
+<LI> Delineate subsystems.
+<LI> Develop vocabulary by identifying instances with their
+      classes, ensembles and relationships.
+<LI> Elaborate classes and relationships by defining their generic
+      static structure and describing their generic dynamic dimension.
+<LI> Construct a model in which the dynamics of objects are wired together.
+</OL>
+<P>
+``Flow of control'' in this space is uncommitted.  Thus whether
+breadth-first descending or vertical slicing is done depends on the
+features of a particular task and the prescription of a risk analysis.
+<P>
+We illustrated this analysis process by applying it to itself, and
+
+also in Chapter <A NAME=tex2html38 HREF="ch10.html">10</A> where we applied it to
+the construction of an ATM system.
+<P>
+<H2><A NAME=SECTION00061000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> The classes <em> Class, Ensemble, Relationship, CI, EI,</em> and
+<em> RI</em> share the property that the <em> elaborates</em> attribute is
+single-valued.  They share as well that the <em> elaboratedIn</em>
+attribute is absent.  Introduce an abstract class that factors out
+this commonality and integrate this class in the other classes.  Hunt
+for other opportunities for abstraction.
+<P>
+<LI> Expand the undefined and underdefined classes in the OOA process
+model, including those indicated by summations.
+<P>
+</OL><BR>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=bc><STRONG>1</STRONG></A><DD>
+K. Beck and W. Cunningham.
+ A laboratory for teaching object-oriented thinking.
+ In <em> OOPSLA '89</em>. ACM, 1989.
+<P>
+<DT><A NAME=boochbook><STRONG>2</STRONG></A><DD>
+G. Booch.
+ <em> Object Oriented Design with Applications</em>.
+ Benjamin/Cummings, 1990.
+<P>
+<DT><A NAME=CoadYourdan><STRONG>3</STRONG></A><DD>
+P. Coad and E. Yourdon.
+ <em> Object-Oriented Analysis</em>.
+ Yourdon Press / Prentice-Hall, 1990.
+<P>
+<DT><A NAME=kurtz><STRONG>4</STRONG></A><DD>
+D.W. Embley, B. Kurtz, and S.N. Woodfield.
+ <em> Object-Oriented Systems Analysis</em>.
+ Yourdon Press/Prentice Hall, 1992.
+<P>
+<DT><A NAME=feller><STRONG>5</STRONG></A><DD>
+P.H. Feller and W.S. Humphrey.
+ Software process development and enactment: Concepts and definitions.
+ Technical report, Software Engineering Institute, January 1992.
+<P>
+<DT><A NAME=firesmith><STRONG>6</STRONG></A><DD>
+D.G. Firesmith.
+ Identification and classification guidelines for objects, classes and
+  subassemblies.
+ In <em> Identification Working Group, OOPSLA '91</em>, 1991.
+<P>
+<DT><A NAME=gibson><STRONG>7</STRONG></A><DD>
+E. Gibson.
+ Objects - born and bred.
+ <em> BYTE</em>, October 1990.
+<P>
+<DT><A NAME=humphrey><STRONG>8</STRONG></A><DD>
+W.S. Humphrey.
+ <em> Managing the Software Process</em>.
+ Addison-Wesley, 1990.
+<P>
+<DT><A NAME=rmfcas><STRONG>9</STRONG></A><DD>
+NIST.
+ <em> Reference Model for Frameworks of Software Engineering
+  Environments</em>.
+ National Institute of Standards and Technology, December 1991.
+<P>
+<DT><A NAME=swpw><STRONG>10</STRONG></A><DD>
+Rocky Mountain Institute of Software Engineering.
+ <em> Seventh International Software Process Workshop</em>.
+ Rocky Mountain Institute of Software Engineering, 1991.
+<P>
+<DT><A NAME=rumbaugh><STRONG>11</STRONG></A><DD>
+J. Rumbaugh, M. Blaha, W. Premerlani, F. Eddy, and W. Lorensen.
+ <em> Object-Oriented Modeling and Design</em>.
+ Prentice Hall, 1991.
+<P>
+<DT><A NAME=sm><STRONG>12</STRONG></A><DD>
+S. Shlaer and S.J. Mellor.
+ <em> Object-Oriented Systems Analysis</em>.
+ Yourdon Press, 1988.
+<P>
+<DT><A NAME=sm4><STRONG>13</STRONG></A><DD>
+S. Shlaer and S.J. Mellor.
+ <em> Object Life Cycles: Modeling the World in States</em>.
+ Yourdon Press, 1991.
+<P>
+<DT><A NAME=sm2><STRONG>14</STRONG></A><DD>
+S. Shlaer, D. Ohlsen S.J. Mellor, and W. Hywari.
+ The object-oriented method for analysis.
+ In <em> 10th Structured Development Forum (SDF-X)</em>, 1988.
+<P>
+<DT><A NAME=wardp><STRONG>15</STRONG></A><DD>
+P.T. Ward and J.W. Brackett.
+ Object-oriented requirements definition and software.
+ <em> NTU Satellite Network Broadcast</em>, November 1991.
+</DL>
+<P>
+
+<a href="ch13.html">Next: Chapter 13</a>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:50:45 EDT 1995</I>
+</ADDRESS>
+</BODY>

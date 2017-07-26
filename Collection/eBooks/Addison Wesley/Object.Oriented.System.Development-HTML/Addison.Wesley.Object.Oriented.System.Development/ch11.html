@@ -1,0 +1,389 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Other Requirements</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Other Requirements">
+<meta name="keywords" value="ch11">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 11: Other Requirements</h2>
+
+
+<UL>
+<LI> <A NAME=tex2html22 HREF="#SECTION00010000000000000000"> Resources</A>
+<LI> <A NAME=tex2html23 HREF="#SECTION00020000000000000000"> Timing</A>
+<LI> <A NAME=tex2html24 HREF="#SECTION00030000000000000000"> Other Constraints</A>
+<LI> <A NAME=tex2html25 HREF="#SECTION00040000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+<p>
+The notions and notations developed thus far aim at capturing the
+intended functionality of the target system.  We have used
+``functionality'' in a narrow sense, excluding performance
+specifications, resource specifications, etc.  For instance, we can
+describe the functionality of a subsystem only by stating that it
+performs a <em> sort</em> operation, while omitting a commitment regarding
+the resources, the number of compute servers, the performance, upper
+bounds on processing times, etc.  In this chapter, we discuss the
+treatment of these so-called ``non-functional requirements''.
+<A NAME=10>&#160;</A><A NAME=11>&#160;</A>
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Resources</A></H2></center>
+<A NAME=13>&#160;</A>
+<A NAME=14>&#160;</A>
+<P>
+Resource constraints refer to the resources that are available to the
+executing target system. They do not refer to constraints that might
+apply to the <em> development</em> effort of that system.
+<P>
+There are many kinds of constraints, ranging from number and type of
+underlying compute servers, availability and capabilities of primary
+and secondary storage, accessibility of networks and their
+capabilities, and on up to the assumed nature of system infrastructure
+software.
+<P>
+All these constraints pass right through from the initial requirements
+phase to the design phase.  For example, compute server constraints
+are explicitly addressed during the design phase.  Other existing
+resource constraints must be satisfied somewhere and sometime during
+design and/or implementation.
+<P>
+However, it is possible that details brought out by the analysis yield
+the insight that there is a mismatch between resources that will be
+available to the target system and the demands of the system. Having
+too many available resources can be dealt with easily, but is unusual.
+Having not enough resources requires backtracking and resolution at
+the level of the requirements specifications.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Timing</A></H2></center>
+<P>
+<A NAME=sectimconst>&#160;</A>
+<P>
+<A NAME=18>&#160;</A><A NAME=19>&#160;</A><A NAME=20>&#160;</A>
+<A NAME=21>&#160;</A>
+<P>
+Timing constraints are usually referred to as <em> real-time</em>
+constraints.  A timing constraint can be formulated for phenomena at
+the system-context boundary.  Here are some examples:
+<P>
+<OL><LI> A dial tone must be produced within 0.2 seconds after the phone has
+been taken of the hook.
+<LI> After a customer has inserted an ATM card in an ATM, the customer must
+     be prompted  for the PIN within 0.5 seconds.
+<LI> When a customer has not responded within 30 seconds with a PIN, a
+reminder is displayed.  The session is terminated when the customer has not
+responded within 45 seconds after the display of the reminder.
+<LI> The card number -- PIN combination is to be validated within 5
+seconds.
+<LI> After the XYZ subsystem is turned off, the pump will continue until
+the temperature drops, but for no longer than 5 minutes.
+</OL>
+<P>
+We may classify these constraints into two categories (cf.,
+[<A HREF="#davis">2</A>]):
+<DL ><DT><b> Performance:</b>
+<DD><A NAME=28>&#160;</A> Certain actions executed
+    by the system as a response to a stimulus from the outside, must be
+    completed within a certain time window. Items 1, 2, and 4
+    in the preceding list are examples of performance constraints.
+<DT><b> Alertness:</b>
+<DD><A NAME=30>&#160;</A> The system (or a component)
+    should resume control when an external agent (for instance another system)
+    does not respond/reply within a certain amount of time. Items
+    3 and 5 in the list are alertness constraints.
+<P>
+ </DL>
+<P>
+If we look at the system and its context from a bird's-eye view, we see
+that performance and alertness timing constraints reduce to the same
+notion.  When the system does not satisfy a performance requirement, the
+context will be alerted and will take appropriate actions.  Dually, when
+the context does not perform from the system's perspective, a system's
+alertness mechanism must jump in.
+<P>
+System-context interaction speed is also subject to performance-based
+timing constraints.
+For example:
+<OL><LI> Events in a stream are separated by at least 0.03 seconds.
+<P>
+This constraint indicates that a recipient of the event stream has a
+lower bound on its ability to process the events, and thus that the
+generator must not be too <em> fast</em>.  This illustrates that lower
+bounds on time windows sometimes have to be specified.
+<P>
+<LI> Continuous one-way reliable data exchange must be at
+least 3 gigabits per second.
+<P>
+This expresses a performance constraint for both parties in an
+interaction.
+</OL>
+<P>
+Timing constraints are formulated for the demands of a particular system.
+This prescribes that notations for capturing these constraints should be
+adjoined to target system specific notions.
+<P>
+<A NAME=35>&#160;</A>
+<P>
+<H2><A NAME=SECTION00021000000000000000> Annotating Use Cases</A></H2>
+<P>
+Use cases are obvious candidates for timing constraint annotations.
+For example, we can annotate a modified fragment of a use case from
+the previous chapter. The notation {<em> x}</em> denotes a state of affairs
+at time <em> x</em>.
+<P>
+<UL><LI> Customer puts card into ATM card slot {<em> a</em>}.  The ATM will read the
+magnetic strip. The next step occurs when the strip can be read.
+<P>
+<LI> Customer is prompted for PIN number {<em> b</em>};<BR>
+    <em> b</em> - <em> a</em> &lt;= <em> 0.1s</em>.
+<P>
+<LI> Customer enters 4-digit PIN number {<em> c</em>};<BR>
+    <em> c</em> - <em> b</em> &lt;= <em> 1m</em>.
+<P>
+<LI> Card verified and presentation of main menu {<em> d</em>};<BR>
+    <em> d</em> - <em> c</em> &lt;= 0.1s.
+<P>
+<LI> ...
+</UL><H2><A NAME=SECTION00022000000000000000> Annotating Transitions</A></H2>
+<P>
+Timing constraints described in use cases must be propagated into
+transition networks.  However, to keep separate reusable generic
+classes and their transition networks from target system-specific
+classes and their transition networks, we must extend only the latter.
+<P>
+Let's have a closer look at a simple version of a telephone use case called
+<em> PhoneSession</em> from a switch control perspective.  A corresponding
+transition network fragment is depicted in tabular
+notation:<A NAME=55>&#160;</A>
+<P>
+<table border=5>
+<tr><td>
+<b>init state</b> </td><td>              <b>action</b> </td><td>                <b>result state</b> </td></tr><tr><td>
+
+phone on hook </td><td>           take phone off hook </td><td>   phone off hook </td></tr><tr><td>
+
+phone off hook </td><td>          provide dial tone </td><td>     dial tone </td></tr><tr><td>
+
+dial tone </td><td>               process digit </td><td>         wait for next digit </td></tr><tr><td>
+
+wait for next digit </td><td>     process digit </td><td>         wait for next digit </td></tr>
+
+</table>
+
+
+<P>
+We may want to express the requirement that the transition <em>
+provide dial tone</em> should take at most 0.2 seconds.  This is an
+example of a performance constraint.  To be more precise, we put a
+bound on the time that can expire between leaving the <em> phone off
+hook</em> state and entering the <em> dial tone</em> state.  This transition
+may imply interaction with third-party objects, which in turn may
+trigger other activities; nonetheless, the transition has to reach its
+goal state in 0.2 seconds.  We could use the following notation (where <em>
+poh</em> stands for <em> phone off hook</em>, and <em> dt</em> for <em> dial
+tone</em>):<A NAME=68>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch11-img2.gif"><P>
+<P>
+As an alternative notation, we may attach time labels to the arcs
+leaving and entering states, and then capture the same constraint
+using an expression that refers to the labels:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch11-img3.gif"><P>
+<P>
+<H2><A NAME=SECTION00023000000000000000> Annotating Transition Sequences</A></H2>
+<P>
+The second notation scales up when we need to put a bound on a
+sequence of transitions.  Consider an initialization transition
+network that contains, for example, two variant sequences:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch11-img4.gif"><P><H2><A NAME=SECTION00024000000000000000> Annotating States</A></H2>
+<P>
+The guards of the <em> process digit</em> transitions depend on the occurrence of
+an external event, namely, a customer selecting a (next) digit.  We want to
+provide for a time-out when the customer does not come up with a (next)
+digit.  This is an example of an alertness constraint. A
+bound should be placed on waiting in the originating states of these
+transitions.  For instance, a customer may be required to select
+the first digit within a minute, and each subsequent digit within 10 seconds
+(<em> dt</em> stands again for <em> dial tone</em>, <em> wfnd</em> stands for <em> wait
+for next digit</em>):
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch11-img5.gif"><P>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch11-img6.gif"><P>
+<P>
+Timing constraints within the states specify that associated guards (which
+depend on events that describe the arrival of a digit) should be
+satisfied within a certain time window.
+(These diagrams are oversimplified in that a last digit of a number is
+recognized through a time-out and that special short phone numbers are
+not recognized.)
+<P>
+Timing constraints within states are not necessarily associated with
+outbound transitions that depend on events.  For example, we can have
+an object <em> m</em> that monitors an aspect of object <em> p</em>, where a guard in
+a transition in the network of <em> m</em> refers to the state of affairs of
+<em> p</em>.  When the condition in the guard is not satisfied for too long a
+period, a time-out transition takes over.  More specifically, consider
+a power plant that operates according to its own logic.  To improve
+the safety of the plant, we can have a monitor object <em> m</em> that watches
+over sensor <em> p</em> readings.  Normal functioning of the sensor <em> p</em> would
+entail that monitor <em> m</em> make a transition within a particular time
+frame.  If not, a time-out transition springs into action.
+<P>
+For another example, we revisit a fragment of the transition
+network of an ATM given in Chapter <A NAME=tex2html16 HREF="ch6.html">6</A>:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch11-img7.gif"><P>
+<P>
+Recall that the <em> Idle</em> -- <em> S1</em> transition has been modeled in
+Chapter <A NAME=tex2html17 HREF="ch10.html">10</A> to generate an event targeted at the
+<em> ATMOutput</em> constituent.  The <em> atm</em> ensemble expects to obtain
+from its <em> ATMInput</em> constituent a PIN in its <em> S1</em> -- <em> S2</em>
+Read PIN transition as detailed in Chapter <A NAME=tex2html18 HREF="ch6.html">6</A>.
+<P>
+Suppose that the requirements document specifies that the customer must
+provide the PIN within a certain time span.  This requirement can be
+accounted for by adding another time-out transition from <em> S1</em> to
+<em> Fnshd</em>. This parallels the <em> Can't read strip</em> transition
+and depends on a time limit in <em> S1</em>:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch11-img8.gif"><P><H2><A NAME=SECTION00025000000000000000> Constraint Failures</A></H2>
+<P>
+We began  by extending a sequential use case with timing
+annotations.  These extensions exposed the incompleteness of the use
+case since no remedial actions have been specified when time
+constraints are violated.  This is acceptable for the specification of
+user-system interaction, but needs remedial action when ``closing off''
+the requirements.  One may want to be specific about how badly the
+system behaves when a timing constraint is not met, taking into
+account total breakdown versus gradual degradation and everything in
+between.
+<P>
+Constraints may be annotated with some indication of the consequences
+of failure. For ease of use, these constraints and consequences may be
+organized into general categories. For example, Jacobson et al
+[<A HREF="#jacobson">4</A>] provide several classifications of constraints in
+real-time systems.  A distinction is made between <em> hard</em> deadlines
+and <em> soft</em> deadlines.  Not meeting a hard deadline results in a
+disaster.  An example is a control system for an aerodynamically
+unstable plane.  Not meeting a soft deadline results in a degradation
+of service.  A slowly responding ATM is an example.  They also make
+the distinction between critical, noncritical, and nonessential
+services.  Critical services have hard deadlines.  Noncritical and
+nonessential services both have soft deadlines.  They differ in that
+a ``nonessential process may miss its deadlines without any effect in
+the near future, but may have an effect in the long term if not
+executed (for example, maintenance and bookkeeping functions).''
+<P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Other Constraints</A></H2>
+<P>
+Boehm [<A HREF="#boehm">1</A>] (see also Davis [<A HREF="#davis">2</A>], chapter 5) mentions
+the following categories of other constraints: portability,
+reliability, efficiency, human engineering, testability,
+understandability, modifiability.  These are refined into fifteen
+subcategories including self-containedness, robustness, integrity,
+and conciseness.  We have nothing to add here at the level of
+analysis, but do address associated design criteria in
+Chapter <A NAME=tex2html19 HREF="ch15.html">15</A>.
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Summary</A></H2></center>
+<P>
+Many non-functional requirements pass through analysis and are
+input to the design and/or the implementation phases.
+<P>
+Timing requirements may be classified into <em> performance</em> and <em>
+alertness</em> constraints.  A performance constraint indicates that a
+certain operation by the system is to be completed in a certain time
+window.  An alertness constraint indicates that a system should resume
+control when an external event does not occur within a certain time
+window.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Further Reading</A></H2>
+<P>
+Jacobson et al [<A HREF="#jacobson">4</A>] further categorize time constraints in
+real-time systems, including for example, those between periodic
+and aperiodic processes.
+<P>
+Hoogeboom and Halang [<A HREF="#hoogeboom">3</A>] argue that time should play a more
+explicit role in analysis and development.  They propose that
+processors be equipped with radio receivers to replace the
+notion of local time by the ``awareness'' of global time.  They also
+propose that tasks be scheduled in the same way as done in our society,
+using reservations for time slots, priorities, etc.  It is hard to
+disagree with the advantages they list:
+<UL><LI> More problem oriented, since the problem is stated in terms of time.
+Therefore, it reflects the user's way of thinking.
+<P>
+<LI> Enhanced predictability.  No unpredictable waiting periods due to
+delay statements of synchronization operations.
+<P>
+<LI> Improved dependability by checking and early conflict resolution.
+<P>
+<LI> Synchronization and scheduling are treated within the same framework.
+</UL><H2><A NAME=SECTION00042000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> We have equipped an <em> atm</em> ensemble with a <em> dispenser</em>
+constituent.  Assume that the requirements document specifies that the
+customer has to take dispensed bills within <em> y</em> seconds.  Otherwise, the
+<em> dispenser</em> will reabsorb these bills and generate an appropriate
+alert.  Model a <em> dispenser</em> and its transition network in enough detail
+to capture this functionality.
+<P>
+<LI> Model a pump subsystem in which, when the subsystem is turned off,
+the pump will continue until the temperature drops to a threshold,
+but for no longer than 5 minutes.
+<P>
+</OL>
+<P>
+
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=boehm><STRONG>1</STRONG></A><DD>
+B. Boehm.
+ Quantitative evaluation of software quality.
+ In <em> Second IEEE International Conference on Software
+  Engineering</em>. IEEE Computer Society Press, 1976.
+<P>
+<DT><A NAME=davis><STRONG>2</STRONG></A><DD>
+A.M. Davis.
+ <em> Software Requirements, Analysis and Specification</em>.
+ Prentice-Hall, 1990.
+<P>
+<DT><A NAME=hoogeboom><STRONG>3</STRONG></A><DD>
+B. Hoogeboom and W.A. Halang.
+ The concept of time in software engineering for real time systems.
+ In <em> Third International Conference on Software Engineering for
+  Real Time Systems</em>, 1991.
+<P>
+<DT><A NAME=jacobson><STRONG>4</STRONG></A><DD>
+I. Jacobson, M. Christerson, P. Jonsson, and G. Overgaard.
+ <em> Object-Oriented Software Engineering</em>.
+ Addison-Wesley, 1992.
+</DL>
+<P>
+
+<a href="ch12.html">Next: Chapter 12</a>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:49:48 EDT 1995</I>
+</ADDRESS>
+</BODY>

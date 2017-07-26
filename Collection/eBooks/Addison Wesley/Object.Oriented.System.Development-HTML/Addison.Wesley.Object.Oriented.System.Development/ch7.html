@@ -1,0 +1,880 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Class Relationships</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Class Relationships">
+<meta name="keywords" value="ch7">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+
+<h2>Chapter 7: Class Relationships</h2>
+<UL>
+<LI> <A NAME=tex2html57 HREF="#SECTION00010000000000000000"> Property Inheritance</A>
+<LI> <A NAME=tex2html58 HREF="#SECTION00020000000000000000"> Subclasses</A>
+<LI> <A NAME=tex2html59 HREF="#SECTION00030000000000000000"> Multiple Inheritance</A>
+<LI> <A NAME=tex2html60 HREF="#SECTION00040000000000000000"> Sibling Relationships</A>
+<LI> <A NAME=tex2html61 HREF="#SECTION00050000000000000000"> Set Operations</A>
+<LI> <A NAME=tex2html62 HREF="#SECTION00060000000000000000"> Inheritance of Relations</A>
+<LI> <A NAME=tex2html63 HREF="#SECTION00070000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+<P>
+Inheritance is a core concept of the object-oriented paradigm, emerging
+in two basic contexts, abstraction and reuse.
+<P>
+<H3><A NAME=SECTION00000100000000000000> Abstraction</A></H3>
+<P>
+First, one may recognize that two constructs <em> A</em> and <em> B</em> have
+something in common.  To avoid having to deal twice with this shared
+aspect, one may create a construct <em> C</em> that captures the commonality,
+remove this commonality from <em> A</em> and <em> B</em> and restore it in <em> A</em> and <em> B</em>
+by letting them inherit from <em> C</em>.  Consider <em> Apple</em>s, <em> Pear</em>s,
+and <em> Orange</em>s.  It may pay off to introduce the notion of <em>
+Fruit</em> and factor out in <em> Fruit</em> the commonalities of apples,
+pears, and oranges.  Similarly, it may pay off to introduce the class
+<em> Account</em> to capture the commonalities in <em> CheckingAccount</em>,
+<em> SavingsAccount</em>, <em> BusinessAccount</em>, etc.  Hierarchical
+abstraction of common features contributes to the overall human
+understanding of the objects and classes comprising a system.
+<P>
+<H3><A NAME=SECTION00000200000000000000> Reuse and Specialization</A></H3>
+<P>
+A second reason for using inheritance can arise during model
+construction.  During the construction of, say, class <em> D</em>, one
+may recognize that a desired feature of <em> D</em> has been developed already
+and is available in, say, class <em> E</em>.  Instead of reconstructing this feature,
+one establishes a directed inheritance link between <em> D</em> and <em> E</em>.
+The more specialized class <em> D</em> reuses all features of <em> E</em>.  In the
+programming realm, this is sometimes known as ``programming by
+differences''.
+<P>
+
+
+<center><H2><A NAME=SECTION00010000000000000000> Property Inheritance</A></H2></center>
+<P>
+
+<A NAME=37>&#160;</A><A NAME=38>&#160;</A> <A NAME=39>&#160;</A>
+<P>
+The notions subject to inheritance in an analysis, a design, and an
+implementation are respectively properties, computation, and code.
+Since classes are not described through code in the analysis phase, we
+have a more abstract notion of inheritance than seen in OO
+programming, <em> property inheritance</em>.
+
+Properties consist of declarative class features and associated
+constraints.  (We consider only <em> explicit</em> features and
+constraints ruling out features, values, etc.)
+
+Property inheritance is in
+fact the foundation for inheritance at the design and implementation
+level (see Chapter <A NAME=tex2html7 HREF="ch16.html">16</A>).<A NAME=44>&#160;</A>
+<P>
+Property inheritance is a relation between a <em> subclass</em> and a <em>
+
+<P>
+superclass</em>.
+Class <em> Q</em> is a subclass of superclass P when every attribute, constraint,
+and transition network of <em> P</em> is also an attribute, constraint and
+transition network of <em> Q</em> and wherever <em> P</em> participates in a
+relationship <em> Q</em> does as well.
+Additionally, the subclass <em> Q</em> is
+
+``stronger'' than <em> P</em>.  Instances of <em> Q</em> have all the definitional
+properties defined in class <em> P</em>, but are also constrained by at least
+one additional definitional feature.  Thus, the family of instances of
+<em> Q</em> is a subfamily of the instances of <em> P</em>. In more detail:
+
+<P>
+
+<DL ><DT><b> Attributes:</b>
+<DD> If all instances of <em> P</em> possess attribute <em> a</em>,
+    then so do all instances of <em> Q</em>. All features and constraints
+    applying to <em> a</em> in <em> P</em> also apply to <em> a</em> in <em> Q</em>.
+<P>
+<DT><b> Relationships:</b>
+<DD> If there is a relationship between
+    <em> P</em> and a class <em> R</em>, then there is
+    a relationship between <em> Q</em> and <em> R</em> as well.  If this relationship is
+    functional and all of <em> P</em> is in the domain of the relationship, then
+    for every instance <em> q</em> in <em> Q</em> there is an associated instance <em> r</em> in
+    <em> R</em>.
+<P>
+<DT><b> Transitions:</b>
+<DD> If the behavior of <em> P</em> is described by a
+    transition network with state <em> S</em> and transition <em> T</em>, then
+    <em> Q</em> has state <em> S</em> and transition <em> T</em> as well.
+<P>
+<DT><b> Interactions:</b>
+<DD> If instances of <em> P</em> may interact with,
+    accept event input data describing, and/or generate output
+    event data describing instances of a class <em> R</em>, then so may
+    instances of <em> Q</em>.
+<P>
+ </DL>
+
+<P>
+All classes may be considered to be subclasses of a common base.  We
+consider class <em> Any</em> to describe any object. It thus serves as the
+root of any inheritance hierarchy. The class defines no attributes or
+transitions.<A NAME=90>&#160;</A> <em> Any</em> is an example of a class that is
+not directly (deterministically) instantiable. No object is a member
+only of class <em> Any</em>, but instead of one of its subclasses (or <em>
+their</em> subclasses, or ...).  Non-instantiable classes are common
+results of superclass abstraction.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> Subclasses</A></H2></center>
+<P>
+<A NAME=sectsupersubjust>&#160;</A>
+<P>
+<A NAME=96>&#160;</A>
+<P>
+One can simply declare that a class is a subclass of another, for
+example that class <em> CheckingAccount</em> is a subclass of the class
+<em> Account</em>. It is, of course, much more defensible to provide a
+reasoned justification of why the class is a subclass of the other.
+In general, inheritance is justifiable when the subclass description
+imposes additional features and/or constraints without invalidating
+any properties described in the superclass.
+<P>
+We will give a set of more precise justifications, along with
+examples.  In this section we focus on the definition of a subclass
+<em> Q</em> with a single superclass <em> P</em>. We will later broaden this to
+include multiple inheritance.  This list of justifications is not
+exhaustive.  Computational justifications will be introduced in Part
+II (especially Chapter <A NAME=tex2html11 HREF="ch16.html">16</A>).
+<P>
+It is certainly possible to define subclasses justified by more than
+one application of these cases.  It is another matter whether bundling
+multiple cases into one inheritance relationship is a wise
+conceptualization.  A good rule of thumb is to proceed step-by-step,
+while at the same time limiting construction to subclasses that have a
+``natural'' interpretation.
+<P>
+<H3><A NAME=SECTION00020100000000000000> Additional Attribute</A></H3>
+<P>
+<em> Q</em> adds an attribute to those that it has
+obtained from <em> P</em>.  As an example, a <em> Room</em> has the subclass <em>
+Bathroom</em> with the attribute <em> bath</em> of domain <em>
+Bathtub</em>:<A NAME=110>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img1.gif"><P>
+<P>
+As illustrated here, our graphical notation of the superclass-subclass
+inheritance relation is an arc directed to the superclass.
+<P>
+For another example, consider a bank to be a family of branches where
+the headquarters is considered to be a special branch.  This suggests
+defining the class <em> Headquarters</em> as a subclass of <em> Branch</em>.
+We can distinguish these two classes by giving <em> Headquarters</em> an
+additional attribute <em> president</em> with domain <em>
+Employee</em>:<A NAME=127>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img2.gif"><P>
+<P>
+A variation on this justification is for <em> Q</em> to require that
+additional elements be contained in a <em> SET</em> or other collection
+attribute defined for <em> P</em>, assuming that <em> P</em> does not possess
+any constraints (e.g., collection size bounds) that preclude this.
+<P>
+<H3><A NAME=SECTION00020200000000000000> Additional Transition</A></H3>
+<P>
+<A NAME=144>&#160;</A>
+<P>
+A subclass <em> Q</em> inherits everything in parent class <em> P</em>, including
+its transition network.  In the simplest case, the transition network
+for <em> Q</em> is the same as the transition network for <em> P</em>.
+This provides transitions ``for free'' in the subclass.
+However, it is possible that the transition network of <em> Q</em> contains
+additions to <em> P</em>'s transition network.
+<P>
+A subclass may contain additional attributes that in turn generate new
+states and transitions.  For example, a savings account may have an
+attribute that describes the interest rate.  As a result, the
+behavioral description may have an additional transition that accounts
+for interest debits. Other examples include:
+<UL><LI> Let <em> P</em> be a particular kind of editor. <em> Q</em> does the same
+    and supports in addition an undo operation.
+<LI> Let <em> P</em> be a particular kind of car. <em> Q</em>
+    has exactly the same features, however it has the additional behavior
+    that it can be operated in four-wheel drive.
+</UL><H3><A NAME=SECTION00020300000000000000> Additional Constraint</A></H3>
+<P>
+Subclass <em> Q</em> may differ from <em> P</em> because <em> Q</em> carries an additional constraint
+on the attributes of <em> P</em>.  For example, let <em> P</em> be the class of <em>
+Customer</em>s, and <em> Q</em> the class of <em> GoldenCustomer</em>s (<em> GC</em>) with
+the feature that they have been customers for at least ten
+years.<A NAME=167>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img3.gif"><P><H3><A NAME=SECTION00020400000000000000> Narrowed Multiplicity</A></H3>
+<P>
+A special case of additional constraint is a narrowed multiplicity
+feature. For example, let <em> P</em> be the class of <em> Airplane</em>s with the
+multivalued attribute <em> engine</em> having multiplicity feature <em>
+[0:M]</em> stating that a plane has zero or more engines.  Now let <em> Q</em> be
+the class of gliders where we narrow down the multiplicity feature of
+<em> engine</em> to <em> [0]</em>:
+<P>
+<A NAME=190>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img4.gif"><P>
+<P>
+As another example, consider the class of bikes that can have as instances
+unicycles, bicycles, and tricycles:<A NAME=204>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img5.gif"><P><H3><A NAME=SECTION00020500000000000000> Narrowed Domain</A></H3>
+<P>
+Assume that <em> P</em> has an attribute with the class <em> PR</em> as a value
+domain. Subclass <em> Q</em> differs from <em> P</em> because it has for this
+attribute the value domain <em> QR</em> instead of the value domain <em>
+PR</em>, where <em> QR</em> is a subclass of <em> PR</em>.  Thus, we see that the
+subclass notion has a recursive component.
+<P>
+As an example, let <em> P</em> be the class <em> Person</em> having the attribute
+<em> countryOfBirth</em> where the value domain <em> PR</em> is equal to <em>
+Country</em>.  Let <em> Q</em> be the class <em> European</em>.  We choose <em>
+EuropeanCountry</em> as the corresponding value domain <em> QR</em>.  Indeed,
+with this choice <em> QR</em> is a subclass of <em> PR</em> and
+thus <em> Q</em> is a subclass of <em> P</em>:<A NAME=240>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img6.gif"><P><H3><A NAME=SECTION00020600000000000000> Fixed Domain</A></H3>
+<P>
+Subclass attributes may be narrowed down to
+fixed values. To extend the previous case, instead of being restricted
+to a subclass of <em> PR</em>, <em> Q</em>'s attribute may be fixed to a certain
+value of <em> PR</em>, say, <em> qr</em>.
+<P>
+Elaborating the previous example, <em> Canadian</em> becomes a subclass of
+<em> Person</em> by fixing the value domain of <em> countryOfBirth</em> to the
+instance <em> Canada</em> of the class <em> Country</em>.
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img7.gif"><P>
+<P>
+Similarly, we can obtain the subclass <em> Albino</em> out of <em> Mammal</em> by
+fixing a color attribute in <em> Mammal</em> to <em> white</em>:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img8.gif"><P><H3><A NAME=SECTION00020700000000000000> Refined Transition</A></H3>
+<P>
+<A NAME=302>&#160;</A>
+<P>
+The definition of property inheritance states that any property true
+of all instances of superclass <em> P</em> must be true of all instances of
+subclass <em> Q</em>.  The same remarks thus hold for each transition
+individually.  As with static properties, refined transitions may
+impose <em> additional</em> constraints as long as they do not conflict
+with those of their bases. In particular:
+<P>
+<OL><LI> The guard in <em> Q</em>'s version of a transition must be true
+        whenever that in <em> P</em>'s version is true. A guard describing
+        input event data (arguments) in <em> Q</em>'s version must be no more
+        restrictive than that in <em> P</em>'s version. Subclass versions may
+        even accept less constrained data than the base.  (This is
+        sometimes termed <em> argument
+        contravariance</em>.)<A NAME=312>&#160;</A>
+  <LI> <em> Q</em>'s version may include additional actions, for example,
+        to set attributes listed in <em> Q</em> but not <em> P</em>. It may
+        also include different actions that have equivalent effect
+        with respect to the state and attribute settings defined for
+        <em> P</em>, as long as they do not invalidate properties
+        that hold for <em> P</em>. For example, an action that results in
+        an attribute being set to <em> true</em> in <em> P</em>'s version cannot be
+        redefined to set it to <em> false</em> in <em> Q</em>'s version.
+  <LI> <em> Q</em>'s version may list additional output events.  For example,
+        a checking account deposit transition may generate a <em>
+        makeReceipt</em> event in addition to updating the balance. Also,
+        output event data (results) in <em> Q</em>'s version must obey <em> P</em>'s
+        constraints.  Subclass versions may even <em> strengthen</em>
+        guarantees about reply values. (This is sometimes termed <em>
+        result covariance</em>.)<A NAME=328>&#160;</A>
+</OL>
+<P>
+Most considerations governing guard, action, and event refinement
+impact subclassing mechanics with respect to the interfaces and
+signatures employed at the design level (Chapter <A NAME=tex2html22 HREF="ch21.html">21</A>)
+where different subclasses describe different ways of representing and
+computing properties.
+<P>
+<H2><A NAME=SECTION00030000000000000000> Multiple Inheritance</A></H2>
+<A NAME=333>&#160;</A>
+<A NAME=secmultin>&#160;</A>
+<A NAME=335>&#160;</A>
+<P>
+A subclass may have two or more superclasses, inheriting all
+properties and constraints from each.  For example, we may
+introduce an account that combines the features of a checking account
+and a savings account, a so-called <em> BahamaAccount</em>:
+<P>
+<A NAME=337>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img9.gif"><P>
+<P>
+Careless use of multiple inheritance can result in the introduction of
+frivolous subclasses that do not describe any possible instance.  For
+example, one may define a meaningless subclass that inherits from,
+say, both <em> Account</em> and <em> Mammal</em>.  Such constructions may be
+avoided by demanding that every defined class be illustrated with at
+least one prototypical instance.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Attribute Ambiguity</A></H2>
+<P>
+<A NAME=360>&#160;</A><A NAME=361>&#160;</A>
+<P>
+In multiple inheritance, equal attributes from multiple sources are
+projected into a single occurrence.  This is one reason that different
+concepts and roles should not be associated with the same name in OO
+models.  For example, consider the class of employees who are also
+clients:
+<P>
+<A NAME=362>&#160;</A>
+<A NAME=363>&#160;</A><A NAME=364>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img10.gif"><P>
+<P>
+Multiple inheritance may lead to ambiguity when a subclass inherits a
+feature that has two or more different interpretations in the
+different superclasses.  For example, suppose that both the class <em>
+Employee</em> and the class <em> Client</em> introduce an attribute <em>
+address</em>.  Assume that the value domain for <em> address</em> in <em>
+Employee</em> is, say, <em> LongAddress</em> (supporting an extended zip
+code), while the value domain for <em> address</em> in <em> Client</em> is
+<em> ShortAddress</em>.  What is the domain for <em> address</em> in <em>
+EmployeeClient</em>?
+<P>
+It is the responsibility of the analyst (and/or a support tool) to
+avoid or repair these ambiguities.  Here, one solution is to redefine
+the class <em> Client</em> by making it a subclass of the class <em>
+ClientNA</em>, which is like the original <em> Client</em> class but does <em>
+not</em> have the <em> address</em> attribute. The <em> ShortAddress</em>
+attribute may then be added to <em> Client</em>.   Class <em>
+EmployeeClient</em> avoids the address ambiguity by inheriting
+from both <em> Employee</em> and <em> ClientNA</em>. Letting <em> LA</em> stand
+for <em> LongAddress</em> and <em> SA</em> for <em> ShortAddress</em>, we obtain:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img11.gif"><P>
+<P>
+Alternatively,  the ancestor class <em> Person</em> could be subdivided in an
+analogous fashion. For example, subclass <em> PersonWithLongAddress</em>
+could be made the common superclass of <em> EmployeeLA</em> and <em>
+ClientLA</em>.  Pushing the distinction up one level has the advantage of
+addressing similar ambiguities that may arise in any additional <em>
+Person</em> subclasses that are introduced.  An even better strategy is to
+use only one form of <em> Address</em>, if this is possible.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Sibling Relationships</A></H2></center>
+<P>
+<A NAME=438>&#160;</A><A NAME=439>&#160;</A><A NAME=440>&#160;</A>
+<P>
+The relationship among the <em> n</em> sibling subclasses <em> Q1</em>, <em> Q2</em>,
+... <em> Qn</em> of superclass <em> P</em> may be stronger than indicated by the
+mere fact that they are all subclasses of the same superclass.  We
+discuss three special cases, exclusion, covering, and partitioning.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Exclusion</A></H2>
+<A NAME=447>&#160;</A>
+We may know that sibling subclasses are definitionally disjoint, thus
+exclude each other.  Among other constraints, this implies that if we
+have an instance of <em> Q1</em> then we know that this instance does not
+satisfy the definitional characteristics of <em> Q2</em>, ... <em> Qn</em>.
+<P>
+For example, clients may be divided into two definitionally
+exclusive categories: <BR>
+<em> P</em> = the class of clients <BR>
+<em> Q1</em> = those clients that are also employees <BR>
+<em> Q2</em> = those clients that are not employees.
+<P>
+For another example, assume that different account subclasses have been
+characterized in terms of attributes and/or constraints such that they
+are, in principle,  mutually exclusive: <BR>
+<em> Account</em> = <em> BankAccount</em> + <em> ClientAccount</em> <BR>
+<em> ClientAccount</em> = <em> Personal</em> + <em> Joint</em> + <em> Business</em><BR>
+A ``+'' is conventionally used in textual listings of disjoint
+classes. We also denote this graphically as follows:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img12.gif"><P>
+<P>
+The subclasses in a family of subclasses <em> Q1</em>,
+<em> Q2</em>, ..., <em> Qn</em> of <em> P</em> bearing an exclusion property are
+connected in an indirect way to the superclass <em> P</em>.  Their family
+membership is expressed by connecting them first to an intermediate
+box which is in turn is attached to the superclass.  This notation is
+also used for covering and partitioning.  To discriminate among them,
+we put an <em> E</em>, <em> C</em>, or <em> P</em> in the little intermediate
+box.
+<P>
+<H2><A NAME=SECTION00042000000000000000> Covering</A></H2>
+<A NAME=518>&#160;</A>
+<P>
+A set of subclasses <em> Q1</em>, <em> Q2</em>,
+..., <em> Qn</em> of <em> P</em> may be defined such that any
+instance of <em> P</em> <em> must</em> belong to at least one of the listed
+subclasses.  As in the previous case, this property applies to any
+actual collection of instances of <em> P</em>.
+<P>
+An ill-defined example is a classification of humans into children, adults
+and elderly.  This yields overlap because the boundary
+between children and adults is fuzzily defined and a particular person can
+be considered to belong to more than one class.
+<P>
+As a precise example, consider a classification of bank clients in three
+overlapping categories, where the ambiguity of a client qualifying for
+more than one category is to be resolved at the discretion of a branch
+manager:<BR>
+<em> P</em> = the class of clients<BR>
+<em> Q1</em> = regular clients with balances less than $1M<BR>
+<em> Q2</em> = golden clients with balances over $0.8M but less than $1B<BR>
+<em> Q3</em> = platinum clients with balances over $0.8B.
+<P>
+<H2><A NAME=SECTION00043000000000000000> Partitioning</A></H2>
+<A NAME=535>&#160;</A>
+<P>
+When a set of subclasses <em> Q1</em>, <em> Q2</em>, ..., <em> Qn</em> of <em> P</em>
+satisfy the exclusion property <em> and</em> the covering
+property, we have a <em> partitioning</em> of <em> P</em>.
+<P>
+We have encountered a partitioning already in the example:<BR>
+<em> P</em> = the class of clients <BR>
+<em> Q1</em> = those clients that are also employees <BR>
+<em> Q2</em> = those clients that are not employees.
+<P>
+Every client is either an employee or not, thus we have the covering
+property.  We agreed already on the exclusion property.
+<P>
+As another example, consider the classification of people according to
+which region of the world in which they reside: Africa, America,
+Antarctica, Asia, Australia, Europe, Oceania.  These categories cover
+the world and exclude each other.  A sometimes-useful technique for
+transforming an exclusion into a partitioning is to define an
+``other'' class that describes all features not possessed in the
+exclusive classes otherwise defined.  This ``other'' class may later
+be expanded into subclasses. For example, people of the world could be
+partitioned simply as:<BR>
+<em> Citizen</em> = <em> American</em> + <em> NonAmerican</em> <BR>
+Later, if necessary, the <em> NonAmerican</em> class could
+itself be partitioned:<BR>
+<em> NonAmerican</em> = <em> European</em> + <em> African</em> + ... <BR>
+In turn, each of these
+may be subject to further refinement, for example:<BR>
+<em> European</em> = <em> British</em> + <em> Continental</em>.
+<P>
+Partitioning sibling classes often makes them easier to reason about.
+All possible instance classifications are accounted for.
+Partitioning properties (when they can be ascertained) also have
+ramifications for design and subsequent implementation.  For example,
+they sometimes simplify the construction of conditional expressions.
+When we know about or have estimates of the relative sizes of a
+partitioning, we should register these insights as well.
+<P>
+If some instances may belong to the superclass only, and not of any
+particular subclass, then these measures do <em> not</em> partition all
+instances into exactly one of the subclasses.  For example, people
+whose citizenship may change can be described only as <em> Citizen</em>,
+not one of its subclasses.  When variability on such a dimension is the
+norm, the entire subclass structure is usually best employed to
+describe partitioned <em> attributes</em> of instances of other classes,
+not as the main classification hierarchy.
+<P>
+<H2><A NAME=SECTION00044000000000000000> Multiple Relationships</A></H2>
+<A NAME=566>&#160;</A>
+<A NAME=567>&#160;</A>
+<P>
+A class may bear more than one family of exclusions, coverings and/or
+partitionings.  These sets are <em> independent</em> (or <em>
+orthogonal</em>) when the intersection of any tuple of subclasses taken
+from the different characterizations is nonempty.  As an example, consider the
+following sets of properties describing <em> Human</em>s:<BR>
+<em> Nationality</em> = <em> American</em> + <em> NonAmerican</em><BR>
+<em> Gender</em> = <em> Female</em> + <em> Male</em><BR>
+<em> Height</em> = <em> Short</em> (&lt; 1.6m) + <em> Medium</em> + <em> Tall</em> (&gt; 1.8m).<BR>
+All crossings are permitted. For example, the intersection of
+Americans, females, and people of height less than 1.6m leads to a
+meaningful class.
+<P>
+Assuming that each of these have been described as subclass
+structures, there are two variant techniques for using them to derive
+new subclasses, attribute narrowing and <em> mixin</em><sup>1</sup> inheritance.  In the first,
+properties are listed as attributes of a base class, and narrowed in
+subclasses.  The superclass may list unconstrained domains, and the
+subclass constrained ones:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img13.gif"><P>
+<P>
+
+<blockquote>
+ <sup>1</sup>Footnote:<br>
+The term
+``mixin'' has grown to be used so commonly in a particular technical
+sense to have lost its hyphen.  This also true of a few other terms,
+including ``callback''
+</blockquote>
+Using mixin inheritance, classes representing completely independent
+properties are ``mixed together'' via multiple inheritance in the
+target class. The superclasses used in mixin inheritance are often
+totally useless, and even unnatural by themselves, but readily combine
+with others to form meaningful classes.  For example:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img14.gif"><P><H3><A NAME=SECTION00044100000000000000> Independence</A></H3>
+<P>
+<A NAME=629>&#160;</A>
+The previous example illustrated two different strategies for relating
+partitioned attribute structures through inheritance.  While similar,
+these are <em> not</em> always equivalent in effect.  For example,
+consider a <em> MailingLabel</em> class with a set of attributes
+containing no explicit codependency constraints:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img15.gif"><P>
+<P>
+While unstated, there <em> are</em> some implicit constraints among the
+attributes, especially the fact that together they describe an actual
+postal address.  However, these constraints are not even specifiable
+without recourse to a model of the entire postal system, and thus,
+probably, of the entire planet.
+<P>
+There are many ways in which these properties could have been factored
+into classes. One extreme is to create a class for each attribute and
+then to use multiple inheritance to bind them together:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img16.gif"><P>
+<P>
+This class structure suggests that the different aspects of a <em>
+MailingLabel</em> may be viewed ``in isolation''. But this is not
+necessarily true, especially if each of the mixed-in classes contains
+a transition that changes the value of the single attribute it
+maintains.  Changing, say, the <em> city</em> surely requires changes in
+the <em> zipcode</em>.  When properties are truly orthogonal, multiple
+inheritance is a good way of describing property combinations.  But
+the implicit constraints that the parts together form a legal address
+indicate otherwise here (and in nearly all similar situations).  Most
+often, interdependencies are much more explicit than in this example,
+thus arguing immediately against multiple inheritance.
+<P>
+Here, an intermediate factoring is more attractive. By isolating the
+address properties in an <em> Address</em> class, we can still
+structurally reflect the cohesion of the address attributes. The <em>
+MailingLabel</em> class then connects the address to a name.  By doing
+this, we will have created an <em> Address</em> class that seems generally
+useful beyond what is needed for mailing label purposes.
+<P>
+Construction of an <em> Address</em> class is, of course, a pretty obvious
+maneuver.  But once we have broken out <em> Address</em>, we can think
+about extending and refactoring this new class. For example, it seems
+like a bad idea to use a zip code attribute, since this only applies
+to addresses in the United States.  It seems safe to say that all
+addresses, world wide, need street and city properties (or surrogates
+such as post office boxes, which are OK since these are just
+uninterpreted string attributes). But different countries have
+different postal codes and/or other information required on mailing
+labels.  This could be captured through standard subclassing
+mechanics.
+<P>
+<H3><A NAME=SECTION00044200000000000000> Adding Attributes</A></H3>
+<A NAME=677>&#160;</A>
+<P>
+As illustrated in the previous example, inheritance may be used to help
+elicit and flesh out tacit dependencies among attributes.  Attempts to
+factor classes into hierarchies may also reveal <em> attributes</em> that
+were not originally listed in classes, but only implicitly assumed.
+<P>
+For example, an <em> Employee</em> class might be defined as a subclass of
+<em> Person</em>, with additional attributes such as <em> salary</em>. But
+there may be other properties that distinguish employees from people
+in general that nobody bothered to list.  Assuming that this class is
+used in our banking application, an obvious one is the predicate <em>
+worksForAB</em>, which is true for employees but not others, and similarly
+for <em> isEmployed</em>, <em> mayParkInEmployeeLot</em>, and perhaps many
+others.
+<P>
+It is sometimes difficult to avoid implicit distinctions during
+initial class definition.  There may be innumerable ways in which
+objects of conceptually defined subclasses differ from those of their
+superclasses. These are only made explicit when analysts notice their
+importance in a given model or hierarchy.  Leaving them implicit can
+be a source of error.  Of course, the best solution is to add
+appropriate attributes.  For example:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img17.gif"><P><H3><A NAME=SECTION00044300000000000000> Alternative Notations</A></H3>
+<P>
+<A NAME=723>&#160;</A><A NAME=724>&#160;</A>
+A simple and useful device for organizing attempts to factor and
+partition classes forms the heart of the <i> Demeter</i> tool system
+[<A HREF="#demeter">3</A>]. Classes and properties may be viewed in a notation
+similar to that used for describing formal grammars.  In
+the <i> Demeter</i> notation, any class may have only properties
+(written using ``='') or may be a superclass of any of a number of
+alternative subclasses (written as ``: ... | ...'').
+<P>
+For example, suppose we started dissecting our <em> MailingLabel</em> class as:<BR>
+<em> MailingLabel = Name Address</em><BR>
+<em> Address: USAddress</em> | <em> CanadianAddress</em><BR>
+<em> USAddress = Street City ZipCode</em><BR>
+<em> CanadianAddress = Street City CanadianPostalCode</em>
+<P>
+After looking at things in this way, we might decide to transform it
+into:<BR>
+<em> MailingLabel = Name Address</em><BR>
+<em> Address = Street City PostalCode</em><BR>
+<em> PostalCode: ZipCode</em> | <em> CanadianPostalCode</em>
+<P>
+The <i> Demeter</i> system itself incorporates a number of other
+constructs and notations.  Various partitioning criteria and
+transformation algorithms may be applied to such representations.  For
+example, it is a good idea to push attributes as far upwards in a
+hierarchy as they can go without breaking any interdependency
+constraints. Even without tools, this grammatical technique can be a
+valuable aid.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00050000000000000000> Set Operations</A></H2></center>
+<P>
+In Chapter <A NAME=tex2html44 HREF="ch4.html">4</A> we described <em> sets</em> as extensionally
+defined analogs of classes.  Analogs of set operations may be applied
+to existing classes to derive new candidate classes:
+<P>
+<DL ><DT>Intersection.
+<DD> <A NAME=751>&#160;</A> For example,
+those persons who are clients as well as employees may be described as
+<em> Client</em> <IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img21.gif"> <em> Employee</em>.
+<P>
+<DT>Summation.
+<DD>  <A NAME=754>&#160;</A> For example,
+household furniture may be described as<BR>
+<IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img22.gif">(<em> Table, Chair, Couch, Bed</em>).
+<P>
+<DT>Subtraction.
+<DD> <A NAME=756>&#160;</A> For
+example, persons who are clients but not employees may be
+described as
+<em> Client</em> \ <em> Employee</em>.
+<P>
+ </DL>
+<P>
+Class intersection (<IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img21.gif">) has been encountered before.  It
+corresponds to multiple inheritance.  Class summation (<IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img22.gif">) is
+similar to abstraction into common superclasses, and subtraction
+(\) is similar to specialization via partitioning.
+<P>
+However, the subclass relations described earlier are based on <em>
+properties</em> of instances while these set operations focus on the
+families of instances themselves. While they may be used directly, set
+expressions are often better viewed as invitations to recast the
+resulting classes in terms of properties and then apply the resulting
+mechanics.
+<P>
+Moreover, these operations must be applied carefully  to avoid
+the definition of meaningless classes. For instance, the class <em>
+RectangularAccount</em> is obtained by intersecting Rectangle and Account.
+Similarly, <em> EvenNumber</em> and <em> NonEvenNumber</em> surely yield an
+empty intersection because they form a partitioning of numbers.  <em>
+Raven</em> and <em> Albino</em> are also not recommended for intersection.
+Subtracting <em> Adult</em> from <em> Human</em> is fine.  The reverse
+subtraction is troublesome.
+<center><P><P>
+
+
+<H2><A NAME=SECTION00060000000000000000> Inheritance of Relations</A></H2></center>
+<A NAME=769>&#160;</A>
+<A NAME=relinherit>&#160;</A>
+<P>
+Inheritance may also be used to abstract and refine relations.
+Justifications for how a relation <em> S</em> can become a specialization of a
+relation <em> R</em> are similar to those for classes.  The most common forms
+follow.
+<P>
+<H3><A NAME=SECTION00060100000000000000> Additional Constraint</A></H3>
+<P>
+Relation <em> S</em> differs from <em> R</em> because the domains of <em> S</em> are subject to an
+additional constraint.  For example, consider the relation between
+ATMs and branches with respect to where the ATMs are located.  Some
+(perhaps most) of the ATMs reside at the same location of a particular
+branch.  Others are in malls, airports, etc.  The relationship <em>
+ATMAssociatedWithBranch</em> (<em> As</em>) is uncommitted about the location
+of an ATM.  The refined relation <em> ATMAttachedToBranch</em> (<em> At</em>)
+holds only for attached ATMs:
+<P>
+<A NAME=781>&#160;</A><A NAME=782>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img27.gif"><P><H3><A NAME=SECTION00060200000000000000> Narrowed Domain</A></H3>
+<A NAME=816>&#160;</A>
+<P>
+A relation may be specialized by narrowing down one or more of its
+domains.  For example, <A NAME=817>&#160;</A> consider the
+subrelation of <em> fraudulent</em> account ownership. Letting <em> Crim</em>
+stand for <em> CriminalClient</em>, <em> LAcc</em> for <em> LaundryAccount</em>,
+and <em> FrOwn</em> for <em> FraudulentOwn</em>:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img28.gif"><P>
+<P>
+<A NAME=854>&#160;</A>
+<P>
+Similarly, a <em> Transfer</em> relationship between accounts may be
+specialized to an <em> InterestTransfer</em> between <em> BankAccount</em> and
+<em> Savings</em>.  Letting <em> Trans</em> stand for <em> Transfer</em>, <em> BA</em>
+for <em> BankAccount</em>, and <em> ITrans</em> for <em> InterestTransfer</em>:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img29.gif"><P>
+<P>
+A narrowed domain may also result from multiple inheritance.  For
+example, If we have been convinced that we can safely create <em>
+EmployeeClient</em>, we can use this class to refine an <em> Own</em>
+relationship into an <em> Own*</em> subrelationship, as
+in:<A NAME=897>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch7-img30.gif"><P>
+<P>
+A more classic example of domain narrowing is the ternary relation
+<em> R(i, j, k)</em> among the integers <em> i, j,</em> and <em> k</em> corresponding to
+addition:<BR>
+<em> i + j = k</em><BR>
+and the ternary relation <em> S(e, f, g)</em> among the <em> even</em> integers
+<em> e, f,</em> and <em> g</em> also with:<BR>
+<em> e + f = g</em>.
+<P>
+<H3><A NAME=SECTION00060300000000000000> Fixed Domain</A></H3>
+<P>
+Fixing a domain of <em> S</em> to a specific value in the corresponding domain
+of <em> R</em> effectively means that the arity of the relation <em> S</em> is less
+than the arity of <em> R</em>.  For example, consider again the ternary relationship
+<em> R(i, j, k)</em> among the integers <em> i, j,</em> and <em> k</em> corresponding to:<BR>
+<em> i + j = k</em>,<BR>
+A refined relation <em> S(i, k)</em> can describe
+successors by fixing <em> j = 1</em>:<BR>
+<em> i + 1 = k</em>.<BR>
+This may be viewed as a projection of the ternary relation <em> R</em> to the
+special binary relation <em> S</em>:
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00070000000000000000> Summary</A></H2></center>
+<P>
+Redundancies among classes can be factored out using (multiple)
+inheritance.  Inheritance lays the foundation for abstraction as well
+as for a powerful version of reuse.  Inheritance may also induce
+relationships among sibling classes, including exclusion, covering,
+and partitioning. Another approach to deriving classes focuses on set
+operations.  A second use of inheritance refines relationships in
+order to achieve similar abstraction and redundancy reductions.
+<P>
+<H2><A NAME=SECTION00071000000000000000> Further Reading</A></H2>
+<P>
+Representative approaches to OO inheritance and subclassing are
+described in the books edited by Lenzerini et al
+[<A HREF="#lenzerini">2</A>] and Shriver and Wegner [<A HREF="#shriver">6</A>].
+A somewhat more formal framework for enumerating subclass
+justifications may be found in [<A HREF="#lano">1</A>].  Opdyke [<A HREF="#opdyke">4</A>]
+discusses other pragmatic issues in the factoring of classes.
+<P>
+We have been careful in this chapter to stay away from code
+inheritance in order to deal first with property inheritance, the
+foundation of what some others call subtyping. Some analysis methods
+are less conservative.  As an example, we quote from Wirfs-Brock et al
+[<A HREF="#wirfs">7</A>]:
+<blockquote> <em> Inheritance</em> is the ability of one class to define the behavior
+and data structure of its instances as a superset of the definition of
+another class or classes. ... Inheritance also allows us to reuse
+code; the wheel need not be reinvented every time.
+</blockquote><H2><A NAME=SECTION00072000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> We have advocated introducing subclasses through the mechanism of
+applying only one of the subclassing mechanisms at a time.  Multiple
+inheritance will in general deviate from this advice.  Is the advice wrong?
+Should multiple inheritance be avoided?
+<P>
+<LI> To obtain justification for relationship inheritance, we looked into
+the justification of class inheritance.  Check the list of class
+justifiers and try to construct additional justifiers for relationship
+inheritance.  Consider, for example, multiple inheritance for
+relations.
+<P>
+<LI> Consider a domain with which you are familiar, for example, a
+university environment, a kitchen, a hardware store, etc.  Describe
+fragments of such a domain exploiting (multiple) inheritance.
+<P>
+<LI> Section <A HREF="#sectsupersubjust">2</A> gave justifications for
+subclassness.  Are there other justifications rooted in the static realm?
+If you cannot find others, can you prove that the given list is exhaustive?
+<P>
+<LI> Does it make sense to make <em> Human</em> a subclass of <em> Mammal</em> and
+<em> Male</em> and <em> Female</em> subclasses of <em> Human</em>?  If not, what would
+be an alternative?
+<P>
+<LI> Give an example of classes related by inheritance, possibly involving
+multiple inheritance, where there are at least four levels of parent --
+child classes.
+<P>
+<LI> As discussed in [<A HREF="#rumbaugh">5</A>],  inheritance may be
+used to capture regularities of <em> events</em>. Exemplify this
+by creating classes and subclasses describing <em> MouseEvent</em>s.
+<P>
+<LI> Consider whether one could construct classes using  operators
+that represent:
+<OL><LI> Swedish electrical engineers residing in Melbourne.
+<LI> Swedish electrical engineers not residing in Melbourne.
+<LI> Grandparents with only male grandchildren.
+<LI> Morning flights out of Kennedy Airport to LA or Paris.
+<LI> Federal laws that have not been enforced since 1900.
+</OL></OL>
+<P>
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=lano><STRONG>1</STRONG></A><DD>
+K. Lano and H. Haughton.
+ Reasoning and refinement in oo specification languages.
+ In <em> ECOOP '92</em>. Springer Verlag, 1992.
+<P>
+<DT><A NAME=lenzerini><STRONG>2</STRONG></A><DD>
+M. Lenzerini, D. Nardi, and M. Simi.
+ <em> Inheritance Hierarchies in Knowledge Representation and
+  Programming Languages</em>.
+ Wiley, 1991.
+<P>
+<DT><A NAME=demeter><STRONG>3</STRONG></A><DD>
+K. Lieberherr and I. Holland.
+ Assuring good style for object-oriented programs.
+ <em> IEEE Software</em>, September 1989.
+<P>
+<DT><A NAME=opdyke><STRONG>4</STRONG></A><DD>
+W. Opdyke.
+ Refactoring object-oriented frameworks.
+ Technical Report Thesis, University of Illinois at Urbana-Champain,
+  1992.
+<P>
+<DT><A NAME=rumbaugh><STRONG>5</STRONG></A><DD>
+J. Rumbaugh, M. Blaha, W. Premerlani, F. Eddy, and W. Lorensen.
+ <em> Object-Oriented Modeling and Design</em>.
+ Prentice Hall, 1991.
+<P>
+<DT><A NAME=shriver><STRONG>6</STRONG></A><DD>
+B. Shriver and P. Wegner, editors.
+ <em> Research Directions in Object-Oriented Programming</em>.
+ MIT Press, 1987.
+<P>
+<DT><A NAME=wirfs><STRONG>7</STRONG></A><DD>
+R. Wirfs-Brock, B. Wilkerson, and L. Wiener.
+ <em> Designing Object-Oriented Software</em>.
+ Prentice Hall, 1990.
+</DL>
+<P>
+
+<a href="ch8.html">Next: Chapter 8</a>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed Jan 10 07:54:02 EST 1996</I>
+</ADDRESS>
+</BODY>

@@ -1,0 +1,1571 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Description and Computation</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Description and Computation">
+<meta name="keywords" value="ch16">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+
+<center><P><P></center>
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 16: Description and Computation</h2>
+<UL>
+<LI> <A NAME=tex2html161 HREF="#SECTION00010000000000000000"> Translating Analysis Models</A>
+<LI> <A NAME=tex2html162 HREF="#SECTION00020000000000000000"> From Abstract to Concrete</A>
+<LI> <A NAME=tex2html163 HREF="#SECTION00030000000000000000"> Composing Classes</A>
+<LI> <A NAME=tex2html164 HREF="#SECTION00040000000000000000"> Controlling Transitions</A>
+<LI> <A NAME=tex2html165 HREF="#SECTION00050000000000000000"> Generic Classes</A>
+<LI> <A NAME=tex2html166 HREF="#SECTION00060000000000000000"> Generating Instances</A>
+<LI> <A NAME=tex2html167 HREF="#SECTION00070000000000000000"> Design for Testability</A>
+<LI> <A NAME=tex2html168 HREF="#SECTION00080000000000000000"> Transformation and Composition</A>
+<LI> <A NAME=tex2html169 HREF="#SECTION00090000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<A NAME=9>&#160;</A><A NAME=10>&#160;</A>
+<P>
+In this chapter, we introduce technical details surrounding functional
+class design. The basic strategy is to collect analysis information
+describing class features and tie them together as abstract classes.
+The computational side of these classes is designed through the
+definition and use of other components. We illustrate with a few
+ridiculously simple classes.
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Translating Analysis Models</A></H2></center>
+<P>
+Analysis models define features and constraints using constructs that
+describe properties of objects, but are not themselves objects.  This
+<em> descriptive</em> information forms the basis for abstract classes.
+For example, a simple <tt> Counter</tt> may be described as an object that
+always possesses a <tt> count</tt> property, as well as operations
+(transitions) such as <tt> clear</tt> that change that property.  This class
+might be described via <i> OAN</i> models including:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch16-img1.gif"><P>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch16-img2.gif"><P>
+<P>
+The <tt> count</tt> property is a <em> value</em><A NAME=49>&#160;</A> attribute that
+describes the state of an object.  On the other hand, an instance of
+class <tt> Counter</tt> is of course an object, and not just a property <em>
+per se</em>, even though it only reflects a single interesting property
+and supports state transitions that alter that single property. This
+would be true even if we designed a <tt> Counter</tt> class in which no
+other object could ever ``know about'' the <tt> count</tt> property.
+<P>
+While we must proceed toward a computationally-based view of objects
+in OOD, we do not want to lose such declarative information.
+Maintaining both descriptive and procedural information at the design
+level increases the chances that computational specifications are
+correct by construction.
+<P>
+<A NAME=54>&#160;</A>
+We accommodate this in <i> ODL</i> by supporting the notion of an <em>
+abstract class</em><A NAME=57>&#160;</A> that collects static and
+dynamic information, and recasts it in a form more readily amenable to
+other design activities.  In simple cases, abstract classes just
+describe a set of value properties, and how they change with
+transitions. We may collect OOA descriptions pertaining to counter
+objects and the events they respond to as
+follows:<A NAME=58>&#160;</A><A NAME=59>&#160;</A>
+<P>
+<PRE>class Counter
+  fn count: int;
+     inv count &gt;= 0
+
+  fn isZero: bool = (count = 0);
+     init isZero = true
+
+  op clear ==&gt; isZero' end
+
+  op inc   ==&gt; count' = count + 1 end
+
+  op dec   when isZero then  % no effect %
+           else count' = count - 1 end
+end
+</PRE>
+<P>
+[We will postpone describing most syntactic details of <i> ODL</i> for a
+while, and pretend that you are following along. But try to figure it
+out. We try to keep <i> ODL</i> examples down to the smallest
+self-contained constructions that illustrate the main ideas.]
+<P>
+Even though it looks somewhat computational in flavor, this abstract
+class declaration is really just descriptive. It says that counter
+objects are entities that may be ascribed an integer-valued <tt>
+count</tt> property. Other constraints and operations are described with
+respect to that attribute. Simple status inspectors such as <tt> isZero</tt>
+summarize an aspect of the state as a boolean indicator value.
+<P>
+<H2><A NAME=SECTION00011000000000000000> Attributes</A></H2>
+<A NAME=65>&#160;</A><A NAME=66>&#160;</A>
+<P>
+We declare <i> OAN</i> attributes as <em>
+functions</em><A NAME=69>&#160;</A>. The <tt> count</tt>
+declaration in no way means that any counter object ``directly''
+maintains any kind of integer-like internal representation, only that
+it needs to report the state in integer form when asked.  For example,
+a counter could be implemented by pushing and popping random items
+onto some kind of stack. The number of items on the stack would
+correspond to the count, and could be so reported.
+<P>
+At the same time, we would like to ensure that these abstract
+properties actually hold for any software counter object. We will do
+so by mandating that implemented versions of classes indeed support
+descriptive functions such as <tt> count</tt>.  Of course, it is possible
+to perform object-oriented design without explicitly incorporating
+such descriptive techniques. In other words, we <em> could</em> just
+implement an integer-based or stack-based counter without bothering to
+tie them explicitly to descriptions of what they are supposed to do.
+Among other disadvantages, this would break all continuity
+and traceability with respect to analysis models.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Domains</A></H2>
+<P>
+In <i> ODL</i>, we provide a very small set of predefined value types
+(principally <tt> bool</tt>, <tt> int</tt>, <tt> real</tt>, <tt> char</tt>; see
+Chapter <A NAME=tex2html13 HREF="ch17.html">17</A>) for use in the definition of abstract classes.
+We keep this small to facilitate the transition from specification to
+implementation.  Value domains are treated very differently than
+classes of objects in <i> ODL</i>.  Values are ``more abstract'' than
+objects. For example, the <tt> bool</tt> value <tt> true</tt> has no identity,
+cannot be changed into another value, and does not itself communicate
+with other objects. It is a raw description.  An <em> object</em> with a
+boolean property does have an identity, may be able to mutate state,
+and may partake in interactions with other objects.
+<P>
+The differences between value-based and object-based perspectives are
+most evident in the separation of ordinary value types from equally
+ordinary <em> objects</em> whose only role is to maintain such values in
+the usual ways.  For example, we may define <em> class</em> <tt> Bool</tt>
+as:<A NAME=88>&#160;</A><A NAME=89>&#160;</A>
+<P>
+<PRE>class Bool
+  fn val: bool;
+  op t!: ()   ==&gt; val' = true end
+  op f!: ()   ==&gt; val' = false end
+  op set(newVal: bool): () ==&gt; val' = newVal end
+end
+</PRE>
+<P>
+A <tt> Bool</tt> object always has a <tt> bool</tt> state of being true or
+false. But since it is an object, it may change its state. Of course,
+we can design objects that <em> do not</em> change their states too. We will
+design quite a few of those.
+<P>
+Some <i> ODL</i> details: We often use capitalization conventions as in
+this example, with lower-case for value types (<tt> bool</tt>) and
+capitalization (<tt> Bool</tt>) for classes. It is a bit confusing at
+first, but makes things easier later.  The characters ``<tt> ?</tt>'' and
+``<tt> !</tt>'' are acceptable as parts of names. We sometimes use the
+former for simple ``self-describing'' attributes, and the latter for
+``self-describing'' commands. As a degenerate case, we use just ``<tt>
+?</tt>'' itself as a name for value attributes of ``basic'' classes
+maintaining values of predefined value types, and drop the intervening
+``<tt> .</tt>'' on access. Thus, to cut down verbosity, we alias the <tt>
+Bool</tt> <tt> val</tt> attribute as just ``<tt> ?</tt>''.  For any boolean
+object <tt> aBool</tt>, saying <tt> aBool?</tt> gets its current value.
+<P>
+<H2><A NAME=SECTION00013000000000000000> Dynamics</A></H2>
+<P>
+Classes <tt> Counter</tt> and <tt> Bool</tt> contain examples of the two
+basic <i> ODL</i> dynamic constructs:
+<P>
+<A NAME=109>&#160;</A><A NAME=110>&#160;</A><A NAME=111>&#160;</A><A NAME=112>&#160;</A>
+<A NAME=113>&#160;</A>
+<P>
+<DL ><DT><b> Functions:</b>
+<DD> A <tt> fn</tt> is a ``value sensor'',
+        or ``attribute inspector''  that reports state information
+        without otherwise disrupting an object. (The keyword <tt> fn</tt> is
+        optional.)
+  <DT><b> Operations:</b>
+<DD><A NAME=119>&#160;</A> An <tt> op</tt> is an
+        event-driven transition (or ``method''), identified by its
+        associated input event (message) name and signature.
+        It may be either a one-way
+        operation or a bidirectional operation that guarantees to
+        reply to its sender (and to ``block'' its sender until it does
+        so).  Declarations of blocking operations include an
+        indication of the kind of entity returned. When <tt> op</tt>s do not
+        return a particular result but only return synchronization,
+        this is marked with ``<tt> ()</tt>''. When they do, the results
+        may either be given a name within the declaration or as a
+        shorthand, treated anonymously and <tt> reply</tt>ed. We will
+        consider further variations and refinements of <tt> op</tt>s in
+        Chapter <A NAME=tex2html22 HREF="ch20.html">20</A>.
+<P>
+ </DL>
+<P>
+Procedure-style (blocking) interaction is a reasonable way to describe
+elementary operations on elementary classes such as <tt> Bool</tt>.  Even
+though an operation such as <tt> f!</tt> is not very ``interactive'' or
+bidirectional, we stick with established conventions when dealing with
+basic classes such as <tt> Bool</tt>.  In contrast, the <tt> Counter</tt>
+class declared <tt> inc</tt>, <tt> dec</tt>, and <tt> clear</tt> as one-way
+operations.  We could have chosen otherwise in both cases.
+<P>
+<H3><A NAME=SECTION00013100000000000000> Effects</A></H3>
+<P>
+<A NAME=136>&#160;</A><A NAME=137>&#160;</A><A NAME=138>&#160;</A>
+<P>
+Operations may be characterized abstractly by listing their <em>
+effects</em> using the syntax <tt> ==&gt;</tt> <em> expr</em> <tt> end</tt>, where <em>
+expr</em> is any descriptive expression. The prime (as in <tt> val'</tt>)
+indicates the state <em> after</em> the transition has completed.
+<P>
+Effects are the main translation constructs for <i> OAN</i> <em>
+action</em><A NAME=148>&#160;</A> and <em> event</em><A NAME=150>&#160;</A> descriptions, as
+well as simple state changes. For example, the effects for <tt> t!</tt> and
+<tt> f!</tt> correspond to the transition network:
+<P>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch16-img4.gif"><P>
+<P>
+<P>
+<P>
+As is the case in analysis (see Chapter <A NAME=tex2html28 HREF="ch5.html">5</A>), the
+nature of effect descriptions can be a bit arbitrary. With any luck,
+analysis models have provided descriptions that are ``complete'' while
+still suppressing ``irrelevant'' details.  It is more than common for
+effect statements to be described via textual annotations rather than
+these slightly more formal specifications. We will most often use the
+more structured versions, since it makes further manipulations and
+transformations easier to describe and illustrate.  However, the
+methods can be used with whatever degree of precision and formality
+you can obtain from analysis models. The more precisely effects can be
+described, the easier it is to transform them into executable code.
+At some point, at some level, this kind of translation needs to be
+performed.
+<P>
+<H2><A NAME=SECTION00014000000000000000> Services</A></H2>
+<A NAME=172>&#160;</A><A NAME=173>&#160;</A>
+<P>
+<H3><A NAME=SECTION00014100000000000000> Cohesion and Layering</A></H3>
+<A NAME=175>&#160;</A>
+<P>
+There are many ways to define classes like <tt> Bool</tt>.  Nothing
+absolutely forces the definition of a given operation as primitively
+available within a class.  Matters of relative primitiveness are often
+judgment calls in class design.  The set of operations defined for a
+class should, on the one hand, be minimally complete, describing only
+those transitions that cannot be defined in terms of others. On the
+other hand, usability concerns lead to the definition of operations
+that make common client-side usages simple to express.  Pragmatics
+argue for hiding enough detail that operations may be efficiently
+implemented without introducing observable dependencies.  For example,
+we might prefer to express <tt> Bool::set</tt> as the sole primitive, and
+then define <tt> t!</tt> and <tt> f!</tt> in terms of <tt> set</tt>, or even to
+define all of them in terms of a <tt> toggle</tt> primitive. (As here, we
+use ``<em> class</em><tt>::</tt><em> op</em>'' when necessary to distinguish the
+version of <em> op</em> defined in <em> class</em>.)
+<A NAME=187>&#160;</A>
+<P>
+The tactic of defining basic classes to have minimal yet complete
+interfaces, and then adding functionality via layered operations
+rather than mangling existing classes is sometimes called <em> extension
+by addition</em>  [<A HREF="#ossher">7</A>]<A NAME=190>&#160;</A>. It is a good
+way of enhancing the maintainability and evolvability of designs.  It
+places some pressure on getting the ``little'' things in a set of
+class designs right to begin with.
+<P>
+Some heuristics may guide such decisions. If an operation can be
+phrased as a sequence of other defined, accessible operations on its
+targets, it should not be listed as an operation of any one of the
+associated classes.  This rule may be balanced with the goal of minimizing
+arguments to operations.
+<P>
+<H3><A NAME=SECTION00014200000000000000> Service Operations</A></H3>
+<P>
+<A NAME=192>&#160;</A><A NAME=193>&#160;</A>
+<P>
+The simplest kind of layering is the definition of service operations.
+Operations may accept and/or return either state or object information
+as message<A NAME=194>&#160;</A> ``arguments'' and ``results''.  Also,
+operations need not be listed within classes if they obtain their
+effects by coordinating others that <em> are</em> received by
+participants.  For example, we may have a service transition described
+for some unrelated object:<A NAME=196>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch16-img6.gif"><P>
+<P>
+This might correspond to <i> ODL</i> operation:<A NAME=220>&#160;</A>
+<PRE>op invertSet(dest: Bool, v: bool) ==&gt; dest'? = ~v end
+</PRE>
+<P>
+Because it was not embedded in a class, this operation may even be
+considered as a ``top-level'' utility procedure.  Actually, in <i>
+ODL</i> we do not consider <em> any</em> operation to be truly receiverless.
+All top-level operations are assumed to be owned by objects of class
+<tt> System</tt>. However, we will describe them as receiverless until we
+get a chance to describe the necessary mechanics
+(Chapter <A NAME=tex2html39 HREF="ch18.html">18</A>).  For another example:<A NAME=226>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch16-img7.gif"><P>
+<P>
+This corresponds to <i> ODL</i> operation:<A NAME=250>&#160;</A>
+<PRE>op copyState(dest: Bool, src: Bool) ==&gt; dest'? = src? end
+</PRE>
+<P>
+These operations use combinations of ``pass by description'' or, more
+familiarly, ``call by value'' (as seen in the value <tt> v:bool</tt>), as
+well as ``pass by participation'' or ``call by reference'' (as seen in
+<tt> dest:Bool</tt>) to exchange information.  There is a big difference
+between the two. A value argument represents a raw state value that
+need not be attached to a particular object.  An object argument lists
+a participant<A NAME=253>&#160;</A> in a transition.  The
+participant is not in any sense ``transmitted'' or ``copied''
+somewhere. Instead, the operation is given <em> access</em> to the
+indicated object. A better term (that we will routinely use) is <em>
+link</em><A NAME=256>&#160;</A>. The operation is provided with a ``communications
+link'' to each participating object. Other roughly equivalent terms
+include ``port'', ``capability'', ``reference'', and ``pointer''.  Use
+of participant arguments is the most common way of transmitting and
+representing transient OOA <em> acquaintance</em>
+relations.<A NAME=258>&#160;</A><A NAME=259>&#160;</A>
+(We investigate alternatives in Chapter <A NAME=tex2html46 HREF="ch18.html">18</A>.)
+<P>
+These differences represent the familiar territory of value versus
+reference arguments in many non-OO programming languages and systems.
+The reason for belaboring them here is that participation in events
+has a much broader <em> design</em> significance in OOD than elsewhere.
+When you have access to an object, you might send it messages, change
+its state, capture its identity for later use, and so on. When all you
+have is a description, you cannot necessarily do any of these things.
+This is a more pervasive issue than implementation-level rules for
+keeping track of ``variables'' versus ``expressions'' in procedural
+programming languages.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00020000000000000000> From Abstract to Concrete</A></H2></center>
+<A NAME=264>&#160;</A>
+<P>
+<H2><A NAME=SECTION00021000000000000000> Concrete Operations</A></H2>
+<P>
+Effect descriptions may include references to other operations.  For
+example, we could have described the previous operation in terms of
+raw manipulations on <tt> Bool</tt>. It is conceivable (but very unlikely)
+that the <i> OAN</i> models already did this:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch16-img8.gif"><P>
+<P>
+<PRE>op copyState_2(dest: Bool, src: Bool) ==&gt; dest.set(src?)' end
+</PRE>
+<P>
+Composite operation definitions such as <tt> copyState_2</tt> are more like
+``scripts''<A NAME=290>&#160;</A> than descriptions of raw state changes.
+Because of this, we need not ascribe them as a properties of <tt>
+Bool</tt> objects per se, but instead as ``application'' operations that
+
+happen to use <tt> Bool</tt>s.
+<P>
+Mentioning a primed operation inside another effect means <em> only</em>
+that its effects hold. For example, the effect,<BR>
+<tt> dest.set(src?)'</tt><BR>
+indicates that the effect of <tt> copyState_2</tt> is just the same as
+the effect listed under <tt> set</tt> with the indicated substitutions.
+It does <em> not</em> say whether the effect is actually obtained by
+invoking <tt> set</tt>.  But it does provide a very strong hint about the
+computations that would meet the effects constraints. The hint may
+be exploited later, or not. Among other benefits, this ``as if''
+interpretation of action specifications allows recovery from
+insufficient abstraction in analysis models and other class designs.
+<P>
+<H3><A NAME=SECTION00021100000000000000> Reification</A></H3>
+<P>
+Given the form and content of operation <tt> copyState_2</tt>, we
+do not have to limit ourselves to purely declarative definitions. The
+script seems to tell us <em> how</em> to obtain the desired state changes.
+We are free to commit to those hints and bind constructs to <em>
+concrete</em> definitions by actually ``coding-in'' the subevents listed in
+the effects description:
+<P>
+<PRE>op copyState_2(dest: Bool, src: Bool) { dest.set(src?) }
+</PRE>
+<P>
+We have just performed our first (albeit trivial) <em>
+reification</em><A NAME=305>&#160;</A> from an abstract to a concrete
+definition. By binding a code body (within braces) to the operation,
+we find ourselves actually specifying computation, rather than
+effects.  While things are not generally <em> quite</em> so easy, the ways
+in which we will list and refine effects often lead to at least one
+natural computational definition.
+<P>
+<A NAME=307>&#160;</A>
+It may seem odd that we were able to define <em> concrete</em> operations
+on <em> abstract</em> objects. Our <tt> Bool</tt> declaration just listed the
+abstract properties (or ``capabilities'') of boolean objects, without
+saying how they are implemented.  For purposes of defining <tt>
+copyState</tt>, it does not matter how the objects are implemented, as
+long as they possess the indicated states and operations. It makes no
+sense at all to introduce such dependencies on internal matters.  An
+essential OO design rule is that participant arguments and other links
+should <em> always</em> be specified in terms of the most abstract
+black-box class characterization available.
+<P>
+Concrete operation definitions are not at all replacements for
+abstract ones.  The two provide different kinds of information that
+happen to look almost identical. But the abstract versions are written
+from the perspective of analysis -- <em> what</em>, not <em> how</em> -- while
+the concrete ones are from the perspective of implementation -- <em>
+how</em>, not <em> what</em>.<A NAME=317>&#160;</A> (For brevity of examples,
+we will sometimes list both bindings and effects in the same
+declaration.)
+<P>
+Concrete definitions are also different than abstract ones in that
+they are <em> maximal</em>. The operation will perform the stated actions
+and nothing more. Abstract declarations are on the other hand <em>
+minimal</em>. They require that the operation will obtain at least the
+stated effects. Other unlisted actions are OK as long as they do not
+conflict.  This enables further refinement in subclasses and
+operation overrides.
+<P>
+<H2><A NAME=SECTION00022000000000000000> Concrete Classes</A></H2>
+<A NAME=321>&#160;</A><A NAME=322>&#160;</A>
+<P>
+<H3><A NAME=SECTION00022100000000000000> Primitives</A></H3>
+<A NAME=324>&#160;</A>
+There might be several ways of implementing boolean objects.  For
+example, interfaces to mechanical switches fulfill this description.
+However, at this bottommost level, we almost always rely on built-in
+software primitives for concrete representations. For each
+elementary type, we will assume the existence of a <em> default</em>
+primitively available subclass that implements it. We further abuse
+capitalization conventions, and denote primitively available
+implementations using an all upper-case notation:
+<A NAME=326>&#160;</A>
+<A NAME=327>&#160;</A>
+<P>
+<PRE>class BOOL is Bool
+  fn val: bool             { % magic % }
+  op t!: ()                { % magic % }
+  op f!: ()                { % magic % }
+  op set(newVal: bool): () { % magic % }
+end
+</PRE>
+<P>
+[<i> ODL</i> details:  ``<tt> is</tt>'' declares a class as a subclass.
+The predefined class <tt> Any</tt> serves as the root of the inheritance
+hierarchy. It has no attributes or behavior, and is thus defined as
+<tt> class</tt> <tt> Any</tt> <tt> end</tt>.  All other classes declared without
+an <tt> is</tt> clause are treated as subclasses of <tt> Any</tt>.  All
+features declared in any superclass hold in a subclass. Features  may be
+strengthened via redeclaration.]<A NAME=336>&#160;</A><A NAME=337>&#160;</A>
+<P>
+Again, the capitalization conventions are a bit confusing, but prevent
+massive awkwardness of expression. To recap, <i> bool</i> is the type of
+raw boolean state values, <tt> Bool</tt> is the type of mutable boolean
+objects, and <tt> BOOL</tt> is the default implementation of these
+objects. More descriptive names might be <em> boolean-state-value</em>,
+<em> mutable-boolean-object-type</em> and <em>
+default-primitively-implemented-mutable-boolean-object-type</em>.
+We also use these conventions for <tt> int</tt>, <tt> Int</tt>, and <tt> INT</tt>,
+and similarly for <tt> real</tt> and <tt> char</tt>.
+<P>
+The term <em> default</em> has some significance here. Actually, we should
+have defined classes <tt> MC68KSmalltalkBool</tt>, <tt> VAXCBool</tt>, and so
+on, to reflect the fact that different interoperable representations
+are available on different machines, systems and languages. But this
+would be pretty silly and useless. We use the all-caps form to denote
+the default version of a primitive object type on the platform
+implementing the object.
+<A NAME=352>&#160;</A>
+<P>
+If this bottom-feeding sounds overly implementational and/or paranoid
+to you, be comforted that now that we have laid down tactics for
+eliminating representation dependence, we will not have to think about
+these precautions very much.
+<P>
+<H3><A NAME=SECTION00022200000000000000> Concrete Classes as Subclasses</A></H3>
+<P>
+The class <tt> BOOL</tt> is declared as a <em> subclass</em> of <tt> Bool</tt>,
+since it obeys all of the characteristics of <tt> Bool</tt>, but also
+declares additional (computational) characteristics owing to the
+binding of features to computational actions (that in this case are
+undefinable in <i> ODL</i> since they are considered magically
+primitive).
+<P>
+This is a very different use of inheritance than seen in Part I, where
+subclassing was employed only to relate the properties of different
+classes.  It is, however, thoroughly reasonable, and meets the
+
+<P>
+definitions of Chapter <A NAME=tex2html60 HREF="ch7.html">7</A>
+if the notion of ``property'' is extended to include computational and
+representational features.
+Class <tt> BOOL</tt> does possess
+
+all of the properties of <tt> Bool</tt>, but is further constrained by
+commitments about particular ways of representing and computing
+things.  Another way of saying this is that class <tt> BOOL</tt> <em>
+conforms</em> to <tt> Bool</tt>.  Any other object or operation demanding
+something with the properties of <tt> Bool</tt> could surely use a <tt>
+BOOL</tt> object.<A NAME=368>&#160;</A><A NAME=369>&#160;</A>
+<P>
+<H3><A NAME=SECTION00022300000000000000> Construction</A></H3>
+<A NAME=371>&#160;</A>
+Unlike abstract classes, concrete classes are directly,
+deterministically <em> instantiable</em>.  Rather than just describing
+properties, concrete classes fill in all of the information necessary
+to represent and compute software objects obeying the stated
+properties.  We specify object construction in <i> ODL</i> by <em>
+binding</em> all undefined attributes in a ``<tt> new</tt>''
+statement.<A NAME=376>&#160;</A> As a minor simplification, when there is
+only one such attribute we just omit naming it:
+<P>
+<PRE>   ...
+   b1: Bool := new BOOL(false);
+   b2: Bool := new BOOL(true);
+   copyState(b1, b2);
+</PRE>
+<P>
+[In examples, ``<tt> ...</tt>'' means ``something has been left out here
+that must be filled in for the example to make sense''. In this case,
+the <em> context</em> of the statements has been omitted.  They should be
+encased in some other operation.]
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Composing Classes</A></H2></center>
+<A NAME=380>&#160;</A>
+<P>
+State types, abstract classes, and concrete classes (e.g.,
+respectively, <tt> bool</tt>, <tt> Bool</tt>, and <tt> BOOL</tt>) may be used to
+define other classes and objects.  For a tiny example, suppose we need
+to define lamps possessing only a simple toggle
+switch:<A NAME=384>&#160;</A><A NAME=385>&#160;</A>
+<P>
+<PRE>class Lamp
+  fn on: bool init= false;
+  op flip ==&gt; on' = ~on end
+end
+</PRE>
+<P>
+[Initial condition constraints may be specified using <tt> init=</tt>.]<A NAME=387>&#160;</A>
+<P>
+Lamps seem to be related to boolean objects, but are not subclasses of
+<tt> Bool</tt>. However, we can still <em> use</em> a <tt> Bool</tt> to
+describe compositional details:
+<P>
+<PRE>class CompositeLamp is Lamp
+  local switch: Bool;
+  inv on = switch?
+  op flip ==&gt; invertSet(switch, switch?)' end
+end
+</PRE>
+<P>
+The <tt> switch</tt> declares that each lamp knows of, communicates with,
+and/or otherwise accesses a <tt> Bool</tt> object. For both better and
+worse, our notation does not quite capture the OOA conceptual
+differences between <em> partOf</em>, <em> brotherOf</em>, or any other
+relationship. They are all expressed via the same link constructs.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Invariants</A></H2>
+<A NAME=396>&#160;</A>
+<P>
+<A NAME=397>&#160;</A>
+<P>
+Invariant, or <tt> inv</tt> statements declare constraints that must hold
+across all states during an object's existence.  The declaration <tt>
+inv</tt> <tt> on</tt> <tt> =</tt> <tt> switch.val</tt> says that the <tt> on</tt> state
+attribute always has the same value as <tt> switch</tt>'s <tt> val</tt>. This
+almost, but does not quite say that the state of the lamp should be
+computed by inspecting the state of the switch.  More generally, such
+<tt> inv</tt> constraints represent <em> contracts</em><A NAME=408>&#160;</A>
+between two objects that must be maintained across all computation.
+The <tt> inv</tt> helps further clarify the nature of the relationship
+(link) between <tt> Lamp</tt>s and <tt> Bool</tt>s.  In <i> OAN</i>, this
+relational invariant might indeed be specified using a parametric
+relation instance.<A NAME=413>&#160;</A>
+<P>
+In <tt> CompositeLamp</tt>, we also replaced the effects description of
+<tt> flip</tt> with one that is equivalent to the original, but now more
+clearly delegates responsibility for handling the transition to
+the underlying component. Delegation<A NAME=416>&#160;</A> of tasks and
+subtasks is among the chief reasons for using composition in the first
+place. The <tt> CompositeLamp</tt> need not know any of the details about
+how to meet the listed effects of <tt> flip</tt> if it knows of other
+objects and operations that do.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Composites as  Ensembles</A></H2>
+<A NAME=420>&#160;</A><A NAME=421>&#160;</A>
+<P>
+The <tt> CompositeLamp</tt> declaration does <em> not</em> say that a <tt>
+CompositeLamp</tt> object has a ``physically embedded'' <tt> Bool</tt> object,
+only that it ``knows of'' and (here, exclusively) exploits
+one.<A NAME=426>&#160;</A> Avoiding, or at least postponing, the issue of
+representational embeddedness is a key tactic in successful
+compositional design. Just as blind acceptance of <em> PartOf</em> leads
+to problems in analysis (Chapter <A NAME=tex2html77 HREF="ch9.html">9</A>), blind
+representational embedding leads to problems in design.<A NAME=430>&#160;</A> (In Chapter <A NAME=tex2html79 HREF="ch23.html">23</A>, we introduce qualifier <tt>
+packed</tt> to express embeddings, but only as a consequence of physical
+design considerations.<A NAME=434>&#160;</A>)
+<P>
+<A NAME=435>&#160;</A><A NAME=436>&#160;</A>
+However, we do want to claim that access to the <tt> Bool</tt> object is
+internal to the <tt> Lamp</tt>, and not part of its interface.  Such <tt>
+local</tt>s differ from regular ``public'' <tt> fn</tt>s in that they are
+accessible only internally to the object.  The fact that <tt>
+CompositeLamp</tt>s employ a <tt> Bool</tt> is irrelevant to any other objects
+that may interact with them.  Suppressing this fact from the interface
+reduces coupling.
+<P>
+In <i> ODL</i>, any attribute or operation may be declared as strictly
+internal via qualifier <tt> local</tt>.  This indicates the presence of an
+attribute without the presence of a public access function, thus
+supporting basic OO encapsulation rules that hide internal matters
+from other objects.  If one object wants to do something with another,
+it must somehow determine its identity and issue a publicly listed
+message to it.  If for some reason we did want to make the <tt>
+switch</tt> visible to other objects in <tt> CompositeLamp</tt>, we would have
+to add a non-<tt> local</tt> <tt> fn</tt> to access it. The use of <tt> local</tt>
+does not, however, commit to concrete details. Access to the <tt>
+switch</tt> might still be arranged through some kind of computation
+rather than direct binding (see Chapter <A NAME=tex2html83 HREF="ch17.html">17</A>).
+<P>
+These tactics are closer to the spirit of OOA methods than they might
+first appear. In Chapter <A NAME=tex2html84 HREF="ch4.html">4</A>, we noted that basic
+attributes might be construed as <em> relations</em> between objects and
+value domains.  In design, object-based relations are links.
+Components that help support basic attributes are related to their
+hosts via <tt> fn</tt>s describing private links.  However, this
+similarity also leads to a difference. In design, all but the very
+most primitive objects are explicitly composite. Thus, even ``simple''
+software objects are more like the <em> ensembles</em> described in
+Chapter <A NAME=tex2html85 HREF="ch9.html">9</A> than the unprotected classes described in
+Chapter <A NAME=tex2html86 HREF="ch3.html">3</A>.
+<P>
+The <em> routine</em> commitment to hiding internal features represents a
+second difference between OOA and OOD.  Many OOA models are too
+trusting. They list attributes for other <em> people</em> to look at.  In
+design, we list the same kinds of attributes, but take special
+precautions to ensure that other software objects cannot mangle them.
+We trust other software less than people.  Actually, we do not trust
+anyone. But we can list the <tt> switch</tt> object here on paper, knowing
+that you cannot reach onto the page and directly modify <tt> switch</tt>
+to turn off the lamp by your side.  Without a membrane to protect it,
+other software objects may well be able to ``reach into'' some poor
+hapless <tt> Lamp</tt> and do just that.
+<P>
+For example, compare the <i> OAN</i> description of <tt> CompositeLamp</tt>
+with that of the <tt> VacuumCleaner</tt> example from
+Chapter <A NAME=tex2html87 HREF="ch9.html">9</A>:<A NAME=472>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch16-img9.gif"><P>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch16-img10.gif"><P>
+<P>
+Even though the component of <tt> CompositeLamp</tt> is much less
+interesting than those of <tt> VacuumCleaner</tt>, the same construction
+strategies apply.  Conversely, private <tt> local</tt> links provide the
+first step in translating the constituents of OOA-level ensembles.
+Generally, <i> OAN</i> ``double vectors'' translate into <tt> own</tt>
+links, a special stronger version of <tt> local</tt> described in
+Chapter <A NAME=tex2html89 HREF="ch17.html">17</A>.  (In fact, <tt> own</tt> would be appropriate even
+in the present example.)
+<P>
+<H2><A NAME=SECTION00033000000000000000> Concrete Composites</A></H2>
+<P>
+<A NAME=506>&#160;</A>
+<P>
+The <tt> CompositeLamp</tt> declaration is still incomplete.  It does not
+represent components or bind actions, it just describes them.  As
+always, there are many ways to define concrete versions, but the
+obvious one is <tt> LampV1</tt>:
+<P>
+<PRE>class LampV1 is CompositeLamp
+  local switch: Bool &lt;&gt;
+  on: bool { switch? }
+  op flip { invertSet(switch, switch?) }
+end
+</PRE>
+<P>
+[We normally give concrete classes names ending in <tt> V</tt><em> n</em>, where
+<em> n</em> is a ``concrete version number''.]
+<P>
+In <i> ODL</i>, all links within concrete classes defined using
+``<tt> &lt;&gt;</tt>'' must be bound to other objects during construction.
+Here, any fresh <tt> Bool</tt> object in a <tt> false</tt> state would do:
+<P>
+<PRE>   myLamp := new LampV1(switch := new BOOL(false));
+</PRE>
+<P>
+Constructors may be wrapped within other operations and classes to
+better hide details, control initialization, maintain defaults, and
+keep track of instances. Note that constructors form the exception to
+privacy rules for <tt> local</tt>s. Constructors must be able to attach
+links while initializing objects.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Controlling Transitions</A></H2></center>
+<A NAME=518>&#160;</A>
+<P>
+<A NAME=519>&#160;</A><A NAME=520>&#160;</A>
+<A NAME=521>&#160;</A><A NAME=522>&#160;</A>
+<P>
+A <em> semaphore</em><A NAME=524>&#160;</A> may be described as an object with a
+boolean state attribute <tt> locked</tt>, a <tt> wait</tt> operation that
+blocks while <tt> locked</tt> is false and then atomically sets it to
+true, and a <tt> signal</tt> operation to set it back to false.  This
+may be represented as:
+<P>
+<PRE>class Semaphore
+  fn locked: bool init= false;
+  op wait: ()   when ~locked then locked' else pend end
+  op signal: () ==&gt;  ~locked' end
+end
+</PRE>
+<P>
+The definition of classes such as <tt> Semaphore</tt> hinges on the fact that
+the reception of a message such as <tt> wait</tt> does not always immediately
+lead to the execution of the corresponding actions. In <i> ODL</i>, the
+conditions under which the message may trigger are listed in <tt>
+when</tt> clauses, which serve as the OOD translation of OOA guards and
+state-dependent transition specifications.  (None of our previous <tt>
+Bool</tt>-based examples happened to require state-based guards for any
+operations.) These <tt> when</tt> guards are purely descriptive tools, just
+like effects. In fact ``<tt> ==&gt;</tt><em> eff</em>'' is shorthand for ``<tt>
+when</tt> <tt> ready</tt> <tt> then</tt> <em> eff</em>'', where <tt> ready</tt> is
+the topmost level of state abstraction (see Chapter <A NAME=tex2html97 HREF="ch5.html">5</A>).
+Here, the class definition says that
+<tt> Semaphore</tt> objects must <tt> pend</tt> <tt> wait</tt> message until they
+reach an unlocked state.  Any number of <tt> wait</tt> messages may be
+<tt> pend</tt>ing at any given time.
+<P>
+In <i> ODL</i>, <tt> when</tt> constructs must cover all cases (i.e., there
+must be a trailing <tt> else</tt> clause, along with possibly several
+intervening <tt> elsewhen</tt>s).  However, delays are not the only
+possible alternative outcome. For example, in the <tt> Counter</tt> class
+described at the beginning of this chapter, we just ignored <tt> dec</tt>
+when the internal count was zero. For illustration, we can recast this
+using the <i> ODL</i> ``outer'' form of <tt> when</tt> that lists together
+all operations that may be triggered in a given state.  The two
+easily intertranslatable forms respectively emphasize the required
+internal conditions versus the triggering input events in <i> OAN</i>
+transitions:
+<P>
+<A NAME=558>&#160;</A>
+<P>
+<PRE>class Counter ...
+  when isZero then
+    op dec: () ==&gt; end
+  else
+    op dec: () ==&gt; count' = count - 1 end
+  end
+end
+</PRE>
+<P>
+The lack of any effect in the first clause allows the <tt> dec</tt>
+message to be ignored when the count is already zero.
+
+(To ensure this, the effect should state <tt> count' = count</tt>.)
+
+<P>
+To demonstrate the interplay here, note that by turning the empty
+effect to ``<tt> pend</tt>'', and changing the nonblocking <tt> inc</tt> and
+<tt> dec</tt> operations into (renamed) blocking forms, a <tt> Counter</tt>
+can be transformed into another common construct, the <tt>
+Count</tt><tt> ing</tt><tt> Sema</tt><tt> phore</tt>:<A NAME=569>&#160;</A>
+<P>
+<PRE>class CountingSemaphore ...
+  op signal: () ==&gt; count' = count + 1 end
+  op wait: () when ~isZero then count' = count - 1 else pend end
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION00041000000000000000> Concrete Transitions</A></H2>
+<P>
+Concrete code bodies must faithfully mirror both effects and
+synchronization conditions.  In <i> ODL</i>, concrete actions within
+curly braces are assumed to be <em> atomic</em> with respect to external
+clients,<A NAME=573>&#160;</A> and performed without interruption.  In the
+same way that it is impossible for the effects of both a <tt>
+Semaphore</tt> <tt> wait</tt> and <tt> signal</tt> operation to hold true
+simultaneously, we ensure that it is impossible for both a <tt> wait</tt>
+and a <tt> signal</tt> operation to execute simultaneously.  For example,
+a more concrete <tt> Semaphore</tt> class may be defined as
+follows:<A NAME=580>&#160;</A>
+<P>
+<PRE>class SemaphoreV1 is Semaphore
+  local l: Bool &lt;&gt;
+  local op set_l_true { l.t! }
+
+  locked: bool  { l? }
+  op wait: ()   { if ~l? then set_l_true else pend end }
+  op signal: () { l.f! }
+end
+</PRE>
+<P>
+For illustration, we broke out the concrete action <tt> set_l_true</tt>
+from the condition under which it is triggered.  While overkill here,
+this commonly useful tactic enables the separate design and
+development of actions and their synchronization conditions, as well
+as the reuse of the same action within different conditions and
+operations.  For convenience, we also sometimes write intermediate
+forms that are concrete in some effects but not in guards or in
+alternative clauses.  For example:
+<P>
+<PRE>  op wait: () when ~locked then { set_l_true } else pend end
+</PRE>
+<P>
+At some point, the <tt> when</tt>s and <tt> pend</tt>s need to be transformed
+(see Chapter <A NAME=tex2html102 HREF="ch19.html">19</A>).
+<P>
+<H2><A NAME=SECTION00042000000000000000> Parallelism</A></H2>
+<A NAME=587>&#160;</A><A NAME=588>&#160;</A>
+<P>
+Of course, atomicity of actions within each object does not at all
+preclude concurrency of <em> groups</em> of objects controlled by a single
+host. Since essentially all design-level classes may have the
+definitional characteristics of analysis-level ensembles, just about
+<em> any</em> object may harbor the forms of parallelism described in
+Chapter <A NAME=tex2html105 HREF="ch9.html">9</A>.  For example, consider a class that maintains
+two counts and has an operation for incrementing both at once:
+<A NAME=593>&#160;</A>
+<P>
+<PRE>class DoubleCounter
+  locals  c1: Counter &lt;&gt;;  c2: Counter &lt;&gt; end
+  fn count1: int { c1.count }
+  fn count2: int { c2.count }
+  op incboth: () ==&gt; count1'' = count1 + 1, count2'' = count2 + 1
+                     { c1.inc; c2.inc } end
+end
+</PRE>
+<P>
+[Sets of <tt> local</tt> declarations may be grouped together, as here.
+Also, for expediency, this class collapses abstract and concrete
+versions. We will sometimes mix descriptions like this while
+demonstrating abstract and concrete features at once.]
+<P>
+<A NAME=595>&#160;</A>
+<P>
+Recall that the original <tt> Counter</tt> class defined <tt> inc</tt> as a
+one-way (nonblocking) operation.  Thus, the <tt> incboth</tt> operation
+here may issue both requests without waiting for replies from either
+of them. The subactions may be executed independently and
+concurrently. One-way sends serve as a translation of <i> OAN</i>
+send-and-forget messages listed in the <em> Events</em> box of transition
+descriptions. They may also be used to obtain multiple independent
+``simultaneous'' logical transitions.
+<P>
+Here, because <tt> inc</tt> is nonblocking, the <tt> incboth</tt> operation
+cannot itself contain any guarantees about <em> when</em> the desired
+effects hold, only that they will take place <em> sometime</em> after the
+operation triggers.  This may be all that is desired.  Such effects
+are indicated in <i> ODL</i> using a double-prime to mean
+``eventually''.<A NAME=606>&#160;</A>
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00050000000000000000> Generic Classes</A></H2></center>
+<P>
+<A NAME=608>&#160;</A><A NAME=609>&#160;</A>
+<A NAME=610>&#160;</A><A NAME=611>&#160;</A>
+<P>
+Generic (or parametric) classes are those that define a whole family
+of related classes, differing only in matters concerning one or more
+types that are used as arguments to the class declarations.
+Generic classes are most useful for defining various
+``collections'' including those described in Chapter <A NAME=tex2html113 HREF="ch18.html">18</A>.
+<P>
+In <i> ODL</i>, generic classes and operations defined on them are
+declared with one or more type parameters within <tt> [...]</tt>.  These
+classes may be instantiated by supplying actual types.  We maintain the
+convention of giving upper case names to generic classes and
+operations. Generic classes may be subclassed in parametric or
+instantiated form.  For example:<A NAME=616>&#160;</A>
+<P>
+<PRE>class STACK[T]
+  fn length: init= 0;
+  fn empty: bool = (length = 0);
+  fn top: opt T;
+  op push(x: T): () ==&gt; top' = x, length' = length + 1 end
+  op pop  when ~empty then length' = length - 1 end
+end
+
+op clear[T](s: STACK[T]) ==&gt; s.empty'
+    { while ~s.empty do s.pop end } end
+</PRE>
+<P>
+<PRE>class REVERSIBLE_STACK[T] is STACK[T] ...
+  op reverse; ...
+end
+
+class WindowStack is STACK[Window] ...
+  fn currentlyDisplayed: bool;
+end
+
+op display(s: STACK[Window]);
+</PRE>
+<P>
+Here, <tt> push</tt> and <tt> clear</tt> are operations defined on <em> any</em>
+kind of stack, while <tt> display</tt> is defined only on stacks of <tt>
+Window</tt> objects.
+<P>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00060000000000000000> Generating Instances</A></H2></center>
+<P>
+<A NAME=623>&#160;</A><A NAME=624>&#160;</A><A NAME=625>&#160;</A>
+<P>
+<i> ODL</i> classes <em> describe</em> objects.  Like <i> OAN</i> models, they
+list attributes, dynamics, required initial conditions and invariants.
+Classes themselves do not define the facilities, rules, and related
+processing needed to <em> generate</em> objects of a given class.
+<P>
+Managing construction is a classic trade-off between flexibility and
+encapsulation. For maximum flexibility, we would like to be able to
+construct concrete objects by just asking that a set of links be
+attached in the desired way within some newly generated software
+entity.  For maximum reliability and security, we would like to
+restrict the rights of other objects to create new instances while
+simultaneously gathering up all construction policies, defaults, and
+related processing in one place, to make it easy to evaluate
+correctness.  For illustration, we adopt constructs and policies that
+are compatible with a range of conventions commonly seen in OO
+systems, from free-form binding to the mandated use of arbitrary forms
+of metaclasses.
+<P>
+<A NAME=630>&#160;</A><A NAME=631>&#160;</A><A NAME=632>&#160;</A>
+We assume that a <tt> new</tt> operation is associated with each concrete
+class. The <tt> new</tt> operation has the special argument syntax of
+accepting pairs of bindings (or simple state values in the case of
+primitives).  However, if a class specifies one or more <tt>
+generator</tt> class(es), then <tt> new</tt> is disabled at top level, and
+is only available from within these generators.  The effect of mandating
+uniform metaclass-based generators may be obtained using the policy of
+<em> always</em> specifying one generator per concrete class.  We will
+increasingly add further capabilities to such generators.
+<P>
+Even though they are not really parts of the target classes,
+generators are intimately tied to them. They must ensure that all
+stated invariants and initial conditions hold.  For example, we may
+add a class that hides the messy details of making new <tt> LampV1</tt>
+objects:<A NAME=639>&#160;</A>
+<P>
+<PRE>class LampV1 is Lamp ...
+  generator LampV1Gen
+end
+
+class LampV1Gen ...
+  op mk(initstate: bool) l: unique LampV1 {
+     l := new LampV1(switch := new BOOL(initstate)) }
+end
+</PRE>
+<P>
+By convention, we usually call basic constructor-wrapper
+operations ``<tt> mk</tt>''.  As discussed in Chapter <A NAME=tex2html122 HREF="ch17.html">17</A>,
+``<tt> unique</tt>'' here indicates that each invocation generates a different
+instance as its result.
+<P>
+Note that the constructor in this example needs to commit to a
+particular concrete version of <tt> Bool</tt> (just the default <tt>
+BOOL</tt>) to actually create the inner component.  It could not have
+listed it as just <tt> Bool</tt> since <tt> Bool</tt> is an abstract class,
+and we need a concrete object. Our <em> list all types as
+abstractly as possible</em> design rule requires that we almost always
+postpone selection of linked concrete object types to constructors.
+<P>
+<H3><A NAME=SECTION00060100000000000000> Multiple Constructors</A></H3>
+<P>
+This rule also implies that we may have several <em> different</em>
+generator classes, or just different constructive operations in the
+same generator for <tt> LampV1</tt> objects, each making a different
+choice about concrete components.  For any given class, there may be
+several reasonable ways to construct objects. For example:<A NAME=652>&#160;</A>
+<P>
+
+<PRE>class LampV1Gen ...
+  op dflt: unique LampV1 {
+     reply new LampV1(switch := new BOOL(false)) }
+  op clone(x: LampV1): unique LampV1 {
+     reply new LampV1(switch = new BOOL(x.on)) }
+end
+</PRE>
+<P>
+<H4><A NAME=SECTION00060110000000000000> Defaults.</A></H4>
+<A NAME=654>&#160;</A>
+Because generator classes are responsible for construction, they are
+also responsible for maintaining information about <em> default</em>
+initial conditions described in OOA models. The managed objects
+themselves need not know anything about default settings. Thus, default
+information normally associated with the target classes in OOA models
+usually translates into generator class design.
+<P>
+<H4><A NAME=SECTION00060120000000000000> Cloning.</A></H4>
+<A NAME=657>&#160;</A><A NAME=658>&#160;</A>
+A <tt> clone</tt> (also known as ``deep copy'' or ``copy-constructor'')
+operation is sometimes useful. This constructor makes a new object
+with the same observable properties as its argument.
+<P>
+<H2><A NAME=SECTION00061000000000000000> Abstracting Interfaces</A></H2>
+<A NAME=661>&#160;</A>
+<P>
+Our <tt> LampV1Gen</tt> class provides a set of concrete operations
+special to <tt> LampV1</tt> objects.  To reflect the fact that there
+are many ways to represent <tt> Lamp</tt>s concretely, we can elevate our
+manager declaration into one that holds for any <tt> Lamp</tt> manager
+class:
+<P>
+<PRE>class LampGen
+  fn defaultInitState: bool init= false;
+  op setDefault(b: bool): () ==&gt; defaultInitState' = b end
+  op dflt                q: unique Lamp ==&gt; q.on = defaultInitState end
+  op mk(initstate: bool) q: unique Lamp ==&gt; q.on = initstate end
+  op clone(p: Lamp)      q: unique Lamp ==&gt; q.on = p.on end
+end
+</PRE>
+<P>
+<PRE>class LampV1Gen is LampGen ... end
+</PRE>
+<P>
+All of the operations are now expressed abstractly. They may be
+implemented in different ways in concrete subclasses. This chain of
+transformations is almost the reverse of property-driven design.
+Instead of starting with some properties, and then finding concrete
+classes to make good on them, we started with some concrete chores to
+be supported, and derived a common property-based interface.  (For the
+sake of brevity, we will often use <tt> new</tt> expressions or isolated
+construction procedures in future examples, with the understanding
+that they should be grouped into appropriate generator
+classes that may in turn be given abstract interfaces.)
+<P>
+<H2><A NAME=SECTION00062000000000000000> Dispatching</A></H2>
+<A NAME=668>&#160;</A>
+<A NAME=669>&#160;</A><A NAME=670>&#160;</A>
+<P>
+We will further examine the role of OO <em> dispatching</em> (message
+binding, resolution, and routing) in Chapter <A NAME=tex2html131 HREF="ch21.html">21</A>. But
+this is a good opportunity to introduce some issues that dispatching
+is meant to solve.
+<P>
+The encapsulation of construction within generators leads to a new
+design problem.  When we were content to just use <tt> new</tt>, we
+imagined that there was a supervisor object sitting there to ``catch''
+the request and do the right thing. But when construction details are
+encapsulated within special classes, any client wishing to create a
+new <tt> LampV1</tt> object must know of a generator object out there
+willing to make one.  However, this introduces object coupling. We do
+not want to mandate hard-wired knowledge of generators inside clients.
+We remedy this via special dispatching policies that support a simple
+form of ``call by role'', or ``object dispatching''. This is one way
+to further postpone resolution of acquaintance relations (see
+Chapter <A NAME=tex2html132 HREF="ch6.html">6</A>).
+<P>
+The basic idea of object dispatching is for a supervisor object to
+accept a message nonspecifically addressed to <em> any</em> object of a
+given class, and then to route it to some particular object (of its
+choosing) that can service it.  We may just assume ``random
+routing'' that arbitrarily selects any object of the required type. (We
+will later describe how to attain more selective policies.)
+In <i> ODL</i> we indicate these requests using ``<tt> $</tt>'':
+<P>
+<PRE>op lampUser  {  local l: Lamp := LampGen$dflt; ... }
+</PRE>
+<P>
+Object dispatching liberates designs from undue object identity
+coupling.  In fact, it may be possible to fully replace all
+identity-based communication with strategies in which clients provide
+only the necessary descriptive properties of target objects rather
+than their identities.  However, the cost of doing so often makes this
+option thoroughly impractical.  For example, consider the descriptive
+measures needed for a <tt> CompositeLamp</tt> object to identify the <tt>
+Bool</tt> object that serves as its <tt> switch</tt> every time it performs
+<tt> flip</tt>.
+<P>
+<A NAME=685>&#160;</A>
+<P>
+<H2><A NAME=SECTION00070000000000000000> Design for Testability</A></H2>
+<A NAME=687>&#160;</A>
+<P>
+Even though testing issues are more bound to the implementation phase
+than to design, many design methods are centered around the notion of
+<em> design for testability</em>, bridging OOA models with computational
+designs.  These methods increase the likelihood that class designs
+solve the <em> right problem</em>, and that class operations execute in
+the <em> right way</em>.
+<P>
+The implementation of every concrete class ought to obey the
+constraints described by its abstract superclass(es). So far, we have
+focused on transformations and refinements that enhance the
+likelihood that concrete classes are correct with respect to these
+abstract specifications.  However, the work involved in transforming
+textual and approximate descriptions into executable expressions is
+also repaid in the design of unit tests for classes.  The opposite also
+applies, perhaps even more so.  In practice, writing self-tests at the
+same time that classes are designed is a productive way to <em> discover</em>
+well-specified constraints, effects, and the like.
+<P>
+A set of tests may be designed relating each abstract class to any and
+all concrete subclasses.  Two principal kinds of tests, constraint
+checks and trace checks, may be mixed and matched as needed.
+<P>
+<H2><A NAME=SECTION00071000000000000000> Constraint Checks</A></H2>
+<A NAME=693>&#160;</A>
+<P>
+Invariant (``<tt> inv</tt>'') constraints may be codified as self-check
+functions.  These may in turn be used as run-time assertions within
+test suites and/or placed in code attached to run-time exceptions
+within concrete classes themselves.  For every concrete class, you
+might define an operation <tt> invCheck</tt> that collects and evaluates
+all computable invariants for the class.  For example, <tt>
+CounterV1::invCheck</tt> should check that <tt> count &gt;= 0</tt>.  Invariants
+need not be readily or even feasibly computable within a class.
+However many are, and most others may be approximated for testing
+purposes.
+<P>
+An <tt> invCheck</tt> operation might be invoked only during testing.
+But it may also be invoked during system execution, especially after
+particularly tricky operations. It might even be invoked by a daemon
+object that periodically inspects system integrity.  Constructors
+inside generator classes also form convenient places to define many
+tests. Constructors create new objects that must:
+<UL><LI> have all ``<tt> &lt;&gt;</tt>'' links bound to suitable objects
+  <LI> obey all <tt> inv</tt> constraints
+  <LI> obey all <tt> init</tt> conditions.
+</UL>
+<P>
+We have already seen how constructors may be grouped into manager
+classes.  Beyond their organizational role, the <em> effects</em>
+descriptions of their component constructor operations help to
+describe the minimal requirements of construction across a set of
+subclasses.
+<P>
+Outside of constructors, invariant expressions and qualifiers may be
+checked by evaluating them at the beginning and/or end of any or all
+concrete operations. While these invariants may be temporarily broken
+within the body of any operations, each concrete action body has the
+obligation to patch constraints back together. This reflects the
+guarantee that if the invariant holds before the operation fires, then
+it still holds on completion.  Class invariants are the same as <em>
+loop invariants</em> (see, e.g., [<A HREF="#gries">6</A>]) except they extend across
+different operations, rather than parts of a single operation. (In
+fact, if object computation is conceptualized in terms of the
+event driven loop of Chapter <A NAME=tex2html136 HREF="ch15.html">15</A>, these notions may be
+treated as equivalent.)
+<P>
+<H2><A NAME=SECTION00072000000000000000> Trace Checks</A></H2>
+<A NAME=710>&#160;</A>
+<P>
+Similar remarks hold for effects defined using ``<tt> ==&gt;</tt>'' for
+abstract operations.  However, since effects may refer to both
+``before'' and ``after'' states of participant objects, they cannot be
+evaluated automatically. It is usually easy to define associated test
+functions manually by keeping track of initial and final properties of
+interest in a driver routine.
+<P>
+The idea of checking the effects of a single operation may be extended
+to sequences of operations, or <em> traces</em>.  The most useful tactics
+for self-tests are <em> constant</em> traces, <em> equivalent</em> traces, and
+<em> simulation</em> traces. In Chapter <A NAME=tex2html138 HREF="ch20.html">20</A> we describe
+bookkeeping classes for keeping track of tasks and sets of operations.
+These may also be used as a locus for defining such tests.
+<P>
+<H3><A NAME=SECTION00072100000000000000> Constant Traces</A></H3>
+<P>
+A constant trace is one that is claimed to propel an object across a
+sequence of operations that lead it back to a state having the same
+properties from which it began. (This is almost always the exact same
+abstract state.) For example:<A NAME=719>&#160;</A><A NAME=720>&#160;</A>
+<P>
+<PRE>op flipTwice(l: Lamp) ==&gt; l.on' = l.on
+   { l.flip; l.flip } end
+
+op pushPop[T](s: STACK[T], x: T)
+   ==&gt; (s.length = s.length') /\ (s.empty \/ (s.top' = s.top))
+   { s.push(x); s.pop } end
+</PRE>
+<P>
+The fact that these checks must be defined as ``tests'' rather than
+``specifications'' in <i> ODL</i> shows one of the essential differences
+between structured OO notations and specification languages in which such
+properties are often specifiable as ``axioms''.  Also, as is the case
+for invariant checks, tests need not exhaustively evaluate all
+properties to be effective. They need only check properties and
+approximations of properties of interest.
+<P>
+<H3><A NAME=SECTION00072200000000000000> Equivalent Paths</A></H3>
+<P>
+An equivalent-paths trace establishes two different sequences that are
+claimed to have the same total effect on abstract state. These are
+just like checks for algebraic identities; e.g., the commutativity of
+addition generates the test <b>a + b = b + a</b>.  For example:
+<P>
+<PRE>op add12(b: Int, d1: int, d2: int)  { b.add(d1); b.add(d2) }
+
+op add21(b: Int, d1: int, d2: int)  { b.add(d2); b.add(d1) }
+</PRE>
+<P>
+<PRE>op test(b: Int, d1: int, d2: int): bool {
+   b2 := new INT(b?);
+   add12(b, d1, d2); add21(b2, d1, d2);
+   reply b? = b2? }
+</PRE>
+<P>
+Interaction diagrams and use cases<A NAME=723>&#160;</A> from analysis may provide
+requirements and hints about useful tests.  Any time there are two
+different paths from one state to another, a test procedure can be
+constructed to check that the two paths actually have equivalent
+effect.  Applying these ideas to nonblocking one-way operations takes
+more work. You must be certain that transitions are
+completed before checking for their effects. Notification techniques
+(see Chapter <A NAME=tex2html142 HREF="ch22.html">22</A>) may be of use.
+<P>
+<H3><A NAME=SECTION00072300000000000000> Simulation Traces</A></H3>
+<A NAME=727>&#160;</A>
+<P>
+Other testing strategies are more appropriate for objects that rely on
+interfaces to foreign, external hardware and/or software.  External
+entities not only have mechanics that cannot be controlled, but they
+also generate sequences of events that cannot be predicted in advance.
+For example, an <tt> ATMCustomer</tt> may be defined as a software object,
+but it contains attributes derived from entities defined as pure
+external interfaces (e.g., the number of seconds since the last key
+press).  Such externally derived state information may be simulated in
+order to propel and assist design, prototyping, and testing efforts
+for <tt> ATMCustomer</tt> and all other objects with which it
+communicates.  For example, a subclass <tt> SimulatedATMCustomer</tt> may
+be constructed that somehow generates appropriate patterns of
+attributes.
+<P>
+Two main techniques are used for designing simulated objects.  The
+first is to generate states in accord with use cases described in OOA
+models. These are variants of trace tests,
+providing scenarios for which known results should hold.
+<P>
+The second is to generate attributes randomly. However, these must be
+generated in accord with all class invariants and other constraints.
+This can be very difficult. A more tractable approach is to simulate
+raw input events coming from the external entities. This is normally
+easier since such events are much less constrained, so are amenable to
+simple pseudorandom generation. It is better since it also tests
+responses to external events, rather than just laying attributes into
+place. This is potentially useful in preliminary assessments of
+performance and alertness requirements.
+<P>
+As a matter of policy, designers may create a <tt> SimulatedExt</tt> for
+every externally implemented class <tt> Ext</tt>. This then allows
+dependent classes such as <tt> ATMCustomer</tt> to be tested without the need
+for a random simulation-based subclass.
+<P>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00080000000000000000> Transformation and Composition</A></H2></center>
+<P>
+<A NAME=735>&#160;</A><A NAME=736>&#160;</A>
+<P>
+We have focused on a set of design strategies linking abstract and
+concrete design.  These tactics and constructs form most of the basis
+for transformational, compositional design.  Although we will see a lot
+of variations and twists, we can now narrow down the steps a bit from
+our previous characterizations.
+<P>
+<DL ><DT><b> Define abstraction:</b>
+<DD> Collect from analysis models the
+        central properties and operations defined for a class.
+        Transcribe and transform this into an abstract class
+        declaration describing types, constraints, and effects.
+  <DT><b> Define composition:</b>
+<DD> Re-express these features in terms of
+        the properties and behaviors of other components, leading to a
+        composite (sub)class declaration. Do this in as many ways as
+        you like, forming any number of composites that have the same
+        abstract features.
+  <DT><b> Define computation:</b>
+<DD> For each composite class, create one or
+        more concrete (sub)classes by transforming properties and
+        effects into delegated values and scripted actions, and
+        by specifying construction details.
+<P>
+ </DL>
+<P>
+These steps need not, and most often should not, be attached to the
+same class declaration.  Subclassing may be used to reflect the fact
+that there are many possible ways to represent and compute features,
+and we have chosen only one of them. This is most clearly important
+for capturing the differences between abstract and concrete
+declarations.
+<P>
+The distinction between abstract and concrete classes is a case where
+aesthetics and good design coincide.  No one likes to look at the ugly
+details of concrete class declarations such as <tt> LampV1</tt>.
+Similarly, other client classes and applications need not, and should
+not, know about these internal matters. Once the feasibility of one or
+more concrete definitions has been established, they need not be
+revisited for purposes of functional design.  Most further design
+matters deal only with the abstract versions.
+<P>
+The starting point for these transformations depends on details of
+analysis models. For example, a class such as <tt> Counter</tt> is most
+likely defined solely in terms of abstract declarative properties. But
+the analysis description of <tt> VacuumCleaner</tt> included some
+compositional and computational details.  So, from a property-driven
+view, the middle ``composition without computation'' stage is only
+sometimes useful.  For example, we skipped it entirely for <tt>
+Semaphore</tt>, and will for many others.  In the fairly common case in
+which the transformation from composite to concrete classes is just
+about completely constrained (i.e., when there is only one sensible
+translation from effects to actions), it makes little difference
+whether they are defined separately or combined into the same class.
+Sometimes, a code body <em> is</em> nearly its own best specification.
+<P>
+<H3><A NAME=SECTION00080100000000000000> Rational Reconstruction</A></H3>
+<A NAME=748>&#160;</A>
+<P>
+This abstract-to-concrete scenario is an overly idealistic view of
+design. When analysis models are weak or incomplete, actual design
+practice is exactly the reverse of this strategy.  Designers often
+first construct a concrete class that seems to do the right thing, and
+then later abstract away nonessential internals and retrospectively
+rationalize decisions, ultimately resulting in an abstract class.
+This is the tactic we used in arriving at abstract interfaces for
+generator classes.
+<P>
+Even though this is common, it is useful to act as though you are
+always following the abstract-to-concrete strategies.  This is a bit
+silly, but it is a recommended practice across just about all design
+efforts (see, especially Parnas and Clements[<A HREF="#parnas">19</A>]), software
+or otherwise.  In particular, <em> failing</em> to rationally reconstruct
+an abstract interface for a concrete class can be a serious error,
+since it binds all further classes to concrete details that will
+almost surely change as classes and applications evolve.
+<P>
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00090000000000000000> Summary</A></H2></center>
+<P>
+Class design is triggered by a group of OOA models collected into
+design-level abstract declarations.  The design of associated concrete
+classes and operations employs a transformational approach focused
+on <em> composition</em> -- arranging that other objects be used to
+obtain desired functionality, and <em> reification</em> -- finding courses
+of action that obtain the required effects.
+<P>
+<H2><A NAME=SECTION00091000000000000000> Further Reading</A></H2>
+<P>
+Similar OO design notations appropriate for active objects include
+<i> DisCo</i> [<A HREF="#disco">9</A>]<A NAME=757>&#160;</A> and <i> Hybrid</i>
+[<A HREF="#hybrid">17</A>]<A NAME=760>&#160;</A>. Alternatives include <em>
+actor</em><A NAME=762>&#160;</A> systems [<A HREF="#yonezawa">24</A>] and direct use
+of parallel OO languages such as <i> POOL</i> [<A HREF="#pool">1</A>]<A NAME=766>&#160;</A> or
+distributed ones such as <i> emerald</i> [<A HREF="#emerald">20</A>]<A NAME=769>&#160;</A>.
+Several formal specification systems have been altered to be more
+applicable to OO methods; see for example, descriptions of OO
+extensions to <i> Z</i><A NAME=771>&#160;</A> in [<A HREF="#ooz">21</A>], to <i> VDM</i><A NAME=774>&#160;</A>
+in [<A HREF="#wills">23</A>], and to <i> Larch</i><A NAME=777>&#160;</A> in [<A HREF="#leavens">13</A>].
+Methods based on formal specification tend to place an even stronger
+emphasis on refinement and reification techniques than described in
+this chapter.  Jones [<A HREF="#jones92">11</A>] describes methods that integrate
+ideas from formal methods and process calculus.  Johnson and Russo
+[<A HREF="#johnsonRusso">10</A>] provide examples and case studies of
+abstract class and framework design. Ossher, Harrison, and colleagues
+[<A HREF="#ossher">7</A>,<A HREF="#ossher2">18</A>] further investigate extension by addition
+as a design policy.
+<P>
+Our treatment of attributes as functions is similar to that supported
+in <i> CLOS</i> [<A HREF="#clos">2</A>]<A NAME=784>&#160;</A> and <i> Iris</i> [<A HREF="#iris">5</A>]. The
+overly careful distinction between values and links is similar to that
+of impure functional languages such as <i> ML</i><A NAME=788>&#160;</A>
+[<A HREF="#ml">22</A>]. The use of guards as specification and design constructs
+was pioneered by Dijkstra [<A HREF="#dijkstra">4</A>].  The broadening of
+postconditions to effects that reference other effects (which is
+intrinsic to structures involving subclassing) appears to have been
+introduced (in a different context) in [<A HREF="#lucassen">14</A>].  Helm et al
+[<A HREF="#helm">8</A>] introduced the notion of constraints as contracts between
+objects; see also Meyer
+[<A HREF="#meyer">16</A>] and Delcambre et al [<A HREF="#delcambre">3</A>].  Our use of object generators is similar to that of <i>
+emerald</i> [<A HREF="#emerald">20</A>]. The language <i> BETA</i><A NAME=798>&#160;</A>
+[<A HREF="#beta1">12</A>,<A HREF="#beta2">15</A>] presents an alternative framework for
+localization and embedding.
+<P>
+<H2><A NAME=SECTION00092000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Explain the difference between an interface and a
+        listing of attributes.
+<P>
+  <LI> Instead of treating OOA attributes as <em> functions</em>, why
+        don't we just say that attributes are ``directly represented'' inside
+        objects?
+<P>
+  <LI> If this is <em> object</em>-oriented design, why do we
+        sometimes define operations ``outside''
+        of objects?
+<P>
+  <LI> Should the <tt> Lamp</tt> class have been reworked to be
+        a <em> subclass</em> of <tt> Bool</tt>?
+<P>
+  <LI> Design an abstract <tt> VacuumCleaner</tt> class. Refer to
+        other OOA details listed in Chapter <A NAME=tex2html158 HREF="ch9.html">9</A>.
+        Then design a corresponding concrete class.
+<P>
+  <LI> Design one or more <tt> RefrigeratorDoor</tt> classes.
+<P>
+  <LI> Is it really an appropriate use of inheritance
+        to say that <tt> BOOL is Bool</tt>?
+<P>
+  <LI> Design a constraint test and a trace test for class <tt> Semaphore</tt>.
+<P>
+</OL>
+<P>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=pool><STRONG>1</STRONG></A><DD>
+P. America.
+ A parallel object-oriented language with inheritance and subtyping.
+ In <em> OOPSLA '90</em>. ACM, 1990.
+<P>
+<DT><A NAME=clos><STRONG>2</STRONG></A><DD>
+D. Bobrow, L. DeMichel, R. Gabriel, S. Keene, G. Kiczales, and D. Moon.
+ Common lisp object system specification.
+ <em> SIGPLAN Notices</em>, September 1988.
+<P>
+<DT><A NAME=delcambre><STRONG>3</STRONG></A><DD>
+L. Delcambre, B. Lim, and S. Urban.
+ Object-centered constraints.
+ In <em> IEEE International Data Engineering Conference</em>. IEEE, 1991.
+<P>
+<DT><A NAME=dijkstra><STRONG>4</STRONG></A><DD>
+E. Dijkstra.
+ <em> A Discipline of Programming</em>.
+ Prentice Hall, 1976.
+<P>
+<DT><A NAME=iris><STRONG>5</STRONG></A><DD>
+D. Fishman, J. Annevelink, E. Chow, T. Connors, J. Davis, W. Hasan, C. Hoch,
+  W. Kent, S. Leichner, P. Lyngbaek, B. Mahbod, M. Neimat, T. Risch, M. Shan,
+  and W. Wilkinson.
+ Overview of the iris dbms.
+ In W. Kim and F. Lochovsky, editors, <em> Object-Oriented Concepts,
+  Databases AND Applications</em>. ACM Press, 1989.
+<P>
+<DT><A NAME=gries><STRONG>6</STRONG></A><DD>
+D. Gries.
+ <em> The Science of Programming</em>.
+ Springer-Verlag, 1981.
+<P>
+<DT><A NAME=ossher><STRONG>7</STRONG></A><DD>
+B. Hailpern and H. Ossher.
+ Extending objects to support multiple interfaces and access control.
+ <em> IEEE Transactions in Software Engineering</em>, November 1990.
+<P>
+<DT><A NAME=helm><STRONG>8</STRONG></A><DD>
+R. Helm, I. Holland, and D. Gangopadhyay.
+ Contracts: Specifying behavioral compositions in object-oriented
+  systems.
+ In <em> OOPSLA '90</em>. ACM, 1990.
+<P>
+<DT><A NAME=disco><STRONG>9</STRONG></A><DD>
+H. Jarvinen, R. Kurki-Suonio, M. Sakkinnen, and K. Systa.
+ Object-oriented specification of reactive systems.
+ In <em> International Conference on Software Engineering</em>. IEEE,
+  1990.
+<P>
+<DT><A NAME=johnsonRusso><STRONG>10</STRONG></A><DD>
+R. Johnson and V. Russo.
+ Reusing object-oriented designs.
+ Technical Report UIUCDCS 91-1696, University of Illinois, 1991.
+<P>
+<DT><A NAME=jones92><STRONG>11</STRONG></A><DD>
+C. Jones.
+ An object-based design method for concurrent programs.
+ Technical Report UMCS-92-12-1, University of Manchester Department of
+  Computer Science, 1992.
+<P>
+<DT><A NAME=beta1><STRONG>12</STRONG></A><DD>
+B. Kristensen, O. Madsen, B. Moller-Pedersen, and K. Nygaard.
+ The beta programming language.
+ In B. Shriver and P. Wegner, editors, <em> Research Directions in
+  Object-Oriented Programming</em>. MIT Press, 1987.
+<P>
+<DT><A NAME=leavens><STRONG>13</STRONG></A><DD>
+G. Leavens and Y. Cheon.
+ Preliminary design of larch/c++.
+ In <em> Larch Workshop</em>, 1992.
+<P>
+<DT><A NAME=lucassen><STRONG>14</STRONG></A><DD>
+H. Lucassen and D. Gifford.
+ Polymorphic effect systems.
+ In <em> ACM Conference on Principles of Programming Languages</em>. ACM,
+  1988.
+<P>
+<DT><A NAME=beta2><STRONG>15</STRONG></A><DD>
+O. Madsen.
+ Block-structure and object-oriented languages.
+ In B. Shriver and P. Wegner, editors, <em> Research Directions in
+  Object-Oriented Programming</em>. MIT Press, 1987.
+<P>
+<DT><A NAME=meyer><STRONG>16</STRONG></A><DD>
+B. Meyer.
+ <em> Object-Oriented Software Construction</em>.
+ Prentice Hall International, 1988.
+<P>
+<DT><A NAME=hybrid><STRONG>17</STRONG></A><DD>
+O. Nierstrasz.
+ Active objects in hybrid.
+ In <em> OOPSLA '87</em>. ACM, 1987.
+<P>
+<DT><A NAME=ossher2><STRONG>18</STRONG></A><DD>
+H. Ossher and W. Harrison.
+ Combination of inheritance hierarchies.
+ In <em> OOPSLA '92</em>. ACM, 1992.
+<P>
+<DT><A NAME=parnas><STRONG>19</STRONG></A><DD>
+D. Parnas and P. Clements.
+ A rational design process: How and why to fake it.
+ <em> IEEE Transactions on Software Engineering</em>, February 1986.
+<P>
+<DT><A NAME=emerald><STRONG>20</STRONG></A><DD>
+R. Raj, E. Tempero, H. Levy, A. Black, N. Hutchinson, and E. Jul.
+ Emerald: A general purpose programming language.
+ <em> Software -- Practice and Experience</em>, 1991.
+<P>
+<DT><A NAME=ooz><STRONG>21</STRONG></A><DD>
+S. Stepney, R. Barden, and D. Cooper, editors.
+ <em> Object Orientation in Z</em>.
+ Springer Verlag, 1992.
+<P>
+<DT><A NAME=ml><STRONG>22</STRONG></A><DD>
+A. Wikstrom.
+ <em> Functional Programming Using Standard ML</em>.
+ Prentice Hall International, 1987.
+<P>
+<DT><A NAME=wills><STRONG>23</STRONG></A><DD>
+A. Wills.
+ Formal methods applied to object oriented programming.
+ Technical Report Thesis, University of Manchester, 1992.
+<P>
+<DT><A NAME=yonezawa><STRONG>24</STRONG></A><DD>
+A. Yonezawa and M. Tokoro, editors.
+ <em> Object-Oriented Concurrent Programming</em>.
+ MIT Press, 1988.
+</DL>
+<P>
+
+<a href="ch17.html">Next: Chapter 17</a>
+<center><P><P></center>
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:55:45 EDT 1995</I>
+</ADDRESS>
+</BODY>

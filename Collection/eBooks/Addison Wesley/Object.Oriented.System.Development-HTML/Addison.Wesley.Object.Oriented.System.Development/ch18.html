@@ -1,0 +1,1307 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Relationships in Design</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Relationships in Design">
+<meta name="keywords" value="ch18">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 18: Relationships in Design</h2>
+<UL>
+<LI> <A NAME=tex2html123 HREF="#SECTION00010000000000000000"> Relationships</A>
+<LI> <A NAME=tex2html124 HREF="#SECTION00020000000000000000"> Collections</A>
+<LI> <A NAME=tex2html125 HREF="#SECTION00030000000000000000"> Coordinators</A>
+<LI> <A NAME=tex2html126 HREF="#SECTION00040000000000000000"> Relations versus Composites</A>
+<LI> <A NAME=tex2html127 HREF="#SECTION00050000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+<A NAME=9>&#160;</A>
+<P>
+In this chapter, we describe objects that track, collect, and maintain
+other objects.  In previous chapters of Part II, we normally assumed
+that we were dealing with OOA models that mentioned only the abstract
+attributes and associated properties of particular classes,
+operations, or sets of classes. The design methods focused on the
+transformation of this information into composite and concrete class
+definitions meeting these properties.  Another view focuses on their
+relations to other objects.  Relations describe objects solely in
+terms of ``who they know''.
+<P>
+In many ways, relational information forms the complement of
+property-based abstract class information. Pure abstract classes list
+only <tt> fn</tt>s and <tt> op</tt>s without necessarily revealing anything
+about internal connections.  Pure relationships list only links,
+without necessarily revealing anything about properties and behaviors
+of the groups of objects when considered as a whole.  In relational
+design, we often add properties and behaviors to the interfaces of
+classes holding known links, rather than finding component objects
+that help satisfy a known interface.
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Relationships</A></H2></center>
+<A NAME=13>&#160;</A>
+<P>
+OOA models may describe relationships in either of two ways.
+Relational models discussed in Chapter <A NAME=tex2html5 HREF="ch4.html">4</A> explicitly
+specify relations such as <em> SisterOf</em>, <em> WorksFor</em>, <em>
+UsedBy</em>, and so on, connecting particular objects.  Also, OOA class
+descriptions may describe links to objects as intrinsic attributes.
+For example, a <tt> Face</tt> class may list attribute <tt> nose:Nose</tt>.
+This represents a connection to a <tt> Nose</tt> object that is
+constrained to play a certain role in its <tt> Face</tt>.
+<P>
+All relationships (as well as composite objects) are described in <i>
+ODL</i> using the same basic link constructs. Declaring that some class
+<tt> X</tt> has a <tt> y:Y</tt> attribute or link means only that each <tt> X</tt>
+object ``knows about'' or ``may directly communicate with'' an object
+of class <tt> Y</tt>.  This cannot capture the different senses in which
+different objects may be connected. Semantically meaningful relations
+such as <em> SisterOf</em> can only be established by convention, by
+naming strategies, by qualifiers and annotations, and, mostly, by
+usage.
+<P>
+There are many ways to capture static relationship information,
+depending on how it is structured and used. In fact, there are at
+least as many strategies as there are ``linked data structures'' and
+associated techniques, as extended by subclassing and other OO
+constructs.  We will describe only a few of the most common and useful
+points on the design space resulting from considerations including:
+<P>
+<UL><LI> the arity of the relation
+<LI> whether the relation is intensionally or extensionally defined
+<LI> the cardinalities of the domains
+<LI> whether it is functional (at most one target per source) in either direction
+<LI> whether relationship instances have properties beyond those of participants
+<LI> whether the whole relationship has properties beyond those of instances
+<LI> whether participants must determine which relations they are members of
+<LI> whether participants ever directly communicate with each other
+<LI> whether participants must determine the identities of other participants
+<LI> whether nonparticipants communicate with members via the relation
+<LI> whether membership is nonoptional for objects of certain subclasses
+<LI> whether membership may be transient
+<LI> how entry and exit conditions of transient relations are controlled
+<LI> whether participants may control which relations they are in
+<LI> whether membership must be explicitly tracked or logged, and if so, how
+<LI> whether the relationship still holds if one or more participants change.
+</UL><H2><A NAME=SECTION00011000000000000000> Relational Classes</A></H2>
+<P>
+
+<P>
+A good starting point is to declare each element of a relationship
+as an instance of a <em> class</em> with <tt> fixed</tt> object link attributes.  For example,
+the ownership relation between clients and
+accounts is:<A NAME=34>&#160;</A><A NAME=35>&#160;</A><A NAME=36>&#160;</A><A NAME=37>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch18-img1.gif"><P>
+<P>
+<PRE>class ClientAccountTuple % or `class Own'
+  local cl: fixed Client;
+  local acct: fixed Account;
+end
+</PRE>
+<P>
+The entire aggregate relationship itself could then be defined as a
+<tt> SET</tt> of such tuples.<A NAME=50>&#160;</A>
+<P>
+However, this is by itself a pretty useless design. The class has no
+external interface at all. No other object may communicate with
+members of <tt> ClientAccountTuple</tt>. Such classes are ``abstract'' in
+a very different sense than the abstract classes we have previously
+encountered.  They represent abstract linkages, relationships, and/or
+interaction potentials between objects. We will sometimes use the
+phrase ``pure relational'' to denote this kind of class.
+<P>
+<H4><A NAME=SECTION00011010000000000000> Adding properties.</A></H4>
+<P>
+If a relational class exists in order to help other objects keep track
+of relationships, it may contain an interface that ``gives away'' the
+identities of participants. It may also contain any other properties and
+constraints of interest.  A variant of the original may be defined
+as a subclass:
+<P>
+<PRE>class ClientAccount
+  client: Client;
+  account: Account;
+  inv account.ownerID = client.clientID
+  lastAccess: Date;
+  op markAccess(d: Date) ==&gt; sameDate(lastAccess', d) end
+end
+</PRE>
+<P>
+<PRE>class ClientAccountV1 is ClientAccount
+  client: Client  &lt;&gt;
+  account: Account &lt;&gt;
+  own lastAccessDate: Date &lt;&gt;
+  op markAccess(d: Date) { lastAccessDate.set(d) }
+end
+</PRE>
+<P>
+Classes such as <tt> ClientAccount</tt> expand on a simple relationship to
+localize attributes and operations, and to isolate and manage object
+interaction.  For example, the difference between abstract and
+concrete versions may be exploited when hiding database retrieves
+behind the veneer of an interoperable relational class.
+<P>
+<H4><A NAME=SECTION00011020000000000000> Back-links.</A></H4>
+<P>
+While simplest and nicest,  these relational class declarations do
+not make allowances for objects to directly ``know'' what relations
+they are in (i.e., here, for clients to know their
+accounts). If this is necessary, we might <em> additionally</em> declare
+that such relational objects serve as conditionally bound link
+attributes of their participants. We may also add predicates
+that allow one member to report whether it is related to another:
+<P>
+<PRE>class Client_1
+  r: opt ClientAccount;
+  fn owns(a: Account): bool  = (~null(r) /\ r.account = a);
+end
+</PRE>
+<P>
+(and/or similarly for <tt> Account</tt>).  This is one translation of:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch18-img2.gif"><P><H4><A NAME=SECTION00011030000000000000> Cross references.</A></H4>
+<P>
+The previous strategy only works for <em> [0:1]</em> and <em> [1:1]</em>
+relationships. If each <tt> Client</tt> may own an unbounded number of
+accounts, then the links and back-links must be defined as
+collections, for example:
+<P>
+<PRE>class Client_2
+  r: fixed SET[ClientAccount];
+  accts: fixed SET[Account];
+end
+</PRE>
+<P>
+<H4><A NAME=SECTION00011040000000000000> Conditional links.</A></H4>
+<P>
+If a relationship is accessible only via its participants, if it
+possesses no other attributes, if there is no other reason to track it
+externally, and if the relationship is <em> [1:1]</em> or <em> [0:1]</em> for
+each participant, then there is no need to declare a relational class
+at all.  Instead, each participant may declare a conditionally bound
+link attribute to the others, perhaps along with state attributes that
+keep track of whether the relation is in effect:
+<P>
+<PRE>class Client_3 ...
+  isOwner: bool;
+  acct: opt Account;
+  inv isOwner =&gt; ~null(acct)
+end
+</PRE>
+<P>
+<H4><A NAME=SECTION00011050000000000000> Unconditional links.</A></H4>
+<P>
+If objects of one class are uniformly and necessarily related to those
+of another and there is no other need to keep track of the relation
+separately, the relation may be declared using regular link
+attributes.  For example, say that accounts are intrinsically required
+to be owned by particular clients, so that it is impossible to have an
+account without an owner.  This implies that <tt> Account_2</tt> is <em>
+itself</em> a sort of relational class in addition to its other
+properties:
+<P>
+<PRE>class Account_2 ...
+  owner: fixed Client;
+end
+</PRE>
+<P>
+<H4><A NAME=SECTION00011060000000000000> Subclassing.</A></H4>
+<P>
+If only special kinds of objects are related to others, they may be
+split away and described as subclasses. For example, if only some
+kinds of accounts have owners, we could make <tt> OwnedAccount</tt> a
+subclass of (ownerless) class <tt> Account</tt>.
+<P>
+<H4><A NAME=SECTION00011070000000000000> Rebindable Links.</A></H4>
+<P>
+If the form of the relation must always hold, but one of the
+participants may vary, then the link need not be declared as
+<tt> fixed</tt>. For example, declaring just <tt> owner:Client</tt> means
+that an account always has an owner, but that it might be owned by
+different clients during its lifetime.
+<P>
+<H4><A NAME=SECTION00011080000000000000> Generics.</A></H4>
+<A NAME=86>&#160;</A>
+<A NAME=87>&#160;</A><A NAME=88>&#160;</A><A NAME=89>&#160;</A>
+<P>
+Specific relational classes may be subsumed under generic classes.
+For example, at an extreme, any relationship linking any two objects
+of the same class could be described parametrically via:<A NAME=90>&#160;</A><A NAME=91>&#160;</A>
+<P>
+<PRE>class PAIR[T]
+  first:  T;
+  second: T;
+end
+
+class ParentChild is PAIR[Person] ... end
+</PRE>
+<P>
+This level of abstraction can impair understandability. Here, for
+example, we would probably like to label the two participants as <tt>
+parent:Person</tt> and <tt> child:Person</tt> rather than just <tt> first</tt> and
+<tt> second</tt>.  Luckily, both effects may be had at once through <em>
+views</em>:<A NAME=97>&#160;</A>
+<P>
+
+<P>
+<H2><A NAME=SECTION00012000000000000000> Relations versus Subclasses</A></H2>
+<P>
+<A NAME=100>&#160;</A>
+<A NAME=101>&#160;</A>
+<P>
+Relational designs focus on relations among objects. Inheritance is a
+relation among classes.  The two concepts should not be confused.
+Relational classes may look superficially similar to multiply
+inherited classes.  However, relational classes describe internal
+connections, without a commitment to visible properties, while
+(abstract) multiple inheritance describes properties, without a
+commitment to composition.  Sometimes these may be mixed and matched,
+but it is worth getting the options straight.  For example, it might
+be tempting to express the ownership relation
+as:<A NAME=102>&#160;</A><A NAME=103>&#160;</A>
+<P>
+<PRE>class CA is Client, Account end
+</PRE>
+<P>
+This declaration says that all objects of class <tt> CA</tt> have all the
+characteristics of accounts as well as all those of clients. Thus,
+<tt> CA</tt> objects have <tt> interestRate</tt> properties, can perform <tt>
+deposit</tt> operations, but also have <tt> lastName</tt>s, <tt> clientID</tt>s,
+and so on. This is surely not what is intended.  It is never a good
+idea to express such relationships as multiply inherited classes
+unless by rare chance <em> all</em> properties and operations defined on
+all of the component classes may be inherited meaningfully.
+<P>
+<H2><A NAME=SECTION00013000000000000000> Constraints on Relations</A></H2>
+<P>
+<A NAME=112>&#160;</A><A NAME=113>&#160;</A>
+<P>
+Relation specifications may include <tt> inv</tt> constraints representing
+<em> contracts</em> [<A HREF="#helm">2</A>] between their members.  For example,
+a relationship may include the constraint that the client ID number of
+a person's checking and savings accounts must be the same.  Or a user
+interface specification may say the open/closed status of a cash
+dispenser door matches that of a displayed door-icon. These might be
+specified at the OOA level explicitly via constraints, or implicitly
+via parametric relations (Chapter <A NAME=tex2html24 HREF="ch4.html">4</A>).
+<P>
+<A NAME=119>&#160;</A>
+<A NAME=120>&#160;</A>
+<P>
+Note that parametric (generic) relational classes are not the same as
+OOA-level parametric relation instances. The latter are typically used
+to indicate constraints on elements of other classes. For example,
+the <em> Family</em> class in Chapter <A NAME=tex2html27 HREF="ch4.html">4</A>
+might look like:<A NAME=124>&#160;</A>
+<P>
+<PRE>class Family ...
+  parent: Person;
+  child: Person;
+  inv parent.isCustodianOf(child)
+end
+</PRE>
+<P>
+Simple static measures occasionally suffice to maintain
+invariants.  Some relational constraints and dependencies may be
+satisfied by designing classes that share links to the same source
+object. For example, a good way to ensure that all accounts held by a
+person report the same client number is to have them all share links
+to the same client object, and delegate requests to get the client ID
+through the sole object whose job is to maintain it. As long as the
+constructors and participants ensure that the links are properly
+shared, all is well.  This technique is just the time-honored practice
+of reducing a value equality constraint to a link equality constraint.
+Assuming <tt> fixed</tt> links and/or other precautions, this need be
+established only once:<A NAME=126>&#160;</A>
+<P>
+<PRE>class AccountPair ...
+  savings: fixed SavingsAccount &lt;&gt;
+  checking: fixed CheckingAccount &lt;&gt;
+
+  inv savings.owner = checking.owner % rely on constructor to establish
+  inv savings.clientID = checking.clientID % implied by owner equality
+end
+
+op mkAccountPair(c: Client): AccountPair {
+  reply new AccountPair(
+     savings := new SavingsAccount(... owner := c ...),
+     checking := new CheckingAccount(... owner := c ...)) }
+</PRE>
+<P>
+Such strategies fail when the constraints carry dynamic consequences
+(i.e., lead to transitions in any of the participants).  For example,
+if there were some action that each account needed to perform if the
+client ID changed, this must be actively coordinated using the
+methods described later in this chapter and in Chapter <A NAME=tex2html30 HREF="ch22.html">22</A>.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00020000000000000000> Collections</A></H2></center>
+<A NAME=130>&#160;</A>
+<P>
+<tt> SET</tt>s and related classes are often used to represent collections
+of objects all of which satisfy some property or relation.  Many
+different collection classes may be defined, each differing in
+interface and policies for keeping track of objects.  These serve both
+as tools for expressing multiplicity features described in analysis
+models, and also as bases for many  manager classes.
+<P>
+The general forms of these classes are not unique to object-oriented
+design.  They are similar to constructs used to describe and specify
+groupings within other design approaches (see, e.g., [<A HREF="#jones">4</A>]).
+As usual, there is nothing very special about the precise definitions of
+the classes we list here. They are ones that are most commonly found
+to be useful.  We do not make much of a commitment about the exact
+form of these classes or of their inheritance relations in following
+discussions, but we need them to exemplify designs using collections.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Sets</A></H2>
+<A NAME=134>&#160;</A><A NAME=135>&#160;</A>
+<P>
+Sets are usually the best way to translate <em> [0:N]</em> attributes
+described in OOA models, as well as collections of relational tuples
+and other groupings.  As discussed in Chapter <A NAME=tex2html34 HREF="ch4.html">4</A>,
+analysts might use set notation for such purposes, in which case
+essentially no transformation is necessary.  A generic class <tt> SET</tt>
+supports properties <tt> size</tt> and membership predicate <tt> has</tt>, as
+well as operations to add, remove, and perform operations on elements:
+<P>
+
+<PRE>class SET[T]
+  size: int;                 %   number of elements
+  empty: bool                =   size = 0;
+  fn has(item: Any): bool;   %   true if item is in set
+  op put(item: T): ()        ==&gt; has(item)' end
+  op remove(item: T): ()     ==&gt; ~has(item)' end
+  op applyC(p: WRAPPER1[T]); %   call p on all elements
+  op applyS(p: WRAPPER1[T]); %   send p to all elements
+end
+</PRE>
+<P>
+<H3><A NAME=SECTION00021100000000000000> Parameterized Wrappers</A></H3>
+<P>
+New forms of wrappers are referenced in <tt> applyC</tt> and <tt> applyS</tt>.
+These invoke (either in <tt> call</tt> or <tt> send</tt> mode) the same
+operation for each element of a set.  The associated wrappers take an
+argument, thus allowing the passing of arguments through to the inner
+operations:<A NAME=147>&#160;</A>
+<P>
+<PRE>class WRAPPER1[T]
+  op call(t: T): ();
+  op send(t: T);
+end
+</PRE>
+<P>
+We assume a <tt> WRAP1</tt> macro that creates the right kind of wrapper and
+instantiates it. This then allows:
+<P>
+<PRE>op print(s: SET[MailingLabel]): () { s.applyC(WRAP1(print(#1))) }
+</PRE>
+<P>
+[We use ``<tt> #</tt><em> n</em>'' as a placeholder for
+macro argument number <em> n</em>.]
+<P>
+A <tt> WRAPPER2</tt> may be defined similarly for two-argument operations,
+and so on.  Special versions may also be defined to wrap procedures
+and functions classified on result type in addition to argument type.
+We will sometimes do this. For example, a <tt> PREDWRAPPER1</tt> is a <tt>
+WRAPPER1</tt>-like class that wraps its actions within <tt> fn</tt> <tt>
+pred:</tt> <tt> bool</tt>, so it can transmit a boolean result back to its
+sender.  Such basic macros cover the most common need for holding
+operations as objects. But there are as many kinds of wrappers as
+there are relational classes and operations.  They cannot <em> all</em> be
+generated mechanically.
+<P>
+<H3><A NAME=SECTION00021200000000000000> Extensions</A></H3>
+<P>
+Any number of auxiliary operations may be defined on top of set
+classes. For example, set union and difference might
+be supported in a <em> mutable</em> fashion:
+<P>
+<PRE>op putAll[T](dest: SET[T], other: SET[T]): ();
+   % add all elements of other into dest
+   % i.e., set dest to (dest U other)
+op removeAll[T](dest: SET[T], other: SET[T]): ();
+   % remove all elements of other from dest
+   % i.e., set dest to (dest \ other)
+</PRE>
+<P>
+Refinements of set classes may be defined through subclassing.  For
+example, special versions of sets might guarantee that <tt> applyC</tt>
+traverses elements in an order based on some kind of key values.  It is
+also convenient to define less powerful <em> super</em>classes.  In
+particular, defining <tt> PUT_ONLY_SET</tt> that supports only <tt>
+has</tt> and <tt> put</tt> is a useful way of to ensure that items are never
+removed or otherwise touched.
+<P>
+Associated concrete classes may be based on hash tables, linked lists,
+balanced trees, and so on.  It is often useful and convenient to
+implement the <tt> applyS</tt> and <tt> applyC</tt> operations as <em>
+multicasts</em> (see Chapter <A NAME=tex2html36 HREF="ch22.html">22</A>). <A NAME=171>&#160;</A>
+<P>
+<P>
+<H3><A NAME=SECTION00021300000000000000> Examples</A></H3>
+<P>
+A <tt> SET</tt> may be used in translating the <em> Hand</em> class
+described in Chapter <A NAME=tex2html38 HREF="ch3.html">3</A>:
+<P>
+<PRE>class Hand ...
+  thumb: Finger;
+  fingers: SET[Finger];
+  inv fingers.size &lt;= 6, fingers.has(thumb)
+end
+</PRE>
+<P>
+The <tt> SET[SET[Student]]</tt> in the following version of the <em>
+School</em> class results from the mixture of <em> [1:M]</em> and explicit set
+constructs:<A NAME=180>&#160;</A>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch18-img3.gif"><P>
+<PRE>class School ...
+  faculty:  SET[Employee];
+  students: SET[SET[Student]];
+end
+</PRE>
+<P>
+
+The simplest relation-holder is just a set whose elements
+are relational objects. Other status operations may then be added. For
+example:
+<P>
+<PRE>class ParentChildSet is SET[ParentChild] ...
+  op put(pc: ParentChild);
+  fn hasParent(p: Any): bool;
+  fn hasChild(c: Any): bool;
+end
+</PRE>
+<P>
+<H2><A NAME=SECTION00022000000000000000> Other Collections</A></H2>
+<P>
+<H4><A NAME=SECTION00022010000000000000> Bags.</A></H4>
+<A NAME=193>&#160;</A>
+<tt> BAG</tt> classes support the same operations as <tt> SET</tt>, but
+possess bag (multiset) semantics. For <tt> SET</tt>s, multiple insertions
+of the same object result in only a single occurrence, while in
+<tt> BAGs</tt>, multiple insertions result in multiple occurrences.  Both
+<tt> SET</tt>s and <tt> BAG</tt>s may be defined to be subclasses of a
+simple <tt> COLLECTION</tt> that makes no guarantees one way or the
+other.
+<P>
+<H4><A NAME=SECTION00022020000000000000> Buffers and queues.</A></H4>
+<A NAME=202>&#160;</A><A NAME=203>&#160;</A>
+A useful variant of a bag is a buffer, supporting only <tt> put</tt>,
+<tt> take</tt>, <tt> empty</tt>, and <tt> full</tt>.  The <tt> take</tt> operation
+removes and returns <em> any</em> arbitrary element:
+<P>
+<PRE>class BUFFER[T]
+  empty: bool;         % false if can take
+  full: bool;          % false if can put
+  op put(item: T): (); % insert an item
+  op take item: T;     % take any item
+end
+</PRE>
+<P>
+Unbounded versions may be defined as subclasses for which <tt> full</tt>
+is constantly false. (The same technique may be used to create possibly
+bounded <tt> SET</tt>s and <tt> BAG</tt>s.)  Subclasses of <tt> BUFFER</tt> may
+strengthen the guarantees of <tt> take</tt>. In particular, a <tt> QUEUE</tt>
+promises that <tt> take</tt> returns the least recently inserted item
+(i.e., maintains FIFO policies).
+<P>
+<H4><A NAME=SECTION00022030000000000000> Maps.</A></H4>
+<A NAME=218>&#160;</A>
+<tt> MAP</tt>s represent sets of pairs of objects in which the first
+element of each pair is unique and serves as a ``key'' for the second.
+They support the same features (on pairs) as <tt> SET</tt>, plus a
+function <tt> at</tt> that accepts a key, and returns the corresponding
+element or is null if there is no such key. (We will describe a better
+way to phrase this operation, via named replies, in
+Chapter <A NAME=tex2html44 HREF="ch20.html">20</A>.) For
+example:<A NAME=224>&#160;</A>
+<P>
+<PRE>class Employees
+  boss: Employee;
+  ssns: MAP[Name, SSN];
+  inv ssns.at(boss.name) = boss.ssn
+end
+</PRE>
+<P>
+A useful variant is an <tt> EQUIV_MAP</tt>, which guarantees that
+keys and contents have a one-to-one relation, and supports an
+<tt> unmap(cont)</tt> to return the first element, given the second.
+<P>
+<H4><A NAME=SECTION00022040000000000000> Tables.</A></H4>
+<A NAME=228>&#160;</A>
+Tables are special versions of maps from integer values to contents.
+They are common replacements for <tt> SET</tt>s when there is a need for
+clients to be able to access individual elements through indices.
+A useful subclass supports traversal:
+<P>
+<PRE>class TABLE[T]
+  size: int;                        % number of elements
+  empty: bool;                      % true if size = 0
+  has(index: int): bool;            % true if item with index is in table
+  op put(item: T): int;             % put item anywhere, return its index
+  op remove(index: int);            % unbind item at index
+  op at(index: int): opt T;         % return item at index
+  op atput(index: int, item: T):(); % rebind item at index
+end
+</PRE>
+<P>
+<PRE>class TRAVERSABLE_TABLE[T] is TABLE[T]
+  lowest: int;                      % minimum bound index
+  highest: int;                     % maximum bound index
+  op next(index: int): int;         % next bound index
+end
+</PRE>
+<P>
+These may be used, for example, in:
+<P>
+<PRE>class Entries
+  v: TABLE[Account];
+  fn accountExists(acctNum: int): bool { ~null(v.at(acctNum)) }
+end
+
+op printAll(t: TRAVERSABLE_TABLE[Employee]) {
+  local i:int := t.lowest;
+  while i &lt;= t.highest do print(t.at(i)); i := t.next(i) end }
+</PRE>
+<P>
+There are several other idioms for arranging traversal.  An
+alternative strategy illustrated later is to define <em> iterator</em>
+objects with operations that reveal the ``current'' element of a
+particular collection object, as well as those that step to the next
+(or previous or whatever) element on
+request.<A NAME=231>&#160;</A>
+<P>
+<H4><A NAME=SECTION00022050000000000000> Arrays.</A></H4>
+<A NAME=233>&#160;</A>
+Arrays are constant-sized, contiguously accessible tables of (<tt>
+opt</tt>) objects, supporting usage such as:
+<P>
+<PRE>class Balances
+  v: ARRAY[Balance];
+  op printAll { local i: int := 0;
+     while i &lt; v.size do print(v.at(i)); i := i + 1 end }
+end
+</PRE>
+<P>
+Multidimensional arrays may be declared as <tt> ARRAY[ARRAY[T]]</tt>.
+Alternatively, special cases (e.g., <tt> MATRIX</tt>) may be defined
+directly.  <tt> ARRAY</tt>s may also be used to translate bounded OOA
+multiplicities.  For example, the <em> Hand</em> example might be recast as:<A NAME=239>&#160;</A>
+<P>
+<PRE>class Hand ...
+  fingers: ARRAY[Finger];
+  inv fingers.size = 6
+end
+</PRE>
+<P>
+<H4><A NAME=SECTION00022060000000000000> Sequences.</A></H4>
+<A NAME=241>&#160;</A><A NAME=242>&#160;</A><A NAME=243>&#160;</A>
+<tt> SEQ</tt> classes represent sequences (lists). <tt> SEQ</tt> supports
+<tt> has</tt> and <tt> size</tt>, plus <tt> hd</tt> and <tt> tl</tt>, and
+operations <tt> prepend</tt>, <tt> append</tt>, and <tt> concat</tt>. For
+example:<A NAME=253>&#160;</A>
+<P>
+<PRE>class Book ...
+  ch: SEQ[Chapter];
+  inv ch.hd.number = 1
+end
+</PRE>
+<P>
+A mutable string class may be defined as:
+<P>
+<PRE>class String is SEQ[Char] ...
+  op toUpperCase; % transform all chars to upper case
+end
+</PRE>
+<P>
+An immutable version may be defined as:
+<P>
+<PRE>class CharVal val: fixed Char; end
+class StringVal is IMMUTABLE_SEQ[CharVal] ... end
+</PRE>
+<P>
+where <tt> IMMUTABLE_SEQ</tt> is a superclass defining only
+<tt> fn</tt>s, not mutating operations.
+<P>
+<H3><A NAME=SECTION00022100000000000000> Sequences as Per-Object Relations</A></H3>
+<A NAME=257>&#160;</A>
+<P>
+Rather than treating the elements as parts of a structured collection,
+sequential ordering may be represented as a relationship between
+individual objects. For example, if each <tt> Chapter</tt> object
+intrinsically bears an <em> is-followed-by</em> relation with another,
+this could be expressed through:<A NAME=260>&#160;</A>
+<P>
+<PRE>class Chapter ...
+  next: opt Chapter;
+end
+
+class Book ...
+  firstChapter: Chapter;
+end
+</PRE>
+<P>
+This may be refined a bit by segregating those objects that <em> are</em>
+followed by others versus the (only) one that is not:
+<P>
+<PRE>class Chapter_2 ... end
+class FinalChapter is Chapter_2 ... end
+class LinkedChapter is Chapter_2
+  local next: Chapter;
+end
+</PRE>
+<P>
+However, this does not apply if any given object may need to change
+its status from linked to unlinked or vice versa (e.g., if a new final
+chapter is added, making the old one nonfinal).  Alternatively, the
+links may be wrapped ``around'' the objects rather than ``within''
+them:
+<P>
+<PRE>class Chapter_3 ... end
+class ChapterLink
+  local ch: Chapter_3;
+  local next: opt ChapterLink;
+end
+</PRE>
+<P>
+This is a common strategy for designing the internal structure of
+concrete <tt> SEQ</tt>, <tt> SET</tt>, etc., classes.  Note that this loses
+subclassing. For example, if <tt> Chapter</tt> objects have <tt> title</tt>
+attributes, then so do <tt> LinkedChapter</tt>s.  But for <tt>
+ChapterLink</tt> objects, the <tt> Chapter</tt> is treated as an internal
+component. The attributes are not automatically propagated (although
+this could be done manually via forwarding).
+<P>
+<H3><A NAME=SECTION00022200000000000000> Active Data Structures</A></H3>
+<P>
+<A NAME=270>&#160;</A>
+<P>
+Elements of a sequence or other collection may include protocols for
+collaborating on various tasks.  For example, suppose we would
+like to be able to send a <tt> printBook</tt> message to <em> any</em> <tt>
+Chapter</tt> object in a book, and still have the book printed in chapter
+order:<A NAME=274>&#160;</A>
+<P>
+<PRE>class Chapter_4 ...
+  locals prev: opt Chapter_4; next: opt Chapter_4; end
+  op printBook {
+     if ~null(prev) then prev.printBook else self.printAndPropagate end }
+  op printAndPropagate {
+     Printer$print(self); if ~null(next) then next.printAndPropagate end }
+end
+</PRE>
+<P>
+In this case, there may be no need to create a <tt> Book</tt> class
+representing all members of the relation. This is only attractive when
+group (relation) membership need not be otherwise managed or tracked.
+<P>
+There are as many such designs as there are operations on data
+structures. This example is an ``active doubly linked list''.
+Similar configurations and algorithms may be based on trees,
+hypercubes, and other graph structures (see, e.g., [<A HREF="#jaja">3</A>]).
+<P>
+<P>
+<H2><A NAME=SECTION00023000000000000000> Repositories</A></H2>
+<A NAME=278>&#160;</A><A NAME=279>&#160;</A>
+<P>
+Repositories (or ``containers'') are collections that take an active
+role in protecting and maintaining their elements.  These structures
+provide footholds for establishing storage, persistence, and database
+management.  From an analysis perspective, repositories are
+collections that are also ensembles.  They are also crosses between
+collections and generators.  Like collections, they keep track of all
+members in some structured fashion. Like generators, they include
+operations that cause new objects to be constructed.  A repository
+class may be defined to maintain all objects of interest in a
+particular class or set of classes, as well as associated constructors
+and other bookkeeping functions. For
+example:<A NAME=280>&#160;</A>
+<P>
+<PRE>class ActiveAccounts
+  accts: SET[Account];
+  syslog: TransactionLog;
+  acctErrorHandler: AccountErrorHandler;
+  ...
+  op mkAccount(initBalance: real...) a: unique Account {
+     a := ...; accts.put(a); }
+  op deactivate(a: Account): () { accts.remove(a) }
+  op overdrawnAccounts(s: SET[Account]); % place all overdrawn accts into s
+end
+</PRE>
+<P>
+Classes such as <tt> ActiveAccounts</tt> have all the makings of database
+services that maintain, report on, and serve as the primary interface
+for collections of objects.  For example, we could extend this to
+include the general purpose:
+<P>
+<PRE>  op select(s: SET[Account], pred: AcctPredicate);
+     % add all accts obeying predicate into s
+</PRE>
+<P>
+Many object-oriented databases use constructs of this general form
+[<A HREF="#oodbmanifesto">1</A>].  They differ across dimensions such as whether
+managers are designed to keep track of all versus some elements of one
+concrete class, one abstract class, one hierarchy, and so on. They
+also differ in how they collect, traverse, and present the component
+objects.
+<P>
+Most repositories are based on <tt> SET</tt>s.<A NAME=284>&#160;</A> In
+Chapter <A NAME=tex2html62 HREF="ch3.html">3</A>, we noted that <em> classes</em> may be viewed as
+descriptions of sets of objects, all sharing some of the same
+properties. A repository using a <tt> SET</tt> to keep track of a group of
+objects, all of the same concrete class, may be seen as a concrete
+translation (or variant, or extension) of a metaclass (see
+Chapter <A NAME=tex2html63 HREF="ch8.html">8</A>).<A NAME=291>&#160;</A>
+<P>
+<H3><A NAME=SECTION00023100000000000000> Reifying Class Descriptions</A></H3>
+<A NAME=293>&#160;</A><A NAME=294>&#160;</A>
+<P>
+Besides tracking objects, metaclass-like repositories may be able to
+answer questions about their properties. For example, they might
+support a check to see if all contained objects possess a given
+attribute:
+<P>
+
+<PRE>class ActiveAccounts_2 ...
+  attrs: fixed SET[AttributeDescriptor];
+  fn hasAttrib(a: AttributeDescriptor): bool { attrs.has(a) }
+end
+</PRE>
+<P>
+Support for such queries requires that all details of <em> classes</em>
+themselves be reified by creating classes representing the metaclass
+attributes described in Chapter <A NAME=tex2html67 HREF="ch8.html">8</A>.  Representational forms for
+attribute functions, operations, messages, etc., must be devised.
+For example:<A NAME=298>&#160;</A>
+<P>
+<PRE>class AttributeDescriptor ...
+  name: String;
+  args: SEQ[ArgumentDescriptor];
+  type: ClassDescriptor;
+  quals: SET[AttributeQualifierDescriptor];
+end
+</PRE>
+<P>
+Unless a target implementation language and/or support service already
+includes all of the background declarations for classes such as <tt>
+AttributeDescriptor</tt>, an entire framework of such classes and
+operations must be designed.
+<P>
+We refrain here from providing a full self-descriptive framework for
+<i> ODL</i>.  Most practical system design efforts require conformance
+with possibly conflicting predefined features of existing tools and
+database facilities (see Chapter <A NAME=tex2html69 HREF="ch23.html">23</A>). For example, such
+a framework could serve as a basis for a query language built on top
+of the base system.  Similarly, standardized ``interface
+repositories'' collecting attribute and service descriptions may be
+needed in support of dispatching and routing (see
+Chapter <A NAME=tex2html70 HREF="ch21.html">21</A>).  The need to conform to existing database
+and/or dispatching facilities may limit options and expressiveness.
+<P>
+<H3><A NAME=SECTION00023200000000000000> Exporting Elements</A></H3>
+<A NAME=306>&#160;</A><A NAME=307>&#160;</A>
+<P>
+Normally, collections include attributes and operations specifically
+designed to reveal and track maintained objects.  But this need not be
+so.  A repository may be designed to never export the identities
+of elements:
+<P>
+<PRE>class HiddenActiveAccounts ...
+  accts: SET[Account];
+  op mkAccount(initBalance: real...) { accts.put(new Account...)}
+
+  op selectivelyApply(predicate: Predicate, action: Action)
+     { % do action for all accounts meeting predicate % }
+end
+...
+accts.selectivelyApply(PREDWRAP1(#1.overdrawn), WRAP1(print(#1)));
+</PRE>
+<P>
+Here, the repository only supplies methods that relay operations to
+internal objects selected via descriptive predicates, without ever
+revealing the component objects.
+<P>
+<H3><A NAME=SECTION00023300000000000000> Interception</A></H3>
+<P>
+An alternative design is to retain a form of identity-based
+communication, but to manufacture pseudo-identities that are then
+intercepted.  A repository agent may pass out arbitrary keys that
+uniquely identify internal objects.  This results in a managed
+``public'' object identity scheme overlaid on top of the ``real''
+internal one. Any kind of ID format (e.g., strings) could be used,
+with various kinds of <tt> MAP</tt>s performing the translation.  To
+illustrate with integer pseudo-IDs:<A NAME=310>&#160;</A><A NAME=311>&#160;</A>
+<P>
+<PRE>class KeyedActiveAccounts ...
+  tab: TABLE[Account];
+  op mkAccount(initBalance: real...): int {
+     reply tab.put(new Account...) }
+  op addToBalance(key: int, amt: Cash): () {
+     local a: Account := tab.at(k);
+     if ~null(a) then a.addToBalance(amt) end }
+end
+</PRE>
+<P>
+All access to the internal objects is mediated through the specially
+generated pseudo-IDs. The agent may then intercept, preprocess, and
+otherwise manage operation requests to these objects, at the expense
+of duplicating the entire interface of the contained objects and
+providing the appropriate forwarding.<A NAME=312>&#160;</A>
+<P>
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00030000000000000000> Coordinators</A></H2></center>
+<P>
+<A NAME=314>&#160;</A>
+<A NAME=315>&#160;</A><A NAME=316>&#160;</A>
+<P>
+Relational classes and collections are special kinds of encapsulators.
+They keep track of other objects and may maintain a separate,
+controlled interface to them. This attitude toward relational classes
+leads to a number of design strategies that exploit these properties.
+<P>
+The best examples stem from the need to convert top-level operations
+to other forms.  We have distinguished operations that are received by
+particular objects versus ``top-level scripts'' that just so happen to
+employ these objects.  For example, we could define operations for our
+mailing label class like this:<A NAME=317>&#160;</A>
+<P>
+<PRE>class MailingLabelV2 is MailingLabel ...
+  op setStreet(newSt: String80) { _street.set(newSt) }
+  op setZip(newZip: int)        { _zip.set(newZip) }
+  op setCity(newCity: String80) { _city.set(newCity) }
+end
+
+op copyAddress(dest: MailingLabel, src: MailingLabel): () {
+   dest.setStreet(src.street);
+   dest.setCity(src.city);
+   dest.setZip(src.zip) }
+</PRE>
+<P>
+Operations such as <tt> setStreet</tt>, <tt> setCity</tt> and <tt> setZip</tt> differ
+from <tt> copyAddress</tt> in that they are all received by mailing label
+objects, while <tt> copyAddress</tt> is an application operation that in
+turn invokes more primitive operations on its participants.
+<P>
+The use of receiverless operations turns out to be inconvenient in
+later design.  One pragmatic reason is ``name space
+pollution''.<A NAME=323>&#160;</A> When a project is constructed by
+multiple developers, clashes in choices of top-level operation names
+and the like become inevitable without further precautions.  Receivers
+may be ``found'' by exploiting the relationship between composite <em>
+classes</em> and composite (scripted) <em> actions</em>.  Any composite action
+may be recast as an argumentless operation that is owned by a class
+with link attributes corresponding to the associated arguments of the
+original version.  For example, we could declare a <em> class</em> that
+directly supported the <tt> copyAddress</tt> operation:
+<P>
+<PRE>class MailingLabelCopier
+  local dest: MailingLabel &lt;&gt;
+  local src: MailingLabel &lt;&gt;
+  op copyAddress: () { dest.setStreet(src.street); ... }
+end
+
+c := new MailingLabelCopier(dest := lab1, src := lab2);
+c.copyAddress;
+</PRE>
+<P>
+This example illustrates the fact that operation coordinators may
+always be built up from relational classes. <em> Any</em> free-standing
+``scripted'' operation with one or more participants may be
+transformed into a coordinator class with a single argumentless
+action. Thus, our ``top-level'' operations might be thought of as
+relational <em> class</em> specifications of a particularly simple sort.
+Free-standing operations and concrete objects are two points on a
+continuum of conventions and usages:
+<P>
+<A NAME=330>&#160;</A><A NAME=331>&#160;</A>
+<UL><LI> Objects may support multiple ``entry points'', while
+        free-standing operations do just one thing.
+  <LI> Objects <em> persist</em> between their actions, while
+        operations conceptually just ``go away'' when they
+        are done.
+  <LI> Objects have identities, while operation invocations do not.
+  <LI> Operations defined within classes are received by the
+        associated objects, while free-standing ones are
+        conceptually receiverless.
+  <LI> Among other minor syntactic differences, we bind arguments
+        by-name for objects, but by-position for operations.
+</UL>
+<P>
+There is a lot of middle ground here.  Whenever there is a need to
+manage interaction in a way that defies implementation through a
+single operation, a composite, relational or collection class may be
+built or extended.
+<P>
+These classes serve as perhaps more literal translations of <em>
+acquaintance</em> relations described in Chapter <A NAME=tex2html83 HREF="ch6.html">6</A> than
+other classes we have so far
+described.<A NAME=338>&#160;</A> The view and wrapper
+classes described in Chapter <A NAME=tex2html85 HREF="ch17.html">17</A> may also be seen as
+examples of this tactic. In all cases, the conceptual property that
+distinguishes them from ordinary composite classes is the <em>
+relational</em> nature of link information. Links inside such classes are
+used to track and manage participants that are not otherwise within
+the object's exclusive control. In other words, relational objects
+form layers that are not necessarily or even usually
+communication-closed. <A NAME=342>&#160;</A>
+<P>
+<H3><A NAME=SECTION00030100000000000000> Conventions and Transformations</A></H3>
+<P>
+Different OO languages and systems have different policies about
+operation receivership and coordination. While these need not directly
+impact design strategies, they may influence their expression.  Some
+OO languages (e.g., <i> CLOS</i><A NAME=345>&#160;</A>) and OO databases (e.g.,
+<i> Iris</i>/<i> OpenODB</i>)<A NAME=348>&#160;</A><A NAME=349>&#160;</A> do not (at
+least normally) directly attach operations to classes at all.  In such
+cases, there is less motivation and support for converting
+multiparticipant operations into classes. In fact, the reverse
+transformation is more appealing, and sometimes even necessary.
+Systems encouraging this style are usually accompanied by lack of
+access restrictions, enabling more centralized handling of dynamics.
+However, this also makes it harder to express matters of distribution.
+In a fully distributed system, it may be difficult or impossible to
+implement a centralized top-level facility for handling all otherwise
+receiverless messages.
+<P>
+At the other extreme, some OO languages <em> require</em> that all
+operations be attached to classes.  This policy sometimes leads
+designers to attach operations to the ``wrong'' classes.  For example,
+it is tempting to attach operations on <em> pairs</em> of <tt>
+MailingLabel</tt>s to the <tt> MailingLabel</tt> class itself rather than a
+coordinator.  However, this does not always  result in the intended
+effect.  This is the reason we attach all top-level operations to <tt>
+System</tt> without demanding that <tt> System</tt> be declared as a class in
+a conventional manner.  Transformations may be applied at any time to
+distribute capabilities among receivers.
+<A NAME=356>&#160;</A>
+<P>
+<H3><A NAME=SECTION00030200000000000000> Applications</A></H3>
+<P>
+Variants of acquaintance relations and ``event stepping stone''
+classes may be used as single-purpose event coordinators between fixed
+sets of objects.  For example, a class may coordinate the
+door-sensor-motor interaction from Chapter <A NAME=tex2html91 HREF="ch6.html">6</A>:
+<P>
+<A NAME=360>&#160;</A><A NAME=361>&#160;</A><A NAME=362>&#160;</A>
+<P>
+<PRE>class DSM ...
+  locals
+    door: fixed Door &lt;&gt;
+    sensor: fixed TempSensor &lt;&gt;
+    motor: fixed Motor &lt;&gt;
+  end
+  op doorOpens { motor.halt }
+  op tmpLow    { motor.halt }
+end
+</PRE>
+<P>
+<PRE>class Door ...
+  local dsm: DSM;
+  op openDoor { ...; dsm.doorOpens }
+end
+</PRE>
+<P>
+The <tt> DSM</tt> class serves as one translation of the oval in:
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch18-img4.gif"><P>
+<P>
+The dynamics of coordinator objects  are discussed in more detail in
+Chapter <A NAME=tex2html95 HREF="ch22.html">22</A>.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Modules</A></H2>
+<A NAME=385>&#160;</A>
+<P>
+Rather than wrapping up all participants as links, a <em> module</em>-like
+class may hold only the ``protocols'' for maintaining relations and
+interactions among particular kinds of objects, leaving the arguments
+intact. Usually, such classes support a collection of operations that all
+have exactly the same arguments.  For example, to group sets of
+operations on pairs of <tt> MailingLabels</tt>:
+<P>
+<PRE>class MailingLabelPairModule ...
+  op copyAddress(dest: MailingLabel, src: MailingLabel);
+  fn sameName(a: MailingLabel, b: MailingLabel): bool = (a.name = b.name);
+end
+</PRE>
+<P>
+These classes are similar to modules in other design frameworks.  They
+help organize and localize groups of related functionality.  They also
+serve the same conceptual role as <tt> generator</tt>s.  In fact, they may
+be defined in an arbitrarily similar manner to generator classes.  The
+main difference between them is that here, the objects are not only
+constructed, but also pushed into action.  For example:
+<P>
+<PRE>class MailingLabelPairModule ...
+  op copy(d: MailingLabel, s: MailingLabel) {
+     new MailingLabelCopier(dest := d, src := s).copyAddress }
+end
+</PRE>
+<P>
+This is one way to implement pure ``stateless'' <em> service
+transitions</em> (Chapter <A NAME=tex2html97 HREF="ch6.html">6</A>)
+in which the server creates a new object to handle each new request.
+<A NAME=392>&#160;</A>
+<A NAME=393>&#160;</A>
+<A NAME=394>&#160;</A>
+<A NAME=395>&#160;</A>
+<P>
+For another example, the following coordinator class may be used to
+translate the <em> Transfer</em> relation described (in
+Chapter <A NAME=tex2html102 HREF="ch4.html">4</A>):<A NAME=399>&#160;</A>
+<P>
+<PRE>class Transfer
+  src: fixed Account;
+  dest: fixed Account;
+  amount: fixed Cash;
+  date: fixed Date;
+
+  op transfer; % do the transfer
+end
+</PRE>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch18-img5.gif"><P>
+<P>
+Alternatively, a <tt> transfer</tt>less version of <tt> Transfer</tt>
+might be accepted by a module:
+<P>
+<PRE>class TransferProtocol
+  op transfer(t: Transfer); % do the transfer
+end
+</PRE>
+<P>
+Such classes may be scaled up to mediate arbitrarily complex actions.
+For example:<A NAME=419>&#160;</A>
+<P>
+<PRE>class TrafficLawModule ...
+  op encounter(v: Vehicle, s: TrafficLight);
+     % if s is red, tell v to stop and tell s to turn green soon, etc.
+end
+</PRE>
+<P>
+Again, these mediators differ from coordinator objects in that they
+know <em> only</em> the protocols, not the participants, which are
+transmitted as arguments that may change from invocation to
+invocation. Callers must know of appropriate modules, as well as other
+co-participants.  Alternatively, protocol mediation modules may be
+seen as <tt> generators</tt> of coordinator objects. Given a protocol and
+a set of participants, they may construct and set in motion a coordinator.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00040000000000000000> Relations versus Composites</A></H2></center>
+<P>
+<A NAME=423>&#160;</A><A NAME=424>&#160;</A>
+<A NAME=425>&#160;</A><A NAME=426>&#160;</A>
+<A NAME=427>&#160;</A><A NAME=428>&#160;</A><A NAME=429>&#160;</A>
+<P>
+There is a continuum from the relational, collection, and coordinator
+classes described in this chapter to the composite classes described
+in Chapter <A NAME=tex2html112 HREF="ch17.html">17</A>.  In pure relations, only the links and their
+invariant constraints matter.  Providing some kind of interface and
+behavior for the class is sometimes almost an afterthought. But for
+property-driven concrete classes, the links are ``uninteresting'' and
+exist only in order to provide a mechanism in support of a desired
+interface.  These represent different approaches to the same basic
+design activity of relating internal characteristics to outward
+appearances.
+<P>
+Even though they lie on the same continuum, the conceptual differences
+between OOA-level relations and composites usually have other
+computational consequences. The best example, which also serves as a
+prototypical consideration for a range of other issues, is the notion
+of <em> copying</em> instances.  Consider the prospects for writing <tt>
+clone</tt> operations for our <tt> Client</tt><tt> AccountV1</tt>, <tt> School</tt>,
+<tt> Active</tt><tt> Accounts</tt>, or <tt> Mailing</tt><tt> Label</tt><tt>
+Copier</tt> classes.
+<P>
+One way to clone <tt> Client</tt><tt> AccountV1</tt> is through a <em> deep
+copy</em>. This copy makes in turn a clone of the <tt> client</tt>, <tt>
+account</tt>, <tt> last</tt><tt> Access</tt><tt> Date</tt>, along with any other
+nested components, and then makes a new <tt> Client</tt><tt> AccountV1</tt>
+object with the links bound to these objects.
+<P>
+This sounds wrong.  Cloning makes perfect sense for underlying support
+components such as <tt> lastAccessDate</tt>.  But the overall purpose of
+the <tt> ClientAccount</tt> class is to record connections between
+pre-existing <tt> Client</tt> and <tt> Account</tt> objects, not to make up
+new ones.  Conceptually, such a cloned object would <em> not</em> be a
+faithful copy.  It represents a different instance of the relation,
+between two new objects that presumably have the same states as the
+originals, but are not the same objects. Generating such clones nearly
+always leads to trouble. Any other object wanting a copy of a <tt>
+ClientAccountV1</tt> probably needs it in order to communicate with the
+participants, not to create new ones.
+<P>
+A second problem is more mechanical.  A <tt> ClientAccount::clone</tt>
+requires associated <tt> Client::clone</tt> and <tt> Account::clone</tt>
+operations.  But suppose that <tt> Client</tt> <em> also</em> had a direct
+link to the <tt> Account</tt>.  Should <tt> Client::clone</tt> make yet
+another copy of the <tt> Account</tt> in the process of cloning itself?
+And what about circular links? These issues come into play as well
+when attempting to create description <tt> records</tt> for relational
+objects.
+<P>
+Often, the best pragmatic solution is just not to define <tt> clone</tt>
+operations for relational objects if you do not have to, thus avoiding
+the issue entirely.  Another option is to rely on <em> shallow</em>
+copies<A NAME=469>&#160;</A> in which the old link bindings are
+propagated to the newly created relational objects. Shallow copying of
+relational objects may be used to implement a form of
+parallelism<A NAME=470>&#160;</A>.  Clients of each copy may pass
+messages through the different relation instance objects
+simultaneously.
+<P>
+Compare this to the idea of cloning <tt> Lamp</tt>s, where <em> deep</em>
+copying <A NAME=473>&#160;</A> seems most sensible.  Generally, whenever
+you can qualify a link as <tt> own</tt> (or otherwise
+communication-closed) deep copying is the right approach.  Other cases
+require consideration of situation-specific semantics.  These matters
+reflect the same difficulties with the metaphors of <em> PartOf</em> and
+related aggregation concepts discussed from an analysis perspective in
+Chapter <A NAME=tex2html116 HREF="ch9.html">9</A>.  They do not go away in design.<A NAME=478>&#160;</A>
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00050000000000000000> Summary</A></H2></center>
+<P>
+Relational and composite classes represent, track, and/or manage
+groups of other objects. They may take a wide range of forms,
+including:
+<P>
+<UL><LI> pure relational classes that maintain only links and invariants
+  <LI> extended relational classes that maintain additional
+        attributes describing features of the relation and
+        a public interface for accessing them
+  <LI> ``regular'' classes and subclasses that embed relational links as
+        attributes
+  <LI> composite classes that bind other objects in order to
+        obtain their functionality
+  <LI> views, operation wrappers, and modules that bind other objects in
+        order to coordinate scripted operations.
+</UL>
+<P>
+Collections similarly come in many flavors, and fill many disparate
+needs in design. <tt> SET</tt>s are among the foremost tools in the
+transformation of OOA models.  They are usually the right way of
+dealing with multiplicities and apply-to-all formulations. However,
+in any particular situation, other collections might better fit
+semantics.
+<P>
+<H2><A NAME=SECTION00051000000000000000> Further Reading</A></H2>
+<P>
+The design and implementation of classes representing relations and
+collections rests on common linked data structures. Knuth
+[<A HREF="#knuth">5</A>], Standish [<A HREF="#standish">8</A>], Sedgewick [<A HREF="#sedgewick">6</A>],
+and Smith [<A HREF="#smith">7</A>] are good references for the underlying data
+structures and  techniques.  Many specification languages (e.g., <i>
+VDM</i><A NAME=489>&#160;</A>[<A HREF="#jones">4</A>]) provide fuller semantics for ``standard''
+collections including <tt> SET</tt>s.  Special relational techniques and
+approaches (especially those geared toward persistent storage) may be
+found in the relational and OO database literature, for example, the
+<em> ACM SIGMOD</em> and <em> IEEE Data Engineering</em> conference
+proceedings.
+<P>
+<H2><A NAME=SECTION00052000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> List 3 ways to translate the <em> MaintainedBy</em> relationship
+        described in Chapter <A NAME=tex2html119 HREF="ch4.html">4</A>.
+<P>
+  <LI> Why does <tt> SET::has</tt> take an argument of type <tt> Any</tt>?
+<P>
+  <LI> Why are <tt> ARRAY</tt>s filled with <tt> opt</tt> elements?
+<P>
+  <LI> List two differences between design-level <tt> SET</tt>s and
+        <tt> class</tt>es.
+<P>
+  <LI> If you want a <tt> SET</tt> class that provides a means
+        to <tt> print</tt> its elements, all you need do is write
+        such a subclass. Why is the combination of <tt> apply</tt>
+        and  wrappers often preferable?
+<P>
+  <LI> Design a <tt> SET</tt> subclass supporting <tt> accumulate</tt>,
+        which applies a listed operation to all elements and then
+        combines the results in a way described by another argument.
+<P>
+  <LI> Design a full abstract <tt> String</tt> class and two
+        completely different concrete subclasses.
+<P>
+  <LI> Design a generic <tt> ASSOC</tt> class that specializes
+        <tt> MAP</tt>s for cases with <tt> String</tt> keys.
+<P>
+  <LI> The operation-to-class transformation runs in both directions.
+        Describe how to cope with methods that <em> prohibit</em>
+        (a) classes (b) multiparameter operations?
+<P>
+  <LI> List two differences between module classes and the kinds of
+        modules found, for example, in <i> Modula-2</i><A NAME=516>&#160;</A>.
+<P>
+</OL>
+<P>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=oodbmanifesto><STRONG>1</STRONG></A><DD>
+M. Atkinson, F. Bancilhon, D. DeWitt, K. Dittrich, D. Maier, and S. Zdonick.
+ The object-oriented database system manifesto.
+ In <em> Deductive and Object-Oriented Databases</em>. Springer-Verlag,
+  1989.
+<P>
+<DT><A NAME=helm><STRONG>2</STRONG></A><DD>
+R. Helm, I. Holland, and D. Gangopadhyay.
+ Contracts: Specifying behavioral compositions in object-oriented
+  systems.
+ In <em> OOPSLA '90</em>. ACM, 1990.
+<P>
+<DT><A NAME=jaja><STRONG>3</STRONG></A><DD>
+J. Jaja.
+ <em> An Introduction to Parallel Algorithms</em>.
+ Addison-Wesley, 1992.
+<P>
+<DT><A NAME=jones><STRONG>4</STRONG></A><DD>
+C. Jones.
+ <em> Systematic Software Development Using VDM</em>.
+ Prentice Hall, 1986.
+<P>
+<DT><A NAME=knuth><STRONG>5</STRONG></A><DD>
+D. E. Knuth.
+ <em> The Art of Computer Programming, Volume 1</em>.
+ Addison-Wesley, 1973.
+<P>
+<DT><A NAME=sedgewick><STRONG>6</STRONG></A><DD>
+R. Sedgewick.
+ <em> Algorithms</em>.
+ Addison-Wesley, 1990.
+<P>
+<DT><A NAME=smith><STRONG>7</STRONG></A><DD>
+H. Smith.
+ <em> Data Structures: Form and Function</em>.
+ Harcourt, Brace AND Jovanovich, 1987.
+<P>
+<DT><A NAME=standish><STRONG>8</STRONG></A><DD>
+T.A. Standish.
+ <em> Data Structures Techniques</em>.
+ Addison-Wesley, 1980.
+</DL>
+<P>
+
+<a href="ch19.html">Next: Chapter 19</a>
+<center><P><P></center>
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 07:58:02 EDT 1995</I>
+</ADDRESS>
+</BODY>

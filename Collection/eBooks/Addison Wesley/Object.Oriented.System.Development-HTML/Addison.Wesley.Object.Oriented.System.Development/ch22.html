@@ -1,0 +1,1706 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Coordination</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Coordination">
+<meta name="keywords" value="ch22">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Chapter 22: Coordination</h2>
+<UL>
+<LI> <A NAME=tex2html118 HREF="#SECTION00010000000000000000"> Joint Actions</A>
+<LI> <A NAME=tex2html119 HREF="#SECTION00020000000000000000"> Controlling Groups</A>
+<LI> <A NAME=tex2html120 HREF="#SECTION00030000000000000000"> Open Systems</A>
+<LI> <A NAME=tex2html121 HREF="#SECTION00040000000000000000"> Summary</A>
+</UL>
+</td><tr></table>
+
+<A NAME=9>&#160;</A>
+<P>
+
+<center><H2><A NAME=SECTION00010000000000000000> Joint Actions</A></H2></center>
+<P>
+<A NAME=11>&#160;</A><A NAME=12>&#160;</A><A NAME=13>&#160;</A>
+<P>
+Coordinator objects introduced in Chapter <A NAME=tex2html7 HREF="ch18.html">18</A>, as well
+as other composite objects, may not be in ``full control'' of their
+operation participants. This complicates translation of guards and
+effects into concrete form.  Generally, any guard evaluating
+conditions on objects accessed via nonexclusively managed links must
+ensure that the referenced objects do not change state between the
+test and the beginning of the operation. Similarly, the coordinator
+must assure that actions across all participants remain atomic with
+respect to external observers.  Thus, the coordinator must transiently
+act as an exclusive controller of these objects.  A number of
+approaches are available for carrying this out.  To describe them, we
+must first address the nature of the problems they are intended to
+solve.
+<P>
+<H2><A NAME=SECTION00011000000000000000> Interference</A></H2>
+<A NAME=17>&#160;</A>
+<P>
+An intrinsic danger of compositional design is that since we are
+always building objects by linking together other objects, it is
+possible to lose track of where any link may actually lead.  This
+creates the potential for <em> interference</em>.
+<P>
+Interference occurs when two competing operations or sets of
+operations are applied to the same object.  Generally, any concrete
+operation that contains the possibility of interference cannot always
+make good on its abstract effects, and is potentially incorrect.
+There are two possible results of interference:
+<A NAME=19>&#160;</A><A NAME=20>&#160;</A><A NAME=21>&#160;</A>
+<DL ><DT><b> Safety Failures:</b>
+<DD>
+    When the individual suboperations of two different actions are
+    interleaved, an object may not end up in the state described by either
+    of their effects, may no longer meet a relational <tt> inv</tt> contract
+    with other objects, and may not be in a legal state at all.
+<P>
+  <DT><b> Liveness Failures:</b>
+<DD>
+    When an object sends a blocking message that ultimately blocks <tt> self</tt>,
+    or two or more objects block each other,  they lock up.
+<P>
+ </DL>
+<P>
+While these two effects can normally be traded off for one another,
+neither is the least bit desirable.  In both cases, the source of
+interference may be far removed from sight.  Interference may occur
+when two clients (perhaps oblivious to each other's existence) both
+try to manipulate the same object. For example, two different <tt>
+Transaction</tt> objects, both holding a link to the same <tt> Account</tt>,
+may both be trying to step the account through mutually incompatible
+operations.
+<P>
+In our design framework, no two objects may interfere with each other
+if they are interested in a single operation in a single object. Our
+noninterruptibility rules prevent contention.  Sadly enough, these
+provisions cannot automatically extend to <em> transactions</em> in which
+a <em> sequence</em> of operations on possibly many objects must be
+triggered in a certain way and processed in a certain order, without
+interleaving any other stray operations.  While this is most obviously
+problematic in systems of concurrently interacting objects, it is just
+as disastrous in purely sequential designs in which subtasks interfere
+with the main tasks they are allegedly supporting.
+<P>
+<H3><A NAME=SECTION00011100000000000000> Aliasing</A></H3>
+<A NAME=33>&#160;</A>
+<P>
+Interference is not restricted to situations involving multiple
+controlling objects.  <em> Local</em> interference occurs when a <em>
+single</em> object ``inadvertently'' tries to use another (perhaps even
+itself!) in two different roles. This <em> aliasing</em> results when two
+different locally accessible links are attached to the same object.
+The most obvious forms of aliasing are similar to those found in any
+system involving references, pointers, or any other link-like
+construct. For example, in the matrix multiplication
+routine:<A NAME=37>&#160;</A>
+<P>
+<PRE>op matMul(lft: Matrix, rgt: Matrix, result: Matrix);
+</PRE>
+<P>
+It may be the case that two or more of <tt> lft</tt>, <tt> rgt</tt>, and <tt>
+result</tt> are actually connected to the same matrix object. If the usual
+matrix multiplication algorithm is applied, and <tt> result</tt> <em> is</em>
+bound to the same matrix as either of the sources, the procedure will
+produce incorrect results.
+<P>
+Aliasing is at least in part a human factors issue.  It is just too
+easy to overlook aliasing possibilities. Often enough, when potential
+problems are identified, solutions are not hard to come by.
+Unfortunately, some object-oriented design constructions tend to hide
+aliasing opportunities.  Potential aliasing is hard to discern when
+arguments or components are of different declared type, but could
+match the same object. For example, suppose we
+had:<A NAME=43>&#160;</A>
+<P>
+<PRE>class Account ... end
+class SavingsAccount is Account ... end
+class CheckingAccount is Account ... end
+class BahamaAccount is SavingsAccount, CheckingAccount ... end
+
+op transfer(src: SavingsAccount, dest: CheckingAccount);
+</PRE>
+<P>
+If the operations on <tt> src</tt> and <tt> dest</tt> within <tt> transfer</tt>
+interfere with each other, then it would be a very bad idea to invoke
+<tt> transfer(x,x)</tt>, for some <tt> x:BahamaAccount</tt>. Of course, it
+may be the case that <tt> transfer</tt> will simply leave <tt> x</tt> in its
+original state, in which case all would be well. But unless you are
+alerted to the possibility, you are unlikely to notice that this
+might be a problem.  A similar situation involves aliasing between an
+argument and a component. For example:
+<P>
+<PRE>class TransactionLog ... end
+class SystemLog is TransactionLog ... end
+class AccountLog is TransactionLog ... end
+</PRE>
+<P>
+<PRE>class Account ...
+   logger: AccountLog;
+   op update(... syslog: TransactionLog)  { ...;
+      logger.recordBalanceChange;
+      syslog.recordTransaction }
+end
+</PRE>
+<P>
+If the <tt> update</tt> operation were invoked with an argument that
+happened to match an account's own <tt> logger</tt>, there may be two
+records in the same log, which is probably not what was intended.
+<P>
+Yet another way to mask aliasing opportunities is through relays and
+other objects that are used as ``pass by role'' intermediaries.  For
+example, if a dependency manager maintains a set of objects interested
+in particular change notices, a design may inadvertently result in an
+object being notified of its own changes.  Again, maybe this is OK;
+maybe not.
+<P>
+<H3><A NAME=SECTION00011200000000000000> Alias Detection</A></H3>
+<P>
+In standard OO systems, any operation has the power to detect simple
+aliasing (just through a link identity test) and then perform
+evasive action.
+<P>
+For example, a matrix multiply routine may invoke a slow-but-safe <tt>
+multiply</tt><tt> In</tt><tt> Place</tt> procedure when it receives aliased
+arguments. This idea may be generalized to arbitrary <em>
+projections</em>. Any two-parameter operation, say, <tt> p(a,b)</tt>, may
+delegate to a special form <tt> p1(ab)</tt> when <tt> a</tt> is known to be
+the same as <tt> b</tt>.  Three-parameter operations (e.g., <tt>
+q(a,b,c)</tt>) may delegate to two- and one-parameter versions (e.g., <tt>
+q1(a,bc)</tt>, <tt> q2(ab,c)</tt>, <tt> q3(ac,b)</tt>, <tt> q4(abc)</tt>). This is a
+bit tedious. But it is also a useful efficiency measure. Actions for
+aliased cases are often either significantly faster or significantly
+slower than others.  By splitting them out, the best method may be
+applied to the case at hand.
+<P>
+However, this strategy works only when distinct objects are entirely
+independent and self-contained, thus sharing no internal links. This
+is typical, but not definitionally forced for common matrix classes.
+For example, if one of the arguments to <tt> matMul</tt> were some kind of
+wrapper or view of another (e.g., if <tt> lft</tt> were of a class that
+held a link to <tt> rgt</tt> and forwarded all operations to it), then the
+same problems result even though <tt> lft</tt> <code>~=</code> <tt> rgt</tt>.
+<P>
+There <em> are</em> ways of specifying classes to (declaratively)
+preclude aliasing. For matrices, this would first require a set of
+guarantees stating that no two cells in a single matrix were aliased.
+For example, a <tt> Matrix</tt> class (or subclass) might include a
+function to determine whether the identities of two cells are the
+same:
+<PRE>  fn eqCell(i: int, j: int, ii: int, jj: int): bool =
+     (at(i, j) = at(ii, jj)) = ((i = ii) /\ (j = jj))
+</PRE>
+<P>
+This version says that the identities of two cells are the same only
+if the indices are. Another function <tt> allIndependent</tt>, which loops
+through all possible indices and checks <tt> eqCell</tt>, may then be
+declared as <tt> inv</tt>.  A relational class containing two or three
+matrices may then rely on these invariants to construct additional
+functions advertising independence between the cells of different
+matrices. The complexity of such declarations corresponds to the
+extensiveness of independence guarantees demanded by standard
+implementations of <tt> matMul</tt>.
+<P>
+Without such assurance, alias checks via identity tests are <em> only</em>
+definitive when they report <tt> true</tt>. In that case, the two links
+really are connected to the same object. In all other cases, lack
+of top-level identity need not imply that two objects are independent
+and cannot always be used  to prevent interference.
+<P>
+<H2><A NAME=SECTION00012000000000000000> Controlling Interference</A></H2>
+<P>
+There cannot be a magical cure for interference. The potential for
+interference is intrinsic to any system of agents communicating
+through sharable channels. In special cases, exhaustive static formal
+analysis of a design might prove it interference-free
+across all possible executions. However, this is both exceedingly rare
+and difficult to undertake. Instead, a mixture of prevention,
+detection, and control must be used. Strategies include
+centralization, export control, sender rules, sender-receiver
+protocols, and recovery techniques.  We have discussed techniques for
+centralization (unique objects) and controlling exports (by protecting
+links, making copies and views, and using collections that never
+reveal identities of their members) in previous chapters.  However,
+there are limits to these safeguards.  It is impossible to remove all
+link exports without removing all potential for interaction.  We
+address the other methods in turn.
+<P>
+<H3><A NAME=SECTION00012100000000000000> Locking</A></H3>
+<P>
+<A NAME=82>&#160;</A>
+<P>
+As a design rule, all senders may promise to access target
+objects only if they are sure that the targets are under their (temporary)
+exclusive control.  This ensures that all operations on the target
+objects are atomic and interference-free with respect to all other
+observers.
+<P>
+Clients may obtain and advertise control by holding <em> locks</em>.  Clients
+use lockable objects by first locking, then operating, then releasing.
+If another client has control over the target, others will wait
+(blocking on <tt> lock</tt>) until they are done, assuming that all
+senders play by these rules.  After obtaining a lock, one object may
+issue messages to another with the same confidence about
+noninterference as does the holder of an unexported <tt> own</tt> link.
+Objects must release locks immediately when they are no longer needed.
+Lockable forms of any class are easy to define:<A NAME=86>&#160;</A>
+<P>
+<PRE>class Lockable
+  locked: bool;
+  op lock: ()   when ~locked then locked' else pend end
+  op release: () ==&gt; ~locked' end
+end
+
+class LockableX is Lockable, X  end
+</PRE>
+<P>
+There is often no reason for each object to possess its own lock.  The
+repositories described in Chapter <A NAME=tex2html17 HREF="ch18.html">18</A> may manage locks
+for all of their members. Traversable forms may also support
+collection-wide locking. A single centralized lock manager may even be
+employed:
+<P>
+<PRE>class LockMgr
+  locked(x: Any): bool;
+  op lock(x: Any): () when ~locked(x) then locked(x)' else pend end
+  op release(x: Any): () ==&gt; ~locked(x)' end
+end
+</PRE>
+<P>
+Note that lock operations are simple renamings of <tt> Semaphore</tt>
+operations. Locks may be implemented as views of semaphores.  The safest
+locking protocol is <em> two phase</em>, in which all locks for all
+objects involved in an operation are obtained before any are released
+(see, e.g., [<A HREF="#cellary">12</A>] for details).
+<P>
+<H4><A NAME=SECTION00012110000000000000> Nested locking.</A></H4>
+<P>
+Locking frameworks are not necessarily effective as defined thus far.
+Suppose a <tt> Square</tt> (as in Chapter <A NAME=tex2html18 HREF="ch17.html">17</A>) were of a type
+that contained exported (shared) links to the inner <tt> Point</tt>
+objects. A lock on the square would not gain control over the
+component points.  Interference would still be possible.  For this
+reason, any lock-based framework must also include <em> nested</em>
+locking protocols that are dependent on the linkage details of
+classes.  For example:<A NAME=98>&#160;</A>
+<P>
+<PRE>class LockableSquare is Square ...
+  locals lowerLeft: LockablePoint; upperRight: LockablePoint; end
+  locked: bool;
+  op lock: () when ~locked then lowerLeft.lock',upperRight.lock',locked'
+              else pend end
+  op release:() ==&gt; ~lowerLeft.locked',~upperRight.locked',~locked' end
+end
+</PRE>
+<P>
+Nested locking requires care. Objects reachable via more than
+one path should not receive multiple <tt> lock</tt> requests.
+<P>
+<H4><A NAME=SECTION00012120000000000000> Read and write locks.</A></H4>
+<P>
+Regular locks are excessive when clients merely want to inspect their
+targets (i.e., invoke <tt> fn</tt>s), not try to change them (i.e., invoke
+<tt> op</tt>s). Any number of ``readers'' may coexist without contention
+or interference.  Bottlenecks may be alleviated by differentiating
+between <em> read locks</em> used only for inspections (e.g., in guard
+evaluation), and <em> write locks</em> used in any actions sending
+state-changing messages.  Any number of readers may simultaneously
+hold read locks, but only one may hold a write lock.  Care is needed
+to implement fair access to both read and write locks (see, e.g.,
+[<A HREF="#andrews">5</A>] for details).  One basic form is as follows:
+<P>
+<PRE>class LockMgr2 ...
+  readLocks(x: Any): int;
+  writeLocked(x: Any): bool;
+  op rLock(x: Any): ()
+     when ~writeLocked(x) then readLocks(x)' = readLocks(x) + 1
+     else pend end
+  op rRelease(x: Any): () ==&gt; readLocks(x)' = readLocks(x) - 1 end
+  op wLock(x: Any): ()
+     when readLocks(x) = 0 /\ ~writeLocked(x) then writeLocked(x)'
+     else pend end
+  op wRelease(x: Any): () ==&gt; ~writeLocked(x)' end
+end
+</PRE>
+<P>
+<H3><A NAME=SECTION00012200000000000000> Access Control</A></H3>
+<P>
+Rather than depending on senders to obey locking protocols, receivers
+may willingly ``enslave'' themselves to selected ``masters''. Objects
+may keep track of their masters and listen only to them. For example:
+<A NAME=107>&#160;</A><A NAME=108>&#160;</A>
+<P>
+<PRE>class SlavePoint ...
+  locals master: Any;  p: Point; end
+  op shiftX(v: real, sender: Any)
+     when sender = master then p.shiftX(v)' else % error % end
+end
+</PRE>
+<P>
+Note that <tt> SlavePoint</tt> is a view of a <tt> Point</tt>, not a subclass.
+<P>
+The <tt> shiftX</tt> operation must be supplied a sender argument that
+must match the master.  This may be generalized to support <em> access
+control lists</em><A NAME=113>&#160;</A> that maintain a <em> set</em>
+of privileged senders.  Of course, this design does not in itself
+provide full security. Without system-level support for this protocol,
+other objects may be able to send <tt> master</tt> as an argument and thus
+obtain access.
+<P>
+<H4><A NAME=SECTION00012210000000000000> Keys.</A></H4>
+<P>
+Unbalanced protection techniques placing nearly all responsibility
+on either senders or receivers can be fragile. For example, locking
+depends heavily on the correctness of all message senders in properly
+obtaining and releasing locks.  These protocols may be made more
+secure by associating keys with locks.  The receivers should also know
+the keys and check them. All other operations can be reparameterized
+to require keys. For example, using simple locks and integer-based
+keys generated by some <tt> KeyMgr</tt>:
+<P>
+<PRE>class LockablePoint3 ...
+  locals currentKey: int; p: Point; end
+  locked: bool;
+  op lock(key: int): ()
+     when ~locked then locked', currentKey' = key
+     elsewhen key = currentKey then % empty %
+     else pend end
+  op release(key: int): ()
+     when key = currentKey then ~locked'  else % error % end
+  op shiftX(v: real, key: int): ()
+     when key = currentKey then p.shiftX(v)' else % error % end
+end
+</PRE>
+<P>
+Keys help solve the nested locking problem. The empty effect
+associated with the condition for a lock request with the same key as
+already being used allows objects that are reachable from multiple
+paths to receive multiple lock requests without causing lock-up. Keys
+thus serve the role of ``visit markers'' necessary in any linked graph
+traversal algorithm (see, e.g., [<A HREF="#aho">2</A>,<A HREF="#sedgewick">40</A>]).
+<P>
+<H4><A NAME=SECTION00012220000000000000> Smarter keys.</A></H4>
+<P>
+The use of keys alone is not foolproof.  A client may tell a third
+object about a key, allowing the other object to obtain incorrect
+access.  Inappropriate key distribution may be controlled by wrapping
+view-based classes around the keys themselves. An extreme tactic is to
+create one-shot key objects that fail to work after a single use.  For
+example, assuming simple integer keys where zero is never a legal key
+value:<A NAME=120>&#160;</A>
+<P>
+<PRE>class OneShotKey
+  own k: Int &lt;&gt;
+  own used: Bool &lt;&gt; init ~used?
+  op key: int { if ~used? then used.t!; reply k? else reply 0 end }
+end
+</PRE>
+<P>
+Lock operations may then use such objects rather than raw keys.  There
+are many useful variations and improvements.  These include support
+for a fixed number of uses (rather than one), means for requesting
+additional use once a key has elapsed, sharing keys, ``aging'' keys on
+the basis of time rather than use, and operations allowing receivers
+to revoke locks when necessary. It is, of course, a very bad idea to
+define a <tt> clone</tt> operation for smart keys. Construction must be
+managed carefully.
+<P>
+<A NAME=122>&#160;</A><A NAME=123>&#160;</A><A NAME=124>&#160;</A>
+<H4><A NAME=SECTION00012230000000000000> Smart links.</A></H4>
+<P>
+There is no conceptual difference between keys, pseudo-IDs, and
+ordinary links.  All are employed to obtain access to particular
+objects. An entire system based on <em> smart links</em> may impose
+arbitrary security and locking mechanisms ``behind the scenes'' of
+normal design efforts.  Given the complexity and fragility of access
+and control mechanisms, this strategy is very attractive for large
+development efforts.
+<P>
+<A NAME=127>&#160;</A>
+<H4><A NAME=SECTION00012240000000000000> Forgetting links.</A></H4>
+<P>
+Simpler, special-purpose versions of smart keys and links include a set of
+policies and techniques called <em> islands</em>  [<A HREF="#hogg">24</A>].  These
+partially automate alias-free import/export protocols.  The idea is
+for objects to support a <tt> sendAndNullOutL</tt> operation for each link
+<tt> L</tt> that is used when sending components as arguments to
+operations that form the ``bridge'' to a set (``island'') of
+alias-propagating objects. The <tt> sendAndNullOutL</tt> operation sends
+out the current identity, but then unbinds the link so that it may no
+longer be used by the sender object. It may later be rebound,
+typically after receiving a message from the original recipient that
+it may do so.  A similar <em> transfer</em> operation is supported in <i>
+Hermes</i> [<A HREF="#hermes">42</A>]<A NAME=137>&#160;</A>.
+<P>
+<A NAME=138>&#160;</A><A NAME=139>&#160;</A>
+<H4><A NAME=SECTION00012250000000000000> Scaling up.</A></H4>
+<P>
+Interference control, access control, and locking mechanisms can
+become arbitrarily complex.  The strategies we have listed in this
+section are geared more toward accident prevention than protection
+against malicious invasion.  The more hostile the environment and the
+more critical the consequences of interference, the more elaborate and
+``heavyweight'' need be the protocols.  These may include combinations
+of authentication, multilevel access, certification,
+encryption, and randomization mechanisms, as provided
+by system tools and services (see, e.g.,
+[<A HREF="#richardson">39</A>,<A HREF="#thuraisingham">43</A>,<A HREF="#cole">14</A>]).
+<P>
+<H2><A NAME=SECTION00013000000000000000> Managing Interference</A></H2>
+<P>
+<A NAME=143>&#160;</A><A NAME=144>&#160;</A><A NAME=145>&#160;</A>
+Unless proven otherwise, no system is free from safety and/or liveness
+failures stemming from interference.  There is hardly ever a real
+choice to be had between designing for safety versus liveness.  Safety
+failures normally lead to <em> undetectable</em> corruption, but liveness
+failures lead to deadlock, which is at least in principle detectable,
+and thus recoverable from.
+<P>
+<H3><A NAME=SECTION00013100000000000000> Detection</A></H3>
+<P>
+Under any of the listed safety measures, potentially interfering
+operations may cause each other to block forever. Even simple aliasing
+may suffice to break things:
+<P>
+<PRE>op rotate2(x: LockableSquare, y: LockableSquare) {
+  lock(x); lock(y);
+    doRotation(x, y);
+  release(x); release(y) }
+
+op user(a: LockableSquare) { rotate2(a, a) }
+</PRE>
+<P>
+Here, the second call to <tt> lock</tt> on <tt> a</tt> will block forever.
+Even an aliasing check of ``<tt> x=y</tt>'' in <tt> rotate2</tt> would not
+necessarily repair this if the top-level objects were different but
+contained shared components with simple nested locks.
+<P>
+Any design using widespread locking should include provisions for
+dynamically detecting and dealing with deadlock conditions. Some
+algorithms for doing so are described in [<A HREF="#avalon">15</A>,<A HREF="#aksit">3</A>].
+However, deadlock detection is often supported in a much simpler
+fashion. Objects requesting locks may use time-outs
+(Chapter <A NAME=tex2html34 HREF="ch20.html">20</A>).  They treat the time-out replies as
+indications of deadlock and initiate the associated recovery measures.
+This is itself risky, since time-outs may occur for other reasons.
+But the use of conservative recovery strategies means that
+false alarms do no more than slow systems down, not cause yet other
+errors.
+<P>
+<H3><A NAME=SECTION00013200000000000000> Recovery</A></H3>
+<P>
+<A NAME=156>&#160;</A><A NAME=157>&#160;</A><A NAME=158>&#160;</A><A NAME=159>&#160;</A>
+<P>
+The most defensible recovery protocol is one in which all
+modifications to all targets are either <em> committed</em> to in the
+normal case, or <em> aborted</em> if deadlock or other failures occur,
+where aborts leave all objects in their initial states, available for
+later <em> retry</em>.  In-between results are not allowed.
+<P>
+These mechanics also apply in many other contexts, including cases in
+which safety failures happen to be detectable before they do any
+permanent harm, machines crash, access rights are denied, or software
+errors are encountered.
+<P>
+In simple cases where actions do not depend on each other, this may
+be accomplished by storing up all mutative operations (perhaps via a
+wrapper queue), and then committing by executing the queued
+operations, or aborting by clearing the queue. The queued operations
+may be rearranged and optimized before execution.  Another set of
+tractable cases involves operations that have unique ``undo'' or
+``antimessage'' counterparts that reverse the effects of operations.
+On failure, a sequence of <tt> undo</tt> requests may be sent to the
+participants.
+<P>
+More general transaction control mechanisms save the states of
+participants before an operation begins and ``roll back'' objects to
+these saved states on failure.  One way to control such mechanics is
+to support operations in a mixin class such as:
+<P>
+<PRE>class TransactionParticipant ...
+  op beginTransaction(t: TransactionID);
+  op commitTransaction(t: TransactionID);
+  op abortTransaction(t: TransactionID);
+end;
+</PRE>
+<P>
+However, many situations requiring locking and recovery also involve
+interactions with database managers or other services that provide
+particular transaction protocols of their own that must be
+accommodated. Indeed, for large system designs, it is all but
+impossible to maintain scattershot selections of methods.  Commitment
+to particular tools, services, conventions, and protocols becomes
+necessary.
+<P>
+<A NAME=164>&#160;</A><A NAME=165>&#160;</A><A NAME=166>&#160;</A>
+Many transaction support packages exist, but only a few
+are designed specifically for OO systems. One example is <i> Kala</i>
+[<A HREF="#kala">41</A>]<A NAME=169>&#160;</A>. <i> Kala</i> provides several OO
+transaction support mechanisms among its other services.  <i> Kala</i>
+deals well with the fact that an object's logical state may be
+distributed among many other objects connected by links.  As we have
+seen, this fact complicates copying, alias detection, and locking
+strategies that might be needed in transaction support.  <i> Kala</i>
+addresses this through a mechanism in which each state (or version) of
+an object may be independently saved without at the same time always
+recursively saving all linked objects.  However, user (programmer)
+level links are actually ``baskets'' of lower level links, normally
+directed at the current versions.  These connections can be changed
+upon transaction commits, rollbacks, and partial rollbacks stemming
+from failures of nested subtasks.
+<P>
+<H2><A NAME=SECTION00014000000000000000> Joint Action Coordinators</A></H2>
+<P>
+<A NAME=174>&#160;</A><A NAME=175>&#160;</A><A NAME=176>&#160;</A>
+<A NAME=177>&#160;</A><A NAME=178>&#160;</A>
+We may finally address the main issue of converting guarded
+multiparticipant transition specifications into concrete form.  <em>
+Joint actions</em><A NAME=180>&#160;</A> are operations in which state
+changes in one or more objects lead to coordinated effects in one or
+more other participants.  All transitions involving references to
+external participants are joint actions, whether OOA models describe
+them as such or not. In particular, operations within relation-based
+coordinator objects are often of this form.  These normally require
+transformations that provide ``handshaking'' to control interference.
+<P>
+We will first describe dynamic coordination using an example that is
+``all control''.  Analysis models and abstract classes may describe
+effects that occur ``automatically'', whenever one or more
+participating objects are in the proper state. For example, assume an
+OOA transition that says that a transfer should be started whenever a
+checking account is overdrawn, a savings account is underdrawn, and
+the customer has requested that the checking account should be
+automatically transferred. (This is an illustrative variation of
+the overdraft protection service described in
+Chapter <A NAME=tex2html49 HREF="ch10.html">10</A>.)  We may represent this initially in a form
+that is concrete in actions but not in synchronization control:
+<P>
+<A NAME=183>&#160;</A><A NAME=184>&#160;</A>
+<P>
+<PRE>class TransferMgr
+  locals
+    ch: fixed Checking; sv: fixed Savings; cmr: fixed Customer;
+    amt: fixed Cash;
+    op doTransfer { sv.withdraw(amt); ch.deposit(amt); ... }
+  end
+  op transfer
+    when ch.overdrawn /\ sv.canWithdraw(amt) /\ rqd(cmr, ch) then
+         { doTransfer; self.transfer }
+    else pend end
+end
+
+op mkTransfer(x: Checking, y: Savings, z: Customer, a: Cash) {
+   t := new TransferMgr(ch := x, sv := y, cmr := z, amt := a);
+   t.transfer; }
+</PRE>
+<P>
+For the moment, we have arranged that the <tt> transfer</tt> operation be
+``always requested'' by artificially generating operation events and
+self-propagating them along.
+<P>
+The primary design issue here is that <tt> transfer</tt> cannot be
+concretely defined by sequentially testing <tt> ch</tt><tt> .overdrawn</tt>,
+
+<P>
+then <tt> sv</tt><tt> .canWithdraw(amt)</tt>, then <tt> rqd(</tt><tt> cmr, </tt><tt>
+ch)</tt>, and then executing <tt> doTransfer</tt> if all conditions
+hold.  Assuming that none of these objects are exclusively managed by
+<tt> TransferMgr</tt>, all may change state between test time and
+trigger time.
+<P>
+A second, closely related issue stems from the fact that OOA models
+require all effects produced within <em> action</em> specifications to be
+logically atomic.  The <tt> Transfer</tt><tt> Mgr</tt><tt> ::</tt><tt>
+doTransfer</tt> operation must ensure that both balances are properly
+updated before returning.  Neither participant may engage in any other
+activities until this action is complete. Both participants must be
+under the control of the <tt> TransferMgr</tt> for the duration of the
+operation.
+<P>
+Unless it can somehow be proven that interference is impossible,
+dynamic control methods are required to address these problems.
+Beyond this, a strategy is needed for transforming logical guards into
+computations. The main alternatives are <em> polling</em> and <em>
+notifications</em>. Polling methods are generally poorer, but still
+sometimes useful.
+<P>
+<H2><A NAME=SECTION00015000000000000000> Polling</A></H2>
+<P>
+<A NAME=205>&#160;</A>
+In a polling approach, the coordinator for a joint action repeatedly
+asks participant objects about their states, and then performs the
+indicated actions if all conditions hold. The self-propagation
+strategy used at the abstract level may be replaced with a simple
+loop.  Locking is needed in order to freeze participants during
+testing and/or to control them exclusively during actions. This is
+facilitated by the use of separate read and write locks.
+<P>
+For example, assuming that the <tt> doTransfer</tt> operation does not
+send any messages to the <tt> Customer</tt> but only reads its status
+while evaluating <tt> rqd</tt> in the guard, it may be read locked, while
+the others are write (or read/write) locked:
+<P>
+<PRE>  op transfer {
+    while true do
+      ch.wLock; sv.wLock; cmr.rLock;
+      if ch.overdrawn /\ sv.canWithdraw(amt) /\ rqd(cmr, ch) then
+           cmr.rRelease; doTransfer
+      else cmr.rRelease  end;
+      ch.wRelease; sv.wRelease
+   end }
+</PRE>
+<P>
+Underneath the lock control, this is just a variant of the original
+specification.
+<P>
+Polling need not require interference protocols if the guards and
+operations are somehow known not to interfere with other processing.
+Polling itself can be limited to those intervals when this is known to
+be true.  For example, assuming that no transactions are made at
+night, a nightly transaction logger that only recorded differences
+over a 24-hour period could maintain a list of all accounts and their
+balances, recheck them once per night to discover which ones changed,
+and write log files accordingly.
+<P>
+<H2><A NAME=SECTION00016000000000000000> Notifications</A></H2>
+<P>
+<A NAME=210>&#160;</A><A NAME=211>&#160;</A><A NAME=212>&#160;</A>
+Polling techniques may test many times for proper conditions before
+firing. While the number of polling iterations may be bounded in
+special cases (see [<A HREF="#herlihy">21</A>]), polling is usually both
+inefficient and unreliable.
+<P>
+Notification-based strategies instead use more efficient event-driven
+processing.  In the case of guards for joint actions, the participants
+themselves may notify the coordinator that an action may need to be
+invoked. Notification-based techniques are also more reliable.
+Assuming queuing, the coordinator can never ``miss'' an opportunity to
+trigger an operation.
+<P>
+When participant objects change state in ways that might trigger a
+joint action, they may send a notification to the coordinator, while
+perhaps also locking themselves in preparation for possible control.
+(A usually better option is to wait for the coordinator to issue the
+lock via a callback sequence.) When there are multiple participants,
+notification from any one of them can trigger a lock-and-check
+sequence for the others.  For example, using keyed locks:
+<P>
+<PRE>class LockableChecking is Checking ...
+  locals mgr: TransferMgr; keyMgr: KeyMgr; end
+  op  withdraw(...) { ...
+      if overdrawn then
+         key := keyMgr.nextKey; self.lock(key); mgr.checkingOvd(key);
+      end }
+end
+
+class TransferMgrV2 is TransferMgr ...
+  op checkingOvd(k: Key) {
+     sv.lock(k); cmr.lock(k);
+     if sv.canWithdraw(amt) /\ rqd(cmr, ch) then doTransfer end;
+     ch.release(k); sv.release(k); cmr.release(k) }
+
+  op savingsOver;      % similar
+  op customerApproved; % similar
+end
+</PRE>
+<P>
+The main disadvantage of notification methods is that without
+planning, they can involve a fair amount of mangling of existing
+classes in order to insert the right notifications at the right times.
+To avoid this, classes may be designed to support notifications on any
+attribute change, as described in Chapter <A NAME=tex2html56 HREF="ch17.html">17</A>. The specific
+notifications may be added later, even dynamically during execution.
+<P>
+Notification techniques open up a large and varied design space.  In
+the remainder of this section, we survey some common variants.
+<P>
+<H3><A NAME=SECTION00016100000000000000> Unsynchronized Notifications</A></H3>
+<P>
+As with polling, notification techniques do not always require
+interference control measures.  In fact, unless an object must enter a
+controlled transition or interaction sequence as a result of the state
+change, it is fine to use simple one-way message passing for notification
+purposes.
+<P>
+<H3><A NAME=SECTION00016200000000000000> Persistent Conditions</A></H3>
+<P>
+<A NAME=218>&#160;</A>
+Some triggering conditions are ``persistent''. Once true, they remain
+
+true forever, or at least over the lifetimes of the relevant objects.
+To stretch an example, suppose that once a customer approved
+automatic transfer services, they were irrevocable. In this case, only
+a single notification need be sent to the <tt> TransferMgr</tt>.  It would
+never need to be checked again.  However, even this is wasteful.  It
+would be simpler to construct the <tt> TransferMgr</tt> itself only when
+the customer requested the service.
+<P>
+Objects that check and respond to single persistent conditions are
+sometimes termed <em> watches</em> and <em> event monitors</em>.
+The most common persistent conditions are time-based. Because time
+increases monotonically, any guard depending on it being after
+a certain time or after a certain event will stay true persistently.
+<P>
+<H4><A NAME=SECTION00016210000000000000> Periodic actions.</A></H4>
+<P>
+<A NAME=224>&#160;</A>
+When persistent conditions hold on a certain periodic basis, daemons may
+be constructed to manage the corresponding actions.  For example, the
+following daemon could be used to implement the Automatic Payment
+Service described in
+Chapter <A NAME=tex2html59 HREF="ch10.html">10</A>:<A NAME=227>&#160;</A>
+<P>
+
+<PRE>class PeriodicAction
+  period: TimePeriod;
+  action: Wrapper;
+end
+</PRE>
+<P>
+<PRE>class TimeTriggerManager
+  local s: TABLE[PeriodicAction];
+  local t: fixed Timer;
+  op alarm(id: int): () {
+     if s.has(id) then
+        s.at(id).action;
+        timer.replyAfter(s.at(id).period, WRAP(alarm(id))) end }
+  op put(c: PeriodicAction): int {
+     local job: int := s.put(c);
+     timer.replyAfter(s.at(job).period, WRAP(alarm(job)));
+     reply job }
+  op remove(id: int) { s.remove(id) }
+end
+</PRE>
+<P>
+<H3><A NAME=SECTION00016300000000000000> Change Notices</A></H3>
+<P>
+<A NAME=229>&#160;</A>
+Some joint action specifications require an action whenever an object is
+changed in <em> any</em> way. These changes are difficult to sense
+by other objects.  Particular attribute values are not important, only the
+fact that they have been changed. For example:<A NAME=231>&#160;</A>
+<P>
+<PRE>class Shape ...
+  viewer: Viewer;
+  op setX(newX: real) {
+     if xCoord ~= newX then ... viewer.redraw; ... end }
+end
+</PRE>
+<P>
+A form of this tactic may be used to translate the <tt>
+sv.canWithdraw(amt)</tt> condition in <tt> TransferMgr</tt> into
+notifications.  Because the savings account does not know the transfer
+amount, it should simply notify the <tt> TransferMgr</tt> when its balance
+changes.  The manager may then perform the complete test.
+<P>
+<H4><A NAME=SECTION00016310000000000000> Tools.</A></H4>
+<A NAME=236>&#160;</A>
+A number of specialized frameworks are available for designing classes
+supporting this general style of change-notice communication. Most
+graphical and user interface toolkits and frameworks use the <em>
+Model-View-Controller</em><A NAME=238>&#160;</A> (MVC) approach
+[<A HREF="#smalltalk">18</A>,<A HREF="#krasner">29</A>]<A NAME=240>&#160;</A> or any of several minor
+variations.  These provide specific protocols linking change-sources
+(models), change-audiences (views) and change-instigators
+(controllers).  The frameworks may be applied to nongraphical
+applications as well.
+<P>
+<H3><A NAME=SECTION00016400000000000000> Special-Purpose Constraint Handlers</A></H3>
+<P>
+<A NAME=242>&#160;</A>
+Some joint action effects and/or relational constraints are amenable
+to faster processing than is possible with generic propagation
+techniques. For example, if a set of <tt> Shape</tt> objects must always
+bear a certain geometric relation to each other (e.g., must be spaced
+uniformly within some region), then changes in any one of them may
+trigger a special-purpose constraint handler (e.g., a quadratic
+equation solver; see [<A HREF="#helm2">20</A>]) that simultaneously changes
+attributes in all of the constituent objects.
+<P>
+<H3><A NAME=SECTION00016500000000000000> Relays</A></H3>
+<P>
+<A NAME=246>&#160;</A>
+A single class may be used to mediate notification events among many
+different sets of objects.  Dependency-based designs may be better
+decoupled and organized through <em> relay</em> classes similar to those
+described in Chapter <A NAME=tex2html68 HREF="ch21.html">21</A>. These maintain sets of
+connections between objects and mediate their communication.  For
+example:<A NAME=250>&#160;</A><A NAME=251>&#160;</A>
+<P>
+<PRE>class ViewerRelay ...
+  m: MAP[Shape, Viewer];
+  op register(s: Shape, v: Viewer) { m.put(s, v) }
+  op changeNotice(s: Shape) {
+     if m.has(s) then m.at(s).redraw end }
+end
+</PRE>
+<P>
+Relays are exceedingly common and useful designs for coping with
+input events that may affect varied and changing audiences.  Here,
+change sources need not know the exact identities of their audiences, as
+long as they know of the appropriate relay object.  This technique may
+be extended to support ``pass by interest'' protocols in which
+senders describe the characteristics of audiences and/or the nature
+of the state change. The relay then determines the best recipient for
+the message at hand.  It is also possible to add more intelligence to
+relays in order to actively mediate, rather than blindly forward
+events.<A NAME=252>&#160;</A>
+<P>
+<H3><A NAME=SECTION00016600000000000000> Broadcasters</A></H3>
+<P>
+<A NAME=254>&#160;</A>
+As should already be obvious, we do not predefine a true <em>
+broadcast</em> primitive in <i> ODL</i>. We instead adopt the more common
+(and much better supported) view that object-oriented message passing
+is intrinsically point to point, although often mediated through
+dispatching and routing. However, the same strategies used
+for notification relays may be adapted readily to obtain the effects of
+uncoordinated broadcast. A relay object can register a <em> set</em> of
+objects that might be interested in receiving some notice and then
+generate multiple propagation messages. For example:
+<P>
+<PRE>class Rcvr op receive(m: Message); end
+class Broadcaster
+  members: SET[Rcvr];
+  op bcast(m: Message);  % relay msg to all members
+  op attach(r: Rcvr);    % add r to rcvrs
+  op detach(r: Rcvr);    % delete r from rcvrs
+end
+</PRE>
+<P>
+This may be further refined and extended. For example, the object
+may offer a filtering service that allows members to receive
+only those kinds of messages for which they express interest.
+<P>
+<H3><A NAME=SECTION00016700000000000000> Blackboards</A></H3>
+<P>
+<A NAME=259>&#160;</A>
+<P>
+An effective merger of polling and notification strategies is to
+externalize queuing to form a standard buffered producer-consumer
+design. Notifier (producer) objects send messages to a common queue
+serving as a ``blackboard''.  The coordinator (consumer) object
+repeatedly takes these messages and performs the associated actions.
+In the simplest case, the consumer may just take the form:
+<P>
+<PRE>op mainLoop { while true do msg := blackboard.take; perform(msg); end }
+</PRE>
+<P>
+The blackboard may actually be split into several queues, perhaps even
+one per message type. This makes it easier for consumers to control
+the kinds of messages they are waiting for.  Many such designs are
+discussed by Carriero and Galerntner
+[<A HREF="#carriero">11</A>].  These are readily amenable for expression in an
+object-oriented framework. <A NAME=261>&#160;</A>
+<P>
+<H3><A NAME=SECTION00016800000000000000> Collaboration</A></H3>
+<P>
+<A NAME=263>&#160;</A>
+<P>
+The coordination of joint actions does not always require explicit
+coordinator objects.  Each of the participating objects may include
+protocols for dealing directly with the others. For example, the
+notification-based version of <tt> TransferMgr</tt> design could be
+further transformed to allow each of the participants to step the
+others through a transaction under appropriate conditions.
+The transformations are similar to those seen for double-dispatching
+in Chapter <A NAME=tex2html76 HREF="ch21.html">21</A>. For example:
+<P>
+<PRE>class Checking_3 is Checking ...
+  locals sv: fixed Savings; cmr: fixed Customer; keyMgr: KeyMgr; end
+  op  withdraw(...) { ...
+      if overdrawn then
+         key := keyMgr.nextKey; sv.lock(key); cmr.lock(key);
+         if sv.canWithdraw(amt) /\ rqd(cmr, self) then ... end;
+         ...
+      end }
+end
+</PRE>
+<P>
+The other classes must be modified accordingly.  This eliminates the
+need for mediation at the expense of extreme identity and protocol
+coupling among participants, sometimes resulting in designs that are
+difficult to maintain.<A NAME=267>&#160;</A>
+<P>
+<H3><A NAME=SECTION00016900000000000000> Localizing Constraint Management</A></H3>
+<P>
+When objects are already structurally coupled for other reasons,
+similar localization techniques may be applied in a less disruptive
+fashion.  Notification techniques may be used to move responsibility
+for managing class and relational constraints down to component
+objects rather than their hosts.
+For example, in our <tt> Square</tt> class we could define special
+versions of <tt> Point</tt> that maintain proper distance from each other
+whenever either is changed:
+<P>
+<A NAME=271>&#160;</A>
+<P>
+<PRE>class DistancedPoint ...
+  locals _x: Real &lt;&gt;; _y: Real &lt;&gt;; nbr: DistancedPoint; end
+  x: real { _x? }
+  y: real { _y? }
+  op noPropShiftX(v: real) { _x.add(v); }
+  op shiftX(v: real): () { _x.add(v); nbr.noPropShiftX(v); }
+end
+
+class Square_5
+  locals lowerLeft: DistancedPoint; upperRight: DistancedPoint; end
+  inv upperRight.x &gt; lowerLeft.x,
+      upperRight.x - lowerLeft.x = upperRight.y - lowerLeft.y
+  inv lowerLeft.nbr = upperRight, upperRight.nbr = lowerLeft
+  op shiftHorizontally(offset: real): () { lowerLeft.shiftX(offset); }
+end
+</PRE>
+<P>
+The invocation of <tt> lowerLeft.shiftX</tt> in <tt> shiftHorizontally</tt>
+maintains all invariants without explicit action on the part of the
+<tt> Square</tt>. The two forms of <tt> Point::</tt><tt> shiftX</tt> (or any of
+several similar setups) are necessary to prevent looping of
+notifications.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00020000000000000000> Controlling Groups</A></H2></center>
+<P>
+<A NAME=278>&#160;</A><A NAME=279>&#160;</A>
+<A NAME=280>&#160;</A><A NAME=281>&#160;</A>
+<A NAME=282>&#160;</A><A NAME=283>&#160;</A>
+<P>
+Group interaction frameworks may be used to translate models usually
+denoted by <em> single</em> classes at the analysis level.  These include
+a number of ``master-slave'' or ``host-helper'' designs, in which a
+controller schedules the actions of a group of worker objects.  The
+normal intent is to hide the fact that these workers exist.
+These designs represent increasingly larger scale versions of basic
+delegation techniques.
+<P>
+In most controller designs it is important to ensure that the
+``outer'' controller object appear as a single entity to all outside
+clients, not as a visible composite of specialists or helpers.  This
+normally requires that none of the internal helpers <em> ever</em>
+``leak'' their identities to clients.  In many situations, this is
+arranged merely by ensuring that the controller serve as a barrier,
+forwarding requests to helpers, and later forwarding back results.  A
+similar practice is to recast bidirectional client-host interactions
+into those in which the delegate performs a callback to the original
+client through an anonymous wrapper.
+<P>
+As long as the delegates perform <em> only</em> internal operations, there
+is nothing more to worry about.  However, these designs do not
+intrinsically ensure that operations within slave or helper classes do
+not send messages that reveal identities to other objects who may
+thereafter bypass the host and deal directly (and incorrectly) with
+the helpers.  Any message sent from a delegate that includes <tt>
+self</tt> as an argument could lead to this.
+<P>
+One way to avoid such problems automatically is to arrange that hosts
+send <tt> self</tt> to delegates as an extra argument for all delegated
+messages. Delegates then uniformly employ the received <tt>
+apparentSelf</tt> for all other messages.  Some OO languages (e.g., <i>
+SELF</i> [<A HREF="#self">44</A>]<A NAME=292>&#160;</A>) use variants of this
+protocol as built-in mechanisms, and to some, this is the only
+``true'' sense of delegation (see, for example, [<A HREF="#dony">16</A>,<A HREF="#wolzco">46</A>]).
+One obstacle to using this strategy is that the hosts must be prepared
+to ``catch'' all messages ordinarily coming back to their delegates in
+order to redelegate them or do anything else with them.  Enabling
+hosts to do this by adding new public forwarding operations to outer
+interfaces is at best tedious, especially when delegation links may be
+rebound. For such reasons, OO languages using such protocols build
+them into the language proper.
+<P>
+However, as they scale up, these strategies encounter further problems
+revolving around visibility, identity, and interference.  The
+structures surveyed in the remainder of this section are most
+appropriate when interactions between controllers and helpers are <em>
+communication-closed</em>. When this does not hold, the architectures and
+protocols must be modified to employ the kinds of coordination
+techniques described earlier in this chapter.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Multicast</A></H2>
+<P>
+<A NAME=296>&#160;</A>
+<A NAME=297>&#160;</A>
+<P>
+A <em> collection</em> may be distributed among a set of objects,
+controlled by a single master that scatters requests and then gathers
+replies.  Requests for set membership, etc., may then be <em>
+multicast</em> to all subcollections and run in parallel. The master does
+not usually need to gather <em> all</em> replies.  For example, a set
+membership inquiry may be satisfied when any one of the slave
+subcollections replies affirmatively.
+<P>
+This idea leads to more general designs in which clients of a
+master-slave system may sequentially access any number of ``answers''
+to queries, tasks, or problems.  These answers may be maintained in a
+queue or similar collection held by the master, and accessed by
+clients.  A bit of bookkeeping is necessary to keep track of things.
+For example:<A NAME=301>&#160;</A>
+<P>
+<PRE>class Master
+  locals
+    slaves: SET[Slave];
+    answers: QUEUE[Answer];
+    solving: Bool; init ~solving?
+    problemID: Int; init problemID? = 0;
+    nAnswers: Int;
+  end
+  op query(p: Problem)
+     when ~solving? then {
+       solving.t!; clear(answers); nAnswers.clr; problemID.inc;
+       slaves.applyS(WRAP1(#1.doProblem(p, problemID?))) }
+     else pend end
+  op slaveReply(a: Answer, pid: int)
+     when solving /\ pid=problemID? then {
+       answers.put(a); nAnswers.inc;
+       if nAnswers? = slaves.size then solving.f! end }
+     else end
+  op getNextAnswer: Answer { reply answers.take }
+end
+</PRE>
+<P>
+This design only supports solution of one problem at a time.
+Multiple problems may be handled by associating different queues with
+different problems and then reparameterizing things accordingly.
+<P>
+<H2><A NAME=SECTION00022000000000000000> Worker Groups</A></H2>
+<P>
+<A NAME=303>&#160;</A>
+<P>
+Such designs may be expressed more easily via the definition of
+classes describing the higher-level structure and protocols.  Worker
+groups (sometimes called <em> process groups</em>) are <tt> SET</tt>s or other
+collections of objects that all band together in computing a task
+or service. Worker groups may have features including:
+<P>
+<UL><LI> Multicast protocols in which a client or controller
+        sends the same message to all members of the group, and then waits for
+        <em> any</em> reply, <em> all</em> replies, a majority of replies,
+        or a reply meeting some stated predicate.
+  <LI> Guarantees that multicasts be <em> causally ordered</em>. All
+        members of a group should receive the same messages in the same
+        order, as established through sequencing and acknowledgment
+        protocols.
+  <LI> A set of actions to be taken whenever a worker object enters
+        or leaves a group.
+  <LI> Consistent methods for detecting failed workers (usually via
+        probes and time-outs) and taking evasive action.
+</UL>
+<P>
+<A NAME=311>&#160;</A><A NAME=312>&#160;</A>
+<P>
+Hiding these details within groups themselves better encapsulates
+protocol mechanics while also simplifying the design of classes that
+use them.  One such protocol is <em> synchronous control</em>, in which
+a controller steps other objects through actions in a way that is
+known to conform to all task dependencies and interaction
+requirements.  For example, the following design solves the <tt>
+ImageCell</tt> problem (Chapter <A NAME=tex2html92 HREF="ch19.html">19</A>) in a somewhat simpler and
+possibly more efficient way than our first
+attempt:<A NAME=317>&#160;</A>
+<P>
+<PRE>class CellStepper ...
+  local g: WorkerGroup[ImageCell];
+  op step: () {
+    g.bcastA(WRAP1(#1.getNorth));
+    g.bcastA(WRAP1(#1.getSouth));
+    g.bcastA(WRAP1(#1.getEast));
+    g.bcastA(WRAP1(#1.getWest));
+    g.bcastA(WRAP1(#1.updateBrightness)) }
+end
+</PRE>
+<P>
+We assume here that <tt> WorkerGroup::bcastA</tt> is a multicast protocol
+that sends a message to all members and then waits for a completion
+reply from all of them before returning.  The <tt> ImageCell</tt>
+operations must, of course, be redefined accordingly.
+<P>
+This arrangement avoids within-object dependency tracking at the price
+of synchronous processing. However, this can be an asset. It opens up
+a set of design methods based on ``data parallel programming''
+[<A HREF="#hillisSteele">23</A>], where a group of objects all do one thing,
+and then all another, and so on. These strategies are well suited to
+many fine-grained parallel programming environments. They are useful
+even in asynchronous systems. The framework results in <em> virtual
+synchrony</em> among slaves, thus simplifying controller design.
+<P>
+Many other coordination tasks become simpler when objects are
+
+structured into managed groups for the sake of performing
+particular tasks.  For example, most, if not all intragroup
+communication may be performed via group multicast. Individual members
+do not need to keep track of others directly.  For another example,
+locking may be performed via <em> token passing</em>, in which a single
+lock token is passed from member to member. Members only execute when
+they possess the token.
+<P>
+<A NAME=323>&#160;</A>
+<P>
+<H2><A NAME=SECTION00023000000000000000> Fault Tolerance</A></H2>
+<P>
+<A NAME=325>&#160;</A><A NAME=326>&#160;</A><A NAME=327>&#160;</A>
+<P>
+Worker group designs may be employed to improve fault tolerance.  For
+example, rather than distributing helper objects that maintain or
+solve different parts of tasks, they may all handle the <em> same</em>
+
+task.  In this way, if any of them fail, answers may still be
+obtained.
+<P>
+Replicated service objects may be arranged in <em> server groups</em> in
+which client service requests are somehow multicast to all replicates.
+Any of several alternative designs may be employed, including:
+<P>
+<DL ><DT><b> Protocol objects:</b>
+<DD> Clients must channel requests
+        through protocol objects that serve as multicast
+        controllers.
+  <DT><b> Cross-delegation:</b>
+<DD> Each server replicates each
+        request to all others. A coordination protocol ensures
+        that only one member replies (through a callback).
+  <DT><b> Standby techniques:</b>
+<DD> Each group contains a primary
+        object that receives client requests and multicasts them to
+        all others. Normally, only the primary object executes the
+        service and replies back to the client.  If it fails (as
+        detected by a time-out), another standby object is chosen.
+        Individual objects may serve on standby duty for many
+        different tasks.
+        There are several variants of this protocol, including <em>
+        coordinator-cohort</em> designs [<A HREF="#isis2">8</A>].
+<P>
+ </DL>
+<A NAME=337>&#160;</A>
+<P>
+To achieve fault tolerance, each replicate should be self-contained,
+and thus share no (or at least few) connections with other downstream
+service objects. This often requires the replication of additional
+objects that must also be kept in synchrony to maintain global
+consistency. For example, in a standby design, all server objects
+might maintain separate versions of some <tt> x:Int</tt>. The primary
+object should multicast all updates to standby objects. However, these
+updates should be acted upon only when it is known that the primary
+has successfully completed its task.
+<P>
+<H4><A NAME=SECTION00023010000000000000> Replicated controllers.</A></H4>
+<P>
+Controllers and group managers themselves may be replicated.  Further
+capabilities may be added to controllers in order to manage
+computation and detect problems. For example, a controller may send
+occasional probes that track participants, monitor progress, and
+detect failures.  Some architectures and algorithms are described by
+Andrews [<A HREF="#andrews2">6</A>].  Dealing with failure of a controller is a
+much more difficult issue.  The members of the group must come to
+agreement about the nature of the failure and responsibility for
+recovery (see, e.g., [<A HREF="#lamport">30</A>]).
+<P>
+<H4><A NAME=SECTION00023020000000000000> Tools.</A></H4>
+<A NAME=343>&#160;</A>
+Such protocols can be difficult to devise, implement, and validate.
+Existing protocols supported by tools such as <i> ISIS</i> may be
+encapsulated as black-box protocol objects and services at the design
+level, with the knowledge that corresponding implementations exist.
+<P>
+<i> ISIS</i> [<A HREF="#isis">9</A>,<A HREF="#isis2">8</A>] <A NAME=347>&#160;</A> is a toolkit of
+protocols and related mechanisms (implemented in <i> C</i>) that
+facilitate development of reliable group interaction designs. <i>
+ISIS</i> includes support for fault-tolerant tracking and control of <em>
+process groups</em>, along with other higher-level protocols useful in common
+design architectures.  <i> ISIS</i> supports a causal multicast protocol
+that ensures that each of a series of messages to a group are received
+in issued order by all members, along with coordinator-cohort support,
+group-based locking protocols, and so on.
+<P>
+<H2><A NAME=SECTION00024000000000000000> Iterative Problem Solving</A></H2>
+<P>
+Further refinements apply to problems that must be solved iteratively
+by looping across phases that (1) divide the task across slaves, (2)
+have them compute some results, (3) gather up results, and (4) check
+if a full solution has finally been reached.  Many large-scale
+scientific and engineering problems are readily, almost mechanically,
+decomposable in such terms.  For example, assuming other appropriate
+declarations, a special kind of worker group could be designed as follows:
+<P>
+
+<P>
+<PRE>class ComputeGroup
+  locals
+    slaves: SET[Slave];  currentTask: Task; ctl: ProblemSplitter;
+    numberReporting: Int; busy: Bool; client: Client;
+    op scatter { numberReporting.clear;
+       ctl.distributeProblem(slaves, currentTask);
+       slaves.applyS(WRAP1(#1.computeAndReport)) }
+  end
+  op gather(c: Chunk,  s: Slave) {
+     currentTask.incorporate(c);
+     numberReporting.inc;
+     if numberReporting? = slaves.size then
+        if ~currentTask.done then scatter
+        else client.result(currentTask); busy.f! end
+     end }
+  op newTask(t: Task, c: Client) when ~busy? then {
+     busy.t!; currentTask := t; client := c; scatter } else pend end
+end
+</PRE>
+<P>
+Extensions include designs employing dynamic load balancing in which
+tasks are reconfigured based on the time it took for slaves to perform
+previous steps.
+<P>
+<H3><A NAME=SECTION00024100000000000000> Blackboards</A></H3>
+<P>
+<A NAME=354>&#160;</A>
+An alternative framework for iterative computation is to have the
+central coordinator serve as a <em> blackboard</em>, or work queue for
+the compute objects. This design is a minor variant of
+blackboard-based notification structures.  In this case, the host
+initializes a set of worker objects, each of the form:
+<P>
+<PRE>class TaskPerformer ...
+  job: Job;  m: TaskManager;
+  op mainLoop {
+     while true do job := m.take; transform(job); m.put(job) end }
+end
+</PRE>
+<P>
+The <tt> take</tt> operation may be parameterized so that different kinds
+of <tt> TaskPerformer</tt>s perform steps on jobs needing only their
+special talents. The results may then be fed back to be picked up by
+different specialists.
+<P>
+This is almost a mirror-image of previous designs. Rather than having
+the master send messages that may sit in queues until objects are ready to
+process them, the slaves themselves only take new tasks when they are done
+with others. Conversion from one form to the other is straightforward.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00030000000000000000> Open Systems</A></H2></center>
+<P>
+<A NAME=360>&#160;</A><A NAME=361>&#160;</A>
+<P>
+<em> Open systems</em>, in the sense coined by Hewitt [<A HREF="#hewitt">22</A>] and
+Agha [<A HREF="#agha">1</A>], are those in which new objects may dynamically join
+configurations, enter contracts, and generally behave as evolving
+self-organizing societies of interacting intelligent agents.  Many of
+the specific architectural elements proposed for open systems (e.g.,
+groups of <em> receptionists</em> that deal with external events) as well
+as for related distributed artificial intelligence frameworks (see, e.g.,
+[<A HREF="#huhns">26</A>,<A HREF="#durfee">17</A>]) are very much usable in the design
+of less experimental applications.  However, techniques for reliably
+supporting the general paradigm do not appear well enough developed to
+admit routine exploitation.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Metalevel Reasoning</A></H2>
+<P>
+<A NAME=368>&#160;</A><A NAME=369>&#160;</A><A NAME=370>&#160;</A>
+Among the primary hurdles in constructing open systems is supporting
+full-scale metalevel reasoning. Since new objects belonging to new
+classes may be introduced at any point, some or all objects must
+``understand'' the underlying meaning of the base language so they can
+dynamically decode and create new attributes and operations, construct
+and instantiate new classes, and so on. In a sense, the objects
+themselves must be able to act as <em> designers</em>. Support requires
+more extensive forms of metaclasses and the like than are presented in
+Chapters <A NAME=tex2html107 HREF="ch8.html">8</A> and <A NAME=tex2html108 HREF="ch18.html">18</A>.  It also requires
+further exploitation of reflection than we have so far described.
+Objects and groups of objects may need to reconfigure themselves
+dynamically to deal with new situations, as described in
+[<A HREF="#matsuoka">31</A>].
+<P>
+While perhaps exotic, many metalevel facilities are currently
+supported in languages including <i> CLOS</i>
+[<A HREF="#kiczales">28</A>]<A NAME=379>&#160;</A> and have been used to good effect. For
+example, Paepcke [<A HREF="#paepke1">33</A>,<A HREF="#paepke2">34</A>,<A HREF="#paepke3">35</A>,<A HREF="#paepke4">36</A>] discusses the
+extension of <i> CLOS</i> into <i> PCLOS</i> through the use of metalevel
+features in which objects behave as local, persistent, and/or cached
+entities depending on context.  Similarly, Rao [<A HREF="#rao">37</A>] describes a
+windowing system supporting programmer-accessible protocol
+specialization. For example, objects do not need to perform expensive
+screen updates when they find themselves embedded in nonoverlapping
+cells in a spreadsheet. Both of these applications are made simpler
+through the use of <i> CLOS</i> mechanisms enabling state and protocol
+descriptions to be dynamically modified rather than hard-wired.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Large-Scale Object Systems</A></H2>
+<P>
+Massively distributed object systems may soon pervade the planet.
+These open object systems do not require the use of fine-grained
+metalevel reasoning facilities. In fact, because of their scale and
+intended range of applicability, they require only the most minimal
+assumptions and information about participating coarse-grained
+distributed objects.  This information generally consists only of a
+listing of those <em> services</em> that each object is willing to provide
+to others, especially those residing in foreign systems.  Service
+specifications must be expressed in a common interface description
+language (e.g., <i> CORBA IDL</i>[<A HREF="#corba">32</A>]<A NAME=389>&#160;</A> -- see
+Chapter <A NAME=tex2html111 HREF="ch23.html">23</A>).
+<P>
+The specification, design, and implementation of global open object
+systems is a very different enterprise than that of the application
+systems discussed in this book.  In Chapter <A NAME=tex2html112 HREF="ch23.html">23</A>, we
+briefly discuss strategies for dealing with foreign systems.  However,
+these methods can break down in the development of such systems
+themselves.  Service interface descriptions are quite a bit weaker
+than specifications possible in self-contained systems.  For example,
+one may no longer rely on object identity as an analysis, design, or
+implementation construct.  Essentially all communication must use
+transparent service-based routing mechanisms resting on these weaker
+assumptions.  Available coordination protocols, security measures, and
+testing techniques are similarly limited.
+<P>
+<center><P><P></center>
+
+<center><H2><A NAME=SECTION00040000000000000000> Summary</A></H2></center>
+<P>
+Transitions <em> interfere</em> when two or more sequences of actions may
+be interleaved in undesirable ways.  Pragmatically, it is impossible
+to guarantee that no interference will occur in a system.  However,
+safeguards, design policies, and control protocols may be used as
+needed to ensure atomicity and consistency.  The translation of
+guarded transitions into concrete form must take potential
+interference into account.
+<P>
+Delegation provides a basis for scaling up control architectures.
+A number of ready-made design architectures exist and may be plugged
+into design efforts.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Further Reading</A></H2>
+<P>
+There are currently no general accounts or catalogs of OO design
+architectures.  However, beyond the references cited in the text, many
+articles and papers describe case studies and overviews of particular
+examples. These may be found in proceedings of the <em> OOPSLA</em>, <em>
+ECOOP</em>, <em> Usenix C++</em>, and <em> TOOLS</em> conferences, as well as the <em>
+Journal of Object-Oriented Programming</em> and other magazines and
+journals.
+<P>
+Synchronization and interference control are central concerns in
+systems of all sorts.  Chandy and Misra
+[<A HREF="#unity">13</A>] describe design issues from a non-OO perspective.
+Andrews [<A HREF="#andrews">5</A>] is an excellent technical reference for many
+control and protocol issues.  Apt and Olderog [<A HREF="#apt">7</A>] discuss
+verification.  Burns et al
+[<A HREF="#burns2">10</A>] describe joint action control in <i> Ada</i><A NAME=407>&#160;</A>.
+Aksit [<A HREF="#aksit">3</A>], Detlefs et al [<A HREF="#avalon">15</A>], and Guerraoui et al
+[<A HREF="#guerraoui">19</A>] describe particular OO transaction architectures.
+<P>
+Further discussions of aliasing in OO contexts may be found in Hogg et
+al [<A HREF="#aliasing">25</A>]. Language-based interference analysis methods are
+discussed by Reynolds [<A HREF="#reynolds">38</A>], America and de Boer
+[<A HREF="#america">4</A>], Jones [<A HREF="#jones92">27</A>] and Wills [<A HREF="#wills">45</A>].
+<P>
+<H2><A NAME=SECTION00042000000000000000> Exercises</A></H2>
+<P>
+<OL><LI> Some OO designers and programmers with extensive experience
+        claim never to have encountered an aliasing-related error,
+        despite never having paid explicit attention to the issue.
+        Why might this be so?
+<P>
+  <LI> Explain why unchecked aliasing makes it very difficult to
+        actually <em> verify</em> that concrete operations obey
+        certain <tt> ==&gt;</tt> effects.
+<P>
+  <LI> Can locking be used to deal with self-interference?
+<P>
+  <LI> Design a concrete queue class supporting <tt> put2(x, y)</tt>
+        that places <tt> x</tt> and <tt> y</tt> on adjacent slots in
+        the queue. Do this by controlling a simple queue.
+<P>
+  <LI> Describe the locking protocols of a database system you
+        are familiar with in <i> ODL</i>.
+<P>
+  <LI> Revise and extend the transfer manager class and related
+        classes to meet the full specifications of the automatic
+        overdraft protection service described in
+        Chapter <A NAME=tex2html114 HREF="ch10.html">10</A>.
+<P>
+  <LI> Instead of using state-change notifications, why can't we
+        just build ``derivative sensing'' in
+        <i> ODL</i> as a primitive capability?
+<P>
+  <LI> Design collection classes that could be used as slaves
+        in the scatter/gather example.
+<P>
+  <LI> Under which conditions would the synchronous <tt> ImageCell</tt>
+        design be better than the asynchronous one?
+<P>
+  <LI> ``True'' delegation is sometimes described as ``self-substitution''.
+        Rework our characterization in these terms.
+<P>
+  <LI> Describe in detail how a time daemon like that described in
+        this chapter could be used to implement the automated payment service
+        of Chapter <A NAME=tex2html115 HREF="ch10.html">10</A>.
+<P>
+  <LI> Design a time daemon that accepts particular
+        sequences of <tt> Date</tt>s to trigger actions rather than
+        a set period.
+<P>
+</OL>
+<P>
+
+<P>
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=agha><STRONG>1</STRONG></A><DD>
+G. Agha.
+ <em> ACTORS: A Model of Concurrent Computation in Distributed
+  Systems</em>.
+ MIT Press, 1986.
+<P>
+<DT><A NAME=aho><STRONG>2</STRONG></A><DD>
+A. Aho, J. Hopcroft, and J. Ullman.
+ <em> The Design and Analysis of Computer Algorithms</em>.
+ Addison-Wesley, 1974.
+<P>
+<DT><A NAME=aksit><STRONG>3</STRONG></A><DD>
+M. Aksit, J. Dijkstra, and A. Tripathi.
+ Atomic delegation: Object oriented transactions.
+ <em> IEEE Software</em>, March 1991.
+<P>
+<DT><A NAME=america><STRONG>4</STRONG></A><DD>
+P. America and F. de Boer.
+ A sound and complete proof system for spool.
+ Technical Report 505, Philips Research Laboratories, May 1990.
+<P>
+<DT><A NAME=andrews><STRONG>5</STRONG></A><DD>
+G. Andrews.
+ <em> Concurrent Programming: Principles and Practice</em>.
+ Benjamin Cummings, 1991.
+<P>
+<DT><A NAME=andrews2><STRONG>6</STRONG></A><DD>
+G. Andrews.
+ Paradigms for interaction in distributed programs.
+ <em> Computing Surveys</em>, March 1991.
+<P>
+<DT><A NAME=apt><STRONG>7</STRONG></A><DD>
+K. Apt and E. Olderog.
+ <em> Verification of Sequential and Concurrent Programs</em>.
+ Springer-Verlag, 1991.
+<P>
+<DT><A NAME=isis2><STRONG>8</STRONG></A><DD>
+K. Birman.
+ <em> ISIS User Guide and Reference Manual</em>.
+ Isis Distributed Systems, 1992.
+<P>
+<DT><A NAME=isis><STRONG>9</STRONG></A><DD>
+K. Birman and K. Marzullo.
+ Isis and the meta project.
+ <em> Sun Technology</em>, Summer 1989.
+<P>
+<DT><A NAME=burns2><STRONG>10</STRONG></A><DD>
+A. Burns, A. Lister, and A. Wellings.
+ <em> A Review of Ada Tasking</em>.
+ Springer Verlag, 1987.
+<P>
+<DT><A NAME=carriero><STRONG>11</STRONG></A><DD>
+N. Carriero and D. Galerntner.
+ <em> How to Write Parallel Programs</em>.
+ MIT Press, 1990.
+<P>
+<DT><A NAME=cellary><STRONG>12</STRONG></A><DD>
+W. Cellary, E. Gelenbe, and T. Morzy.
+ <em> Concurrency Control in Distributed Database Systems</em>.
+ North-Holland, 1988.
+<P>
+<DT><A NAME=unity><STRONG>13</STRONG></A><DD>
+K. Chandy and J. Misra.
+ <em> Parallel Program Design: A Foundation</em>.
+ Addison-Wesley, 1988.
+<P>
+<DT><A NAME=cole><STRONG>14</STRONG></A><DD>
+R. Cole.
+ A model for security in distributed systems.
+ <em> Computers and Security</em>, 9(4), 1990.
+<P>
+<DT><A NAME=avalon><STRONG>15</STRONG></A><DD>
+D. Detlefs, P. Herlihy, and J. Wing.
+ Inheritance of synchronization and recovery properties in avalon/c++.
+ In <em> International Conference on System Sciences</em>, 1988.
+<P>
+<DT><A NAME=dony><STRONG>16</STRONG></A><DD>
+C. Dony, J. Malenfant, and P. Cointe.
+ Prototype-based languages: From a new taxonomy to constructive
+  proposals and their validation.
+ In <em> OOPSLA '92</em>. ACM, 1992.
+<P>
+<DT><A NAME=durfee><STRONG>17</STRONG></A><DD>
+E. Durfee.
+ <em> Coordination of Distributed Problem Solvers</em>.
+ Kluwer, 1988.
+<P>
+<DT><A NAME=smalltalk><STRONG>18</STRONG></A><DD>
+A. Goldberg.
+ <em> Smalltalk 80: The Interactive Programming Environment</em>.
+ Addison-Wesley, 1984.
+<P>
+<DT><A NAME=guerraoui><STRONG>19</STRONG></A><DD>
+R. Guerraoui, R. Capobianchi, A. Lanusse, and P. Roux.
+ Nesting actions through asynchronous message passing: the acs
+  protocol.
+ In <em> ECOOP '92</em>. Springer Verlag, 1992.
+<P>
+<DT><A NAME=helm2><STRONG>20</STRONG></A><DD>
+R. Helm, T. Huynh, K. Marriott, and J. Vlissides.
+ An object-oriented architecture for constraint-based graphical
+  editing.
+ In <em> Third Eurographics Workshop on Object-oriented Graphics</em>,
+  1992.
+<P>
+<DT><A NAME=herlihy><STRONG>21</STRONG></A><DD>
+M. Herlihy.
+ A methodology for implementing highly concurrent data structures.
+ In <em> Symposium on Principles and Practices of Parallel
+  Programming</em>. ACM, 1990.
+<P>
+<DT><A NAME=hewitt><STRONG>22</STRONG></A><DD>
+C. Hewitt, P. Bishop, and R. Steiger.
+ A universal modular actor formalism for ai.
+ In <em> Third International Joint Conference on Artificial
+  Intelligence</em>, 1973.
+<P>
+<DT><A NAME=hillisSteele><STRONG>23</STRONG></A><DD>
+W. Hillis and G. Steele.
+ Data parallel algorithms.
+ <em> Communications of the ACM</em>, December 1986.
+<P>
+<DT><A NAME=hogg><STRONG>24</STRONG></A><DD>
+J. Hogg.
+ Islands: Aliasing protection in object-oriented languages.
+ In <em> OOPSLA '91</em>. ACM, 1991.
+<P>
+<DT><A NAME=aliasing><STRONG>25</STRONG></A><DD>
+J. Hogg, D. Lea, R. Holt, A. Wills, and D. de Champeaux.
+ The geneva convention on the treatment of object aliasing.
+ <em> OOPS Messenger</em>, April 1992.
+<P>
+<DT><A NAME=huhns><STRONG>26</STRONG></A><DD>
+M. Huhns.
+ <em> Distributed Artificial Intelligence</em>.
+ Morgan Kaufmann, 1987.
+<P>
+<DT><A NAME=jones92><STRONG>27</STRONG></A><DD>
+C. Jones.
+ An object-based design method for concurrent programs.
+ Technical Report UMCS-92-12-1, University of Manchester Department of
+  Computer Science, 1992.
+<P>
+<DT><A NAME=kiczales><STRONG>28</STRONG></A><DD>
+G. Kiczales, J. des Rivieres, and D.G. Bobrow.
+ <em> The Art of the Metaobject Protocol</em>.
+ MIT Press, 1991.
+<P>
+<DT><A NAME=krasner><STRONG>29</STRONG></A><DD>
+G. Krasner and S. Pope.
+ A cookbook for using the model view controller user interface
+  paradigm in smalltalk-80.
+ <em> Journal of Object-Oriented Programming</em>, August/September 1988.
+<P>
+<DT><A NAME=lamport><STRONG>30</STRONG></A><DD>
+L. Lamport and N. Lynch.
+ Distributed computing models and methods.
+ In J. van Leeuwen, editor, <em> Handbook of Theoretical Computer
+  Science</em>. MIT Press, 1990.
+<P>
+<DT><A NAME=matsuoka><STRONG>31</STRONG></A><DD>
+S. Matsuoka, T. Watanabe, and A. Yonezawa.
+ Hybrid group reflective architecture for object-oriented concurrent
+  reflective programming.
+ In <em> ECOOP '91</em>. Springer Verlag, 1991.
+<P>
+<DT><A NAME=corba><STRONG>32</STRONG></A><DD>
+OMG.
+ <em> Common Object Request Broker Architecture and Specification</em>.
+ Object Management Group, 1991.
+<P>
+<DT><A NAME=paepke1><STRONG>33</STRONG></A><DD>
+A. Paepcke.
+ Pclos: A flexible implementation of clos persistence.
+ In <em> ECOOP '88</em>. Springer Verlag, 1988.
+<P>
+<DT><A NAME=paepke2><STRONG>34</STRONG></A><DD>
+A. Paepcke.
+ Pclos: A critical review.
+ In <em> OOPSLA '89</em>. ACM, 1989.
+<P>
+<DT><A NAME=paepke3><STRONG>35</STRONG></A><DD>
+A. Paepcke.
+ Pclos: Stress testing clos - experiencing the metaobject protocol.
+ In <em> OOPSLA '90</em>. ACM, 1990.
+<P>
+<DT><A NAME=paepke4><STRONG>36</STRONG></A><DD>
+A. Paepcke.
+ User-level language crafting: Introducing the clos metaobject
+  protocol.
+ Technical Report HPL-91-169, HP Labs, October 1991.
+<P>
+<DT><A NAME=rao><STRONG>37</STRONG></A><DD>
+R. Rao.
+ Implementational reflection.
+ In <em> ECOOP '91</em>. Springer Verlag, 1991.
+<P>
+<DT><A NAME=reynolds><STRONG>38</STRONG></A><DD>
+J. Reynolds.
+ Syntactic control of interference.
+ Technical Report CMU-CS-89-130, Carnegie-Mellon University, 1989.
+<P>
+<DT><A NAME=richardson><STRONG>39</STRONG></A><DD>
+J. Richardson, P. Schwarz, and L. Cabrera.
+ Cacl: Efficient fine-grained protection for objects.
+ In <em> OOPSLA '92</em>. ACM, 1992.
+<P>
+<DT><A NAME=sedgewick><STRONG>40</STRONG></A><DD>
+R. Sedgewick.
+ <em> Algorithms</em>.
+ Addison-Wesley, 1990.
+<P>
+<DT><A NAME=kala><STRONG>41</STRONG></A><DD>
+S. Simmel.
+ The kala basket: A semantic primitive unifying object transactions,
+  access control, versions and configurations.
+ In <em> OOPSLA '91</em>. ACM, 1991.
+<P>
+<DT><A NAME=hermes><STRONG>42</STRONG></A><DD>
+R. Strom, D. Bacon, A. Goldberg, A. Lowry, D. Yellin, and S. Yemeni.
+ <em> Hermes: A Language for Distributed Computing</em>.
+ Prentice Hall, 1991.
+<P>
+<DT><A NAME=thuraisingham><STRONG>43</STRONG></A><DD>
+B. Thuraisingham.
+ Multilevel secure object-oriented data model.
+ <em> Journal of Object-Oriented Programming</em>, November 1991.
+<P>
+<DT><A NAME=self><STRONG>44</STRONG></A><DD>
+D. Ungar.
+ The self papers.
+ <em> Lisp and Symbolic Computation</em>, 1991.
+<P>
+<DT><A NAME=wills><STRONG>45</STRONG></A><DD>
+A. Wills.
+ Formal methods applied to object oriented programming.
+ Technical Report Thesis, University of Manchester, 1992.
+<P>
+<DT><A NAME=wolzco><STRONG>46</STRONG></A><DD>
+M. Wolczko.
+ Encapsulation, delegation and inheritance in object-oriented
+  languages.
+ <em> Software Engineering Journal</em>, March 1992.
+</DL>
+<P>
+
+<a href="ch23.html">Next: Chapter 23</a>
+<center><P><P></center>
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 08:00:10 EDT 1995</I>
+</ADDRESS>
+</BODY>

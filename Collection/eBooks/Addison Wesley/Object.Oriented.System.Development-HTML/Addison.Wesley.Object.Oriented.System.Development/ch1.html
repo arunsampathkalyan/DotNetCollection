@@ -1,0 +1,595 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Overview</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Overview">
+<meta name="keywords" value="ch1">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+
+<center><P><P></center>
+
+
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+
+<h2>Chapter 1: Overview</h2>
+<UL>
+<LI> <A NAME=tex2html62 HREF="#SECTION00010000000000000000"> Scope</A>
+<LI> <A NAME=tex2html63 HREF="#SECTION00020000000000000000"> Objects</A>
+<LI> <A NAME=tex2html64 HREF="#SECTION00030000000000000000"> Development Paradigms</A>
+<LI> <A NAME=tex2html65 HREF="#SECTION00040000000000000000"> Development Phases</A>
+<LI> <A NAME=tex2html66 HREF="#SECTION00050000000000000000"> Summary</A>
+
+</UL>
+</td><tr></table>
+
+
+<center><H2><A NAME=SECTION00010000000000000000> Scope</A></H2></center>
+<P>
+The development of a software system is usually just a part of finding
+a solution to a larger problem. The larger problem may entail the
+development of an overall system involving software, hardware,
+procedures, and organizations.
+<P>
+In this book, we concentrate on the software side.  We do not address
+associated issues such as constructing the proper hardware platform
+and reorganizing institutional procedures that use the software to
+improve overall operations.  We further limit ourselves to the
+``middle'' phases of OO system development.  We discuss the initial
+collection of system requirements and scheduling of efforts only to
+the extent to which they impact analysis.  Similarly, we discuss
+situation-dependent implementation matters such as programming in
+particular languages, porting to different systems, and performing
+release management only with respect to general design issues. Also,
+while we devote considerable attention to the process of OO
+development, we do not often address the <em> management</em> of this or
+any software development process.  We urge readers to consult Humphrey
+[<A HREF="#humphrey">8</A>], among other sources, for such guidance.
+<P>
+<A NAME=12>&#160;</A>
+We cannot however, ignore the <em> context</em> of a software system.  The
+context of any system is simply that part of the ``world'' with which
+it directly interacts.  In order to describe the behavior of a target
+system, we have to describe relevant parts of the immediate context
+forming the boundary of the system.  Consequently, one may argue that
+the apparatus that we present in this book could be used for modeling
+nonsoftware aspects as well.  We do not deny potential wider
+applicability, but we have no claims in that direction.
+<P>
+<H2><A NAME=SECTION00011000000000000000> Running Example</A></H2>
+<A NAME=15>&#160;</A>
+Many examples in this text describe parts of the following system of
+automated teller machines<A NAME=16>&#160;</A> (ATMs):<A NAME=17>&#160;</A>
+<P>
+We assume that the American Bank<A NAME=18>&#160;</A> (AB)<A NAME=19>&#160;</A>
+has partly decentralized account management.  Every branch office has
+equipment to maintain the accounts of its clients.  All equipment is
+networked together.  Each ATM is associated and connected with the
+equipment of a particular branch office.  Clients can have checking,
+savings and line of credit accounts, all conveniently interconnected.
+Clients can obtain cash out of any of their accounts.  A client with a
+personal identification number (PIN) can use an ATM to transfer funds
+among attached accounts.  Daemons<A NAME=20>&#160;</A> can be set up that
+monitor balance levels and trigger automatic fund transfers when
+specifiable conditions are met and/or that initiate transfers
+periodically.  Automatic periodic transfers to third party accounts
+can be set up as well.
+<P>
+We will expand on these requirements as necessary.  For presentation
+reasons, we often revise descriptions from chapter to chapter.  Our
+examples represent only small fragments of any actual system.
+<P>
+
+
+<center><P><P>
+
+<H2><A NAME=SECTION00020000000000000000> Objects</A></H2></center>
+<A NAME=22>&#160;</A>
+<P>
+Objects have complex historical roots.  On the declarative side, they
+somewhat resemble <em> frames</em>,<A NAME=24>&#160;</A> introduced in artificial
+intelligence (AI) by Marvin Minsky [<A HREF="#minsky">10</A>] around 1975.  Frames
+were proposed in the context of knowledge representation to represent
+knowledge units that are larger than the constants, terms, and
+expressions offered by logic.  A frame represents a concept in
+multiple ways.  There is a descriptive as well as a behavioral
+component.  A frame of a restaurant would have as a descriptive
+component its prototypical features -- being a business, having a
+location, employing waiters, and maintaining seating arrangements.
+The behavioral component would have scripts.  For example, a customer
+script outlines stereotypical events that involve visiting a
+restaurant.<A NAME=26>&#160;</A>
+<P>
+Objects and frames share the property that they bring descriptive and
+behavioral features closely together.  This shared feature, phrased
+from the programming angle, means that the storage structures and the
+procedural components that operate on them are tightly coupled.  The
+responsibilities of frames go beyond those of objects.  Frames are
+supposed to support complex cognitive operations including reasoning,
+planning, natural language understanding and generation.  In contrast,
+objects for software development are most often used for realizing
+better understood operations.
+<P>
+On the programming side, the <i> Simula</i><A NAME=28>&#160;</A> [<A HREF="#simula">3</A>]
+programming language is another, even older, historical root of
+objects.  Unsurprisingly, <i> Simula</i> was aimed at supporting
+simulation activities.  Procedures could be attached to a type (a
+class in <i> Simula</i>'s terminology) to represent the behavior of an
+instance.  <i> Simula</i> supported parallelism<A NAME=33>&#160;</A>, in
+the approximation of coroutines<A NAME=34>&#160;</A>, allowing for many
+interacting entities in a simulation.
+<P>
+<i> Simula</i> objects share the close coupling of data and procedures.
+The concurrency in <i> Simula</i> was lost in <i>
+Smalltalk</i><A NAME=38>&#160;</A>, <i> Eiffel</i><A NAME=40>&#160;</A>, <i>
+Objective-C</i><A NAME=42>&#160;</A>, <i> C++</i><A NAME=44>&#160;</A>, and other
+popular OO programming languages.  However, parallelism has reentered
+the OO paradigm via OO analysis methods and distributed designs.
+Modeling reality with ``active'' objects requires giving them a large
+degree of autonomy.
+<P>
+The notion of whether objects have a parallel connotation or not is
+currently a major difference between OO analysis and OO
+programming.  Since we expect OO programming languages to evolve to
+support the implementation of distributed, parallel systems, we expect
+this difference to decrease.  The parallel OO paradigm is well
+positioned to meet these upcoming demands.
+<P>
+<H2><A NAME=SECTION00021000000000000000> Definitions</A></H2>
+ <A NAME=46>&#160;</A>
+<P>
+Like ``system'', ``software'', ``analysis'', and ``design'', the term
+``object'' evades simplistic definition.  A typical dictionary
+definition reads:
+<P>
+<UL><LI> <em> object</em>: a visible or
+tangible thing of relative stable form; a thing that may be apprehended
+intellectually; a thing to which thought or action is directed [<A HREF="#random">7</A>].
+</UL>
+<P>
+Samplings from the OO literature include:
+<UL><LI> An object has identity, state and behavior (Booch  [<A HREF="#boochbook">1</A>]).
+<LI> An object is a unit of structural and behavioral modularity that has
+    properties (Buhr  [<A HREF="#buhr">2</A>]).
+</UL>
+<P>
+Our own working definition will be refined throughout this book.
+We define an object as a conceptual entity that:
+<P>
+<UL><LI> is identifiable;
+<P>
+<LI> has features that span a local state space;
+<P>
+<LI> has operations that can change the status of the system locally,
+while also inducing operations in peer objects.
+</UL>
+
+
+<center><P><P>
+
+
+<H2><A NAME=SECTION00030000000000000000> Development Paradigms</A></H2></center>
+<P>
+The structured analysis (SA)<A NAME=58>&#160;</A> paradigm
+[<A HREF="#yourdonb">15</A>] is rooted in third generation programming languages
+including <i> Algol</i><A NAME=61>&#160;</A>, <i> Fortran</i><A NAME=63>&#160;</A>,
+and <i> COBOL</i><A NAME=65>&#160;</A>.  The procedure and function constructs
+in these languages provide for a powerful abstraction mechanism.
+Complex behavior can be composed out of or decomposed into simpler
+units.  The block structure of <i> Algol</i>-like languages provides
+syntactic support for arbitrary many layers.  Applied to the
+development of systems, this abstraction mechanism gives prominence to
+behavioral characterization.  Behavior is repeatedly decomposed into
+subcomponents until plausibly implementable behavioral units are
+obtained.
+<P>
+The abandonment of sequential control flow by SA was a major
+breakthrough.  Procedure invocations have been generalized into
+descriptions of interacting processes.  The ``glue'' between the
+processes are data flows, the generalization of data that is passed
+around in procedure invocations.  Processes represent the inherent
+parallelism of reality.  At the same time, the use of processes produces a
+mapping problem.  One has to transform a high level, intrinsically
+parallel description into an implementation that is usually
+sequential.  As we will see, the OO paradigm faces the same mapping
+problem.
+<P>
+The starting point for process modeling resides in the required
+behavior of the desired system.  This makes SA a predominantly
+top-down<A NAME=67>&#160;</A><A NAME=68>&#160;</A> method.  High
+level process descriptions are consequently target system specific,
+and thus unlikely to be reusable for even similar systems.  As a
+result, a description (and a subsequent design and implementation) is
+obtained that is by and large custom fit for the task at hand.
+<P>
+OO software development addresses the disadvantage of custom fitting a
+solution to a problem.  At all levels of the development process,
+solution components can be formulated that generalize beyond the local
+needs and as such become candidates for reuse<A NAME=69>&#160;</A> (provided
+we are able to manage these components).
+<P>
+Other aspects of OO development are available to control the
+complexity of a large system.  An object maintains its own state.  A
+history-dependent function or procedure can be realized much more
+cleanly and more independently of its run-time environment than in
+procedural languages.  In addition, inheritance<A NAME=70>&#160;</A>
+provides for an abstraction mechanism that permits factoring out
+redundancies.
+<P>
+<H2><A NAME=SECTION00031000000000000000> Applicability</A></H2>
+<P>
+Are the applicability ranges of the object-oriented paradigm and the
+structured paradigm different?  If so, how are they related?  Is one
+contained in the other?  Can we describe their ranges?
+<P>
+As yet there is not enough evidence to claim that the applicability ranges
+are different, although OO may have an edge for distributed systems.
+Structured analysis thrives on process decomposition and data flows.  Can
+we identify a task domain where process decomposition is not the right
+thing to do, but where objects can be easily recognized?  Conversely, can
+we identify a task where we do not recognize objects, but where process
+decomposition is natural?  Both cases seem unlikely.
+<P>
+Processes and objects go hand in hand when we see them as emphasizing
+the dynamic<A NAME=72>&#160;</A> versus the static<A NAME=73>&#160;</A> view of
+an underlying ``behaving'' substratum.  The two paradigms differ in
+the sequence in which attention is given to the dynamic and static
+dimensions.  Dynamics are emphasized in the structured paradigm and
+statics are emphasized in the OO paradigm.  As a corollary, top-down
+decomposition<A NAME=74>&#160;</A> is a strength for the
+SA<A NAME=75>&#160;</A> approach, while the grouping of
+declarative commonalities via inheritance<A NAME=76>&#160;</A> is a
+strength for the OO approach.
+<P>
+<H2><A NAME=SECTION00032000000000000000> Mixing Paradigms</A></H2>
+<P>
+The software development community has a large investment in
+structured analysis and structured design (SD). The question has been
+raised repeatedly whether one can mix and match components from the
+structured development process with components of the OO development
+process.  For instance, whether the combination of SA + SD + OOP or SA
++ OOD + OOP is a viable route.
+<P>
+Experts at two recent panels<sup>1</sup> denied the viability of these combinations (but see Ward
+[<A HREF="#ward">13</A>] for a dissenting opinion).  A key problem resides in the
+data dictionaries produced by structured analysis.  One cannot derive
+generic objects from them.  Inheritance cannot be retrofitted.  Also,
+the behavior of any given object is listed ``all over the place'' in
+data flow diagrams.<A NAME=81>&#160;</A>
+<blockquote>
+<sup>1</sup>Footnote :<br>
+panels at <em> OOPSLA/ECOOP</em> '90 and <em>
+OOPSLA</em> '91.
+</blockquote>
+<P>
+Consequently and unfortunately, we cannot blindly leverage SA and SD
+methods and tools.  However,  OO analysis methods exist that do
+(partially) rely on SA to describe object behavior; see [<A HREF="#ch3">6</A>] for
+a comparative study.
+<P>
+<H2><A NAME=SECTION00033000000000000000> Development Methods</A></H2>
+<A NAME=84>&#160;</A><A NAME=85>&#160;</A>
+<P>
+Within a given paradigm, one may follow a particular <em>
+method</em><sup>2</sup>. A method consists of:
+<OL><LI> A notation with associated semantics.
+<LI> A procedure/pseudo-algorithm/recipe for applying the notation.
+<LI> A criterion for measuring progress and deciding to terminate.
+</OL>
+
+<blockquote>
+<sup>2</sup>Footnote :<br>
+We use the word <em> method</em>, not <em> methodology</em>.
+The primary meaning of methodology is ``the study of methods'' which
+is the business of philosophers.  The secondary meaning of methodology
+is method.  Since that is a shorter word we refrain from joining the
+methodology crowd.  (Similarly, we prefer using technique over
+technology.)
+</blockquote>
+<P>
+This book does not introduce yet another new method for OO
+development.  We instead attempt to integrate methods representative
+of the OO paradigm.  Our OO analysis notation is just borrowed from
+multiple sources.  Still we have given it a name, <i>
+OAN</i><A NAME=92>&#160;</A> (Our Analysis Notation), for easy referencing.  In
+part II, we introduce <i> ODL</i><A NAME=94>&#160;</A> (Our Design Language), a
+language with similarly mixed origins. Summaries of each are presented
+in the Appendix <A NAME=tex2html41 HREF="ch27.html">27</A>.  When necessary to distinguish our views from those
+of others, we will refer to these simply as ``our method'' (<i> OM</i>).
+<A NAME=98>&#160;</A>
+<P>
+<BR>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00040000000000000000> Development Phases</A></H2></center>
+<P>
+<A NAME=100>&#160;</A>
+<A NAME=101>&#160;</A>
+<A NAME=102>&#160;</A>
+<A NAME=103>&#160;</A>
+<P>
+No author in the area of software development has resisted denouncing the
+waterfall model<A NAME=104>&#160;</A>.  Everyone agrees that insights
+obtained downstream may change decisions made upstream and thus violate a
+simple sequential development algorithm.  The notion of a
+development process in which one can backtrack at each point to any
+previous point has led to the fountain<A NAME=105>&#160;</A> metaphor
+(with, we assume, the requirements at the bottom and the target system at
+the top).
+<P>
+Whether the development process has few feedback loops (the waterfall
+model) or many (the fountain model) depends on several factors.  The
+clarity of the initial requirements is an obvious factor.  The less we
+know initially about the desired target system, the more we have to learn
+along the way and the more we will change our minds, leading to
+backtracking.
+<P>
+Another factor might be the integration level of tools<A NAME=106>&#160;</A> that
+support the development process.  A highly integrated development
+environment encourages ``wild'' explorations, leading to more
+backtracking.  On the other hand without tool support, we may be
+forced to think more deeply at each stage before moving on because
+backtracking may become too costly.  The development style of
+team members may be a factor as well.
+<P>
+It has been said that the object-oriented paradigm is changing the
+classic distinctions between analysis, design and implementation.  In
+particular, it is suggested that the differences between these phases
+is decreasing, that the phases blur into each other. People claim that
+the OO paradigm turns every programmer into a designer, and every
+designer into an analyst.  We are willing to go only part way with
+this view.  There is empirical evidence from projects in which
+objects identified in the requirements phase carried all the way
+through into the implementation (see [<A HREF="#champander">5</A>]).  We will see as
+well that notions and notations used in analysis and design are
+similar, lending more support for this thesis.
+<P>
+On the other hand, intrinsic differences among phases cannot be
+forgotten.  Analysis aims at clarifying what the task is all about and
+does not go into any problem solving activity.  In contrast, design
+and implementation take the task specification as a given and then
+work out the details of the solution.  The analyst talks to the
+customer and subsequently (modulo fountain iterations) delivers the
+result to the designer.  The designer ``talks'', via the implementor,
+with hardware that will ultimately execute the design.  In a similar
+vein we do not want to blur the difference between design and
+implementation.  Contemporary OO programming languages have
+limitations and idiosyncrasies that do not make them optimal thinking
+media for many design tasks.
+<P>
+It is, in our opinion, misleading to suggest that phase differences
+disappear in the OO paradigm.  Objects in the analysis realm differ
+significantly from objects in the implementation phase.  An analysis
+object is independent and autonomous.<A NAME=108>&#160;</A> However, an object
+in an OO programming language usually shares a single thread of
+control with many or all other objects.  Hence, the design phase plays
+a crucial role in bridging these different computational object
+models.
+<P>
+<H2><A NAME=SECTION00041000000000000000> Prototyping</A></H2>
+<P>
+Prototyping<sup>3</sup> and exploratory
+programming<A NAME=112>&#160;</A> are common parts of OO
+analysis, design and implementation activities.  Prototyping can play
+a role when aspects of a target system cannot be described due to lack
+of insight.  Often enough, people can easily decide what they do <em>
+not</em> want, but they cannot describe beyond some vague indications what
+is to be produced.
+<blockquote>
+<sup>3</sup>Footnote :<br>
+We avoid the trendy phrase <em> rapid</em>
+prototyping since no one has yet advocated slow
+prototyping.
+</blockquote>
+<P>
+Graphical user interfaces are an example.  What makes a particular
+layout on a screen acceptable?  Must a system keep control during
+human interaction by offering menu choices or should control be
+relinquished so that a user can provide unstructured input?
+<P>
+These kinds of question are sometimes hard or impossible to
+answer.  Prototyping experimental layouts can help.  The situation
+resembles that of an architect making a few sketches so that a
+customer can formulate preferences.
+<P>
+As long as the unknown part of the requirements is only a fragment of
+a system, OO analysis cooperates with prototyping.  Exploratory
+programming is called for when most of the requirements are not well
+understood.  Research projects fall into this category.  Programming
+in artificial intelligence is an example.  Problem solving by analogy
+is particularly murky behavior.  Exploratory programming can be a
+vehicle for validating theories and/or for obtaining better
+conjectures.
+<P>
+We feel that <em> purely</em> exploratory programming applies to an essentially
+different set of tasks than the more tractable (although possibly very
+large) tasks to which the methods described in this book apply.
+Formulated negatively, the methods in this book may not apply when the
+development task is too simple or when the task is too hard.
+<P>
+Elucidating functionality is just one of the motivations for
+prototyping.  We have so far used ``prototyping'' primarily in the
+sense of ``throwaway prototyping'' -- aimed at gathering insights --
+in contrast to ``evolutionary prototyping'' -- aimed at implementing
+a system in stages.  A prototyping activity may have both aims but
+they need not coincide (see [<A HREF="#davis">4</A>]). In Part II, we describe a
+framework for design prototyping that is explicitly evolutionary in
+nature.  Similarly, performance constraints may require empirical
+evaluation via implementation-level prototyping.
+<P>
+<H2><A NAME=SECTION00042000000000000000> Development Tools</A></H2>
+<P>
+<A NAME=117>&#160;</A><A NAME=118>&#160;</A>
+Acceptance of the fountain metaphor as the process model for software
+development has profound ramifications. Beyond toy tasks,
+tool<A NAME=119>&#160;</A> support and integration of different tools is essential
+in enabling backtracking.  Of course these tools also need to support
+versioning, allow for traceability<A NAME=120>&#160;</A>, and cater to team
+development.  These are quite stringent requirements, which are
+currently not yet satisfied.  Various groups are working on the
+standards to achieve tool control and data integration
+[<A HREF="#rmfcas">11</A>].  Manipulating objects in all phases of the
+development process should make it easier to construct an
+integrated development environment. We consider these issues
+in more detail in Chapter <A NAME=tex2html58 HREF="ch12.html">12</A> and <A NAME=tex2html59 HREF="ch15.html">15</A>.
+<P>
+<BR>
+<center><P><P>
+
+
+<H2><A NAME=SECTION00050000000000000000> Summary</A></H2></center>
+<P>
+Software systems are often components of general systems. This book
+discusses only object-oriented approaches to developing software
+systems.  The roots of the OO paradigm include AI frames and
+programming languages including <i> Simula</i>.
+<P>
+The structured paradigm focuses on decomposing behaviors. The OO
+paradigm focuses on objects, classes, and inheritance.  The two
+paradigms do not mix well.  While the OO paradigm tightly integrates
+the development phases of analysis, design and implementation,
+intrinsic differences between these phases should not be blurred.  OO
+methods are compatible with prototyping efforts, especially those
+constructed in order to elucidate otherwise unknown requirement
+fragments.
+<P>
+<H2><A NAME=SECTION00051000000000000000> Further Reading</A></H2>
+<P>
+Standard non-OO texts include Ward and Mellor's <em> Structured
+Development for Real-Time Systems</em> [<A HREF="#wardm">14</A>] and Jackson's <em>
+Systems Development</em> [<A HREF="#jackson">9</A>].  OO texts that cover the full
+life cycle include Booch's <em> Object Oriented Design with
+Applications</em> [<A HREF="#boochbook">1</A>] and Rumbaugh et al's <em> Object Oriented
+Modeling and Design</em> [<A HREF="#rumbaugh">12</A>].
+<P>
+Yearly proceedings are available from the principal OO conferences,
+<em> OOPSLA</em> (held in the Western hemisphere) and <em> ECOOP</em>
+(Europe).  Both originally focused on programming and programming
+languages but have more recently broadened their attention to the
+full life cycle.
+<P>
+<H2><A NAME=SECTION00052000000000000000> Exercises</A></H2>
+<P>
+<OL><LI>   Analysis aims at giving an unambiguous description of <em> what</em> a
+target system is supposed to do.  Enumerate the differences, if any, of an
+analysis method for characterizing software systems versus an analysis
+method for characterizing hospital systems, or any other
+nonsoftware system with which you are familiar.
+<P>
+<LI>  Consider whether the following list of items could be objects with
+respect to the definition given in Section 1.2:  an elevator, an apple, a
+social security number, a thought, the color green, yourself, a needle, an
+emotion, Sat Jun  1 21:35:52 1991, the Moon, this book, the Statue of
+Liberty, high tide, the taste of artichoke, 3.141..., (continue this list
+according to its pattern, if there is one).
+<P>
+<LI> In general, prototyping may be seen as ``disciplined'' hacking that
+explores a narrow well defined problem.  Would the throwaway connotation of
+a produced artifact in this characterization change as the result of an
+overall OO approach?
+<P>
+</OL>
+
+<P>
+<BR>
+
+
+
+<P><A NAME=SECTIONREF><H2>References</H2></A><P>
+<DL COMPACT>
+<DT><A NAME=boochbook><STRONG>1</STRONG></A><DD>
+G. Booch.
+ <em> Object Oriented Design with Applications</em>.
+ Benjamin/Cummings, 1990.
+<P>
+<DT><A NAME=buhr><STRONG>2</STRONG></A><DD>
+R. Buhr.
+ Machine charts for visual prototyping in system design.
+ Technical Report 88-2, Carlton University, August 1988.
+<P>
+<DT><A NAME=simula><STRONG>3</STRONG></A><DD>
+O. Dahl and K. Nygaard.
+ Simula: An algol-based simulation language.
+ <em> Communications of the ACM</em>, 9, 1966.
+<P>
+<DT><A NAME=davis><STRONG>4</STRONG></A><DD>
+A.M. Davis.
+ <em> Software Requirements, Analysis and Specification</em>.
+ Prentice-Hall, 1990.
+<P>
+<DT><A NAME=champander><STRONG>5</STRONG></A><DD>
+D. de Champeaux, A. Anderson, M. Dalla Gasperina, E. Feldhousen, F. Fulton,
+  M. Glei, C. Groh, D. Houston, D. Lerman, C. Monroe, R. Raj, and D. Shultheis.
+ Case study of object-oriented software development.
+ In <em> OOPSLA '92</em>. ACM, 1992.
+<P>
+<DT><A NAME=ch3><STRONG>6</STRONG></A><DD>
+D. de Champeaux and P. Faure.
+ A comparative study of object-oriented analysis methods.
+ <em> Journal of Object-Oriented Programming</em>, March/April 1992.
+<P>
+<DT><A NAME=random><STRONG>7</STRONG></A><DD>
+Random House.
+ <em> The Random House College Dictionary</em>.
+ Random House, 1975.
+<P>
+<DT><A NAME=humphrey><STRONG>8</STRONG></A><DD>
+W.S. Humphrey.
+ <em> Managing the Software Process</em>.
+ Addison-Wesley, 1990.
+<P>
+<DT><A NAME=jackson><STRONG>9</STRONG></A><DD>
+M. Jackson.
+ <em> Systems Development</em>.
+ Prentice Hall, 1982.
+<P>
+<DT><A NAME=minsky><STRONG>10</STRONG></A><DD>
+M. Minsky.
+ A framework for representing knowledge.
+ In P. Winston, editor, <em> The Psychology of Computer Vision</em>.
+  McGraw-Hill, 1975.
+<P>
+<DT><A NAME=rmfcas><STRONG>11</STRONG></A><DD>
+NIST.
+ <em> Reference Model for Frameworks of Software Engineering
+  Environments</em>.
+ National Institute of Standards and Technology, December 1991.
+<P>
+<DT><A NAME=rumbaugh><STRONG>12</STRONG></A><DD>
+J. Rumbaugh, M. Blaha, W. Premerlani, F. Eddy, and W. Lorensen.
+ <em> Object-Oriented Modeling and Design</em>.
+ Prentice Hall, 1991.
+<P>
+<DT><A NAME=ward><STRONG>13</STRONG></A><DD>
+P.T. Ward.
+ How to integrate object orientation with structured analysis and
+  design.
+ <em> IEEE Software</em>, March 1989.
+<P>
+<DT><A NAME=wardm><STRONG>14</STRONG></A><DD>
+P.T. Ward and S. Mellor.
+ <em> Structured Development for Real-Time Systems</em>.
+ Prentice Hall, 1985.
+<P>
+<DT><A NAME=yourdonb><STRONG>15</STRONG></A><DD>
+E. Yourdon.
+ <em> Modern Structured Analysis</em>.
+ Yourdon Press, 1989.
+</DL>
+<P>
+
+<a href="ch2.html">Next: Chapter 2</a><p>
+
+<center><P><P></center>
+
+
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed Jan 10 07:51:53 EST 1996</I>
+</ADDRESS>
+</BODY>

@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3O//DTD W3 HTML 2.0//EN">
+<!Converted with LaTeX2HTML 95.1 (Fri Jan 20 1995) by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds >
+<HEAD><meta http-equiv="pragma" content="no-cache">
+<TITLE>Notation</TITLE>
+</HEAD>
+<BODY bgcolor=#ffffee vlink=#0000aa link=#cc0000>
+<meta name="description" value="Notation">
+<meta name="keywords" value="ch27">
+<meta name="resource-type" value="document">
+<meta name="distribution" value="global">
+<center><P><P></center>
+<table><tr><td><IMG ALIGN=LEFT SRC="medcover.gif"></td><td>
+<h2>Appendix: Notation</h2>
+<UL>
+<LI> <A NAME=tex2html8 HREF="#SECTION00010000000000000000">  OAN</A>
+<LI> <A NAME=tex2html9 HREF="#SECTION00020000000000000000">  ODL</A>
+</UL>
+</td><tr></table>
+
+<center><H2><A NAME=SECTION00010000000000000000>  OAN</A></H2></center>
+<A NAME=8>&#160;</A><A NAME=9>&#160;</A>
+<P>
+<H4><A NAME=SECTION00010010000000000000> Instance</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img1.gif"><P><H4><A NAME=SECTION00010020000000000000> Class</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img2.gif"><P>
+<P>
+<H4><A NAME=SECTION00010030000000000000> Generic class</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img3.gif"><P><H4><A NAME=SECTION00010040000000000000> Ensemble</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img4.gif"><P><H4><A NAME=SECTION00010050000000000000> Relation</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img5.gif"><P><H4><A NAME=SECTION00010060000000000000> Relation instance</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img6.gif"><P>
+<P>
+<P>
+<H4><A NAME=SECTION00010070000000000000> Inheritance</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img7.gif"><P><H4><A NAME=SECTION00010080000000000000> Multiple inheritance</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img8.gif"><P><H4><A NAME=SECTION00010090000000000000> Exclusion, covering, partitioning</A></H4>
+ (* = <em> E, C,</em> or <em> P</em>)
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img9.gif"><P>
+<P>
+<P>
+<P>
+<H4><A NAME=SECTION000100100000000000000> Transition</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img10.gif"><P><H4><A NAME=SECTION000100110000000000000> Service transition</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img11.gif"><P><H4><A NAME=SECTION000100120000000000000> Exception</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img12.gif"><P>
+<P>
+<P>
+<P>
+<H4><A NAME=SECTION000100130000000000000> Time-out</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img13.gif"><P><H4><A NAME=SECTION000100140000000000000> Transition time constraint</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img14.gif"><P><H4><A NAME=SECTION000100150000000000000> Multiple disjoint transitions</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img15.gif"><P>
+<P>
+<P>
+<H4><A NAME=SECTION000100160000000000000> One-way communication</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img16.gif"><P>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img17.gif"><P><H4><A NAME=SECTION000100170000000000000> Bidirectional communication</A></H4>
+<P>
+<P><IMG  ALIGN=BOTTOM ALT="" SRC="ch27-img18.gif"><P>
+<P>
+
+<center><P><P>
+
+<H2><A NAME=SECTION00020000000000000000>  ODL</A></H2></center>
+<A NAME=330>&#160;</A>
+<P>
+The following meaningless declarations illustrate principal
+<i> ODL</i> constructs.
+<P>
+<PRE>class X                      % class declaration
+  is SuperX, SuperX2         % all superclasses
+  generator XGen;            % All X constructions go through XGens
+
+  fn i: int;                 % value attribute
+  b: fixed bool;             % shorten fn, qualify as constant
+  c: common char;            % c is same for all X's
+  r: unique real;            % r is different for all X's
+
+  inv i &gt; 0;                 % invariant constraint
+  j: int = 3;                % short form
+
+  init i = 2;                % initial state constraint
+  d: int init= 3;            % short form
+
+  local fn l: Y;             % private link attribute
+  local m: opt Y;            % short form; qualify as optional
+  own q: X;                  % fixed, unique, local
+
+  locals                     % qualify all enclosed decls as local
+     p : Int &lt;&gt;              % bind link to int obj at construction
+     k: int { i + j }        % computed attribute
+     fn gti(x: int) : bool   % local fn with argument
+        = (x &gt; i)            % abstract definition
+        { x &gt; i }            % concrete definition
+  end                        % end of locals section
+
+  op op1(x: int) : ()        % procedural operation
+     ==&gt; i' = x end          % effect/postcondition
+
+  op op2(x: int)             % one-way operation
+     ==&gt; p''? = x            % eventual value held in p is x
+     { p.set(x) } end        % concrete action
+</PRE>
+<P>
+<PRE>  op op3                     % argumentless one-way
+     when i &gt; 3 then         % guard
+       m' = l                % effect; prime for post-value
+     elsewhen null(m) then   % alternate guard; see if bound
+       op2(d)'               % referenced effect
+     elsewhen l in SubY then % true if l has features of SubY
+       pend                  % delay processing (queue request)
+     else end                % empty effect
+
+  when i = 7 then            % guarded set of concrete ops
+     op op4: int {           % return integer value
+       reply 12;             % reply to sender and continue
+       q.op2 }               % invoke op2 on q
+  elsewhen i = 219 then      % accept op5 only when i = 219
+     op op5: ok(),bad(i:int) % alternate terminations
+       { if b then ok        % conditional reply
+         else bad(2) end }   % reply on second return channel
+  else                       % i.e., when i ~= 7 /\ i ~= 219
+     op op6 y: Y {           % y is local name for result
+       local a: int := 1;    % local value
+       y := YGen$mk;         % ask any YGen to make a Y
+       while a &gt; 0 do        % loop
+        catch q.op4          % catch q.op4's reply by name
+         op ok { a: = 0 }    % value update
+         op bad(i:int) {}    % no action
+        end;
+        a := a - 1;          % value update
+      end }
+  end
+
+end
+
+inv X = oneOf(X1, X2);       % X1 and X2 fully partition X
+record desc(a: A, b: B)      % value-structuring record for messages
+fn geti(x: X):int { x.i }    % top-level operation
+class List[T] ... end        % generic class with type argument T
+op clear[T](l: List[T]);     % operation on any List class
+</PRE>
+<P>
+<P>
+<P>
+<H2><A NAME=SECTION00021000000000000000>  ODL Syntax</A></H2>
+<A NAME=333>&#160;</A>
+<P>
+The following EBNF syntax (with ``<em> [...]</em>'' for ``optional'' and
+``<em> [...]*</em>'' for ``zero or more'') does not reflect static
+semantic restrictions discussed in the text.
+<P>
+<em>
+System:  [ Decl ]*<BR>
+Decl:  Class | Fn | Op | Inv | Init | Open | Gen | Locals | Accept | Rec | <tt> ;</tt><BR>
+Class:  <tt> class</tt> GID [ <tt> is</tt> GIDs ] [ Decl ]* <tt> end</tt><BR>
+Fn:  [ <tt> local</tt> | <tt> own</tt> | <tt> packed</tt> ] [ <tt> fn</tt> ] GID Params <tt> :</tt> QualType FnDef<BR>
+Op:  [ <tt> local</tt> ] <tt> op</tt> GID Params ReturnSpec OpDef <BR>
+Inv:  <tt> inv</tt> Exps<BR>
+Init:  <tt> init</tt> Exps<BR>
+Open:  <tt> opens</tt> GID<BR>
+Gen:  <tt> generator</tt> GID<BR>
+Rec:  <tt> record</tt> GID Params <BR>
+Locals:  <tt> locals</tt> [ Decl ]* <tt> end</tt><BR>
+Accept:  <tt> when</tt> Exp <tt> then</tt> [ Op ]*  ElseAccepts  <tt> end</tt><BR>
+ElseAccepts:  [ <tt> elsewhen</tt> Exp <tt> then</tt> [ Op ]* ]* <tt> else</tt> [ Op ]*<BR>
+Params:  [ <tt> (</tt> ParamList <tt> )</tt> ]<BR>
+ParamList:  GID <tt> :</tt> QualType [ <tt> ,</tt> GID <tt> :</tt> QualType ]*<BR>
+QualType:  [ <tt> fixed</tt> | <tt> unique</tt> | <tt> common</tt> | <tt> opt</tt> ]* GID<BR>
+ReturnSpec:  [  [ ID ] <tt> :</tt> QualType | <tt> :</tt> Synch [ <tt> ,</tt> Synch ]*  ]<BR>
+Synch:  [ ID ] <tt> (</tt> [ ParamList ] <tt> )</tt><BR>
+FnDef:  [ [ <tt> init</tt> ] <tt> =</tt> Exp ] FnBind<BR>
+FnBind:  <tt> &lt;&gt;</tt> | Block | <tt> ;</tt> <BR>
+OpDef:  Block | Effect | <tt> ;</tt><BR>
+Effect:  <tt> ==&gt;</tt> OpSpec <tt> end</tt> | When<BR>
+When:  <tt> when</tt> Exp <tt> then</tt> OpSpec  ElseWhens   <tt> end</tt><BR>
+ElseWhens:  [ <tt> elsewhen</tt> Exp <tt> then</tt> OpSpec ]* <tt> else</tt> OpSpec<BR>
+OpSpec:  [ When | Exps [ Block ] | Block ]<BR>
+Block:  <tt> {</tt> Statements <tt> }</tt><BR>
+Statements:  Statement [ <tt> ;</tt> Statement ]*<BR>
+Statement:  [ Exp | Assign | Loc | Catch | While | If | Reply ]<BR>
+Reply:  <tt> reply</tt> [ Exp ]<BR>
+While:  <tt> while</tt> Exp <tt> do</tt> Statements <tt> end</tt><BR>
+If:  <tt> if</tt> Exp <tt> then</tt> Statements ElsIfs  <tt> end</tt><BR>
+ElsIfs:  [ <tt> elsif</tt> Exp <tt> then</tt> Statements ]* [ <tt> else</tt> Statements ]<BR>
+Catch:  <tt> catch</tt> Exp [ Op ]* <tt> end</tt><BR>
+Assigns:  Assign [ <tt> ,</tt> Assign ]*<BR>
+Assign:  GID <tt> :=</tt> Exp<BR>
+Loc:  <tt> local</tt> GID <tt> :</tt> QualType [ <tt> :=</tt> Exp ]<BR>
+Exps:  Exp | Exp <tt> ,</tt> Exps<BR>
+Exp:  [ <tt> @</tt> ] Exp2<BR>
+Exp2:  [ Exp2 OrOp ] Exp3<BR>
+OrOp:  <code>\/</code> | <tt> =&gt;</tt><BR>
+Exp3:  [ Exp3 <code>/\</code> ] Exp4<BR>
+Exp4:  [ Exp5 RelOp ] Exp5<BR>
+RelOp:  <tt> =</tt> | <tt> &lt;</tt> | <tt> &gt;</tt> | <code>~</code> | <tt> &gt;=</tt> | <tt> &lt;=</tt><BR>
+Exp5:  [ Exp5 AddOp ] Exp6<BR>
+AddOp:  <tt> +</tt> | <tt> -</tt><BR>
+Exp6:  [ Exp6 MulOp ] Exp7<BR>
+MulOp:  <tt> *</tt> | <tt> /</tt> | <tt> div</tt> | <tt> mod</tt><BR>
+Exp7:  [ Unop ]* Exp8<BR>
+Unop:   <tt> -</tt> | <code>~</code><BR>
+Exp8:  PredefFn | PredefExp | Msg | <tt> (</tt> Exp <tt> )</tt><BR>
+PredefFn:  Msg <tt> in</tt> GID  | <tt> null</tt> <tt> (</tt> Msg <tt> )</tt> | <tt> oneOf</tt> <tt> (</tt> GIDs <tt> )</tt><BR>
+PredefExp:  <tt> true</tt> | <tt> false</tt> | <tt> null</tt> | <tt> pend</tt>  | <em> literal</em><BR>
+Msg:  Rcvr [ <tt> .</tt> Send ]* [ <tt> '</tt> | <tt> ''</tt> | <tt> ?</tt> ]<BR>
+Rcvr:  <tt> self</tt> | [ GID <tt> $</tt> ] Send | <tt> new</tt> GID [ <tt> (</tt> [ Assigns|Exp ] <tt> )</tt> ]<BR>
+Send:  GID [ <tt> (</tt> [ Exps ] <tt> )</tt> ]<BR>
+GID:  ID | GID <tt> [</tt> Exps <tt> ]</tt>  | PredefType <BR>
+PredefType:  <tt> bool</tt> | <tt> int</tt> | <tt> char</tt> | <tt> real</tt> | <tt> time</tt> | <tt> blob</tt> | <tt> Any</tt> | <tt> System</tt><BR>
+GIDs:  GID [ <tt> ,</tt> GID ]*<BR>
+ID:  [ ID <tt> ::</tt> ]* <em> name</em><BR>
+</em>
+<P>
+
+<center><P><P></center>
+
+<BR> <HR>
+<P><ADDRESS>
+<I>Doug Lea <BR>
+Wed May 10 08:01:54 EDT 1995</I>
+</ADDRESS>
+</BODY>
