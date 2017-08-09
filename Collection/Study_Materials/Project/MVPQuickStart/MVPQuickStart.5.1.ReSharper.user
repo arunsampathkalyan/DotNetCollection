@@ -1,0 +1,54 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="A90AB682-44E3-4C18-A021-C7B6944E2807/d:MasterPages/f:IDefaultMasterView.cs" caret="0" fromTop="0" />
+      <File id="A90AB682-44E3-4C18-A021-C7B6944E2807/d:MasterPages/f:DefaultMasterPresenter.cs" caret="0" fromTop="0" />
+      <File id="A90AB682-44E3-4C18-A021-C7B6944E2807/d:Views/f:DefaultViewPresenter.cs" caret="0" fromTop="0" />
+      <File id="A90AB682-44E3-4C18-A021-C7B6944E2807/d:Views/f:IDefaultView.cs" caret="0" fromTop="0" />
+      <File id="A90AB682-44E3-4C18-A021-C7B6944E2807/d:Views/f:ILoadDocumentView.cs" caret="0" fromTop="0" />
+      <File id="A90AB682-44E3-4C18-A021-C7B6944E2807/f:ShellModuleInitializer.cs" caret="486" fromTop="0" />
+      <File id="A90AB682-44E3-4C18-A021-C7B6944E2807/d:Views/f:LoadDocumentPresenter.cs" caret="240" fromTop="8" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/f:Default.aspx.cs" caret="726" fromTop="14" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/d:MVP/d:Interfaces/f:IMessage.cs" caret="0" fromTop="0" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/d:MVP/d:Presenters/f:PresenterBase.cs" caret="0" fromTop="0" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/d:MVP/d:Models/f:ModelBase.cs" caret="147" fromTop="6" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/d:MVP/d:Interfaces/f:IModel.cs" caret="0" fromTop="0" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/d:MVP/d:Classes/f:Message.cs" caret="653" fromTop="26" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/d:Module1/f:LoadDocument.aspx.cs" caret="432" fromTop="16" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/d:Module1/f:LoadDocument.aspx" caret="0" fromTop="0" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/d:MVP/d:Interfaces/f:IPresenter.cs" caret="165" fromTop="9" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="A90AB682-44E3-4C18-A021-C7B6944E2807/d:Views/f:IDefaultView.cs" caret="0" fromTop="0" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/f:Default.aspx.cs" caret="10967" fromTop="14" />
+      <File id="16A0C80D-B535-4434-AEDE-E9408D288DA5/f:Default.aspx.cs" caret="726" fromTop="14" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir IsNull="False">
+    </NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="var" priority="1" />
+      <Item value="string" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Text.RegularExpressions.Regex">
+      <Item value="Unescape`0" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+</Configuration>

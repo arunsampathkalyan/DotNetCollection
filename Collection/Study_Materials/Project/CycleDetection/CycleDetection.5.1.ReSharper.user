@@ -1,0 +1,141 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="livetemplates.csharp.usevar">True</setting>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="5092" fromTop="167" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="7866" fromTop="21" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="8551" fromTop="34" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="8501" fromTop="31" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="8071" fromTop="20" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="7207" fromTop="0" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="13" fromTop="0" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="5424" fromTop="17" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="6614" fromTop="7" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="6176" fromTop="18" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="8306" fromTop="26" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="7764" fromTop="10" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="8049" fromTop="18" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="3727" fromTop="40" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="5036" fromTop="33" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="3815" fromTop="8" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="4961" fromTop="22" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="4263" fromTop="23" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="474" fromTop="12" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="277" fromTop="6" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="541" fromTop="15" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="633" fromTop="14" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="816" fromTop="8" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="1793" fromTop="10" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="1258" fromTop="7" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="2216" fromTop="18" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="2517" fromTop="23" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="3202" fromTop="24" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="5011" fromTop="27" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="1510" fromTop="9" />
+      <File id="E9E560FE-45FF-499E-BDED-CCE206881B3E/f:Program.cs" caret="2278" fromTop="16" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir IsNull="False">
+    </NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="as" priority="0" />
+      <Item value="null" priority="0" />
+      <Item value="var" priority="9" />
+      <Item value="new" priority="4" />
+      <Item value="root" priority="2" />
+      <Item value="string" priority="3" />
+      <Item value="Collection&lt;BinaryTreeNode&gt;" priority="0" />
+      <Item value="From" priority="1" />
+      <Item value="Console`0" priority="1" />
+      <Item value="this" priority="0" />
+      <Item value="value" priority="1" />
+      <Item value="yield break" priority="0" />
+      <Item value="return" priority="2" />
+      <Item value="reference" priority="0" />
+      <Item value="EnvironmentVariableTarget`0" priority="0" />
+      <Item value="public" priority="4" />
+      <Item value="void" priority="3" />
+      <Item value="Collection&lt;DocumentReference&gt;" priority="0" />
+      <Item value="documentReferenceEntity" priority="1" />
+      <Item value="parent" priority="2" />
+      <Item value="if" priority="1" />
+      <Item value="parents" priority="0" />
+      <Item value="yield return" priority="1" />
+      <Item value="IEnumerable`0" priority="1" />
+      <Item value="ValueType`0" priority="0" />
+      <Item value="linkedList" priority="0" />
+      <Item value="t" priority="0" />
+      <Item value="cycleDetection" priority="0" />
+      <Item value="parentlist" priority="0" />
+      <Item value="else" priority="0" />
+      <Item value="foreach" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:CycleDetection.BinaryTreeNode">
+      <Item value="Left" priority="0" />
+      <Item value="Right" priority="0" />
+      <Item value="Data" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.String">
+      <Item value="Empty" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:CycleDetection.CycleDetection">
+      <Item value="GetAllParentNodesRecursively`0" priority="0" />
+      <Item value="Print`0" priority="1" />
+      <Item value="FormLinkedList`0" priority="0" />
+      <Item value="FloydCycleDetection`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Console">
+      <Item value="ReadLine`0" priority="0" />
+      <Item value="WriteLine`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:CycleDetection.BuildDirectedGraph">
+      <Item value="documentReference" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.List`1">
+      <Item value="AddRange`0" priority="0" />
+      <Item value="Add`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.ObjectModel.Collection`1">
+      <Item value="Add`0" priority="0" />
+      <Item value="Where`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:CycleDetection.DocumentReference">
+      <Item value="From" priority="6" />
+      <Item value="To" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.IEnumerable`1">
+      <Item value="Count`1" priority="1" />
+      <Item value="FirstOrDefault`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.LinkedList`1">
+      <Item value="AddFirst`0" priority="0" />
+      <Item value="AddAfter`0" priority="0" />
+      <Item value="Find`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.String">
+      <Item value="Equals`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.LinkedListNode`1">
+      <Item value="Value" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+</Configuration>

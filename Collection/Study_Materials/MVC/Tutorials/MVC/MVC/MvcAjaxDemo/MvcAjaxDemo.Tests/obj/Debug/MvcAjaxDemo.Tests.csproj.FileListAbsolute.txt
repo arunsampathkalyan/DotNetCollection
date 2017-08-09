@@ -1,0 +1,8 @@
+E:\jabarullah.bhadurude\Projects\NxG\MVC\MvcAjaxDemo\MvcAjaxDemo.Tests\bin\Debug\MvcAjaxDemo.Tests.dll.config
+E:\jabarullah.bhadurude\Projects\NxG\MVC\MvcAjaxDemo\MvcAjaxDemo.Tests\bin\Debug\MvcAjaxDemo.Tests.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\MvcAjaxDemo\MvcAjaxDemo.Tests\bin\Debug\MvcAjaxDemo.Tests.pdb
+E:\jabarullah.bhadurude\Projects\NxG\MVC\MvcAjaxDemo\MvcAjaxDemo.Tests\bin\Debug\MvcAjaxDemo.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\MvcAjaxDemo\MvcAjaxDemo.Tests\bin\Debug\MvcAjaxDemo.pdb
+E:\jabarullah.bhadurude\Projects\NxG\MVC\MvcAjaxDemo\MvcAjaxDemo.Tests\obj\Debug\ResolveAssemblyReference.cache
+E:\jabarullah.bhadurude\Projects\NxG\MVC\MvcAjaxDemo\MvcAjaxDemo.Tests\obj\Debug\MvcAjaxDemo.Tests.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\MvcAjaxDemo\MvcAjaxDemo.Tests\obj\Debug\MvcAjaxDemo.Tests.pdb

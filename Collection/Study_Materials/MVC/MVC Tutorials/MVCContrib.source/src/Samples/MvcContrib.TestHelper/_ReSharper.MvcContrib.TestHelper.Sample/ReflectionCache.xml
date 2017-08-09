@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Assemblies Version="1073741836">
+  <Assembly Name="nunit.framework, Version=2.4.3.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" Image="fff4e907-af2a-4620-b457-0aac58aa962a" Timestamp="633649499914950000" />
+  <Assembly Name="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Image="a2d90253-694c-445a-aa24-6941ebd5d8cc" Timestamp="633529932480000000" XmlDocIndexTimestamp="633490255300000000" />
+  <Assembly Name="System.Web.Abstractions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Image="6aa692af-07d8-40cd-a11e-bc8b356eb43b" Timestamp="633529932480000000" XmlDocIndexTimestamp="633492858660000000" />
+  <Assembly Name="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Image="b34b56ad-cb46-4dff-b587-35ca18994898" Timestamp="633689327596900000" />
+  <Assembly Name="System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Image="41b55785-ce4d-47d1-98d6-ecedc19e9dfb" Timestamp="633529932480000000" XmlDocIndexTimestamp="633492858660000000" />
+  <Assembly Name="Microsoft.Web.Mvc, Version=1.0.0.0, Culture=neutral" Image="133b3816-68c3-412c-b7f2-f8db664bc3b0" Timestamp="633687556125903904" />
+  <Assembly Name="System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Image="a871fa35-8bb9-42b1-8f2f-aaf898e5de0c" Timestamp="633529932480000000" XmlDocIndexTimestamp="633490255300000000" />
+  <Assembly Name="System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Image="2f004db8-9af2-4078-8fc9-e1736eaadd41" Timestamp="633529932480000000" XmlDocIndexTimestamp="633490255300000000" />
+  <Assembly Name="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Image="a3bac2a2-da84-4574-bd66-74c9da893bff" Timestamp="633529932480000000" XmlDocIndexTimestamp="633492859960000000" />
+  <Assembly Name="JetBrains.Annotations, Version=4.1.933.3, Culture=neutral, PublicKeyToken=1010a0d8d6380325" Image="3bebc3bb-9e70-4b02-8001-eee1c68d6a75" Timestamp="633559958920000000" XmlDocIndexTimestamp="633559958920000000" />
+  <Assembly Name="MvcContrib.TestHelper, Version=1.0.0.0, Culture=neutral" Image="f44e5d92-5d48-4e7d-9068-b5286c8b4425" Timestamp="633716357043289826" />
+</Assemblies>

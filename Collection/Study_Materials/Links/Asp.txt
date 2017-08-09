@@ -1,0 +1,4 @@
+http://www.codeproject.com/Articles/13100/ASP-NET-Best-Practices-for-High-Performance-Applic
+http://www.codeproject.com/Articles/75082/Layers-Pattern-in-Practice
+http://www.codeproject.com/Articles/36847/Three-Layer-Architecture-in-C-NET
+http://www.dotnetfunda.com/articles/article45.aspx

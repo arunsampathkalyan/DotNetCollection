@@ -1,0 +1,5 @@
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\Expression Evaluation\Expression Evaluation\bin\Debug\Expression Evaluation.exe
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\Expression Evaluation\Expression Evaluation\bin\Debug\Expression Evaluation.pdb
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\Expression Evaluation\Expression Evaluation\obj\x86\Debug\Expression Evaluation.exe
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\Expression Evaluation\Expression Evaluation\obj\x86\Debug\Expression Evaluation.pdb
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\Expression Evaluation\Expression Evaluation\obj\x86\Debug\Expression Evaluation.csprojResolveAssemblyReference.cache

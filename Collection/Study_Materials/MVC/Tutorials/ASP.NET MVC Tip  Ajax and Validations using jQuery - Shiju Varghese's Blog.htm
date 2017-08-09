@@ -1,0 +1,1890 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional-dtd">
+<!-- saved from url=(0110)http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head id="ctl00_ctl00"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="description" content="Shiju Varghese&#39;s Blog on ASP.NET MVC ">
+<meta name="keywords" content="ASP.NET MVC">
+<meta name="GENERATOR" content="CommunityServer 2007 SP1 (Build: 20510.895)">
+<link rel="pingback" href="http://weblogs.asp.net/shijuvarghese/pingback.aspx">
+<link rel="shortcut icon" type="image/ico" href="http://weblogs.asp.net/favicon.ico">
+<link rel="alternate" type="application/rss+xml" title="Shiju Varghese&#39;s Blog (RSS 2.0)" href="http://feeds2.feedburner.com/ShijuVBlog">
+<link rel="alternate" type="application/rss+xml" title="Shiju Varghese&#39;s Blog - All Comments (RSS 2.0)" href="http://weblogs.asp.net/shijuvarghese/rsscomments.aspx">
+<link rel="alternate" type="application/rss+xml" title="ASP.NET MVC Tip: Ajax and Validations using jQuery - Comments for this post (RSS 2.0)" href="http://weblogs.asp.net/shijuvarghese/rsscomments.aspx?PostID=6649683">
+
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=7">
+	<link rel="stylesheet" href="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/style.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/print.css" type="text/css" media="print">
+	<link rel="stylesheet" href="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/DynamicStyle.aspx" type="text/css" media="screen">
+	<!--[if lte IE 6]>
+		<style>
+		#titleWrapper { padding: 62px 65px 14px 14px; border-bottom: solid 1px #000; border-right: solid 1px #000;}
+		</style>
+	<![endif]-->
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://weblogs.asp.net/shijuvarghese/rsd.ashx">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" title="WLWManifest" href="http://weblogs.asp.net/shijuvarghese/wlwmanifest.ashx">
+<title>
+	ASP.NET MVC Tip: Ajax and Validations using jQuery - Shiju Varghese's Blog
+</title></head>
+<body>
+    <form name="aspnetForm" method="post" action="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog.htm" onsubmit="javascript:return WebForm_OnSubmit();" id="aspnetForm">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTE3MDQ0Njc3MDNkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYBBS5jdGwwMCRNYWluJGN0bDA3JGN0bDAyJGN0bDAyJGN0bDAyJGNoa1JlbWVtYmVypmBmLN7OY/k8jW7sECrLRNNG/fA=">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/WebResource.axd" type="text/javascript"></script>
+
+
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/WebResource(2).axd" type="text/javascript"></script>
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/WebResource(3).axd" type="text/javascript"></script>
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/WebResource(4).axd" type="text/javascript"></script>
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/WebResource(5).axd" type="text/javascript"></script>
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/WebResource(6).axd" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+    			
+
+        <div id="wrapper">
+            <div id="container">
+                <div id="header">
+		            <div id="titleWrapper">
+		            	<div id="title">
+	                        <h1><a class="headermaintitle" href="http://weblogs.asp.net/shijuvarghese/default.aspx">Shiju Varghese's Blog</a></h1>
+	                        <div>A .Net Geek on  ASP.NET MVC and Entity Framework.</div>
+	                    </div>
+                    </div> 
+                </div>
+                <div id="navigation">
+        	        <div id="welcome">
+				        
+        <a href="http://weblogs.asp.net/login.aspx?ReturnUrl=%2fshijuvarghese%2farchive%2f2008%2f10%2f01%2fasp-net-mvc-tip-ajax-and-validations-using-jquery.aspx">Sign in </a>
+         | <a href="http://weblogs.asp.net/user/CreateUser.aspx?ReturnUrl=">Join</a>
+     
+
+
+		        	</div>
+                	<ul>
+                		<li><a href="http://weblogs.asp.net/shijuvarghese/default.aspx">Home</a></li>
+			            <li><a href="http://weblogs.asp.net/shijuvarghese/contact.aspx">Contact</a></li>
+			            <li><a href="http://weblogs.asp.net/shijuvarghese/about.aspx">About</a></li>
+			            <li><a href="http://feeds2.feedburner.com/ShijuVBlog">RSS</a></li>
+			            <li><a href="http://feeds2.feedburner.com/ShijuVBlog">Atom</a></li>
+		                <li id="RssComments"><a href="http://weblogs.asp.net/shijuvarghese/rsscomments.aspx">Comments RSS</a></li>
+			            
+                	</ul>
+                </div>
+                <div id="contentwrapper">                    
+                        
+                
+                    <div id="sidebar-a">
+                        <div id="TasksSideBar">    
+                            
+                            
+                        </div>                                
+                        <div id="SubscriptionsSideBar">
+			                    
+                        </div>
+                        <div id="SearchSideBar">
+                            <div id="Search">
+                                <h3>Search</h3>
+                                <ul>
+                                <div id="Search" align="left">
+                                            <li><input name="ctl00$SideBar$ctl02$ctl00$SearchBox" type="text" id="ctl00_SideBar_ctl02_ctl00_SearchBox" class="searchBox" button="SearchButton" onclick="if(this.defaultValue==this.value) this.value=&#39;&#39;;" onblur="if(this.value==&#39;&#39;) this.value=this.defaultValue;"> <input type="submit" name="ctl00$SideBar$ctl02$ctl00$SearchButton" value="Go" id="ctl00_SideBar_ctl02_ctl00_SearchButton" class="SearchButton"></li>
+                                    </div>
+                                </ul>
+                            </div>
+                         </div>
+            		        
+                        
+                        <div id="TagSideBar">
+                                <h3>Tags</h3>
+                            <ul class="SidebarTagCloud">
+<li class="Tag2"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/.Net/default.aspx" rel="tag">.Net</a></li>
+<li class="Tag4"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/.Net+3.5/default.aspx" rel="tag">.Net 3.5</a></li>
+<li class="Tag3"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/.Net+4/default.aspx" rel="tag">.Net 4</a></li>
+<li class="Tag1"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/ASP.NET/default.aspx" rel="tag">ASP.NET</a></li>
+<li class="Tag1"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/ASP.NET+MVC/default.aspx" rel="tag">ASP.NET MVC</a></li>
+<li class="Tag1"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/ASP.NET+MVC+3/default.aspx" rel="tag">ASP.NET MVC 3</a></li>
+<li class="Tag6"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/Azure/default.aspx" rel="tag">Azure</a></li>
+<li class="Tag6"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/Book+Review/default.aspx" rel="tag">Book Review</a></li>
+<li class="Tag4"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/Books/default.aspx" rel="tag">Books</a></li>
+<li class="Tag4"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/C_2300_/default.aspx" rel="tag">C#</a></li>
+<li class="Tag6"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/C_2300_+5/default.aspx" rel="tag">C# 5</a></li>
+<li class="Tag4"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/Community/default.aspx" rel="tag">Community</a></li>
+<li class="Tag2"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/Community+News/default.aspx" rel="tag">Community News</a></li>
+<li class="Tag4"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/Entity+Framework/default.aspx" rel="tag">Entity Framework</a></li>
+<li class="Tag1"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/IoC/default.aspx" rel="tag">IoC</a></li>
+<li class="Tag6"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/jQuery/default.aspx" rel="tag">jQuery</a></li>
+<li class="Tag6"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/LINQ/default.aspx" rel="tag">LINQ</a></li>
+<li class="Tag2"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/NoSQL/default.aspx" rel="tag">NoSQL</a></li>
+<li class="Tag6"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/Personal/default.aspx" rel="tag">Personal</a></li>
+<li class="Tag2"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/RavenDB/default.aspx" rel="tag">RavenDB</a></li>
+<li class="Tag1"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/Razor/default.aspx" rel="tag">Razor</a></li>
+<li class="Tag6"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/REST/default.aspx" rel="tag">REST</a></li>
+<li class="Tag6"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/Sql/default.aspx" rel="tag">Sql</a></li>
+<li class="Tag3"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/T4/default.aspx" rel="tag">T4</a></li>
+<li class="Tag6"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/TDD/default.aspx" rel="tag">TDD</a></li>
+<li class="Tag6"><a href="http://weblogs.asp.net/shijuvarghese/archive/tags/WCF/default.aspx" rel="tag">WCF</a></li>
+</ul>
+</div>
+                        
+                        <div id="FeaturedAd">
+                            <h3>Sponsors</h3>
+                            <ul>
+                                <li style="margin-left: -10px">           
+           
+<script type="text/javascript" src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/context.cgi"></script><p><span style="cursor: pointer" onmouseover="top.status=&#39;&#39;; return true" onmouseout="top.status=&#39;&#39;; return true"><font color="#3399FF"><b></b></font><br><br><font color="#3399FF"><u></u></font></span></p></li>
+                                <li><a href="http://www.neudesicmediagroup.com/Advertising.aspx?site=ASP">advertise here</a></li>
+                            </ul>
+                        </div>   
+                        
+                        
+                        <div id="NewsSidebar">
+                                <h3>News</h3>
+                                <ul>
+                            <a title="Microsoft MVP Profile" href="https://mvp.support.microsoft.com/profile/Shiju"><img style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" alt="Microsoft MVP for ASP.NET" src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/MVPLogo.png"></a>
+<br><br>
+<a title="My Linked In Profile" href="http://www.linkedin.com/in/shijuv"><img style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" alt="My Linked In Profile" src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/linkedinimage.gif"></a>
+<br>
+<a href="http://www.twitter.com/shijucv/"><img style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" alt="Follow me on Twitter." src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/FollowMeTwitter.png"></a>
+<br><br>
+<a href="http://testdriven.com/"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/imtd6.gif" border="1" alt="I&#39;m test-driven!"></a><br><br>
+<img style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" alt="MCTS" src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/MCTS.gif">
+<br><br>
+<img style="border-right: 0px; border-top: 0px; border-left: 0px; border-bottom: 0px" alt="MCPD : Web Developer" src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/MCPD.gif">
+<br><br>
+
+Shiju Varghese is a Technical Architect on the Microsoft .Net technology stack with a strong focus on web application development and Domain-Driven Design. He has been working with .Net Technologies since beta version and involving with ASP.NET MVC since its first preview version.
+<br><br>
+Shiju is focusing on Net 4.0, C#, ASP.Net MVC, Entity Framework, Windows Azure, REST, WCF, IoC/Unity and DSL tools. Shiju holds number of Microsoft certifications including MCP, MCAD, MCTS, and MCPD: Web. 
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-13190824-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+ 
+<link href="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/shCore.css" rel="stylesheet" type="text/css"> 
+<link href="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/shCore.js" type="text/javascript"></script> 
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/shBrushCSharp.js" type="text/javascript"></script> 
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/shBrushCss.js" type="text/javascript"></script> 
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/shBrushJScript.js" type="text/javascript"></script> 
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/shBrushXml.js" type="text/javascript"></script> 
+<script language="javascript"> 
+SyntaxHighlighter.config.bloggerMode = true;
+SyntaxHighlighter.config.clipboardSwf = 'http://alexgorbatchev.com/pub/sh/current/scripts/clipboard.swf';
+SyntaxHighlighter.all();
+</script>
+                                </ul>
+                            </div>
+                                            
+                        
+                        <div id="NavSideBar"><h3>Navigation</h3>
+<ul>
+<li><a href="http://weblogs.asp.net/">Home</a></li><li><a href="http://weblogs.asp.net/">Blogs</a></li>
+</ul></div>
+                             
+                        
+                        <div id="ArchiveSideBar"><h3>Archives</h3>
+<ul>
+<li><a href="http://weblogs.asp.net/shijuvarghese/archive/2010/12.aspx">December 2010 (3)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2010/11.aspx">November 2010 (1)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2010/10.aspx">October 2010 (6)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2010/07.aspx">July 2010 (5)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2010/06.aspx">June 2010 (2)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2010/05.aspx">May 2010 (4)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2010/04.aspx">April 2010 (4)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2010/03.aspx">March 2010 (4)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2010/02.aspx">February 2010 (3)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2010/01.aspx">January 2010 (1)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2009/12.aspx">December 2009 (3)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2009/11.aspx">November 2009 (1)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2009/07.aspx">July 2009 (3)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2009/06.aspx">June 2009 (2)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2009/03.aspx">March 2009 (2)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2009/01.aspx">January 2009 (3)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2008/12.aspx">December 2008 (2)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2008/11.aspx">November 2008 (1)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10.aspx">October 2008 (6)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2008/09.aspx">September 2008 (1)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2008/08.aspx">August 2008 (1)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2008/07.aspx">July 2008 (4)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2008/06.aspx">June 2008 (1)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2008/05.aspx">May 2008 (1)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2008/04.aspx">April 2008 (1)</a></li><li><a href="http://weblogs.asp.net/shijuvarghese/archive/2008/03.aspx">March 2008 (1)</a></li>
+</ul></div> 
+                        
+                        
+                        
+                                    <h3>Blogroll</h3>
+                                    <div id="LinkSideBar">
+                                        
+<ul class="CommonSidebarList">
+<li><a href="http://shiju.spaces.live.com/">My Previous Blog</a></li><li><a href="http://martinfowler.com/bliki/">Martin Fowler</a></li><li><a href="http://jimmynilsson.com/blog/">Jimmy Nilsson</a></li><li><a href="http://haacked.com/">Phil Hack</a></li><li><a href="http://codebetter.com/">Codebetter</a></li><li><a href="http://www.hanselman.com/blog/">Scott Hanselman</a></li><li><a href="http://weblogs.asp.net/scottgu/">Scott Guthrie</a></li><li><a href="http://blog.wekeroad.com/">Rob Conery</a></li>
+</ul>
+                                    </div>
+                            
+                    </div>
+                
+
+                <div id="content"><div id="content2">
+                    
+
+<div align="center" id="diva874d424e4b947b3afed6345e2a8c9db" style="padding-top:5px; padding-bottom:5px">
+    <iframe name="frame86ceb652ebdd41158f652c8d853c4225" src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/Banner.htm" width="486" height="60" scrolling="no" frameborder="0" marginheight="0" marginwidth="0" visible="false" onload="makeTransparentBottom(this, document.getElementById(&#39;diva874d424e4b947b3afed6345e2a8c9db&#39;))"></iframe>
+</div>
+
+<script language="javascript">
+
+    function makeTransparentBottom(adFrame, parent)
+    {
+        return;
+        window.frames[adFrame.name].document.getElementsByTagName("img")[0].style.backgroundColor = "#FFFFFF";
+        parent.style.visibility = "visible";
+    }
+
+</script>
+
+	                
+    <h2 class="pageTitle">
+       ASP.NET MVC Tip: Ajax and Validations using jQuery               
+    </h2>
+    <div class="post">
+        <div class="postsub">
+            <p><span style="font-size: 10pt; color: black; font-family: Verdana;">jQuery is now part of the ASP.net development platform and it is going to ship with Visual Studio in the future and will also be the part of ASP.NET MVC installation. ASP.NET MVC will be the first product to include jQuery. Guru Gu’s <a href="http://weblogs.asp.net/scottgu/archive/2008/09/28/jquery-and-microsoft.aspx" mce_href="http://weblogs.asp.net/scottgu/archive/2008/09/28/jquery-and-microsoft.aspx">blog entry</a> has the full details regarding this. This is a great decision from Microsoft and I hope that the community would be happy about the great decision taken by Microsoft. And this is another good step for web development after the ASP.NET MVC technology. jQuery is an excellent java script library and very popular among the web developers regardless of technology.<o:p></o:p></span> <span style="font-size: 10pt; font-family: Verdana;">In this post, I demonstrate how to integrate jQuery with ASP.NET MVC and will be explain how to send <st1:city w:st="on"><st1:place w:st="on">Ajax</st1:place></st1:city> requests and also show client side validation using jQuery. I am using a blog application for this demo and it will show how to post a comment of a blog entry using <st1:city w:st="on"><st1:place w:st="on">Ajax</st1:place></st1:city> request and will also show partial rendering with the help of a user control.<o:p></o:p></span> 
+</p><p><span style="font-size: 10pt; font-family: Verdana;">The below is the class diagram of the example I have used for this demo. <span>&nbsp;</span></span></p>
+<p><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/class_diag.bmp" mce_src="http://weblogs.asp.net/blogs/shijuvarghese/class_diag.bmp">&nbsp;</p>
+<p><b><span style="font-size: 10pt; font-family: Verdana;">Controller </span></b></p><p><b><span style="font-size: 10pt; font-family: Verdana;"><o:p></o:p></span></b><span style="font-size: 10pt; font-family: Verdana;">The below is the code of BlogController. It has two action methods and first one is for getting the single blog post including all comments and another action is for post a comment for the particular blog post. I am going to call the AddComment method ( ActionName Post) using <st1:city w:st="on"><st1:place w:st="on">Ajax</st1:place></st1:city> request using jQuery.</span></p><p><span style="font-size: 10pt; font-family: Verdana;"> <span style="text-transform: uppercase; color: black;"><o:p></o:p></span></span><span style="background: white none repeat scroll 0% 0%; font-size: 11pt; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; color: navy; font-family: Consolas;"></span></p><meta name="ProgId" content="Word.Document"><meta name="Generator" content="Microsoft Word 11"><meta name="Originator" content="Microsoft Word 11"><link href="file:///C:/%5CDOCUME~1%5Cuser%5CLOCALS~1%5CTemp%5Cmsohtml1%5C01%5Cclip_filelist.xml" rel="File-List"><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:View>Normal</w:View>
+  <w:Zoom>0</w:Zoom>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:-1610611985 1073750091 0 0 159 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style><!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">public</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: navy;">class</span> <span style="color: rgb(166, 83, 0);">BlogController</span> : <span style="color: rgb(166, 83, 0);">Controller</span>{
+<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">private</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: navy;">readonly</span> <span style="color: rgb(43, 145, 175);">ICommentRepository</span> <span style="color: maroon;">comments</span>
+=<span style="color: navy;">new</span> <span style="color: rgb(166, 83, 0);">CommentRepository</span>();<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">private</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: navy;">readonly</span> <span style="color: rgb(43, 145, 175);">IPostRepository</span> <span style="color: maroon;">posts</span>
+= <span style="color: navy;">new</span> <span style="color: rgb(166, 83, 0);">PostRepository</span>();
+<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><br>
+[<span style="color: rgb(166, 83, 0);">AcceptVerbs</span>( "GET" )]&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">public</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: rgb(166, 83, 0);">ActionResult</span> <span style="color: maroon;">Post</span>( <span style="color: navy;">int</span> <span style="color: maroon;">id</span> ) <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;<span style="color: navy;">return</span> <span style="color: maroon;">View</span>(
+<span style="color: maroon;">posts</span>.<span style="color: maroon;">Retrieve</span>().<span style="color: maroon;">Where</span>( <span style="color: maroon;">p</span> =&gt; <span style="color: maroon;">p</span>.<span style="color: maroon;">ID</span> == <span style="color: maroon;">id</span> ).<span style="color: maroon;">Single</span>() );<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;}<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><br>
+[<span style="color: rgb(166, 83, 0);">AcceptVerbs</span>( "POST" )]<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">[<span style="color: rgb(166, 83, 0);">ActionName</span>( "Post"
+)]&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">public</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: rgb(166, 83, 0);">ActionResult</span> <span style="color: maroon;">AddComment</span>( <span style="color: navy;">int</span> <span style="color: maroon;">postId</span>, <span style="color: navy;">string</span> <span style="color: maroon;">commentAuthor</span>, <span style="color: navy;">string</span>
+<span style="color: maroon;">commentText</span> )&nbsp; {&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">var</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: maroon;">comment</span> = <span style="color: navy;">new</span> <span style="color: rgb(166, 83, 0);">Comment</span>{<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">PostID</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> = <span style="color: maroon;">postId</span>,&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">Author</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> = <span style="color: maroon;">commentAuthor</span>,&nbsp; <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">Text</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> = <span style="color: maroon;">commentText</span>,&nbsp;
+&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">DatePosted</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> = <span style="color: rgb(43, 145, 175);">DateTime</span>.<span style="color: maroon;">Now</span> <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">};<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">try</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> {&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: maroon;">comments</span>.<span style="color: maroon;">Create</span>( <span style="color: maroon;">comment</span>
+);<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: navy;">return</span> <span style="color: maroon;">View</span>("PostComment", <span style="color: maroon;">comment</span>);&nbsp;&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;&nbsp; }&nbsp; <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">catch</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">( <span style="color: rgb(166, 83, 0);">Exception</span>&nbsp; <span style="color: maroon;">ex</span> )&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp; {&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;&nbsp; <span style="color: navy;">throw</span> <span style="color: maroon;">ex</span>;&nbsp;&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp; }&nbsp;&nbsp; <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">}&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">}<o:p></o:p></span></p><p>
+
+<br><b>View</b></p><p><meta name="ProgId" content="Word.Document"><meta name="Generator" content="Microsoft Word 11"><meta name="Originator" content="Microsoft Word 11"><link href="file:///C:/%5CDOCUME~1%5Cuser%5CLOCALS~1%5CTemp%5Cmsohtml1%5C01%5Cclip_filelist.xml" rel="File-List"><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:View>Normal</w:View>
+  <w:Zoom>0</w:Zoom>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:-1610611985 1073750091 0 0 159 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style><!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+
+</p><p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">asp</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">:</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">Content</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">ID</span><span style="color: blue;">="content"</span>
+<span style="color: red;">ContentPlaceHolderID</span><span style="color: blue;">="MainContent"</span>
+<span style="color: red;">runat</span><span style="color: blue;">="server"&gt;</span>
+<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">h2</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;% <span style="color: blue;">=</span><span style="color: maroon;">Html</span>.<span style="color: maroon;">ActionLink</span>( <span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">Title</span>,"Post",
+<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">new</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> { <span style="color: maroon;">id</span> = <span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">ID</span> } )%&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;/</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">h2</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">div</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">Posted by <span style="color: blue;">&lt;</span><span style="color: rgb(163, 21, 21);">strong</span><span style="color: blue;">&gt;</span>&lt;% <span style="color: blue;">=</span><span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">Author</span>%&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;/</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">strong</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> on <span style="color: blue;">&lt;</span><span style="color: rgb(163, 21, 21);">strong</span><span style="color: blue;">&gt;</span>&lt;% <span style="color: blue;">=</span><span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">DatePosted</span>%&gt;<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">strong</span><span style="color: blue;">&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;/</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">div</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">p</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;% <span style="color: blue;">=</span><span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">Text</span>.<span style="color: maroon;">Replace</span>( "\n", "&lt;br /&gt;"
+)%&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;/</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">p</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">h3</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">Comments<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">h3</span><span style="color: blue;">&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">div</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">id</span><span style="color: blue;">="post_comment"&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;% <span style="color: navy;">if</span>( <span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">Comments</span>.<span style="color: maroon;">Count</span> &gt; 0 )<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{ %&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;%<span style="color: navy;">foreach</span>( <span style="color: navy;">var</span>
+<span style="color: maroon;">comment</span> <span style="color: navy;">in</span> <span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">Comments</span> )<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{ %&gt;&nbsp;&nbsp; <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&lt;% <span style="color: maroon;">Html</span>.<span style="color: maroon;">RenderPartial</span>("PostComment", <span style="color: maroon;">comment</span>); %&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&lt;% } %&gt;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;% } %&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;/</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">div</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">form</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">id</span><span style="color: blue;">="new_comment"</span>
+<span style="color: red;">action</span><span style="color: blue;">="/Blog/Post"</span>
+<span style="color: red;">method</span><span style="color: blue;">="post"&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">input</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">type</span><span style="color: blue;">="hidden"</span> <span style="color: red;">name</span><span style="color: blue;">="postId"</span> <span style="color: red;">id</span><span style="color: blue;">="postId"</span> <span style="color: red;">value</span><span style="color: blue;">="</span>&lt;% =ViewData.Model.ID%&gt;<span style="color: blue;">"</span> <span style="color: blue;">/&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">img</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">id</span><span style="color: blue;">="ajaxLoader"</span> <span style="color: red;">src</span><span style="color: blue;">="../../Content/ajax-loader.gif"/&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">fieldset</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;<span style="color: blue;">&lt;</span><span style="color: rgb(163, 21, 21);">legend</span><span style="color: blue;">&gt;</span>Add Comment<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">legend</span><span style="color: blue;">&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp; <span style="color: blue;">&lt;</span><span style="color: rgb(163, 21, 21);">ul</span><span style="color: blue;">&gt;&lt;</span><span style="color: rgb(163, 21, 21);">li</span><span style="color: blue;">&gt;</span>&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;&nbsp; <span style="color: blue;">&lt;</span><span style="color: rgb(163, 21, 21);">label</span> <span style="color: red;">for</span><span style="color: blue;">="author"&gt;&lt;</span><span style="color: rgb(163, 21, 21);">span</span>
+<span style="color: red;">class</span><span style="color: blue;">="required"&gt;</span>Name:
+<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">span</span><span style="color: blue;">&gt;&lt;/</span><span style="color: rgb(163, 21, 21);">label</span><span style="color: blue;">&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;&nbsp; <span style="color: blue;">&lt;</span><span style="color: rgb(163, 21, 21);">input</span> <span style="color: red;">id</span><span style="color: blue;">="commentAuthor"</span> <span style="color: red;">class</span><span style="color: blue;">="text required"</span> <span style="color: red;">name</span><span style="color: blue;">="commentAuthor"</span> <span style="color: red;">type</span><span style="color: blue;">="text"</span> <span style="color: red;">value</span><span style="color: blue;">=""</span> <span style="color: blue;">/&gt;</span>
+&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp; <span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">li</span><span style="color: blue;">&gt;</span>&nbsp;<span style="color: blue;">&lt;</span><span style="color: rgb(163, 21, 21);">li</span><span style="color: blue;">&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">label</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">for</span><span style="color: blue;">="text"&gt;&lt;</span><span style="color: rgb(163, 21, 21);">span</span>
+<span style="color: red;">class</span><span style="color: blue;">="required"&gt;</span>Comment:
+<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">span</span><span style="color: blue;">&gt;&lt;/</span><span style="color: rgb(163, 21, 21);">label</span><span style="color: blue;">&gt;</span>&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">textarea</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">cols</span><span style="color: blue;">="20"</span> <span style="color: red;">id</span><span style="color: blue;">="commentText"</span> <span style="color: red;">class</span><span style="color: blue;">="text required"</span> <span style="color: red;">name</span><span style="color: blue;">="commentText"</span> <span style="color: red;">rows</span><span style="color: blue;">="2"&gt;&lt;/</span><span style="color: rgb(163, 21, 21);">textarea</span><span style="color: blue;">&gt;</span> <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">li</span><span style="color: blue;">&gt;</span> <span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">ul</span><span style="color: blue;">&gt;&lt;/</span><span style="color: rgb(163, 21, 21);">fieldset</span><span style="color: blue;">&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp; <span style="color: blue;">&lt;</span><span style="color: rgb(163, 21, 21);">input</span>
+<span style="color: red;">type</span><span style="color: blue;">="submit"</span>
+<span style="color: red;">value</span><span style="color: blue;">="Add"</span>
+<span style="color: blue;">/&gt;</span><o:p></o:p></span></p>
+
+<p><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">form</span><span style="color: blue;">&gt;</span> <span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">asp</span><span style="color: blue;">:</span><span style="color: rgb(163, 21, 21);">Content</span><span style="color: blue;">&gt;</span></span> <br></p>
+
+<span style="background: white none repeat scroll 0% 0%; font-size: 11pt; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; color: blue; font-family: Consolas;"></span><b></b><p mce_keep="true"><b>Displaying the comments</b> <br></p><meta name="ProgId" content="Word.Document"><meta name="Generator" content="Microsoft Word 11"><meta name="Originator" content="Microsoft Word 11"><link href="file:///C:/%5CDOCUME~1%5Cuser%5CLOCALS~1%5CTemp%5Cmsohtml1%5C01%5Cclip_filelist.xml" rel="File-List"><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:View>Normal</w:View>
+  <w:Zoom>0</w:Zoom>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:-1610611985 1073750091 0 0 159 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style><!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;% <span style="color: navy;">if</span>( <span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">Comments</span>.<span style="color: maroon;">Count</span> &gt; 0 )<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{ %&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;%<span style="color: navy;">foreach</span>( <span style="color: navy;">var</span>
+<span style="color: maroon;">comment</span> <span style="color: navy;">in</span> <span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">Comments</span> )<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{ %&gt;&nbsp;&nbsp; <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&lt;% <span style="color: maroon;">Html</span>.<span style="color: maroon;">RenderPartial</span>("PostComment", <span style="color: maroon;">comment</span>); %&gt;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&lt;% } %&gt;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;% } %&gt; </span></p><p class="MsoNormal" style="margin: 5pt 0in;">&nbsp;</p>
+
+<span style="background: yellow none repeat scroll 0% 0%; font-size: 11pt; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; font-family: Consolas;"></span> 
+<p class="MsoNormal"><span class="NormalWebChar"><span style="font-size: 10pt; font-family: Verdana;">The above code iterating through Comments collection of our ViewData and also calling the PostComment user control with comment object as ViewData for displaying a single comment.<span>&nbsp; </span>This user control is also using for partial rendering when we send <st1:city w:st="on"><st1:place w:st="on">Ajax</st1:place></st1:city> request</span></span>. <br></p><p><o:p>&nbsp;</o:p><b>PostComment.ascx<o:p> </o:p></b><meta name="ProgId" content="Word.Document"><meta name="Generator" content="Microsoft Word 11"><meta name="Originator" content="Microsoft Word 11"><link href="file:///C:/%5CDOCUME~1%5Cuser%5CLOCALS~1%5CTemp%5Cmsohtml1%5C01%5Cclip_filelist.xml" rel="File-List"><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:View>Normal</w:View>
+  <w:Zoom>0</w:Zoom>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:-1610611985 1073750091 0 0 159 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style><!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+
+</p><p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">u</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;% <span style="color: blue;">=</span><span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">Author</span>%&gt;
+commented on<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;% <span style="color: blue;">=</span><span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">DatePosted</span>%&gt;:<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">u</span><span style="color: blue;">&gt;&lt;</span><span style="color: rgb(163, 21, 21);">p</span><span style="color: blue;">&gt;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;% <span style="color: blue;">=</span><span style="color: maroon;">ViewData</span>.<span style="color: maroon;">Model</span>.<span style="color: maroon;">Text</span>%&gt;<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">p</span></span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&gt;&nbsp;</span></p><p>&nbsp;<span style="font-size: 10pt; font-family: Verdana;"><span style="color: blue;"></span></span><b><span></span><o:p></o:p></b><b><o:p></o:p></b><span style="background: white none repeat scroll 0% 0%; font-size: 11pt; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; color: blue; font-family: Consolas;"></span></p><meta name="ProgId" content="Word.Document"><meta name="Generator" content="Microsoft Word 11"><meta name="Originator" content="Microsoft Word 11"><link href="file:///C:/%5CDOCUME~1%5Cuser%5CLOCALS~1%5CTemp%5Cmsohtml1%5C01%5Cclip_filelist.xml" rel="File-List"><o:smarttagtype namespaceuri="urn:schemas-microsoft-com:office:smarttags" name="City"></o:smarttagtype><o:smarttagtype namespaceuri="urn:schemas-microsoft-com:office:smarttags" name="place"></o:smarttagtype><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:View>Normal</w:View>
+  <w:Zoom>0</w:Zoom>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]><object
+ classid="clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D" id=ieooui></object>
+<style>
+st1\:*{behavior:url(#ieooui) }
+</style>
+<![endif]--><style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Verdana;
+	panose-1:2 11 6 4 3 5 4 4 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:536871559 0 0 0 415 0;}
+@font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:-1610611985 1073750091 0 0 159 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+p
+	{mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style><!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+
+<p><b>Client Side Validation </b></p>
+
+<p><b>&nbsp;</b><span style="font-size: 10pt; font-family: Verdana;">For client
+side validation, I am using jQuery Validation plugin. For more details about
+the jQuery plugin, visit <a href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">http://bassistance.de/jquery-plugins/jquery-plugin-validation/</a>
+. This validation framework is very easy to use. You just put <span style="background: white none repeat scroll 0% 0%; color: red; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">class</span><span style="background: white none repeat scroll 0% 0%; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">="text required"</span><span style="color: blue;"> </span>for
+a required field validator. For an email validation, you need to put <span style="background: white none repeat scroll 0% 0%; color: red; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">class</span><span style="background: white none repeat scroll 0% 0%; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">="text email"</span><span style="color: blue;">. </span></span><b>&nbsp;</b></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">input</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">id</span><span style="color: blue;">="commentAuthor"</span>
+<span style="color: red;">class</span><span style="color: blue;">="text
+required"</span> <span style="color: red;">name</span><span style="color: blue;">="commentAuthor"</span> <span style="color: red;">type</span><span style="color: blue;">="text"</span> <span style="color: red;">value</span><span style="color: blue;">=""</span> <span style="color: blue;">/&gt;</span> <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">textarea</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">cols</span><span style="color: blue;">="20"</span> <span style="color: red;">id</span><span style="color: blue;">="commentText"</span> <span style="color: red;">class</span><span style="color: blue;">="text required"</span> <span style="color: red;">name</span><span style="color: blue;">="commentText"</span> <span style="color: red;">rows</span><span style="color: blue;">="2"&gt;&lt;/</span><span style="color: rgb(163, 21, 21);">textarea</span><span style="color: blue;">&gt;</span>&nbsp;<o:p></o:p></span></p>
+
+<p><span style="font-size: 10pt; font-family: Verdana;">The validation process
+will be working with the jQuery method validate of form object.</span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">(<span style="color: navy;">function</span>() {<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: green; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">// for highlight </span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">var</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: maroon;">elements</span> = <span style="color: maroon;">$</span>("input[type!='submit'], textarea,
+select");<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">elements</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">.<span style="color: maroon;">focus</span>(<span style="color: navy;">function</span>(){<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">(<span style="color: navy;">this</span>).<span style="color: maroon;">parents</span>('li').<span style="color: maroon;">addClass</span>('highlight');<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">});<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">elements</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">.<span style="color: maroon;">blur</span>(<span style="color: navy;">function</span>()<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">(<span style="color: navy;">this</span>).<span style="color: maroon;">parents</span>('li').<span style="color: maroon;">removeClass</span>('highlight');<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">});&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">("#new_comment").<span style="color: maroon;">validate</span>()
+// for validation <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">});</span></p><p><span style="font-size: 10pt; font-family: Verdana;">You can optionally add validation rules along with validate method. The below code added validation rules included with validate method of form object.</span></p><p><span style="font-size: 10pt; font-family: Verdana;"></span> <meta name="ProgId" content="Word.Document"><meta name="Generator" content="Microsoft Word 11"><meta name="Originator" content="Microsoft Word 11"><link href="file:///C:/%5CDOCUME~1%5Cuser%5CLOCALS~1%5CTemp%5Cmsohtml1%5C01%5Cclip_filelist.xml" rel="File-List"><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:View>Normal</w:View>
+  <w:Zoom>0</w:Zoom>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:-1610611985 1073750091 0 0 159 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.NormalConsolas, li.NormalConsolas, div.NormalConsolas
+	{mso-style-name:"Normal + Consolas\,10 pt\,Pattern\: Clear \(White\)";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	mso-layout-grid-align:none;
+	text-autospace:none;
+	font-size:10.0pt;
+	font-family:Consolas;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	mso-no-proof:yes;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style><!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><meta name="ProgId" content="Word.Document"><meta name="Generator" content="Microsoft Word 11"><meta name="Originator" content="Microsoft Word 11"><link href="file:///C:/%5CDOCUME~1%5Cuser%5CLOCALS~1%5CTemp%5Cmsohtml1%5C01%5Cclip_filelist.xml" rel="File-List"><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:View>Normal</w:View>
+  <w:Zoom>0</w:Zoom>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:-1610611985 1073750091 0 0 159 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.NormalConsolas, li.NormalConsolas, div.NormalConsolas
+	{mso-style-name:"Normal + Consolas\,10 pt\,Pattern\: Clear \(White\)";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	mso-layout-grid-align:none;
+	text-autospace:none;
+	font-size:10.0pt;
+	font-family:Consolas;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	mso-no-proof:yes;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style><!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+
+</p><p></p><p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$(</span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">"#new_comment"<span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">).validate({<o:p></o:p></span></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>rules:
+{<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>commentText:
+</span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">"required"<span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">,<o:p></o:p></span></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>commentAuthor:
+{<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>required:
+true,<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>minlength:
+</span><span style="background: aqua none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">2<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>},<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>email:
+{<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>required:
+true,<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>email:
+true<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>}<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>},<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>messages:
+{<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="">&nbsp; </span>commentText: </span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">"Please enter Comment"<span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><o:p></o:p></span></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="">&nbsp; </span>commentAuthor: {<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>required:
+</span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">"Please enter your Name"<span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><o:p></o:p></span></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>minlength:
+</span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">"Your Name must consist of at least
+2<span style=""></span><span style=""> </span>characters"<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>},<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><o:p></o:p></span></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>email:
+</span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">"</span> <span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">Please enter a valid email address”<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>}<o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>});</span><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><o:p></o:p></span></p>
+
+<p class="NormalConsolas"><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"></span><span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><o:p></o:p></span></p>
+
+
+
+<p><b>jQuery includes</b></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">script</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">type</span><span style="color: blue;">="text/javascript"</span> <span style="color: red;">src</span><span style="color: blue;">="../../Content/jquery-1.2.5.min.js"&gt;&lt;/</span><span style="color: rgb(163, 21, 21);">script</span><span style="color: blue;">&gt;</span> <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: blue; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&lt;</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: rgb(163, 21, 21); -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">script</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: red;">src</span><span style="color: blue;">="../../Content/jquery.validate.js"</span> <span style="color: red;">type</span><span style="color: blue;">="text/javascript"&gt;&lt;/</span><span style="color: rgb(163, 21, 21);">script</span><span style="color: blue;">&gt;</span><o:p></o:p></span></p>
+
+<p>&nbsp;<b>Ajxa using jQuery&nbsp;</b></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">(<span style="color: maroon;">document</span>).<span style="color: maroon;">ready</span>(<span style="color: navy;">function</span>()
+{&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">("#ajaxLoader").<span style="color: maroon;">hide</span>();<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">("#new_comment").<span style="color: maroon;">submit</span>(<span style="color: navy;">function</span>() <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp; <span style="color: maroon;">addComment</span>(<span style="color: navy;">this</span>);<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp; <span style="color: navy;">return</span> <span style="color: navy;">false</span>;&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">});<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">});</span><span style="font-size: 10pt;"><o:p></o:p></span></p>
+
+<p><span style="font-size: 10pt; font-family: Verdana;">jQuery method <span style="background: white none repeat scroll 0% 0%; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$</span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">(<span style="color: maroon;">document</span>).<span style="color: maroon;">ready</span>()</span>
+will executes when the DOM has been loaded and in this function we handles the
+onsubmit event of the form. In the onsubmit event, we calling the addComment
+function and then the <span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">return</span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: navy;">false</span> </span>statement
+prevent the form submit and we submit the form post using <st1:city w:st="on"><st1:place w:st="on">Ajax</st1:place></st1:city>. </span></p>
+
+<p><b>addComment function</b><b><span style="font-size: 10pt;"></span></b><span style="font-size: 10pt;"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">function</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: maroon;">addComment</span>(<span style="color: maroon;">form</span>)<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">("#ajaxLoader").<span style="color: maroon;">show</span>();&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">$</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">.<span style="color: maroon;">ajax</span>(<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{<span style="color: maroon;">type</span>: <span style="color: maroon;">form</span>.<span style="color: maroon;">method</span>,<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">url</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">: <span style="color: maroon;">form</span>.<span style="color: maroon;">action</span>,<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">data</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">: <span style="color: maroon;">$</span>(<span style="color: maroon;">form</span>).<span style="color: maroon;">serialize</span>(),<span style="color: green;">// Form data</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">dataType</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">: "html",<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">completed</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">: <span style="color: maroon;">$</span>("#ajaxLoader").<span style="color: maroon;">hide</span>(),<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">success</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">: <span style="color: navy;">function</span>(<span style="color: maroon;">result</span>)&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">var</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: maroon;">domObj</span> = <span style="color: maroon;">$</span>(<span style="color: maroon;">result</span>); <span style="color: green;">// create element from result html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: maroon;">$</span>("#post_comment").<span style="color: maroon;">append</span>(<span style="color: maroon;">domObj</span>); <span style="color: green;">// append to end of comment list&nbsp;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">},&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">error</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">: <span style="color: navy;">function</span>(<span style="color: maroon;">error</span>)&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp; <span style="color: maroon;">alert</span>(<span style="color: maroon;">error</span>);&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">}&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">});&nbsp;&nbsp;&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">}&nbsp;<o:p></o:p></span></p>
+
+<p><span style="font-size: 10pt; font-family: Verdana;">The above code sends the
+form data to the controller action Post using <st1:place w:st="on"><st1:city w:st="on">Ajax</st1:city></st1:place> . The <span style="background: white none repeat scroll 0% 0%; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">dataType</span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">: </span><span style="background: yellow none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">"html"</span> represent that we want
+partial HTML result for our <st1:city w:st="on"><st1:place w:st="on">Ajax</st1:place></st1:city>
+request.&nbsp; In the success function of our <st1:city w:st="on"><st1:place w:st="on">Ajax</st1:place></st1:city> request, we append the result HTML to
+the &lt;div&gt; element named post_comment. This will dynamically add the new
+comment to the end of the comment list.</span><span style="background: white none repeat scroll 0% 0%; font-size: 11pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">success</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">: <span style="color: navy;">function</span>(<span style="color: maroon;">result</span>) <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">{&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;<span style="color: navy;">var</span> <span style="color: maroon;">domObj</span>
+= <span style="color: maroon;">$</span>(<span style="color: maroon;">result</span>);<span style="color: green;">// create element from result
+html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;
+<span style="color: maroon;">$</span>("#post_comment").<span style="color: maroon;">append</span>(<span style="color: maroon;">domObj</span>); <span style="color: green;">// append to end of comment list&nbsp;</span><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">}<o:p></o:p></span></p>
+
+<p><b>Controller Action</b></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">[<span style="color: rgb(166, 83, 0);">AcceptVerbs</span>( "POST" )]<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">[<span style="color: rgb(166, 83, 0);">ActionName</span>( "Post"
+)]&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">public</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: rgb(166, 83, 0);">ActionResult</span> <span style="color: maroon;">AddComment</span>( <span style="color: navy;">int</span> <span style="color: maroon;">postId</span>, <span style="color: navy;">string</span> <span style="color: maroon;">commentAuthor</span>, <span style="color: navy;">string</span>
+<span style="color: maroon;">commentText</span> )&nbsp; {&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">var</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: maroon;">comment</span> = <span style="color: navy;">new</span> <span style="color: rgb(166, 83, 0);">Comment</span>{<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">PostID</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> = <span style="color: maroon;">postId</span>,&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">Author</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> = <span style="color: maroon;">commentAuthor</span>,&nbsp; <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">Text</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> = <span style="color: maroon;">commentText</span>,&nbsp;
+&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: maroon; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">DatePosted</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> = <span style="color: rgb(43, 145, 175);">DateTime</span>.<span style="color: maroon;">Now</span> <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">};<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">try</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> {&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: maroon;">comments</span>.<span style="color: maroon;">Create</span>( <span style="color: maroon;">comment</span>
+);<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: navy;">return</span> <span style="color: maroon;">View</span>("PostComment", <span style="color: maroon;">comment</span>);&nbsp;&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;&nbsp; }&nbsp; <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">catch</span><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">( <span style="color: rgb(166, 83, 0);">Exception</span>&nbsp; <span style="color: maroon;">ex</span> )&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp; {&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;&nbsp;&nbsp; <span style="color: navy;">throw</span> <span style="color: maroon;">ex</span>;&nbsp;&nbsp;&nbsp;<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp; }&nbsp;&nbsp; <o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">}<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 5pt 0in;"><span style="background: white none repeat scroll 0% 0%; font-size: 10pt; font-family: Consolas; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">&nbsp;}<o:p></o:p></span></p>
+
+<p class="MsoNormal"><span style="font-size: 10pt; font-family: Verdana;">Our <st1:place w:st="on"><st1:city w:st="on">Ajax</st1:city></st1:place> request will call the
+AddComment method and this will create a new comment for the given Post. After
+the data persist, we calling the&nbsp; <span style="background: white none repeat scroll 0% 0%; color: navy; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">return</span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"> <span style="color: maroon;">View</span>(</span><span style="background: yellow none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">"PostComment"</span><span style="background: white none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">, <span style="color: maroon;">comment</span>)</span>. <span style="background: yellow none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">PostComment</span> is our user control with new added
+comment object as the model of our View. So that the user control will
+generates markup for the new comment and our Ajax request will get the output
+as the HTML that rendered by the user control. So we can dynamically add the
+new markup to the HTML element of our post comment list. User control is very
+powerful technique for partial rendering.&nbsp;You can download the jQuery from
+<a href="http://docs.jquery.com/Downloading_jQuery">http://docs.jquery.com/Downloading_jQuery</a>
+and jQuery validation pugin from <a href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">http://bassistance.de/jquery-plugins/jquery-plugin-validation</a>.&nbsp;You
+can read Rick Strahl’s excellent article about jQuery from <a href="http://www.west-wind.com/presentations/jQuery/default.aspx">here</a>.</span></p><p class="MsoNormal">&nbsp;</p><p class="MsoNormal"><b>Update </b>: You can download the source code from <a href="http://weblogs.asp.net/blogs/shijuvarghese/MVCjQuery.zip">MVCjQuery.zip</a></p>
+
+<span style="font-size: 10pt; font-family: Verdana;"><o:p></o:p></span>
+            
+            <div class="postfoot">
+                <div><span class="em">Attachment:</span> <a href="http://weblogs.asp.net/shijuvarghese/attachment/6649683.ashx">MVCjQuery.zip</a></div>
+                Published
+                Wednesday, October 01, 2008 2:03 AM
+			    by
+			    <a href="http://weblogs.asp.net/members/shiju.aspx">shiju</a>
+                <span id="ctl00_Main_WeblogPostRating1" title="Rated Excellent [5 out of 5]." class="CommonRateControlReadOnly"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/star-left-on.gif" align="absmiddle" border="0"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/star-right-on.gif" align="absmiddle" border="0"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/star-left-on.gif" align="absmiddle" border="0"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/star-right-on.gif" align="absmiddle" border="0"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/star-left-on.gif" align="absmiddle" border="0"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/star-right-on.gif" align="absmiddle" border="0"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/star-left-on.gif" align="absmiddle" border="0"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/star-right-on.gif" align="absmiddle" border="0"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/star-left-on.gif" align="absmiddle" border="0"><img src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/star-right-on.gif" align="absmiddle" border="0"></span><input type="hidden" value="5" id="ctl00_Main_WeblogPostRating1_Value">
+                <div class="em"><span id="ctl00_Main_ctl06_ctl01">Filed under: <a href="http://weblogs.asp.net/shijuvarghese/archive/tags/ASP.NET/default.aspx" rel="tag">ASP.NET</a>, <a href="http://weblogs.asp.net/shijuvarghese/archive/tags/ASP.NET+MVC/default.aspx" rel="tag">ASP.NET MVC</a>, <a href="http://weblogs.asp.net/shijuvarghese/archive/tags/jQuery/default.aspx" rel="tag">jQuery</a></span><input type="hidden" name="ctl00$Main$ctl06$ctl01" id="ctl00_Main_ctl06_ctl01_State" value="value:Filed%20under%3A%20%3Ca%20href%3D%22%2Fshijuvarghese%2Farchive%2Ftags%2FASP.NET%2Fdefault.aspx%22%20rel%3D%22tag%22%3EASP.NET%3C%2Fa%3E%2C%20%3Ca%20href%3D%22%2Fshijuvarghese%2Farchive%2Ftags%2FASP.NET%2BMVC%2Fdefault.aspx%22%20rel%3D%22tag%22%3EASP.NET%20MVC%3C%2Fa%3E%2C%20%3Ca%20href%3D%22%2Fshijuvarghese%2Farchive%2Ftags%2FjQuery%2Fdefault.aspx%22%20rel%3D%22tag%22%3EjQuery%3C%2Fa%3E"></div>
+                
+            </div>
+        </div>
+    </div>
+    
+    
+                    
+                    <h3 class="pageTitle">Comments</h3>
+                    <div id="comments">
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6650124">#</a>
+	                        <span>
+	                            ASP.NET MVC Archived Blog Posts, Page 1
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Wednesday, October 01, 2008 9:21 AM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://aspdotnetmvc.com/blogs/default.aspx">ASP.NET MVC Archived Blog Posts, Page 1</a>
+                            
+	                    </div>
+	                    <p>Pingback from &nbsp;ASP.NET MVC Archived Blog Posts, Page 1</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6655888">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Friday, October 03, 2008 1:42 AM
+                            by
+                            Mike
+                            
+	                    </div>
+	                    <p>Excellent article. User control is really a powerful thing.</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6656498">#</a>
+	                        <span>
+	                            ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Friday, October 03, 2008 8:02 AM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://www.dotnetkicks.com/aspnet/ASP_NET_MVC_Tip_Ajax_and_Validations_using_jQuery">DotNetKicks.com</a>
+                            
+	                    </div>
+	                    <p>You've been kicked (a good thing) - Trackback from DotNetKicks.com</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6682782">#</a>
+	                        <span>
+	                            ASP.NET MVC Beta Released
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Thursday, October 16, 2008 4:20 AM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/16/asp-net-mvc-beta-released.aspx">Shiju Varghese's Blog</a>
+                            
+	                    </div>
+	                    <p>Microsoft has released the official beta for ASP.NET MVC. You can download the Beta version from here</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6691728">#</a>
+	                        <span>
+	                            ASP.NET MVC for Live Applications
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Monday, October 20, 2008 6:58 AM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/20/asp-net-mvc-for-live-applications.aspx">Shiju Varghese's Blog</a>
+                            
+	                    </div>
+	                    <p>ASP.NET MVC has got big attention in the community and lot of people looking to start production ready</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6729895">#</a>
+	                        <span>
+	                            ASP.NET MVC Tip: Ajax and Validations using jQuery - Shiju Varghese's 
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Tuesday, November 11, 2008 9:03 PM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://webdevvote.com/AspNet/ASP_NET_MVC_Tip_Ajax_and_Validations_using_jQuery_Shiju_Varghese_s">Web Development Community</a>
+                            
+	                    </div>
+	                    <p>You are voted (great) - Trackback from Web Development Community</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6730682">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Wednesday, November 12, 2008 7:28 AM
+                            by
+                            bipin
+                            
+	                    </div>
+	                    <p>Excellent article.</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6742408">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Sunday, November 16, 2008 8:29 PM
+                            by
+                            <a title="jenyyoung" href="http://www.devinspire.com/">jenyyoung</a>
+                            
+	                    </div>
+	                    <p>Good article.</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6751497">#</a>
+	                        <span>
+	                            ASP .NET 3.5 MVC
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Monday, November 24, 2008 8:25 AM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://my6solutions.com/post/2008/11/24/ASP-NET-35-MVC.aspx">my6solutions</a>
+                            
+	                    </div>
+	                    <p>ASP .NET 3.5 MVC</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6844074">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Sunday, January 18, 2009 3:16 PM
+                            by
+                            <a title="ash143gupta" href="http://smallworkarounds.blogspot.com/">ash143gupta</a>
+                            
+	                    </div>
+	                    <p>This is a very nice article and you have covered most of the points required to kickstart the development with Jquery and MVC</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6845101">#</a>
+	                        <span>
+	                            ASP.NET MVC Validation - The Definitive Guide (in my eyes) &amp;laquo; {Programming} &amp;amp; Life
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Monday, January 19, 2009 6:31 PM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://goneale.wordpress.com/2009/01/19/aspnet-mvc-validation-the-definitive-guide-in-my-eyes/">ASP.NET MVC Validation - The Definitive Guide (in my eyes) « {Programming} &amp; Life</a>
+                            
+	                    </div>
+	                    <p>Pingback from &nbsp;ASP.NET MVC Validation - The Definitive Guide (in my eyes) &amp;laquo; {Programming} &amp;amp; Life</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6845104">#</a>
+	                        <span>
+	                            ASP.NET MVC Validation - The Definitive Guide (in my eyes) &amp;laquo; {Programming} &amp;amp; Life
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Monday, January 19, 2009 6:34 PM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://goneale.wordpress.com/2009/01/19/aspnet-mvc-validation-the-definitive-guide-in-my-eyes/">ASP.NET MVC Validation - The Definitive Guide (in my eyes) « {Programming} &amp; Life</a>
+                            
+	                    </div>
+	                    <p>Pingback from &nbsp;ASP.NET MVC Validation - The Definitive Guide (in my eyes) &amp;laquo; {Programming} &amp;amp; Life</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6845105">#</a>
+	                        <span>
+	                            ASP.NET MVC Validation - The Definitive Guide (in my eyes) &amp;laquo; {Programming} &amp;amp; Life
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Monday, January 19, 2009 6:34 PM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://goneale.wordpress.com/2009/01/19/aspnet-mvc-validation-the-definitive-guide-in-my-eyes/">ASP.NET MVC Validation - The Definitive Guide (in my eyes) « {Programming} &amp; Life</a>
+                            
+	                    </div>
+	                    <p>Pingback from &nbsp;ASP.NET MVC Validation - The Definitive Guide (in my eyes) &amp;laquo; {Programming} &amp;amp; Life</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6845108">#</a>
+	                        <span>
+	                            ASP.NET MVC Validation - The Definitive Guide (in my eyes) &amp;laquo; {Programming} &amp;amp; Life
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Monday, January 19, 2009 6:35 PM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://goneale.wordpress.com/2009/01/19/aspnet-mvc-validation-the-definitive-guide-in-my-eyes/">ASP.NET MVC Validation - The Definitive Guide (in my eyes) « {Programming} &amp; Life</a>
+                            
+	                    </div>
+	                    <p>Pingback from &nbsp;ASP.NET MVC Validation - The Definitive Guide (in my eyes) &amp;laquo; {Programming} &amp;amp; Life</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6864218">#</a>
+	                        <span>
+	                            ASP.NET MVC 1.0 Release Candidate (RC) Released
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Tuesday, January 27, 2009 11:48 PM
+                            by
+                            <a title="TrackBack" rel="nofollow" href="http://weblogs.asp.net/shijuvarghese/archive/2009/01/27/asp-net-mvc-1-0-release-candidate-rc-released.aspx">Shiju Varghese's Blog</a>
+                            
+	                    </div>
+	                    <p>After 5 CTP versions and 1 Beta version, Microsoft has finally shipped Release Candidate version of ASP</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6873737">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Sunday, February 01, 2009 9:43 PM
+                            by
+                            <a title="..." rel="nofollow" href="http://maegancarberry.com/images/user/onlinepoker/">...</a>
+                            
+	                    </div>
+	                    <p>Oh, its great!</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6916777">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Thursday, February 19, 2009 7:05 AM
+                            by
+                            <a title="naveedkamboh" href="http://www.isolutionteam.co.uk/">naveedkamboh</a>
+                            
+	                    </div>
+	                    <p>Thanks, &nbsp;I am going to start work with MVC and this is good example. &nbsp;</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6935808">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Monday, March 02, 2009 9:19 PM
+                            by
+                            <a title="..." rel="nofollow" href="http://reachingforlucidity.net/live/kino-berlin.php">...</a>
+                            
+	                    </div>
+	                    <p>Gut!</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6936887">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Tuesday, March 03, 2009 9:29 PM
+                            by
+                            <a title="Jim Speaker" rel="nofollow" href="http://www.smartfishmap.com/">Jim Speaker</a>
+                            
+	                    </div>
+	                    <p>Thanks, you just tied together the last little tidbit for me as I prepare to port my .NET 2.0 AJAX app to MVC 3.5 AJAX with jQuery. &nbsp;'preciate the fine article. &nbsp;Cheers.</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6961152">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Saturday, March 14, 2009 11:05 AM
+                            by
+                            <a title="..." rel="nofollow" href="http://seeworthy.org/ducktales/immobilie/">...</a>
+                            
+	                    </div>
+	                    <p>Sehr wertvolle Informationen! Empfehlen!</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#6961162">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Saturday, March 14, 2009 11:06 AM
+                            by
+                            <a title="..." rel="nofollow" href="http://seeworthy.org/ducktales/immobilie/">...</a>
+                            
+	                    </div>
+	                    <p>Sehr wertvolle Informationen! Empfehlen!</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#7060040">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Saturday, April 25, 2009 3:22 PM
+                            by
+                            <a title="marquinhocb" href="http://blog.yuniti.com/marquinho">marquinhocb</a>
+                            
+	                    </div>
+	                    <p>A better approach to doing client-side validation (more automated and uses the same validation for client-side and server-side):</p>
+<p><a rel="nofollow" target="_new" href="http://xval.codeplex.com/">http://xval.codeplex.com</a></p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#7551724">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Friday, July 02, 2010 3:00 AM
+                            by
+                            <a title="Ann" rel="nofollow" href="http://www.google.com/">Ann</a>
+                            
+	                    </div>
+	                    <p>Thanks for information! </p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#7602997">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Wednesday, September 01, 2010 10:07 AM
+                            by
+                            Simonas
+                            
+	                    </div>
+	                    <p>And why someone would think this is better then web forms, I can do the same thing as here much faster..</p>
+
+        	            
+	                </div>
+	            
+	                <div class="comment">
+	                    <h4>
+	                        <a href="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx#7624691">#</a>
+	                        <span>
+	                            re: ASP.NET MVC Tip: Ajax and Validations using jQuery
+	                        </span>
+	                    </h4>
+	                    <div class="commentssubhead">
+	                        
+                                            
+                            Thursday, October 07, 2010 2:19 AM
+                            by
+                            <a title="link building service" rel="nofollow" href="http://link-building-service.info/">link building service</a>
+                            
+	                    </div>
+	                    <p>tis is really a great info..thanks lol!!i would definitely pass on this blog to my frnds..</p>
+
+        	            
+	                </div>
+	            
+                    </div>
+                
+            
+            
+            
+            
+                    <div id="commentform">
+                    <h3 class="pageTitle">Leave a Comment</h3>
+	                    <dl>
+                            <dt><label for="ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbTitle">Title</label> <em>(required)</em><span id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl02" style="color:Red;visibility:hidden;">*</span></dt>
+	                        <dd><input name="ctl00$Main$ctl07$ctl02$ctl02$ctl02$tbTitle" type="text" value="re: ASP.NET MVC Tip: Ajax and Validations using jQuery" id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbTitle" class="smallbox"></dd>
+        	          
+                            <dt id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_NameTitle"><label for="ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbName">Name</label> <em>(required)</em><span id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl10" style="color:Red;visibility:hidden;">*</span></dt>
+                            <dd id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_NameDesc"><input name="ctl00$Main$ctl07$ctl02$ctl02$ctl02$tbName" type="text" id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbName" class="smallbox"></dd>
+                   
+                            <dt><label for="ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbUrl">Your URL</label> <em>(optional)</em></dt>
+                            <dd><input name="ctl00$Main$ctl07$ctl02$ctl02$ctl02$tbUrl" type="text" id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbUrl" class="smallbox"></dd>
+                    
+                            <dt><label for="ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbComment">Comments</label> <em>(required)</em><span id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl07" style="color:Red;visibility:hidden;">*</span></dt>
+                            <dd><textarea name="ctl00$Main$ctl07$ctl02$ctl02$ctl02$tbComment" rows="5" cols="25" id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbComment"></textarea></dd>
+
+                            <dt><input id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_chkRemember" type="checkbox" name="ctl00$Main$ctl07$ctl02$ctl02$ctl02$chkRemember"><label for="ctl00_Main_ctl07_ctl02_ctl02_ctl02_chkRemember">Remember Me?</label></dt>
+
+                            <dt><input type="submit" name="ctl00$Main$ctl07$ctl02$ctl02$ctl02$btnSubmit" value="Submit" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$Main$ctl07$ctl02$ctl02$ctl02$btnSubmit&quot;, &quot;&quot;, true, &quot;CreateCommentForm&quot;, &quot;&quot;, false, false))" id="ctl00_Main_ctl07_ctl02_ctl02_ctl02_btnSubmit"></dt>
+        	            
+	                    </dl>
+                    </div>
+                    
+        
+  
+	                
+
+<div align="center" id="div046f6acc79954024b040c2d7b42a38f9" style="padding-top:5px; padding-bottom:5px">
+    <iframe name="frame174ccdb094a942dca8f94f47626a1c6c" src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/Banner.htm" width="486" height="60" scrolling="no" frameborder="0" marginheight="0" marginwidth="0" visible="false" onload="makeTransparentBottom(this, document.getElementById(&#39;div046f6acc79954024b040c2d7b42a38f9&#39;))"></iframe>
+</div>
+
+<script language="javascript">
+
+    function makeTransparentBottom(adFrame, parent)
+    {
+        return;
+        window.frames[adFrame.name].document.getElementsByTagName("img")[0].style.backgroundColor = "#FFFFFF";
+        parent.style.visibility = "visible";
+    }
+
+</script>
+      
+                </div></div>
+
+            </div>
+            <div id="contentfooter">
+                
+				    <div> <span><a href="http://www.microsoft.com/info/cpyright.mspx">Terms of Use</a></span></div>
+
+					
+				
+            </div>       
+        </div>
+    </div>
+    <script type="text/javascript" src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/omniture_all.js"></script>
+            <noscript>&lt;a href="http://www.omniture.com" title="Web Analytics"&gt;&lt;img
+                src="http://msstonojsaspnet.112.2O7.net/b/ss/msstonojsaspnet/1/H.20.2--NS/0"
+                height="1" width="1" border="0" alt="" /&gt;&lt;/a&gt;</noscript>
+    
+<script type="text/javascript">
+//<![CDATA[
+var Page_Validators =  new Array(document.getElementById("ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl02"), document.getElementById("ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl10"), document.getElementById("ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl07"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl02 = document.all ? document.all["ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl02"] : document.getElementById("ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl02");
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl02.controltovalidate = "ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbTitle";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl02.errormessage = "*";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl02.validationGroup = "CreateCommentForm";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl02.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl02.initialvalue = "";
+var ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl10 = document.all ? document.all["ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl10"] : document.getElementById("ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl10");
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl10.controltovalidate = "ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbName";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl10.errormessage = "*";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl10.validationGroup = "CreateCommentForm";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl10.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl10.initialvalue = "";
+var ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl07 = document.all ? document.all["ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl07"] : document.getElementById("ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl07");
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl07.controltovalidate = "ctl00_Main_ctl07_ctl02_ctl02_ctl02_tbComment";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl07.errormessage = "*";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl07.validationGroup = "CreateCommentForm";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl07.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+ctl00_Main_ctl07_ctl02_ctl02_ctl02_ctl07.initialvalue = "";
+//]]>
+</script>
+
+
+<!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+<rdf:Description
+rdf:about="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx"
+dc:identifier="http://weblogs.asp.net/shijuvarghese/archive/2008/10/01/asp-net-mvc-tip-ajax-and-validations-using-jquery.aspx"
+dc:title="ASP.NET MVC Tip: Ajax and Validations using jQuery"
+trackback:ping="http://weblogs.asp.net/shijuvarghese/trackback.ashx?PostID=6649683" />
+</rdf:RDF>
+-->
+<script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/ShijuVBlog" type="text/javascript" charset="utf-8"></script><script src="./ASP.NET MVC Tip  Ajax and Validations using jQuery - Shiju Varghese's Blog_files/ShijuVBlog(1)" type="text/javascript"></script> <script type="text/javascript">
+// <![CDATA[
+Telligent_Modal.Configure('/utility/loading.htm',['Modal'],['ModalTitle'],['ModalClose'],['ModalContent'],['ModalFooter'],['ModalResize'],['ModalMask'],100);
+// ]]>
+</script><script type="text/javascript">
+// <![CDATA[
+var ctl00_Main_WeblogPostRating1=new PostRating('ctl00_Main_WeblogPostRating1','ctl00_Main_WeblogPostRating1','ctl00_Main_WeblogPostRating1_Value', 5, '/Themes/default/images/common/', false, 'CommonRateControl','CommonRateControlActive','CommonRateControlReadOnly',['Terrible','Poor','Fair','Average','Good','Excellent'],true,true);
+// ]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+
+WebForm_InitCallback();//]]>
+</script>
+<script type="text/javascript">
+            // <![CDATA[
+            var ctl00_Main_WeblogPostRating1_ajax={"SaveRating":function(rating,successFunction,failureFunction){WebForm_DoCallback('ctl00$Main$WeblogPostRating1',rating,successFunction,rating,failureFunction,false)}};
+            // ]]>
+            </script><script type="text/javascript">
+// <![CDATA[
+window.ctl00_Main_ctl06_ctl01 = new Telligent_InlineEditorPanel('ctl00_Main_ctl06_ctl01','ctl00_Main_ctl06_ctl01','ctl00_Main_ctl06_ctl01_State','ctl00_Main_ctl06_ctl00',false,null,null,null);
+// ]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        //]]>
+</script>
+</form>
+
+
+</body></html>

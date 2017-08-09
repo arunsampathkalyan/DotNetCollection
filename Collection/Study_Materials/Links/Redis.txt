@@ -1,0 +1,1 @@
+https://www.codeproject.com/tips/827979/implementing-custom-asp-net-state-management-using

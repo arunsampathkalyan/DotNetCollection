@@ -1,0 +1,11 @@
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\bin\Debug\MvcContrib.XsltViewEngine.XML
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\bin\Debug\MvcContrib.XsltViewEngine.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\bin\Debug\MvcContrib.XsltViewEngine.pdb
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\bin\Debug\MvcContrib.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\bin\Debug\Mvp.Xml.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\bin\Debug\Microsoft.Web.Mvc.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\bin\Debug\MvcContrib.pdb
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\bin\Debug\MvcContrib.xml
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\obj\Debug\ResolveAssemblyReference.cache
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\obj\Debug\MvcContrib.XsltViewEngine.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.XsltViewEngine\obj\Debug\MvcContrib.XsltViewEngine.pdb

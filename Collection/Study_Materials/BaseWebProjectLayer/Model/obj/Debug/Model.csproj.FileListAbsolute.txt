@@ -1,0 +1,5 @@
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\Model\bin\Debug\Model.dll
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\Model\bin\Debug\Model.pdb
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\Model\obj\Debug\Model.dll
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\Model\obj\Debug\Model.pdb
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache

@@ -1,0 +1,611 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0078)http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-cs -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Understanding Models, Views, and Controllers: The Official Microsoft ASP.NET Site</title>
+  
+  
+  <link href="http://i2.asp.net/common/www-css/i/favicon.ico?cdn_id=2010-10-26-001" rel="shortcut icon">
+  <link href="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/main.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/titanoverrides.css" rel="stylesheet" type="text/css" media="screen">
+  
+  <script src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/jquery-1.4.2.min.js" type="text/javascript"></script>
+  <script src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/msc_all.js" type="text/javascript"></script>  
+  
+
+	
+	<link href="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/shCore.css" rel="stylesheet" type="text/css" media="screen">
+	<link href="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/shThemeDefault.css" rel="stylesheet" type="text/css" media="screen">
+
+	<script type="text/javascript" src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/shComposite.js"></script>
+	<script type="text/javascript">	    SyntaxHighlighter.defaults['gutter'] = false; SyntaxHighlighter.defaults['toolbar'] = true; SyntaxHighlighter.all();</script>
+
+    <script type="text/javascript">
+        function initTutorialTooltip() {
+            $("div.syntaxhighlighter").mouseover(function () {
+                ShowMscTooltip(this, 'To preserve the line breaks in a code block, place your mouse pointer within the block and double-click to select the block before you copy it.');
+            });
+            $("div.syntaxhighlighter").mouseout(function () {
+                HideMscTooltip();
+            });
+        }
+        window.setTimeout(initTutorialTooltip, 2000);
+    </script>
+
+
+
+
+
+</head>
+<body>
+<form method="post" action="http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-cs?" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUENTM4MQ9kFgJmD2QWAmYPZBYCZg9kFgJmD2QWAmYPZBYCZg9kFgICBRBkZBYCAg0PZBYCAgEPZBYCZg9kFgJmDxYCHgdWaXNpYmxlZ2RktqQmrcLHo0/KSomLABiV1Ib+w+Y=">
+</div>
+
+<div id="content_container" class="content_container">
+<div class="header_container">
+    <div class="header_top"><div class="header_top_right">&nbsp;</div></div>
+    
+    <div class="header_content">
+        <div class="header_content_right">
+            <a href="http://www.asp.net/" title="Home Page">
+                <img class="logo" style="border-width: 0px;" alt="" src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/logo.png" title="Microsoft ASP.NET">
+            </a>
+        <div id="WLSearchBoxDiv"><div id="WLSearchBoxPlaceholder"><input class="search_box" id="WLSearchBoxInput" name="WLSearchBoxInput" value="Search"><input class="search_button" id="WLSearchBoxButton" type="button" value="" name="WLSearchBoxButton"></div></div><div id="mainnav"><ul class="nav_main"><li class="first"><a href="http://www.asp.net/home">Home</a></li><li><a href="http://www.asp.net/get-started">Get Started</a></li><li><a href="http://www.asp.net/downloads">Downloads</a></li><li><a href="http://www.asp.net/web-forms">Web Forms</a></li><li class="active"><a href="http://www.asp.net/mvc">MVC</a></li><li><a href="http://www.asp.net/ajax">AJAX</a></li><li><a href="http://www.asp.net/community">Community</a></li><li><a href="http://wiki.asp.net/">Wiki</a></li><li><a href="http://forums.asp.net/">Forums</a></li></ul></div>            
+      <div class="nav_login_user"><ul><li class="first"><a href="http://login.asp.net/login/signin.aspx?ReturnUrl=http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-cs">Sign In</a></li><li><a href="http://login.asp.net/login/createuser.aspx?ReturnUrl=http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-cs">Join</a></li></ul></div>
+        </div>
+    </div>
+    <div class="header_breadcrumb_top">
+  <div class="header_breadcrumb_top_right"></div>
+</div>
+<div class="header_breadcrumb_content">
+  <div class="header_breadcrumb_content_right"><span><span><a href="http://www.asp.net/home">Home</a></span><span> › </span><span><a href="http://www.asp.net/mvc">ASP.NET MVC</a></span><span> › </span><span><a href="http://www.asp.net/mvc/tutorials">ASP.NET MVC Tutorials</a></span><span> › </span><span>Understanding Models, Views, and Controllers</span></span></div>
+</div>
+<div class="header_breadcrumb_bottom">
+  <div class="header_breadcrumb_bottom_right"></div>
+</div>
+</div>
+
+
+
+
+<div class="columns_container">
+ <div class="columns_left">
+  <div class="columns_left_padding">
+
+
+
+<div class="heading_container"><div class="heading_right_top">&nbsp;</div>
+   <h1>Understanding Models, Views, and Controllers</h1>
+   
+</div>
+<div class="heading_bottom heading_bottom_connected"><span></span></div>
+<div class="rounded_box_top_connected"><span></span></div>
+<div class="rounded_box blue_rounded_box rounded_box_connected">
+     <div class="rounded_box_content">
+	
+	<p>This is the <strong>C#</strong> tutorial
+	  
+                (<a href="http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-vb">Switch to the Visual Basic tutorial</a>) 
+              </p>
+
+	<p class="first introduction">Confused about Models, Views, and Controllers? In this tutorial, Stephen Walther introduces you to the different parts of an ASP.NET MVC application.</p>
+	
+	
+	<div class="pagination"><a href="http://www.asp.net/mvc/tutorials/understanding-the-asp-net-mvc-execution-process-cs">« Previous Tutorial </a><span class="light"> | </span><span class="light"> Next Tutorial »</span></div>
+
+     </div>
+     <div class="rounded_box_bottom"><span></span></div>
+</div>
+
+
+
+	
+
+	<h2><b>Understanding Models, Views, and 
+Controllers (C#)</b></h2>
+ <br>
+<p>This tutorial provides you with a high-level 
+overview of ASP.NET MVC models, views, and controllers. In other words, 
+it explains the  M',  V', and  C' in ASP.NET MVC. </p>
+
+<p>After reading this tutorial, you should 
+understand how the different parts of an ASP.NET MVC application work 
+together. You should also understand how the architecture of an ASP.NET 
+MVC application differs from an ASP.NET Web Forms application or Active 
+Server Pages application.</p>
+<h2><b>The Sample ASP.NET 
+MVC Application</b></h2>
+<p>The default Visual Studio template 
+for creating ASP.NET MVC Web Applications includes an extremely simple 
+sample application that can be used to understand the different parts 
+of an ASP.NET MVC application.  We take advantage of this simple application 
+in this tutorial.</p>
+
+<p>You create a new ASP.NET MVC application 
+with the MVC template by launching Visual Studio 2008 and selecting 
+the menu option File, New Project (see Figure 1). In the New Project 
+dialog, select your favorite programming language under Project Types 
+(Visual Basic or C#) and select <b>ASP.NET MVC Web Application</b> under 
+Templates. Click the OK button.</p>
+<div class="photo_container">
+        <div class="photo_container_inner">
+            <div class="photo_border">
+                <a href="http://static.asp.net/asp.net/images/mvc/02/CS/image001.png">
+                    <img src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/image002.jpg" alt="New Project Dialog">
+                </a>
+            </div>
+            <p class="caption">
+                <strong>Figure 01</strong>: New Project Dialog <span class="nobreak">(<a href="http://static.asp.net/asp.net/images/mvc/02/CS/image001.png">Click
+                    to view full-size image</a>)</span></p>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+<p>When you create a new ASP.NET MVC application, 
+the <b>Create Unit Test Project</b> dialog appears (see Figure 2). This 
+dialog enables you to create a separate project in your solution for 
+testing your ASP.NET MVC application. Select the option <b>No, do not 
+create a unit test project</b> and click the <b>OK</b> button.</p>
+
+    <div class="photo_container">
+        <div class="photo_container_inner">
+            <div class="photo_border">
+                <a href="http://static.asp.net/asp.net/images/mvc/02/CS/image003.png">
+                    <img src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/image004.jpg" alt="Create Unit Test Dialog">
+                </a>
+            </div>
+            <p class="caption">
+                <strong>Figure 02</strong>: Create Unit Test Dialog <span class="nobreak">(<a href="http://static.asp.net/asp.net/images/mvc/02/CS/image003.png">Click
+                    to view full-size image</a>)</span></p>
+        </div>
+        <div class="clear">
+        </div>
+    </div><p>After the new ASP.NET MVC application 
+is created. You will see several folders and files in the Solution Explorer 
+window. In particular, you'll see three folders named Models, Views, 
+and Controllers. As you might guess from the folder names, these folders 
+contain the files for implementing models, views, and controllers.</p>
+<p>If you expand the Controllers folder, 
+you should see a file named AccountController.cs and a file named HomeController.cs. 
+If you expand the Views folder, you should see three subfolders named 
+Account, Home and Shared. If you expand the Home folder, you'll see 
+two additional files named About.aspx and Index.aspx (see Figure 3). 
+These files make up the sample application included with the default 
+ASP.NET MVC template.</p>
+    <div class="photo_container">
+        <div class="photo_container_inner">
+            <div class="photo_border">
+                <a href="http://static.asp.net/asp.net/images/mvc/02/CS/image005.png">
+                    <img src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/image006.jpg" alt="The Solution Explorer Window">
+                </a>
+            </div>
+            <p class="caption">
+                <strong>Figure 03</strong>: The Solution Explorer Window <span class="nobreak">(<a href="http://static.asp.net/asp.net/images/mvc/02/CS/image005.png">Click
+                    to view full-size image</a>)</span></p>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+<p>You can run the sample application 
+by selecting the menu option <b>Debug, Start Debugging</b>. Alternatively, 
+you can press the F5 key.</p>
+
+<p>When you first run an ASP.NET application, 
+the dialog in Figure 4 appears that recommends that you enable debug 
+mode. Click the OK button and the application will run. </p>
+    <div class="photo_container">
+        <div class="photo_container_inner">
+            <div class="photo_border">
+                <a href="http://static.asp.net/asp.net/images/mvc/02/CS/image007.png">
+                    <img src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/image008.jpg" alt="Debugging Not Enabled dialog">
+                </a>
+            </div>
+            <p class="caption">
+                <strong>Figure 04</strong>: Debugging Not Enabled dialog <span class="nobreak">(<a href="http://static.asp.net/asp.net/images/mvc/02/CS/image007.png">Click
+                    to view full-size image</a>)</span></p>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+<p>When you run an ASP.NET MVC application, 
+Visual Studio launches the application in your web browser.  The 
+sample application consists of only two pages: the Index page and the 
+About page. When the application first starts, the Index page appears 
+(see Figure 5). You can navigate to the About page by clicking the menu 
+link at the top right of the application.</p>
+    <div class="photo_container">
+        <div class="photo_container_inner">
+            <div class="photo_border">
+                <a href="http://static.asp.net/asp.net/images/mvc/02/Images/mvc_tutorial02_cs_figure05.png">
+                    <img src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/mvc_tutorial02_cs_figure05s.png" alt="The Index Page">
+                </a>
+            </div>
+            <p class="caption">
+                <strong>Figure 05</strong>: The Index Page <span class="nobreak">(<a href="http://static.asp.net/asp.net/images/mvc/02/Images/mvc_tutorial02_cs_figure05.png">Click
+                    to view full-size image</a>)</span></p>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+<p>Notice the URLs in the address bar 
+of your browser. For example, when you click the About menu link, the 
+URL in the browser address bar changes to <b>/Home/About</b>.</p>
+
+<p>If you close the browser window and 
+return to Visual Studio, you won't be able to find a file with the 
+path Home/About. The files don't exist. How is this possible?</p>
+<h2><b>A URL Does Not 
+Equal a Page</b></h2>
+<p>When you build a traditional ASP.NET 
+Web Forms application or an Active Server Pages application, there is 
+a one-to-one correspondence between a URL and a page. If you request 
+a page named SomePage.aspx from the server, then there had better be 
+a page on disk named SomePage.aspx. If the SomePage.aspx file does not 
+exist, you get an ugly <b>404 - Page Not 
+Found</b> error.</p>
+<p>When building an ASP.NET MVC application, 
+in contrast, there is no correspondence between the URL that you type 
+into your browser's address bar and the files that you find in your 
+application. In an ASP.NET MVC application, a URL corresponds to a controller 
+action instead of a page on disk.</p>
+
+<p>In a traditional ASP.NET or ASP application, 
+browser requests are mapped to pages. In an ASP.NET MVC application, 
+in contrast, browser requests are mapped to controller actions. An ASP.NET 
+Web Forms application is content-centric. An ASP.NET MVC application, 
+in contrast, is application logic centric.   </p>
+<h2><b>Understanding ASP.NET 
+
+Routing</b></h2>
+<p>A browser request gets mapped to a 
+controller action through a feature of the ASP.NET framework called <i>
+ASP.NET Routing</i>. ASP.NET Routing is used by the ASP.NET MVC framework 
+to <i>route</i> incoming requests to controller actions.</p>
+
+<p>ASP.NET Routing uses a route table 
+to handle incoming requests. This route table is created when your web 
+application first starts. The route table is setup in the Global.asax 
+file. The default MVC Global.asax file is contained in Listing 1.</p>
+<p><b>Listing 1 
+- Global.asax</b></p>
+<pre class="code_block">using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+
+namespace MvcApplication1
+{
+    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
+    // visit http://go.microsoft.com/?LinkId=9394801
+
+    public class MvcApplication : System.Web.HttpApplication
+    {
+        public static void RegisterRoutes(RouteCollection routes)
+        {
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.MapRoute(
+                "Default",                                              // Route name
+                "{controller}/{action}/{id}",                           // URL with parameters
+                new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
+            );
+
+        }
+
+        protected void Application_Start()
+        {
+            RegisterRoutes(RouteTable.Routes);
+        }
+    }
+}
+
+</pre>
+<p>When an ASP.NET application first starts, 
+the Application_Start() method is called. In Listing 1, this method 
+calls the RegisterRoutes() method and the RegisterRoutes() method creates 
+the default route table.</p>
+
+<p>The default route table consists of 
+one route. This default route breaks all incoming requests into three 
+segments (a URL segment is anything between forward slashes). The first 
+segment is mapped to a controller name, the second segment is mapped 
+to an action name, and the final segment is mapped to a parameter passed 
+to the action named Id. </p>
+<p>For example, consider the following 
+URL:</p>
+<p>       
+/Product/Details/3 </p>
+<p>This URL is parsed into three parameters 
+like this:</p>
+<p>      Controller 
+= Product</p>
+<p>      Action 
+= Details</p>
+<p>      Id 
+= 3</p>
+
+<p>The Default route defined in the Global.asax 
+file includes default values for all three parameters. The default Controller 
+is Home, the default Action is Index, and the default Id is an empty 
+string. With these defaults in mind, consider how the following URL 
+is parsed:</p>
+<p>      /Employee</p>
+<p>This URL is parsed into three parameters 
+like this:</p>
+<p>      Controller 
+= Employee</p>
+<p>      Action 
+= Index</p>
+<p>      Id 
+= ��</p>
+
+<p>Finally, if you open an ASP.NET MVC 
+Application without supplying any URL (for example, <a href="http://localhost/" target="_blank"><u>http://localhost</u></a>) then the URL is parsed like this:</p>
+<p>      Controller 
+= Home</p>
+<p>      Action 
+= Index</p>
+<p>      Id  
+= ��</p>
+<p>The request is routed to the Index() 
+action on the HomeController class.</p>
+
+<h2><b>Understanding Controllers</b></h2>
+<p>A controller is responsible for controlling 
+the way that a user interacts with an MVC application. A controller 
+contains the flow control logic for an ASP.NET MVC application. A controller 
+determines what response to send back to a user when a user makes a 
+browser request.</p>
+<p>A controller is just a class (for example, 
+a Visual Basic or C# class). The sample ASP.NET MVC application includes 
+a controller named HomeController.cs located in the Controllers folder. 
+The content of the HomeController.cs file is reproduced in Listing 2.</p>
+<p><b>Listing 2 
+- HomeController.cs</b></p>
+<pre class="code_block">using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace MvcApplication1.Controllers
+{
+    [HandleError]
+    public class HomeController : Controller
+    {
+        public ActionResult Index()
+        {
+            ViewData["Title"] = "Home Page";
+            ViewData["Message"] = "Welcome to ASP.NET MVC!";
+
+            return View();
+        }
+
+        public ActionResult About()
+        {
+            ViewData["Title"] = "About Page";
+
+            return View();
+        }
+    }
+}
+
+</pre>
+<p>Notice that the HomeController has 
+two methods named Index() and About(). These two methods correspond 
+to the two actions exposed by the controller. The URL /Home/Index invokes 
+the HomeController.Index() method and the URL /Home/About invokes the 
+HomeController.About() method.</p>
+<p>Any public method in a controller is 
+exposed as a controller action. You need to be careful about this. This 
+means that any public method contained in a controller can be invoked 
+by anyone with access to the Internet by entering the right URL into 
+a browser.</p>
+
+<h2><b>Understanding Views</b></h2>
+<p>The two controller actions exposed 
+by the HomeController class, Index() and About(), both return a view. 
+A view contains the HTML markup and content that is sent to the browser. 
+A view is the equivalent of a page when working with an ASP.NET MVC 
+application.</p>
+<p>You must create your views in the right 
+location. The HomeController.Index() action returns a view located at 
+the following path:</p>
+<p>      \Views\Home\Index.aspx</p>
+<p>The HomeController.About() action returns 
+a view located at the following path:</p>
+<p>      \Views\Home\About.aspx</p>
+
+<p>In general, if you want to return a 
+view for a controller action, then you need to create a subfolder in 
+the Views folder with the same name as your controller. Within the subfolder, 
+you must create an .aspx file with the same name as the controller action.</p>
+<p>The file in Listing 3 contains the 
+About.aspx view.</p>
+<p><b>Listing 3 
+- About.aspx</b></p>
+<pre class="code_block">&lt;%@ Page Language="C#" MasterPageFile="/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %&gt;
+
+&lt;asp:Content ID="aboutContent" ContentPlaceHolderID="MainContent" runat="server"&gt;
+    &lt;h2&gt;About&lt;/h2&gt;
+    &lt;p&gt;
+        Put content here.
+    &lt;/p&gt;
+&lt;/asp:Content&gt;
+
+</pre>
+<p>If you ignore the first line in Listing 
+3, most of the rest of the view consists of standard HTML. You can modify 
+the contents of the view by entering any HTML that you want here.</p>
+<p>A view is very similar to a page in 
+Active Server Pages or ASP.NET Web Forms. A view can contain HTML content 
+and scripts. You can write the scripts in your favorite .NET programming 
+language (for example, C# or Visual Basic .NET). You use scripts to 
+display dynamic content such as database data.</p>
+<h2><b>Understanding Models</b></h2>
+<p>We have discussed controllers and we 
+have discussed views. The last topic that we need to discuss is models. 
+What is an MVC model?</p>
+<p>An MVC model contains all of your application 
+logic that is not contained in a view or a controller. The model should 
+contain all of your application business logic, validation logic, and 
+database access logic. For example, if you are using the Microsoft Entity 
+Framework to access your database, then you would create your Entity 
+Framework classes (your .edmx file) in the Models folder.</p>
+<p>A view should contain only logic related 
+to generating the user interface. A controller should only contain the 
+bare minimum of logic required to return the right view or redirect 
+the user to another action (flow control). Everything else should be 
+contained in the model. </p>
+<p>In general, you should strive for fat 
+models and skinny controllers. Your controller methods should contain 
+only a few lines of code. If a controller action gets too fat, then 
+you should consider moving the logic out to a new class in the Models 
+folder.</p>
+
+<h2><b>Summary</b></h2>
+<p>This tutorial provided you with a high 
+level overview of the different parts of an ASP.NET MVC web application. 
+You learned how ASP.NET Routing maps incoming browser requests to particular 
+controller actions. You learned how controllers orchestrate how views 
+are returned to the browser. Finally, you learned how models contain 
+application business, validation, and database access logic. <br>
+</p>
+<p>  <br></p>
+	<div class="pagination"><a href="http://www.asp.net/mvc/tutorials/understanding-the-asp-net-mvc-execution-process-cs">« Previous Tutorial </a><span class="light"> | </span><span class="light"> Next Tutorial »</span></div>
+	<div class="heading_container"><div class="heading_right_top">&nbsp;</div><h1>Comments (<span id="spanCommentCount">7</span>)</h1><a class="icon_rss_header" target="_blank" href="http://www.asp.net/rss/comments/11917">&nbsp;</a></div><div class="bucket_container"><div class="bucket_top"><span>&nbsp;</span></div><div class="bucket_content region_absminheight"><div><table width="100%" cellspacing="0" cellpadding="5"><tbody id="mscCommentOutput"><tr><td class="icon_contract"><a href="http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-cs#" onclick="initComments();return false;"><strong>Show all 7 comments</strong></a></td></tr></tbody></table></div><div><p style="padding-left: 10px;">You must be logged in to leave a comment.&nbsp;<a href="http://login.asp.net/login/signin.aspx?ReturnUrl=http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-cs">Click here</a> to log in.</p></div></div><div class="bucket_bottom"><span>&nbsp;</span></div></div><script type="text/javascript"> 
+  var umbCurrentNodeId = 11917;
+  function initComments() {
+	BindTemplateData("mscCommentTemplate","mscCommentOutput",
+	    "/base/MscComment/GetCommentsForDocument/11917", "initCommentsCallback");
+	$("#txtNewComment").val("");
+  }
+  function initCommentsCallback(json){
+	if( json != null ) { $("#spanCommentCount").html(json.length); }
+  }
+  function submitComment() {
+    var url = "/base/MscComment/CreateComment/" + umbCurrentNodeId + ""; 
+    var comment = $("#txtNewComment").val();
+    if (comment != "") {
+      $("#pCommentError").html("");
+      jQuery.post(url, { comment: $("#txtNewComment").val() }, function(data) { initComments(); });
+    }
+    else { 
+	$("#pCommentError").html("Comment is empty. Please enter comment and try submitting again.");
+    }
+  }
+
+</script>	
+
+
+
+      
+  </div>
+ </div>
+ <div class="columns_right">
+	
+	<div id="firstregion"><div class="heading_container"><div class="heading_right_top">&nbsp;</div><h2 id="mscTutorialSideBarTitle">C# Tutorials</h2></div><div class="heading_bottom heading_bottom_connected"><span>&nbsp;</span></div><div class="rounded_box_top_connected"><span>&nbsp;</span></div><div class="rounded_box blue_rounded_box rounded_box_connected"><div class="rounded_box_content"><p>
+              (<a id="mscTutorialSideBarSwitchLang" href="http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-cs#" onclick="swapTutorialSidebarLanguage();return false;">Switch to Visual Basic tutorials</a>)
+            </p></div><div class="rounded_box_content sub_nav" id="mscTutorialSidebarVb" style="display:none"><h3 id="Overview">ASP.NET MVC Overview</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/create-a-movie-database-application-in-15-minutes-with-asp-net-mvc-vb">Create a Movie Database Application in 15 Minutes with ASP.NET MVC</a></li><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-overview-vb">ASP.NET MVC Overview </a></li><li><a href="http://www.asp.net/mvc/tutorials/understanding-the-asp-net-mvc-execution-process-vb">Understanding the ASP.NET MVC Execution Process</a></li><li><a href="http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-vb">Understanding Models, Views, and Controllers</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-mvc-3-application-with-razor-and-unobtrusive-javascript">Creating a MVC 3 Application with Razor and Unobtrusive JavaScript</a></li></ul><h3 id="Routing">ASP.NET MVC Routing</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-routing-overview-vb">ASP.NET MVC Routing Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-custom-routes-vb">Creating Custom Routes</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-custom-route-constraint-vb">Creating a Custom Route Constraint</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-route-constraint-vb">Creating a Route Constraint</a></li></ul><h3 id="Controllers">ASP.NET MVC Controllers</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-controller-overview-vb">ASP.NET MVC Controller Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-controller-vb">Creating a Controller </a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-an-action-vb">Creating an Action </a></li></ul><h3 id="Views">ASP.NET MVC Views</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-views-overview-vb">ASP.NET MVC Views Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-custom-html-helpers-vb">Creating Custom HTML Helpers</a></li><li><a href="http://www.asp.net/mvc/tutorials/displaying-a-table-of-database-data-vb">Displaying a Table of Database Data</a></li><li><a href="http://www.asp.net/mvc/tutorials/using-the-tagbuilder-class-to-build-html-helpers-vb">Using the TagBuilder Class to Build HTML Helpers</a></li></ul><h3 id="Models">ASP.NET MVC Models</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-vb">Creating Model Classes with the Entity Framework</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-linq-to-sql-vb">Creating Model Classes with LINQ to SQL</a></li></ul><h3 id="Validation">ASP.NET MVC Validation</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/performing-simple-validation-vb">Performing Simple Validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/validating-with-the-idataerrorinfo-interface-vb">Validating with the IDataErrorInfo Interface </a></li><li><a href="http://www.asp.net/mvc/tutorials/validating-with-a-service-layer-vb">Validating with a Service Layer </a></li><li><a href="http://www.asp.net/mvc/tutorials/validation-with-the-data-annotation-validators-vb">Validation with the Data Annotation Validators</a></li></ul><h3 id="Master Pages">Master Pages</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-page-layouts-with-view-master-pages-vb">Creating Page Layouts with View Master Pages</a></li><li><a href="http://www.asp.net/mvc/tutorials/passing-data-to-view-master-pages-vb">Passing Data to View Master Pages</a></li></ul><h3 id="Action Filters and Model Binders">Action Filters and Model Binders</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/understanding-action-filters-vb">Understanding Action Filters</a></li></ul><h3 id="Improving Performance with Caching">Improving Performance with Caching</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/improving-performance-with-output-caching-vb">Improving Performance with Output Caching</a></li><li><a href="http://www.asp.net/mvc/tutorials/adding-dynamic-content-to-a-cached-page-vb">Adding Dynamic Content to a Cached Page</a></li></ul><h3 id="Security">Security</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/authenticating-users-with-forms-authentication-vb">Authenticating Users with Forms Authentication</a></li><li><a href="http://www.asp.net/mvc/tutorials/authenticating-users-with-windows-authentication-vb">Authenticating Users with Windows Authentication</a></li><li><a href="http://www.asp.net/mvc/tutorials/preventing-javascript-injection-attacks-vb">Preventing JavaScript Injection Attacks</a></li></ul><h3 id="Testing">ASP.NET MVC Testing</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-unit-tests-for-asp-net-mvc-applications-vb">Creating Unit Tests for ASP.NET MVC Applications</a></li></ul><h3 id="Navigation">Navigation</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/providing-website-navigation-with-sitemaps-vb">Providing Website Navigation with SiteMaps</a></li></ul><h3 id="Deploying Applications">Deploying ASP.NET MVC Applications</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/using-asp-net-mvc-with-different-versions-of-iis-vb">Using ASP.NET MVC with Different Versions of IIS</a></li></ul><h3 id="Tutorials for Contact Manager">Tutorials for Contact Manager</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/iteration-1-create-the-application-vb">Iteration #1 – Create the Application</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-2-make-the-application-look-nice-vb">Iteration #2 – Make the application look nice</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-3-add-form-validation-vb">Iteration #3 – Add form validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-4-make-the-application-loosely-coupled-vb">Iteration #4 – Make the application loosely coupled</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-5-create-unit-tests-vb">Iteration #5 – Create unit tests</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-6-use-test-driven-development-vb">Iteration #6 – Use test-driven development</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-7-add-ajax-functionality-vb">Iteration #7 – Add Ajax functionality</a></li></ul><h3 id="ASP.NET MVC Music Store">ASP.NET MVC Music Store</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-1">Part 1: Overview and File-&gt;New Project</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-2">Part 2: Controllers</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-3">Part 3: Views and ViewModels</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-4">Part 4: Models and Data Access</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-5">Part 5: Edit Forms and Templating</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-6">Part 6: Using Data Annotations for Model Validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-7">Part 7: Membership and Authorization</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-8">Part 8: Shopping Cart with Ajax Updates</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-9">Part 9: Registration and Checkout</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-10">Part 10: Final Updates to Navigation and Site Design, Conclusion</a></li></ul><h3 id="NerdDinner">NerdDinner Tutorials</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/introducing-the-nerddinner-tutorial">Introducing the NerdDinner Tutorial</a></li><li><a href="http://www.asp.net/mvc/tutorials/create-a-new-aspnet-mvc-project">Create a New ASP.NET MVC Project</a></li><li><a href="http://www.asp.net/mvc/tutorials/create-a-database">Create a Database</a></li><li><a href="http://www.asp.net/mvc/tutorials/build-a-model-with-business-rule-validations">Build a Model with Business Rule Validations</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-controllers-and-views-to-implement-a-listingdetails-ui">Use Controllers and Views to Implement a Listing/Details UI</a></li><li><a href="http://www.asp.net/mvc/tutorials/provide-crud-(create,-read,-update,-delete)-data-form-entry-support">Provide CRUD (Create, Read, Update, Delete) Data Form Entry Support</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-viewdata-and-implement-viewmodel-classes">Use ViewData and Implement ViewModel Classes</a></li><li><a href="http://www.asp.net/mvc/tutorials/re-use-ui-using-master-pages-and-partials">Re-use UI Using Master Pages and Partials</a></li><li><a href="http://www.asp.net/mvc/tutorials/implement-efficient-data-paging">Implement Efficient Data Paging</a></li><li><a href="http://www.asp.net/mvc/tutorials/secure-applications-using-authentication-and-authorization">Secure Applications Using Authentication and Authorization</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-ajax-to-deliver-dynamic-updates">Use AJAX to Deliver Dynamic Updates</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-ajax-to-implement-mapping-scenarios">Use AJAX to Implement Mapping Scenarios</a></li><li><a href="http://www.asp.net/mvc/tutorials/enable-automated-unit-testing">Enable Automated Unit Testing</a></li><li><a href="http://www.asp.net/mvc/tutorials/nerddinner-wrap-up">NerdDinner Wrap Up</a></li></ul><h3 id="Getting-Started-With-MVC">Getting Started with MVC</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part1">Intro to ASP.NET MVC</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part2">Adding a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part3">Adding a View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part4">Creating a Database</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part5">Accessing your Model's Data from a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part6">Adding a Create Method and Create View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part7">Adding Validation to the Model</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part8">Adding a Column to the Model</a></li></ul></div><div class="rounded_box_content sub_nav" id="mscTutorialSidebarCs"><h3 id="Overview">ASP.NET MVC Overview</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/create-a-movie-database-application-in-15-minutes-with-asp-net-mvc-cs">Create a Movie Database Application in 15 Minutes with ASP.NET MVC</a></li><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-overview-cs">ASP.NET MVC Overview </a></li><li><a href="http://www.asp.net/mvc/tutorials/understanding-the-asp-net-mvc-execution-process-cs">Understanding the ASP.NET MVC Execution Process</a></li><li class="active"><a href="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site.htm">Understanding Models, Views, and Controllers</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-mvc-3-application-with-razor-and-unobtrusive-javascript">Creating a MVC 3 Application with Razor and Unobtrusive JavaScript</a></li></ul><h3 id="Routing">ASP.NET MVC Routing</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-routing-overview-cs">ASP.NET MVC Routing Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-custom-routes-cs">Creating Custom Routes</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-route-constraint-cs">Creating a Route Constraint</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-custom-route-constraint-cs">Creating a Custom Route Constraint</a></li></ul><h3 id="Controllers">ASP.NET MVC Controllers</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-controller-overview-cs">ASP.NET MVC Controller Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-controller-cs">Creating a Controller </a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-an-action-cs">Creating an Action </a></li></ul><h3 id="Views">ASP.NET MVC Views</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-views-overview-cs">ASP.NET MVC Views Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-custom-html-helpers-cs">Creating Custom HTML Helpers</a></li><li><a href="http://www.asp.net/mvc/tutorials/displaying-a-table-of-database-data-cs">Displaying a Table of Database Data</a></li><li><a href="http://www.asp.net/mvc/tutorials/using-the-tagbuilder-class-to-build-html-helpers-cs">Using the TagBuilder Class to Build HTML Helpers</a></li></ul><h3 id="Models">ASP.NET MVC Models</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-cs">Creating Model Classes with the Entity Framework</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-linq-to-sql-cs">Creating Model Classes with LINQ to SQL</a></li></ul><h3 id="Validation">ASP.NET MVC Validation</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/performing-simple-validation-cs">Performing Simple Validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/validating-with-the-idataerrorinfo-interface-cs">Validating with the IDataErrorInfo Interface </a></li><li><a href="http://www.asp.net/mvc/tutorials/validating-with-a-service-layer-cs">Validating with a Service Layer </a></li><li><a href="http://www.asp.net/mvc/tutorials/validation-with-the-data-annotation-validators-cs">Validation with the Data Annotation Validators</a></li></ul><h3 id="Master Pages">Master Pages</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-page-layouts-with-view-master-pages-cs">Creating Page Layouts with View Master Pages</a></li><li><a href="http://www.asp.net/mvc/tutorials/passing-data-to-view-master-pages-cs">Passing Data to View Master Pages</a></li></ul><h3 id="Action Filters and Model Binders">Action Filters and Model Binders</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/understanding-action-filters-cs">Understanding Action Filters</a></li></ul><h3 id="Improving Performance with Caching">Improving Performance with Caching</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/improving-performance-with-output-caching-cs">Improving Performance with Output Caching</a></li><li><a href="http://www.asp.net/mvc/tutorials/adding-dynamic-content-to-a-cached-page-cs">Adding Dynamic Content to a Cached Page</a></li></ul><h3 id="Security">Security</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/authenticating-users-with-forms-authentication-cs">Authenticating Users with Forms Authentication</a></li><li><a href="http://www.asp.net/mvc/tutorials/authenticating-users-with-windows-authentication-cs">Authenticating Users with Windows Authentication</a></li><li><a href="http://www.asp.net/mvc/tutorials/preventing-javascript-injection-attacks-cs">Preventing JavaScript Injection Attacks</a></li></ul><h3 id="Testing">ASP.NET MVC Testing</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-unit-tests-for-asp-net-mvc-applications-cs">Creating Unit Tests for ASP.NET MVC Applications</a></li></ul><h3 id="Navigation">Navigation</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/providing-website-navigation-with-sitemaps-cs">Providing Website Navigation with SiteMaps</a></li></ul><h3 id="Deploying Applications">Deploying ASP.NET MVC Applications</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/using-asp-net-mvc-with-different-versions-of-iis-cs">Using ASP.NET MVC with Different Versions of IIS</a></li></ul><h3 id="Tutorials for Contact Manager">Tutorials for Contact Manager</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/iteration-1-create-the-application-cs">Iteration #1 – Create the Application</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-2-make-the-application-look-nice-cs">Iteration #2 – Make the application look nice</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-3-add-form-validation-cs">Iteration #3 – Add form validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-4-make-the-application-loosely-coupled-cs">Iteration #4 – Make the application loosely coupled</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-5-create-unit-tests-cs">Iteration #5 – Create unit tests</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-6-use-test-driven-development-cs">Iteration #6 – Use test-driven development</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-7-add-ajax-functionality-cs">Iteration #7 – Add Ajax functionality</a></li></ul><h3 id="ASP.NET MVC Music Store">ASP.NET MVC Music Store</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-1">Part 1: Overview and File-&gt;New Project</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-2">Part 2: Controllers</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-3">Part 3: Views and ViewModels</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-4">Part 4: Models and Data Access</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-5">Part 5: Edit Forms and Templating</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-6">Part 6: Using Data Annotations for Model Validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-7">Part 7: Membership and Authorization</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-8">Part 8: Shopping Cart with Ajax Updates</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-9">Part 9: Registration and Checkout</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-10">Part 10: Final Updates to Navigation and Site Design, Conclusion</a></li></ul><h3 id="NerdDinner">NerdDinner Tutorials</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/introducing-the-nerddinner-tutorial">Introducing the NerdDinner Tutorial</a></li><li><a href="http://www.asp.net/mvc/tutorials/create-a-new-aspnet-mvc-project">Create a New ASP.NET MVC Project</a></li><li><a href="http://www.asp.net/mvc/tutorials/create-a-database">Create a Database</a></li><li><a href="http://www.asp.net/mvc/tutorials/build-a-model-with-business-rule-validations">Build a Model with Business Rule Validations</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-controllers-and-views-to-implement-a-listingdetails-ui">Use Controllers and Views to Implement a Listing/Details UI</a></li><li><a href="http://www.asp.net/mvc/tutorials/provide-crud-(create,-read,-update,-delete)-data-form-entry-support">Provide CRUD (Create, Read, Update, Delete) Data Form Entry Support</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-viewdata-and-implement-viewmodel-classes">Use ViewData and Implement ViewModel Classes</a></li><li><a href="http://www.asp.net/mvc/tutorials/re-use-ui-using-master-pages-and-partials">Re-use UI Using Master Pages and Partials</a></li><li><a href="http://www.asp.net/mvc/tutorials/implement-efficient-data-paging">Implement Efficient Data Paging</a></li><li><a href="http://www.asp.net/mvc/tutorials/secure-applications-using-authentication-and-authorization">Secure Applications Using Authentication and Authorization</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-ajax-to-deliver-dynamic-updates">Use AJAX to Deliver Dynamic Updates</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-ajax-to-implement-mapping-scenarios">Use AJAX to Implement Mapping Scenarios</a></li><li><a href="http://www.asp.net/mvc/tutorials/enable-automated-unit-testing">Enable Automated Unit Testing</a></li><li><a href="http://www.asp.net/mvc/tutorials/nerddinner-wrap-up">NerdDinner Wrap Up</a></li></ul><h3 id="Getting-Started-With-MVC">Getting Started with MVC</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part1">Intro to ASP.NET MVC</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part2">Adding a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part3">Adding a View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part4">Creating a Database</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part5">Accessing your Model's Data from a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part6">Adding a Create Method and Create View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part7">Adding Validation to the Model</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part8">Adding a Column to the Model</a></li></ul></div><div class="rounded_box_bottom"><span>&nbsp;</span></div></div></div><script type="text/javascript">
+      function swapTutorialSidebarLanguage() {
+      $("#mscTutorialSidebarVb").toggle();
+      $("#mscTutorialSidebarCs").toggle();
+      if ($("#mscTutorialSidebarCs").is(":visible")) {
+      $("#mscTutorialSideBarTitle").html("C# Tutorials");
+      $("#mscTutorialSideBarSwitchLang").html("Switch to Visual Basic tutorials");
+      }
+      else {
+      $("#mscTutorialSideBarTitle").html("Visual Basic Tutorials");
+      $("#mscTutorialSideBarSwitchLang").html("Switch to Visual C# tutorials");
+      }
+      }
+
+      </script>
+	
+		
+
+	<iframe width="300" height="283" scrolling="no" frameborder="0" style="border:none;margin:0" src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/adchain.htm"></iframe>
+	
+	
+	
+
+
+ </div>
+</div>     
+
+    <div style="clear:both">&nbsp;</div>
+    <div class="center bottom_banner"><iframe src="./Understanding Models, Views, and Controllers  The Official Microsoft ASP.NET Site_files/adbanner.htm" width="728" height="90" scrolling="no" frameborder="0" marginheight="0" marginwidth="0">&nbsp;</iframe>&nbsp;</div>
+    <div class="footer_container"> 
+        <div class="footer_content">
+        <p class="footer_links">
+            <a href="http://www.asp.net/feedback/">Contact</a> | 
+            <a href="http://www.neudesicmediagroup.com/Advertising.aspx?site=ASP">Advertise</a> |
+      <a href="http://umbraco.org/" target="_blank">Powered by Umbraco</a>
+    <br>
+            <a href="http://www.asp.net/Terms-Of-Use">Terms of Use</a> | 
+            <a href="http://www.microsoft.com/library/toolbar/3.0/trademarks/en-us.mspx">Trademarks</a> | 
+            <a href="http://www.asp.net/privacy/">Privacy Statement</a><br>
+            © 2010 Microsoft Corporation. All Rights Reserved.
+        </p>
+        <ul class="footer_site_logos">
+      <li class="footer_site_logos"><a href="http://msdn.microsoft.com/" class="footer_site_logos logo-footer-msdn"></a></li>           
+            <li class="footer_site_logos"><a href="http://www.silverlight.net/" class="footer_site_logos logo-footer-silverlight"></a></li>
+            <li class="footer_site_logos"><a href="http://channel9.msdn.com/" class="footer_site_logos logo-footer-ch9"></a></li>
+            <li class="footer_site_logos"><a href="http://www.iis.net/" class="footer_site_logos logo-footer-iis"></a></li>
+            <li class="footer_site_logos"><a href="http://visitmix.com/" class="footer_site_logos logo-footer-mix"></a></li>
+            <li class="footer_site_logos"><a href="http://windowsclient.net/" class="footer_site_logos logo-footer-wc"></a></li>
+        </ul>
+      </div>
+    </div>
+</div>
+
+                    <noscript>&lt;a href="http://www.omniture.com" title="Web Analytics"&gt;&lt;img
+                    src="http://msstonojsaspnet.112.2O7.net/b/ss/msstonojsaspnet/1/H.20.2--NS/0"
+                    height="1" width="1" border="0" alt="" /&gt;&lt;/a&gt;</noscript>
+<div style="position: absolute; display: none;" id="mscTooltip">
+  <div></div>
+</div>               
+
+
+    <script id="mscCommentTemplate" type="text/html">
+        <# 
+            for(var i=0; i < obj.length && obj[i] != null; i++)
+            {
+                var item = obj[i];             
+        #>
+        <tr>
+            <td valign="top" style="border-top: 1px solid black;width:105px;"><img style="border-width: 0px;" alt="<#= item.username #>" src="<#= item.avatar #>" /></td>
+            <td width="100%" valign="top" align="left" style="border-top: 1px solid black;">
+                <table style="table-layout:fixed;">
+                <tr>
+                    <# if( item.time.Hours > 0 || item.time.Minutes > 0 || item.time.Seconds > 0 ) { #>
+                        <p>Posted at <a href="javascript:SetPlayerTime('<#= item.time.Hours #>:<#= item.time.Minutes #>:<#= item.time.Seconds #>');"><#= ( item.time.Hours > 0 ) ? item.time.Hours + ":" : ""#><#= item.time.Minutes #>:<#= item.time.Seconds #></a> in the video</p>
+                    <# } #>
+                    <td style="padding-bottom: 5px;width:500px;">
+                        <a href="http://forums.asp.net/members/<#= item.username#>.aspx"><#= item.username #></a> : <font style="font-style: italic;">On <span><#= item.created #></span> said: </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td><div style="word-wrap:break-word;"><#= item.comment #></div></td>
+                </tr>
+                </table>
+            </td>
+        </tr>
+        <#
+            }
+        #>  
+    </script>
+
+
+
+
+
+
+
+</form>
+
+
+</body></html>

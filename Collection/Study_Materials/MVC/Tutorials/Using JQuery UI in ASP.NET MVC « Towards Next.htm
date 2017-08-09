@@ -1,0 +1,1572 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0074)http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en"><!--
+	generated in 0.618 seconds
+	93701 bytes batcached for 300 seconds
+--><head profile="http://gmpg.org/xfn/11"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Using JQuery UI in ASP.NET MVC « Towards Next</title>
+
+<link rel="stylesheet" href="./Using JQuery UI in ASP.NET MVC « Towards Next_files/style.css" type="text/css" media="screen">
+
+<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/base.js"></script>
+<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/menu.js"></script>
+
+<link rel="pingback" href="http://towardsnext.wordpress.com/xmlrpc.php">
+<link rel="alternate" type="application/rss+xml" title="Towards Next » Feed" href="http://towardsnext.wordpress.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="Towards Next » Comments Feed" href="http://towardsnext.wordpress.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Towards Next » Using JQuery UI in ASP.NET MVC Comments Feed" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/feed/">
+<script type="text/javascript">
+/* <![CDATA[ */
+function addLoadEvent(func){var oldonload=window.onload;if(typeof window.onload!='function'){window.onload=func;}else{window.onload=function(){oldonload();func();}}}
+/* ]]> */
+</script>
+<link rel="stylesheet" href="./Using JQuery UI in ASP.NET MVC « Towards Next_files/global.css" type="text/css">
+<link rel="stylesheet" id="sharedaddy-css" href="./Using JQuery UI in ASP.NET MVC « Towards Next_files/sharing.css" type="text/css" media="all">
+<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/l10n.js"></script>
+<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/jquery.js"></script>
+<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/comment-reply.js"></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://towardsnext.wordpress.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://towardsnext.wordpress.com/wp-includes/wlwmanifest.xml"> 
+<link rel="index" title="Towards Next" href="http://towardsnext.wordpress.com/">
+<link rel="prev" title="Named &amp; Optional Parameter, C# 4.0 Part 2" href="http://towardsnext.wordpress.com/2009/03/16/named-optional-parameter-c-40-part-2/">
+<link rel="next" title="Crop Image in ASP.NET using JCrop, JQuery" href="http://towardsnext.wordpress.com/2009/04/13/crop-image-in-aspnet-using-jcrop-jquery/">
+<meta name="generator" content="WordPress.com">
+<link rel="canonical" href="./Using JQuery UI in ASP.NET MVC « Towards Next_files/Using JQuery UI in ASP.NET MVC « Towards Next.htm">
+<link rel="shortlink" href="http://wp.me/pjLEM-5v">
+<link rel="shortcut icon" type="image/x-icon" href="http://0.gravatar.com/blavatar/091b853e71cad0669b6cb018aa8671bd?s=16" sizes="16x16">
+<link rel="icon" type="image/x-icon" href="http://0.gravatar.com/blavatar/091b853e71cad0669b6cb018aa8671bd?s=16" sizes="16x16">
+<link rel="apple-touch-icon" href="http://0.gravatar.com/blavatar/0d5c2635ec2a02c4496e83f10be76d61?s=158">
+	<style type="text/css">
+	/* <![CDATA[ */
+				div#likes { margin-top: 15px; }
+		.like-button { border: 1px solid #eee; padding: 2px 6px; font-size: 13px; font-family: arial, tahoma, sans-serif; }
+		#wpl-likebox { clear: left; font-size: 11px; font-family: arial, tahoma, verdana, sans-serif !important; min-height: 30px; margin: 10px 0 !important; padding: 5px 0 10px 0 !important; }
+		#wpl-button { float: left; background: url( /i/buttonbg.png ) top left repeat-x; margin-right: 7px; border: 1px solid #d4d4d4; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
+		#wpl-button a { color: #666 !important; line-height: 130% !important; text-decoration: none !important; outline: none; float: left; padding: 3px 6px 2px 24px !important; font-size: 11px !important; background: url( /i/likestar.png ) 6px 49.8% no-repeat; }
+		#wpl-button.liked { background: #feffce; border: 1px solid #f3e389; }
+		#wpl-button.liked a { color: #ba871b !important; }
+		#wpl-likebox #wpl-count { min-height: 25px; line-height: 130% !important; float: left; padding-top: 4px; }
+		#wpl-likebox #wpl-avatars { clear: left; max-height: 98px; overflow: hidden; margin-top: 15px; line-height: 130% !important; }
+		#wpl-likebox #wpl-avatars img { border: none !important; }
+		#wpl-likebox #wpl-mustlogin { line-height: 14px !important; font-size: 11px; clear: left; margin-top: 5px; background: #f0f0f0; padding: 10px; width: 65%; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
+		#wpl-likebox #wpl-mustlogin a { color: #888; text-decoration: underline; }
+		#wpl-likebox #wpl-mustlogin p { margin: 5px 0; padding: 0 }
+		#wpl-likebox #wpl-mustlogin input.input { padding: 2px; background: #fff; font-size: 11px; font-family: inherit; border: 1px solid #ccc; -moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) inset; -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) inset; line-height: 12px; }
+		#wpl-likebox #wpl-mustlogin input#wp-submit { border: 1px solid #ccc; font-size: 11px; background: #fafafa; repeat-x; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; padding: 2px 4px !important; line-height: 12px; }
+		#wpl-likebox #wpl-mustlogin label { position: relative; cursor: text; }
+		#wpl-likebox #wpl-mustlogin label span { position: absolute; top: 0px; left: 5px; padding: 0 !important; }
+		#wpl-likebox #wpl-mustlogin label span { top /*\**/: -10px\9; }
+	/* ]]> */
+	</style>
+	<link rel="openid.server" href="http://towardsnext.wordpress.com/?openidserver=1">
+<link rel="openid.delegate" href="http://towardsnext.wordpress.com/">
+<link rel="search" type="application/opensearchdescription+xml" href="http://towardsnext.wordpress.com/osd.xml" title="Towards Next">
+<link rel="search" type="application/opensearchdescription+xml" href="http://wordpress.com/opensearch.xml" title="WordPress.com">
+<style type="text/css">.recentcomments a{display:inline !important;padding: 0 !important;margin: 0 !important;}</style>
+<meta name="application-name" content="Towards Next"><meta name="msapplication-window" content="width=device-width;height=device-height"><meta name="msapplication-tooltip" content="Next step of programming"><meta name="msapplication-task" content="name=Subscribe;action-uri=http://towardsnext.wordpress.com/feed/;icon-uri=http://0.gravatar.com/blavatar/091b853e71cad0669b6cb018aa8671bd?s=16"><meta name="msapplication-task" content="name=Sign up for a free blog;action-uri=http://wordpress.com/signup/;icon-uri=http://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=WordPress.com Support;action-uri=http://support.wordpress.com/;icon-uri=http://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=WordPress.com Forums;action-uri=http://forums.wordpress.com/;icon-uri=http://s2.wp.com/i/favicon.ico">
+<style type="text/css">
+table.recentcommentsavatar img.avatar {border: 0px; margin:0;}
+table.recentcommentsavatar a {border: 0px !important;background-color: transparent !important}
+td.recentcommentsavatartop {padding:0px 0px 1px 0px;margin:0px; }
+td.recentcommentsavatarend {padding:0px 0px 1px 0px;margin:0px; }
+td.recentcommentstexttop { border: none !important;padding:0px 0px 0px 10px;}
+td.recentcommentstextend { border: none !important;padding:0px 0px 2px 10px;}
+</style><script type="text/javascript"> 
+	window.google_analytics_uacct = "UA-52447-2"; 
+</script>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-52447-2']);
+	_gaq.push(['_setDomainName', 'wordpress.com']);
+	_gaq.push(['_initData']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+	})();
+</script><script type="text/javascript" async="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/ga.js"></script>
+<link rel="stylesheet" type="text/css" id="gravatar-card-css" href="./Using JQuery UI in ASP.NET MVC « Towards Next_files/hovercard.css"><link rel="stylesheet" type="text/css" id="gravatar-card-services-css" href="./Using JQuery UI in ASP.NET MVC « Towards Next_files/services.css"></head>
+
+<body>
+<!-- wrap START -->
+<div id="wrap">
+
+<!-- container START -->
+<div id="container">
+
+<!-- header START -->
+<div id="header">
+
+	<!-- banner START -->
+		<!-- banner END -->
+
+	<div id="caption">
+		<h1 id="title"><a href="http://towardsnext.wordpress.com/">Towards Next</a></h1>
+		<div id="tagline">Next step of programming</div>
+	</div>
+
+	<div class="fixed"></div>
+</div>
+<!-- header END -->
+
+<!-- navigation START -->
+<div id="navigation">
+	<!-- menus START -->
+	<ul id="menus">
+	<li class=""><a class="home" title="Home" href="http://towardsnext.wordpress.com/">Home</a></li>
+	<li class="page_item page-item-2"><a href="http://towardsnext.wordpress.com/about/" title="About">About</a></li>
+<li class="page_item page-item-309"><a href="http://towardsnext.wordpress.com/images/" title="Images">Images</a></li>
+	<li><a class="lastmenu" href="javascript:void(0);"></a></li>
+</ul>
+
+	<!-- menus END -->
+
+	<!-- searchbox START -->
+	<div id="searchbox">
+		<form action="http://towardsnext.wordpress.com/" method="get">
+			<div class="content">
+				<input type="text" class="textfield searchtip" name="s" size="24" value="">
+				<input type="submit" class="button" value="">
+			</div>
+		</form>
+	</div>
+<script type="text/javascript">
+//<![CDATA[
+	var searchbox = MGJS.$("searchbox");
+	var searchtxt = MGJS.getElementsByClassName("textfield", "input", searchbox)[0];
+	var searchbtn = MGJS.getElementsByClassName("button", "input", searchbox)[0];
+	var tiptext = "Type text to search here...";
+	if(searchtxt.value == "" || searchtxt.value == tiptext) {
+		searchtxt.className += " searchtip";
+		searchtxt.value = tiptext;
+	}
+	searchtxt.onfocus = function(e) {
+		if(searchtxt.value == tiptext) {
+			searchtxt.value = "";
+			searchtxt.className = searchtxt.className.replace(" searchtip", "");
+		}
+	}
+	searchtxt.onblur = function(e) {
+		if(searchtxt.value == "") {
+			searchtxt.className += " searchtip";
+			searchtxt.value = tiptext;
+		}
+	}
+	searchbtn.onclick = function(e) {
+		if(searchtxt.value == "" || searchtxt.value == tiptext) {
+			return false;
+		}
+	}
+//]]>
+</script>
+	<!-- searchbox END -->
+
+	<div class="fixed"></div>
+</div>
+<!-- navigation END -->
+
+<!-- content START -->
+<div id="content">
+
+	<!-- main START -->
+	<div id="main">
+
+
+	<div id="postpath">
+		<a title="Go to homepage" href="http://towardsnext.wordpress.com/">Home</a>
+		 &gt; <a href="http://en.wordpress.com/tag/aspnet/" title="View all posts in ASP.NET" rel="category tag">ASP.NET</a>, <a href="http://en.wordpress.com/tag/mvc-aspnet/" title="View all posts in MVC" rel="category tag">MVC</a>		 &gt; Using JQuery UI in ASP.NET&nbsp;MVC	</div>
+
+	<div class="post" id="post-341">
+		<h2>Using JQuery UI in ASP.NET&nbsp;MVC</h2>
+		<div class="info">
+			<span class="date">April 10, 2009</span>
+			<span class="author"><a href="http://towardsnext.wordpress.com/author/aatishsethi/" title="Posts by A.Sethi">A.Sethi</a></span>										<span class="addcomment"><a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#respond">Leave a comment</a></span>
+				<span class="comments"><a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comments">Go to comments</a></span>
+						<div class="fixed"></div>
+		</div>
+		<div class="content">
+			<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/adsense.js"></script><p><span style="font-family:Verdana,Arial,Helvetica,sans-serif;">I was developing one application in ASP.NET MVC, where i was in need of displaying Date Picker to the user. But if you generate View with the help of MVC extension then it will display text box for your date field. In order to show the datepicker i used jquery datepicker.<br>
+You can download it from <a title="JQuery UI" href="http://jqueryui.com/" target="_blank">JQuery UI here</a></span></p>
+<p><span style="font-family:Verdana,Arial,Helvetica,sans-serif;"><strong>Step 1</strong><br>
+</span></p>
+<ul> <span style="font-family:Verdana,Arial,Helvetica,sans-serif;"><p></p>
+<li>Include these files in your project. in the script folder</li>
+<p>jquery-1.3.2.js<br>
+ui.core.js<br>
+ui.datepicker.js</p>
+<p><span style="font-family:Verdana,Arial,Helvetica,sans-serif;"> Also include the theme folder in project to apply the themes for the respective controls</span></p>
+<p></p></span></ul>
+<ul>
+<li><span style="font-family:Verdana,Arial,Helvetica,sans-serif;">Add the Script reference in your webpage, for that include the following code</span></li>
+<pre style="border:1px dashed #999999;overflow:auto;width:95%;color:#000000;line-height:14px;padding:5px;"><span style="font-family:Verdana,Arial,Helvetica,sans-serif;"><span style="color:#0000ff;"><span style="color:#0000ff;">&lt;</span><span style="color:#a31515;">script </span><span style="color:#ff0000;">type</span><span style="color:#0000ff;">="text/javascript" </span><span style="color:#ff0000;">src</span><span style="color:#0000ff;">="/../../Scripts/jquery-1.3.2.js"&gt;&lt;/</span><span style="color:#a31515;">script</span><span style="color:#0000ff;">&gt;
+<span style="color:#0000ff;">&lt;</span></span><span style="color:#a31515;">script </span><span style="color:#ff0000;">type</span><span style="color:#0000ff;">="text/javascript" </span><span style="color:#ff0000;">src</span><span style="color:#0000ff;">="/../../Scripts/ui.core.js"&gt;&lt;/</span><span style="color:#a31515;">script</span><span style="color:#0000ff;">&gt;
+<span style="color:#0000ff;">&lt;</span></span><span style="color:#a31515;">script </span><span style="color:#ff0000;">type</span><span style="color:#0000ff;">="text/javascript" </span><span style="color:#ff0000;">src</span><span style="color:#0000ff;">="/../../Scripts/ui.datepicker.js"&gt;&lt;/</span><span style="color:#a31515;">script</span><span style="color:#0000ff;">&gt;</span>
+</span></span></pre>
+<li><span style="font-family:Verdana,Arial,Helvetica,sans-serif;">Include the following script in your view page(where you want to show the date picker) giving it a ID. On that ID we will use it as a input. ID should be unique</span></li>
+<pre style="border:1px dashed #999999;overflow:auto;width:95%;color:#000000;line-height:14px;padding:5px;"><span style="font-family:Verdana,Arial,Helvetica,sans-serif;"><span style="color:#0000ff;">&lt;</span><span style="color:#a31515;">script </span><span style="color:#ff0000;">type</span><span style="color:#0000ff;">="text/javascript"&gt;</span>
+ $(document).ready(<span style="color:#0000ff;">function</span>(){
+$(<span style="color:#a31515;">"#FromDate"</span>).datepicker();
+});
+<span style="color:#0000ff;">&lt;/</span><span style="color:#a31515;">script</span><span style="color:#0000ff;">&gt;</span>
+</span></pre>
+</ul>
+<p><span style="font-family:Verdana,Arial,Helvetica,sans-serif;"><strong>Step 2</strong><br>
+</span></p>
+<ul> <span style="font-family:Verdana,Arial,Helvetica,sans-serif;"><span style="font-family:Verdana,Arial,Helvetica,sans-serif;"><p></p>
+<li><span style="font-family:Verdana,Arial,Helvetica,sans-serif;">We need to create a Extension for HtmlHelper Class.</span></li>
+<p></p>
+<pre style="border:1px dashed #999999;overflow:auto;width:95%;color:#000000;line-height:14px;padding:5px;"><span style="font-family:Verdana,Arial,Helvetica,sans-serif;"><span style="color:#0000ff;">using</span> System;
+<span style="color:#0000ff;">using</span> System.Collections.Generic;
+<span style="color:#0000ff;">using</span> System.Linq;
+<span style="color:#0000ff;">using</span> System.Web;
+
+<span style="color:#0000ff;">namespace</span> System.Web.Mvc.Html
+{
+<span style="color:#0000ff;">public <span style="color:#0000ff;">static <span style="color:#0000ff;">class </span></span></span><span style="color:#2b91af;">DatePickerExtension</span>
+{
+<span style="color:#0000ff;">public <span style="color:#0000ff;">static <span style="color:#0000ff;">string</span></span></span> DatePicker(<span style="color:#0000ff;">this </span><span style="color:#2b91af;">HtmlHelper</span> htmlHelper, <span style="color:#0000ff;">string</span> name)
+{
+<span style="color:#0000ff;">return </span><span style="color:#a31515;">"&lt;input type=\"text\" id=\""</span> + name +
+<span style="color:#a31515;">"\" name=\""</span> + name + <span style="color:#a31515;">"\" value=\"\"/&gt;"</span>;
+}
+}
+}</span></pre>
+<li><span style="font-family:Verdana,Arial,Helvetica,sans-serif;">In your view page you have to add the following code to have that control</span></li>
+<pre style="border:1px dashed #999999;overflow:auto;width:95%;color:#000000;line-height:14px;padding:5px;"> <span style="color:#0000ff;">&lt;</span><span style="color:#a31515;">label </span><span style="color:#ff0000;">for</span><span style="color:#0000ff;">="fromDate"&gt;</span>From date:<span style="color:#0000ff;">&lt;/</span><span style="color:#a31515;">label</span><span style="color:#0000ff;">&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+&lt;%<span style="color:#0000ff;">=</span> Html.DatePicker(<span style="color:#a31515;">"FromDate"</span>)%&gt;</pre>
+</span></span></ul>
+<p>Output :</p>
+<p></p><div id="attachment_349" class="wp-caption alignleft" style="width: 310px"><a href="http://towardsnext.files.wordpress.com/2009/04/jquery-datepicker.jpg"><img class="size-medium wp-image-349" title="JQuery UI DatePicker" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/jquery-datepicker.jpg" alt="JQuery UI DatePicker" width="300" height="201"></a><p class="wp-caption-text">JQuery UI DatePicker</p></div>
+<div class="snap_nopreview sharing robots-nocontent">
+<ul>
+<li class="sharing_label">Share this:</li>
+<li class="share-print share-regular"><a rel="nofollow" class="share-print share-icon" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#print" target="_blank" title="Click to print">Print</a></li>
+<li class="share-email share-regular share-service-visible"><a rel="nofollow" class="share-email share-icon" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?share=email&nb=1" target="_blank" title="Click to email this to a friend">Email</a></li>
+<li class="share-digg share-regular"><a rel="nofollow" class="share-digg share-icon" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?share=digg&nb=1" target="_blank" title="Click to Digg this post">Digg</a></li>
+<li class="share-reddit share-regular"><a rel="nofollow" class="share-reddit share-icon" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?share=reddit&nb=1" target="_blank" title="Click to share on Reddit">Reddit</a></li>
+<li class="share-facebook share-regular"><a rel="nofollow" class="share-facebook share-icon" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?share=facebook&nb=1" target="_blank" title="Share on Facebook">Facebook</a></li>
+<li class="share-twitter share-regular">
+<div class="twitter_button"><iframe allowtransparency="true" frameborder="0" scrolling="no" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/tweet_button.htm" style="width:97px; height:20px;"></iframe></div>
+</li>
+<li class="share-stumbleupon share-regular"><a rel="nofollow" class="share-stumbleupon share-icon" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?share=stumbleupon&nb=1" target="_blank" title="Click to share on StumbleUpon">StumbleUpon</a></li>
+<li class="share-end"></li>
+</ul>
+<div class="sharing-clear"></div>
+</div>
+<div style="margin-top: 1em" class="possibly-related"><hr><p><strong>Possibly related posts: (automatically generated)</strong></p><ul><li><a rel="related nofollow" href="http://rayaspnet.wordpress.com/2009/04/22/jquery-auto-complete-text-box-with-aspnet-mvc/">jQuery Auto-Complete Text Box with ASP.NET MVC</a></li><li><a rel="related nofollow" href="http://seekdotnethosting.wordpress.com/2009/09/01/asp-net-mvc-hosting-asp-net-frameworks-and-structure/">ASP.NET MVC Hosting – ASP.NET Frameworks and Structure</a></li><li><a rel="related nofollow" href="http://mvcframework.wordpress.com/2010/04/20/what-is-asp-net-mvc/">What is asp.net MVC???</a></li></ul></div>
+<!--adcode-->
+<div align="center" style="padding-top: 5px; text-align: left;" class="adcode">
+<script type="text/javascript"><!--
+google_ad_client = "pub-3443918307802676";
+google_ad_output = "js";
+google_feedback = "on";
+google_max_num_ads = "4";
+google_ad_width = 336;
+google_ad_height = 280;
+google_ad_format = "336x280_as";
+google_image_size = "336x280";
+google_ad_type = "text,flash,html";
+google_ad_channel ="7770228814+3633280292+7401333398+7453468586+2794543176";
+var color_bg = 'ffffff';
+var color_text = '000000';
+var color_link = '2970A6';
+var color_border = '000000';
+var color_url = '2970A6';
+
+google_analytics_domain_name = "wordpress.com";
+//--></script>
+<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/show_ads.js"></script><script src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/show_ads_impl.js"></script><script src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/test_domain.js"></script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><script language="JavaScript1.1" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/ads"></script><div style="margin-top: 15px;"><a href="http://www.google.com/url?ct=abg&q=https://www.google.com/adsense/support/bin/request.py%3Fcontact%3Dabg_afc%26url%3Dhttp://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/%26hl%3Den%26client%3Dca-pub-3443918307802676%26adU%3Dmethode.com/user-interface.html%26adT%3DMethode%2BUser%2BInterfaces%26gl%3DIN&usg=AFQjCNGQYso2h0SlaJIytCpj2yC3gtBkyw" style="border-bottom: none; text-decoration: none;">Ads by Google</a><br><div style="display: block; float: left; padding-right: 10px; font-size: 130%; margin: auto;"><a href="s-p: Go to methode.com/user-interface.html" onclick="advert_cookie(); window.location=&#39;http://googleads.g.doubleclick.net/aclk?sa=l&amp;ai=B87pl0csITamPOYvNkAW5pvyHAaWIk9MB3bbdwhTAjbcB8PUSEAEYASCk7p8GOABQ0Nj4xgJg5ZLog9gOoAHHgpP9A7IBGXRvd2FyZHNuZXh0LndvcmRwcmVzcy5jb226AQozMzZ4MjgwX2pzyAEB2gFKaHR0cDovL3Rvd2FyZHNuZXh0LndvcmRwcmVzcy5jb20vMjAwOS8wNC8xMC91c2luZy1qcXVlcnktdWktaW4tYXNwbmV0LW12Yy-AAgHIAsHphASoAwHoA9wF6AMf6AOmA_UDCAAAxA&amp;num=1&amp;sig=AGiWqtwaQVGiL1YeiT0k3AatH2kj8BOlIw&amp;client=ca-pub-3443918307802676&amp;adurl=http://www.methode.com/user-interface.html&#39;; return false;"><span class="gad-head" style="font-size: 1.2em; font-weight: bold;">Methode User Interfaces</span></a><br><span style="">Simple touch-activated controls to complex multi-function consoles<br></span><a href="s-p: Go to methode.com/user-interface.html" onclick="advert_cookie(); window.location=&#39;http://googleads.g.doubleclick.net/aclk?sa=l&amp;ai=B87pl0csITamPOYvNkAW5pvyHAaWIk9MB3bbdwhTAjbcB8PUSEAEYASCk7p8GOABQ0Nj4xgJg5ZLog9gOoAHHgpP9A7IBGXRvd2FyZHNuZXh0LndvcmRwcmVzcy5jb226AQozMzZ4MjgwX2pzyAEB2gFKaHR0cDovL3Rvd2FyZHNuZXh0LndvcmRwcmVzcy5jb20vMjAwOS8wNC8xMC91c2luZy1qcXVlcnktdWktaW4tYXNwbmV0LW12Yy-AAgHIAsHphASoAwHoA9wF6AMf6AOmA_UDCAAAxA&amp;num=1&amp;sig=AGiWqtwaQVGiL1YeiT0k3AatH2kj8BOlIw&amp;client=ca-pub-3443918307802676&amp;adurl=http://www.methode.com/user-interface.html&#39;; return false;">methode.com/user-interface.html</a></div><br clear="all"><br clear="all"></div><iframe height="1" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/iframes_api_loader.htm" style="position:absolute;visibility:hidden" width="1"></iframe>
+</div>
+<div style="clear: both"><br></div>
+<!--/adcode-->
+						<div class="fixed"></div>
+		</div>
+		<div class="under">
+			<span><span class="categories">Categories: </span><a href="http://en.wordpress.com/tag/aspnet/" title="View all posts in ASP.NET" rel="category tag">ASP.NET</a>, <a href="http://en.wordpress.com/tag/mvc-aspnet/" title="View all posts in MVC" rel="category tag">MVC</a></span>
+			<span><span class="tags">Tags: </span><a href="http://en.wordpress.com/tag/aspnet/" rel="tag">ASP.NET</a>, <a href="http://en.wordpress.com/tag/extension/" rel="tag">EXTENSION</a>, <a href="http://en.wordpress.com/tag/htmlhelper/" rel="tag">HTMLHELPER</a>, <a href="http://en.wordpress.com/tag/jquery/" rel="tag">JQUERY</a>, <a href="http://en.wordpress.com/tag/mvc/" rel="tag">MVC</a>, <a href="http://en.wordpress.com/tag/ui/" rel="tag">UI</a></span>
+		</div>
+		<div class="fixed"></div>
+	</div>
+
+	<div id="wpl-likebox"><div id="wpl-button"><a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?like=1&_wpnonce=75014a650f" title="I like this post" class="like needs-login"><span>Like</span></a></div><div id="wpl-count">Be the first to like this post.</div></div><script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/comment.js"></script>
+
+
+
+<div id="comments">
+
+<div id="cmtswitcher">
+			<a id="commenttab" class="curtab" href="javascript:void(0);" onclick="MGJS.switchTab(&#39;thecomments,commentnavi&#39;, &#39;thetrackbacks&#39;, &#39;commenttab&#39;, &#39;curtab&#39;, &#39;trackbacktab&#39;, &#39;tab&#39;);">Comments (26)</a>
+		<a id="trackbacktab" class="tab" href="javascript:void(0);" onclick="MGJS.switchTab(&#39;thetrackbacks&#39;, &#39;thecomments,commentnavi&#39;, &#39;trackbacktab&#39;, &#39;curtab&#39;, &#39;commenttab&#39;, &#39;tab&#39;);">Trackbacks (2)</a>
+				<span class="addcomment"><a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#respond">Leave a comment</a></span>
+				<span class="addtrackback"><a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/trackback/">Trackback</a></span>
+		<div class="fixed"></div>
+</div>
+
+<div id="commentlist">
+	<!-- comments START -->
+	<ol id="thecomments">
+		<li class="comment regularcomment" id="comment-152">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/62e4df82d52221751142c68ee5d2ae0b" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-62e4df82d52221751142c68ee5d2ae0b-2">			</div>
+			<div class="name">
+									<span id="commentauthor-152">Jon</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				April 29, 2009 at 9:56 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-152">#1</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=152#respond" onclick="return addComment.moveForm(&quot;comment-152&quot;, &quot;152&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-152&#39;, &#39;comment-152&#39;, &#39;commentbody-152&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-152">
+					<p>How would you use this DatePicker if you had a table of Events that need displaying on the public side of a website not a CRUD scenario?</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+<ul class="children">
+	<li class="comment admincomment" id="comment-155">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d572ac324d6be5d65351eba70d1a029d" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-d572ac324d6be5d65351eba70d1a029d-10">			</div>
+			<div class="name">
+									<span id="commentauthor-155">A.Sethi</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				April 30, 2009 at 5:39 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-155">#2</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=155#respond" onclick="return addComment.moveForm(&quot;comment-155&quot;, &quot;155&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-155&#39;, &#39;comment-155&#39;, &#39;commentbody-155&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-155">
+					<p>Jon</p>
+<p>Can you give more details on your requirement.</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+<ul class="children">
+	<li class="comment regularcomment" id="comment-157">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/62e4df82d52221751142c68ee5d2ae0b" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-62e4df82d52221751142c68ee5d2ae0b-0">			</div>
+			<div class="name">
+									<span id="commentauthor-157">Jon</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				April 30, 2009 at 8:21 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-157">#3</a>
+			</div>
+			<div class="act">
+								<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-157&#39;, &#39;comment-157&#39;, &#39;commentbody-157&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-157">
+					<p>I have a table in a database which contains event information eg/date, where, cost of admission, details. I need to display these details somehow and I thought that the datepicker might work (I’m not sure how else you would display it) but when you visit the Events page you would need to take the data out of the table and wire it up to the DatePicker which would highlight days that events are on and then have a link to the details page.</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+	<li class="comment admincomment" id="comment-158">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d572ac324d6be5d65351eba70d1a029d" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-d572ac324d6be5d65351eba70d1a029d-0">			</div>
+			<div class="name">
+									<span id="commentauthor-158">A.Sethi</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				April 30, 2009 at 5:35 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-158">#4</a>
+			</div>
+			<div class="act">
+								<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-158&#39;, &#39;comment-158&#39;, &#39;commentbody-158&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-158">
+					<p>Jon</p>
+<p>I created one sample application using jMonthCalendar in asp.net mvc. you can see and download sample from <a href="http://towardsnext.wordpress.com/2009/04/30/event-calendar-in-mvc-application-using-jmonthcalendarjquery/" rel="nofollow">http://towardsnext.wordpress.com/2009/04/30/event-calendar-in-mvc-application-using-jmonthcalendarjquery/</a></p>
+<p>anything else update me</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+</ul>
+
+</ul>
+
+	<li class="comment regularcomment" id="comment-153">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d27d87178ab506547a12b697cb3a8b17" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-d27d87178ab506547a12b697cb3a8b17-1">			</div>
+			<div class="name">
+									<a id="commentauthor-153" class="url" href="http://www.coderesearchcenter.com/" rel="external nofollow">Jeff</a>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				April 30, 2009 at 1:08 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-153">#5</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=153#respond" onclick="return addComment.moveForm(&quot;comment-153&quot;, &quot;153&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-153&#39;, &#39;comment-153&#39;, &#39;commentbody-153&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-153">
+					<p>nice, thanks</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+	<li class="comment regularcomment" id="comment-185">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/a63ad26531b678b72d67a52ce31d449b" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-a63ad26531b678b72d67a52ce31d449b-1">			</div>
+			<div class="name">
+									<a id="commentauthor-185" class="url" href="http://www.webtrafficroi.com/" rel="external nofollow">ZK@Web Marketing Blo</a>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				June 21, 2009 at 6:41 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-185">#6</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=185#respond" onclick="return addComment.moveForm(&quot;comment-185&quot;, &quot;185&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-185&#39;, &#39;comment-185&#39;, &#39;commentbody-185&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-185">
+					<p>For the upcoming 0.9.0 PrimeFaces release I’ve migrated PrimeFaces to use jQuery for Dom manipulation and Ajax purposes. Along the way I’ve faced an issue where jQuery doesn’t play well with the JSF clientIds containing the colon “:” so special characters like this need to be escaped.</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+<ul class="children">
+	<li class="comment admincomment" id="comment-186">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d572ac324d6be5d65351eba70d1a029d" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-d572ac324d6be5d65351eba70d1a029d-1">			</div>
+			<div class="name">
+									<span id="commentauthor-186">A.Sethi</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				June 21, 2009 at 10:47 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-186">#7</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=186#respond" onclick="return addComment.moveForm(&quot;comment-186&quot;, &quot;186&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-186&#39;, &#39;comment-186&#39;, &#39;commentbody-186&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-186">
+					<p>thanks for nice and useful information. i will also have look to it</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+</ul>
+
+	<li class="comment regularcomment" id="comment-187">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/87f60ea777b0d9395d5d4ad7ea4be745" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-87f60ea777b0d9395d5d4ad7ea4be745-2">			</div>
+			<div class="name">
+									<span id="commentauthor-187">whiskey tango</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				June 23, 2009 at 3:20 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-187">#8</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=187#respond" onclick="return addComment.moveForm(&quot;comment-187&quot;, &quot;187&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-187&#39;, &#39;comment-187&#39;, &#39;commentbody-187&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-187">
+					<p>what the heck does this sentence even mean??</p>
+<p>&gt;&gt;Add the Script reference in our page for that include the following code the page of yours</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+<ul class="children">
+	<li class="comment admincomment" id="comment-189">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d572ac324d6be5d65351eba70d1a029d" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-d572ac324d6be5d65351eba70d1a029d-2">			</div>
+			<div class="name">
+									<span id="commentauthor-189">A.Sethi</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				June 23, 2009 at 6:33 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-189">#9</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=189#respond" onclick="return addComment.moveForm(&quot;comment-189&quot;, &quot;189&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-189&#39;, &#39;comment-189&#39;, &#39;commentbody-189&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-189">
+					<p>Sorry that was mistake and now it is corrected. Thanks for correction <img src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/icon_smile.gif" alt=":)" class="wp-smiley"> </p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+</ul>
+
+	<li class="comment regularcomment" id="comment-188">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/87f60ea777b0d9395d5d4ad7ea4be745" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-87f60ea777b0d9395d5d4ad7ea4be745-0">			</div>
+			<div class="name">
+									<span id="commentauthor-188">whiskey tango</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				June 23, 2009 at 3:30 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-188">#10</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=188#respond" onclick="return addComment.moveForm(&quot;comment-188&quot;, &quot;188&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-188&#39;, &#39;comment-188&#39;, &#39;commentbody-188&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-188">
+					<p>thank you for this!</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+	<li class="comment regularcomment" id="comment-227">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/8fede765ad2d5acf82a20e0b5d331417" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-8fede765ad2d5acf82a20e0b5d331417-1">			</div>
+			<div class="name">
+									<span id="commentauthor-227">Corneliu</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				September 28, 2009 at 10:14 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-227">#11</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=227#respond" onclick="return addComment.moveForm(&quot;comment-227&quot;, &quot;227&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-227&#39;, &#39;comment-227&#39;, &#39;commentbody-227&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-227">
+					<p>Why do we need to create HtmlHelper extension class?</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+<ul class="children">
+	<li class="comment admincomment" id="comment-229">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d572ac324d6be5d65351eba70d1a029d" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-d572ac324d6be5d65351eba70d1a029d-3">			</div>
+			<div class="name">
+									<span id="commentauthor-229">A.Sethi</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				September 29, 2009 at 4:34 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-229">#12</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=229#respond" onclick="return addComment.moveForm(&quot;comment-229&quot;, &quot;229&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-229&#39;, &#39;comment-229&#39;, &#39;commentbody-229&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-229">
+					<p>We can directly write the tags also in the html page rather writing the extension class. But since we are going to use this date picker in various screens again and again so if i will create this extension class then i will just call HtmlHelper.DatePicker function and it will be automatically replaced by the code as in other controls like textbox etc</p>
+<p>This extension class will add my method to the existing HtmlHelper class </p>
+<p>for more on extension method check this link<br>
+<a href="http://msdn.microsoft.com/en-us/library/bb383977.aspx" rel="nofollow">http://msdn.microsoft.com/en-us/library/bb383977.aspx</a></p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+</ul>
+
+	<li class="comment regularcomment" id="comment-231">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/a3121b185ce0cbacd590fd5fea766062" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-a3121b185ce0cbacd590fd5fea766062-1">			</div>
+			<div class="name">
+									<a id="commentauthor-231" class="url" href="http://blog.vanmeeuwen-online.nl/" rel="external nofollow">Rob</a>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				October 1, 2009 at 12:31 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-231">#13</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=231#respond" onclick="return addComment.moveForm(&quot;comment-231&quot;, &quot;231&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-231&#39;, &#39;comment-231&#39;, &#39;commentbody-231&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-231">
+					<p>Thanks for you post, but I figure out an easier way (well, as far as I can see now). You don’t need to create helper classes and/or extension methods. See my post on: <a href="http://blog.vanmeeuwen-online.nl/2009/10/easy-way-to-use-jquery-datepicker-on.html" rel="nofollow">http://blog.vanmeeuwen-online.nl/2009/10/easy-way-to-use-jquery-datepicker-on.html</a></p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+	<li class="comment regularcomment" id="comment-242">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/b23855d2ced3d5ce6609c07114f77900" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-b23855d2ced3d5ce6609c07114f77900-2">			</div>
+			<div class="name">
+									<span id="commentauthor-242">MikeC</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				November 1, 2009 at 1:30 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-242">#14</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=242#respond" onclick="return addComment.moveForm(&quot;comment-242&quot;, &quot;242&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-242&#39;, &#39;comment-242&#39;, &#39;commentbody-242&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-242">
+					<p>I installed per above, and I copied the jQueryUI base themes into my App_Themes folder, but I don’t think my datepicker is seeing it’s themes.  For example, the datepicker is transparent, and the Prev and Next are not well formatted.</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+<ul class="children">
+	<li class="comment regularcomment" id="comment-243">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/b23855d2ced3d5ce6609c07114f77900" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-b23855d2ced3d5ce6609c07114f77900-0">			</div>
+			<div class="name">
+									<span id="commentauthor-243">MikeC</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				November 3, 2009 at 2:58 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-243">#15</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=243#respond" onclick="return addComment.moveForm(&quot;comment-243&quot;, &quot;243&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-243&#39;, &#39;comment-243&#39;, &#39;commentbody-243&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-243">
+					<p>Ok, all set.  Just needed to add a reference to the css file in my master page.</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+<ul class="children">
+	<li class="comment admincomment" id="comment-244">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d572ac324d6be5d65351eba70d1a029d" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-d572ac324d6be5d65351eba70d1a029d-4">			</div>
+			<div class="name">
+									<span id="commentauthor-244">A.Sethi</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				November 4, 2009 at 5:33 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-244">#16</a>
+			</div>
+			<div class="act">
+								<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-244&#39;, &#39;comment-244&#39;, &#39;commentbody-244&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-244">
+					<p>Yes you are correct. You can have various themes also by including different css, check the JqueryUI website</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+</ul>
+
+</ul>
+
+	<li class="comment regularcomment" id="comment-250">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/c3fcaaa6c118e600f09d04667e50d113" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-c3fcaaa6c118e600f09d04667e50d113-2">			</div>
+			<div class="name">
+									<span id="commentauthor-250">Mike</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				November 18, 2009 at 4:04 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-250">#17</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=250#respond" onclick="return addComment.moveForm(&quot;comment-250&quot;, &quot;250&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-250&#39;, &#39;comment-250&#39;, &#39;commentbody-250&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-250">
+					<p>This calendar apparently doesn’t play well with you use an “id” as the selector.</p>
+<p>$(‘.DateOfBirth’).datepicker();</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+	<li class="comment regularcomment" id="comment-251">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/c3fcaaa6c118e600f09d04667e50d113" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-c3fcaaa6c118e600f09d04667e50d113-0">			</div>
+			<div class="name">
+									<span id="commentauthor-251">Mike</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				November 18, 2009 at 4:08 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-251">#18</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=251#respond" onclick="return addComment.moveForm(&quot;comment-251&quot;, &quot;251&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-251&#39;, &#39;comment-251&#39;, &#39;commentbody-251&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-251">
+					<p>never mind, duh!, put a . instead of a #. Can you say fat finger…</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+	<li class="comment regularcomment" id="comment-260">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/f5ddf306eae80d5cc37f6b58d9eafbad" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-f5ddf306eae80d5cc37f6b58d9eafbad-1">			</div>
+			<div class="name">
+									<span id="commentauthor-260">carl</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				December 16, 2009 at 6:49 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-260">#19</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=260#respond" onclick="return addComment.moveForm(&quot;comment-260&quot;, &quot;260&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-260&#39;, &#39;comment-260&#39;, &#39;commentbody-260&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-260">
+					<p>Hello,<br>
+I am able to implement the datepicker just fine – thanks for the tutorial.<br>
+I would like to use the date picker value to pass as a querystring parameter to filter data.  Is there a way that I can extract the value to use in conjunction with an mvc Html.Actionlink?<br>
+Or is there a way to add something to the htmlHelper class to return the value of the datepicker?</p>
+<p>Thanks</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+<ul class="children">
+	<li class="comment admincomment" id="comment-265">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d572ac324d6be5d65351eba70d1a029d" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-d572ac324d6be5d65351eba70d1a029d-5">			</div>
+			<div class="name">
+									<span id="commentauthor-265">A.Sethi</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				December 29, 2009 at 6:43 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-265">#20</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=265#respond" onclick="return addComment.moveForm(&quot;comment-265&quot;, &quot;265&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-265&#39;, &#39;comment-265&#39;, &#39;commentbody-265&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-265">
+					<p>Sure that will come for that just the class to extend the htmlhelper, which is already written in step 2 of this post. Then to get that value in your code you can get it as class object. I will upload the sample today and will place link in this post</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+</ul>
+
+	<li class="comment regularcomment" id="comment-263">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/954af989ba27830c2dc39eca853fa8fc" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-954af989ba27830c2dc39eca853fa8fc-2">			</div>
+			<div class="name">
+									<span id="commentauthor-263">KK</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				December 29, 2009 at 6:24 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-263">#21</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=263#respond" onclick="return addComment.moveForm(&quot;comment-263&quot;, &quot;263&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-263&#39;, &#39;comment-263&#39;, &#39;commentbody-263&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-263">
+					<p>hi sethi thanks for the post.. i have applied this to a form but i faced just a lil problem.. it gives me a diffirent UI from yours. my background is transparent.<br>
+can you tell me what to do to have the same as yours?</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+<ul class="children">
+	<li class="comment admincomment" id="comment-264">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d572ac324d6be5d65351eba70d1a029d" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-d572ac324d6be5d65351eba70d1a029d-6">			</div>
+			<div class="name">
+									<span id="commentauthor-264">A.Sethi</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				December 29, 2009 at 6:37 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-264">#22</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=264#respond" onclick="return addComment.moveForm(&quot;comment-264&quot;, &quot;264&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-264&#39;, &#39;comment-264&#39;, &#39;commentbody-264&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-264">
+					<p>You have to include the css in you page so that it can be applied to the respective jquery control like </p>
+<p>In downloaded file from jquery ui website you will find all these themes and css then just put above line in your page in the head section with the proper location of the ui.all.css file. You can see the same thing used in one of other sample like <a href="http://towardsnext.wordpress.com/2009/04/17/file-upload-in-aspnet-mvc/" rel="nofollow">http://towardsnext.wordpress.com/2009/04/17/file-upload-in-aspnet-mvc/</a>. download the project you can see in the master page</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+</ul>
+
+	<li class="comment regularcomment" id="comment-266">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/954af989ba27830c2dc39eca853fa8fc" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-954af989ba27830c2dc39eca853fa8fc-0">			</div>
+			<div class="name">
+									<span id="commentauthor-266">KK</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				December 29, 2009 at 6:55 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-266">#23</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=266#respond" onclick="return addComment.moveForm(&quot;comment-266&quot;, &quot;266&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-266&#39;, &#39;comment-266&#39;, &#39;commentbody-266&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-266">
+					<p>thx it’s the same now.. but in the jqueryui.com i saw the example there.. they have a lot of different theme for the datepicker how to u think i can change my theme?</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+<ul class="children">
+	<li class="comment admincomment" id="comment-267">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d572ac324d6be5d65351eba70d1a029d" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-d572ac324d6be5d65351eba70d1a029d-7">			</div>
+			<div class="name">
+									<span id="commentauthor-267">A.Sethi</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				December 29, 2009 at 7:06 am					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-267">#24</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=267#respond" onclick="return addComment.moveForm(&quot;comment-267&quot;, &quot;267&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-267&#39;, &#39;comment-267&#39;, &#39;commentbody-267&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-267">
+					<p>when you are downloading the package from the jquery ui page <a href="http://jqueryui.com/download" rel="nofollow">http://jqueryui.com/download</a> in the right side you can select  the theme which you want for you project. Whatever you want you can select and when you will downloaded it will come for that specific theme only.</p>
+<p>Or if you want many themes which can be selected by user or you want to customized and want more control on it then check this link <a href="http://jqueryui.com/themeroller/" rel="nofollow">http://jqueryui.com/themeroller/</a></p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+</ul>
+
+	<li class="comment regularcomment" id="comment-271">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/7ebe33d5d32e4a0489b19f7d7b6c6a48" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-7ebe33d5d32e4a0489b19f7d7b6c6a48-1">			</div>
+			<div class="name">
+									<span id="commentauthor-271">Richard77</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				January 17, 2010 at 7:26 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-271">#25</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=271#respond" onclick="return addComment.moveForm(&quot;comment-271&quot;, &quot;271&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-271&#39;, &#39;comment-271&#39;, &#39;commentbody-271&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-271">
+					<p>Thanks a lot. Now, JQuery cease to be a distant dream for me. I’ll go ahead and buy a book</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+	<li class="comment regularcomment" id="comment-307">
+		<div class="author">
+			<div class="pic">
+				<img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/f9065b5e969af82dd8e9c838731a44db" class="avatar avatar-32 grav-hashed grav-hijack" height="32" width="32" id="grav-f9065b5e969af82dd8e9c838731a44db-1">			</div>
+			<div class="name">
+									<span id="commentauthor-307">femi</span>
+							</div>
+		</div>
+
+		<div class="info">
+			<div class="date">
+				April 13, 2010 at 3:49 pm					 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-307">#26</a>
+			</div>
+			<div class="act">
+				<a class="comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?replytocom=307#respond" onclick="return addComment.moveForm(&quot;comment-307&quot;, &quot;307&quot;, &quot;respond&quot;, &quot;341&quot;)">Reply</a> | 				<a href="javascript:void(0);" onclick="MGJS_CMT.quote(&#39;commentauthor-307&#39;, &#39;comment-307&#39;, &#39;commentbody-307&#39;, &#39;comment&#39;);">Quote</a>
+							</div>
+			<div class="fixed"></div>
+			<div class="content">
+				
+				<div id="commentbody-307">
+					<p>how can this code be used for ALL date fields in my model by placing an ascx in the editortemplates folder.<br>
+any ideas what the code would be?<br>
+thanks</p>
+				</div>
+			</div>
+		</div>
+		<div class="fixed"></div>
+	</li>
+
+	</ol>
+	<!-- comments END -->
+
+
+	<!-- trackbacks START -->
+			<ol id="thetrackbacks">
+												<li class="trackback">
+						<div class="date">
+							April 10, 2009 at 12:55 pm							 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-132">#1</a>
+						</div>
+						<div class="act">
+													</div>
+						<div class="fixed"></div>
+						<div class="title">
+							<a href="http://blog.jqueryui.com/2009/04/this-week-in-jquery-ui-vol-5/">
+								This Week in jQuery UI vol. 5 « jQuery UI Blog							</a>
+						</div>
+					</li>
+									<li class="trackback">
+						<div class="date">
+							December 7, 2009 at 10:40 pm							 | <a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#comment-256">#2</a>
+						</div>
+						<div class="act">
+													</div>
+						<div class="fixed"></div>
+						<div class="title">
+							<a href="http://www.qihost.com/myWiki/?p=266">
+								My Stuff » Blog Archive » Using JQuery UI in ASP.NET MVC – Calendar							</a>
+						</div>
+					</li>
+				
+					</ol>
+		<div class="fixed"></div>
+	<!-- trackbacks END -->
+</div>
+
+</div>
+
+
+								<div id="respond">
+				<h3 id="reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://towardsnext.wordpress.com/wp-comments-post.php" method="post" id="commentform">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name</label> <span class="required">*</span><input id="author" name="author" type="text" value="" size="30" aria-required="true"></p>
+<p class="comment-form-email"><label for="email">Email</label> <span class="required">*</span><input id="email" name="email" type="text" value="" size="30" aria-required="true"></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" name="url" type="text" value="" size="30"></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;pre&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment">
+							<input type="hidden" name="comment_post_ID" value="341" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+						</p>
+						
+<input type="hidden" name="genseq" value="1292422095">
+<p><input type="checkbox" name="subscribe" id="subscribe" value="subscribe" style="width: auto;" tabindex="6"> <label class="subscribe-label" id="subscribe-label" for="subscribe">Notify me of follow-up comments via email.</label></p><p><input type="checkbox" name="subscribe_blog" id="subscribe_blog" value="subscribe" style="width: auto;" tabindex="7"> <label class="subscribe-label" id="subscribe-blog-label" for="subscribe_blog">Subscribe to this site by email</label></p><input type="hidden" name="sub-type" value="comment-form-text2"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="b05e1cef55">					</form>
+							</div><!-- #respond -->
+						
+	
+
+	<div id="postnavi">
+		<span class="prev"><a href="http://towardsnext.wordpress.com/2009/04/13/crop-image-in-aspnet-using-jcrop-jquery/" rel="next">Crop Image in ASP.NET using JCrop,&nbsp;JQuery</a></span>
+		<span class="next"><a href="http://towardsnext.wordpress.com/2009/03/16/named-optional-parameter-c-40-part-2/" rel="prev">Named &amp; Optional Parameter, C# 4.0 Part&nbsp;2</a></span>
+		<div class="fixed"></div>
+	</div>
+
+
+	</div>
+	<!-- main END -->
+
+	
+<!-- sidebar START -->
+<div id="sidebar">
+
+<!-- sidebar north START -->
+<div id="northsidebar" class="sidebar">
+
+	<!-- feeds -->
+	<div class="widget widget_feeds">
+		<div class="content">
+			<div id="subscribe">
+				<a rel="external nofollow" id="feedrss" title="Subscribe to this blog..." href="http://towardsnext.wordpress.com/feed/"><abbr title="Really Simple Syndication">RSS</abbr> feed</a>
+									<ul id="feed_readers">
+						<li id="google_reader"><a rel="external nofollow" class="reader" title="Subscribe with Google" href="http://fusion.google.com/add?feedurl=http://towardsnext.wordpress.com/feed/"><span>Google</span></a></li>
+						<li id="youdao_reader"><a rel="external nofollow" class="reader" title="Subscribe with Youdao" href="http://reader.youdao.com/#url=http://towardsnext.wordpress.com/feed/"><span>Youdao</span></a></li>
+						<li id="xianguo_reader"><a rel="external nofollow" class="reader" title="Subscribe with Xian Guo" href="http://www.xianguo.com/subscribe.php?url=http://towardsnext.wordpress.com/feed/"><span>Xian Guo</span></a></li>
+						<li id="zhuaxia_reader"><a rel="external nofollow" class="reader" title="Subscribe with Zhua Xia" href="http://www.zhuaxia.com/add_channel.php?url=http://towardsnext.wordpress.com/feed/"><span>Zhua Xia</span></a></li>
+						<li id="yahoo_reader"><a rel="external nofollow" class="reader" title="Subscribe with My Yahoo!" href="http://add.my.yahoo.com/rss?url=http://towardsnext.wordpress.com/feed/"><span>My Yahoo!</span></a></li>
+						<li id="newsgator_reader"><a rel="external nofollow" class="reader" title="Subscribe with newsgator" href="http://www.newsgator.com/ngs/subscriber/subfext.aspx?url=http://towardsnext.wordpress.com/feed/"><span>newsgator</span></a></li>
+						<li id="bloglines_reader"><a rel="external nofollow" class="reader" title="Subscribe with Bloglines" href="http://www.bloglines.com/sub/http://towardsnext.wordpress.com/feed/"><span>Bloglines</span></a></li>
+						<li id="inezha_reader"><a rel="external nofollow" class="reader" title="Subscribe with iNezha" href="http://inezha.com/add?url=http://towardsnext.wordpress.com/feed/"><span>iNezha</span></a></li>
+					</ul>
+							</div>
+			
+			<!-- twitter -->
+						
+			<div class="fixed"></div>
+		</div>
+	</div>
+
+	<!-- showcase -->
+	
+<div id="image-3" class="widget widget_image"><h3>What I’m Reading Now</h3><div style="overflow:hidden;"><div class="wp-caption alignnone" style="width: 212px"><a href="http://www.amazon.com/Einstein-Times-Ronald-W-Clark/dp/038001159X"><img src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/enistein-life-and-time.jpg" title="Einstein:: The Life and Times " width="202" height="333"></a><p class="wp-caption-text">Einstein:: The Life and Times </p></div></div>
+</div><div id="calendar-2" class="widget widget_calendar"><h3>Post Calendar</h3><div id="calendar_wrap"><table id="wp-calendar" summary="Calendar">
+	<caption>April 2009</caption>
+	<thead>
+	<tr>
+		<th scope="col" title="Monday">M</th>
+		<th scope="col" title="Tuesday">T</th>
+		<th scope="col" title="Wednesday">W</th>
+		<th scope="col" title="Thursday">T</th>
+		<th scope="col" title="Friday">F</th>
+		<th scope="col" title="Saturday">S</th>
+		<th scope="col" title="Sunday">S</th>
+	</tr>
+	</thead>
+
+	<tfoot>
+	<tr>
+		<td colspan="3" id="prev"><a href="http://towardsnext.wordpress.com/2009/03/" title="View posts for March 2009">« Mar</a></td>
+		<td class="pad">&nbsp;</td>
+		<td colspan="3" id="next"><a href="http://towardsnext.wordpress.com/2009/05/" title="View posts for May 2009">May »</a></td>
+	</tr>
+	</tfoot>
+
+	<tbody>
+	<tr>
+		<td colspan="2" class="pad">&nbsp;</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td>
+	</tr>
+	<tr>
+		<td>6</td><td>7</td><td>8</td><td>9</td><td><a href="http://towardsnext.wordpress.com/2009/04/10/" title="Using JQuery UI in ASP.NET MVC">10</a></td><td>11</td><td>12</td>
+	</tr>
+	<tr>
+		<td><a href="http://towardsnext.wordpress.com/2009/04/13/" title="Crop Image in ASP.NET using JCrop, JQuery">13</a></td><td>14</td><td>15</td><td><a href="http://towardsnext.wordpress.com/2009/04/16/" title="Convert ILIST, LIST to DataSet with child tables and relations">16</a></td><td><a href="http://towardsnext.wordpress.com/2009/04/17/" title="File upload in ASP.NET MVC">17</a></td><td>18</td><td>19</td>
+	</tr>
+	<tr>
+		<td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td>
+	</tr>
+	<tr>
+		<td>27</td><td>28</td><td>29</td><td><a href="http://towardsnext.wordpress.com/2009/04/30/" title="Event Calendar in MVC application Using jMonthCalendar(JQuery)">30</a></td>
+		<td class="pad" colspan="3">&nbsp;</td>
+	</tr>
+	</tbody>
+	</table></div></div><div id="pages-2" class="widget widget_pages"><h3>Other Pages</h3>		<ul>
+			<li class="page_item page-item-2"><a href="http://towardsnext.wordpress.com/about/" title="About">About</a></li>
+<li class="page_item page-item-309"><a href="http://towardsnext.wordpress.com/images/" title="Images">Images</a></li>
+		</ul>
+		</div><div id="categories-298217991" class="widget widget_categories"><h3>Categories</h3>		<ul>
+			<li class="cat-item cat-item-2425"><a href="http://towardsnext.wordpress.com/category/aspnet/" title="Web Application and Web Services">ASP.NET</a> (12)
+<ul class="children">
+	<li class="cat-item cat-item-8153935"><a href="http://towardsnext.wordpress.com/category/aspnet/controls-aspnet/" title="View all posts filed under Controls">Controls</a> (1)
+</li>
+	<li class="cat-item cat-item-19883751"><a href="http://towardsnext.wordpress.com/category/aspnet/jquery-aspnet/" title="View all posts filed under JQuery">JQuery</a> (1)
+</li>
+	<li class="cat-item cat-item-8913015"><a href="http://towardsnext.wordpress.com/category/aspnet/mvc-aspnet/" title="View all posts filed under MVC">MVC</a> (4)
+</li>
+	<li class="cat-item cat-item-984139"><a href="http://towardsnext.wordpress.com/category/aspnet/silverlight/" title="View all posts filed under Silverlight">Silverlight</a> (2)
+</li>
+	<li class="cat-item cat-item-16522876"><a href="http://towardsnext.wordpress.com/category/aspnet/webservices-api/" title="View all posts filed under WebServices &amp; API">WebServices &amp; API</a> (2)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-2426"><a href="http://towardsnext.wordpress.com/category/c/" title="C# programming">C#</a> (31)
+<ul class="children">
+	<li class="cat-item cat-item-62630"><a href="http://towardsnext.wordpress.com/category/c/adonet/" title="Database Related Programming">ADO.NET</a> (2)
+</li>
+	<li class="cat-item cat-item-174250"><a href="http://towardsnext.wordpress.com/category/c/compression/" title="View all posts filed under Compression">Compression</a> (1)
+</li>
+	<li class="cat-item cat-item-11061411"><a href="http://towardsnext.wordpress.com/category/c/cryptography-c/" title="Encryption And Decryption in C#">Cryptography</a> (4)
+</li>
+	<li class="cat-item cat-item-54"><a href="http://towardsnext.wordpress.com/category/c/general/" title="View all posts filed under General">General</a> (11)
+</li>
+	<li class="cat-item cat-item-114227"><a href="http://towardsnext.wordpress.com/category/c/linq/" title="Language integrated query in C#">LINQ</a> (1)
+</li>
+	<li class="cat-item cat-item-7426"><a href="http://towardsnext.wordpress.com/category/c/networking/" title="View all posts filed under Networking">Networking</a> (5)
+</li>
+	<li class="cat-item cat-item-647643"><a href="http://towardsnext.wordpress.com/category/c/parallel-programming/" title="View all posts filed under Parallel Programming">Parallel Programming</a> (4)
+</li>
+	<li class="cat-item cat-item-8408"><a href="http://towardsnext.wordpress.com/category/c/reflection/" title="View all posts filed under Reflection">Reflection</a> (2)
+</li>
+	<li class="cat-item cat-item-98471"><a href="http://towardsnext.wordpress.com/category/c/threading/" title="View all posts filed under Threading">Threading</a> (1)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-7777"><a href="http://towardsnext.wordpress.com/category/ms-sql-server/" title="View all posts filed under MS SQL SERVER">MS SQL SERVER</a> (12)
+</li>
+	<li class="cat-item cat-item-20989071"><a href="http://towardsnext.wordpress.com/category/towards-next/" title="View all posts filed under Towards Next">Towards Next</a> (1)
+</li>
+	<li class="cat-item cat-item-4495"><a href="http://towardsnext.wordpress.com/category/updates-news/" title="View all posts filed under Updates &amp; News">Updates &amp; News</a> (4)
+</li>
+	<li class="cat-item cat-item-6678"><a href="http://towardsnext.wordpress.com/category/visual-studio/" title="View all posts filed under Visual Studio">Visual Studio</a> (1)
+</li>
+		</ul>
+</div><div id="archives-2" class="widget widget_archive"><h3>Archives</h3>		<ul>
+			<li><a href="http://towardsnext.wordpress.com/2010/09/" title="September 2010">September 2010</a>&nbsp;(2)</li>
+	<li><a href="http://towardsnext.wordpress.com/2010/08/" title="August 2010">August 2010</a>&nbsp;(1)</li>
+	<li><a href="http://towardsnext.wordpress.com/2010/04/" title="April 2010">April 2010</a>&nbsp;(1)</li>
+	<li><a href="http://towardsnext.wordpress.com/2010/01/" title="January 2010">January 2010</a>&nbsp;(1)</li>
+	<li><a href="http://towardsnext.wordpress.com/2009/09/" title="September 2009">September 2009</a>&nbsp;(1)</li>
+	<li><a href="http://towardsnext.wordpress.com/2009/05/" title="May 2009">May 2009</a>&nbsp;(2)</li>
+	<li><a href="http://towardsnext.wordpress.com/2009/04/" title="April 2009">April 2009</a>&nbsp;(5)</li>
+	<li><a href="http://towardsnext.wordpress.com/2009/03/" title="March 2009">March 2009</a>&nbsp;(3)</li>
+	<li><a href="http://towardsnext.wordpress.com/2009/02/" title="February 2009">February 2009</a>&nbsp;(14)</li>
+	<li><a href="http://towardsnext.wordpress.com/2009/01/" title="January 2009">January 2009</a>&nbsp;(5)</li>
+	<li><a href="http://towardsnext.wordpress.com/2008/12/" title="December 2008">December 2008</a>&nbsp;(6)</li>
+	<li><a href="http://towardsnext.wordpress.com/2008/11/" title="November 2008">November 2008</a>&nbsp;(1)</li>
+	<li><a href="http://towardsnext.wordpress.com/2008/10/" title="October 2008">October 2008</a>&nbsp;(2)</li>
+	<li><a href="http://towardsnext.wordpress.com/2008/09/" title="September 2008">September 2008</a>&nbsp;(16)</li>
+		</ul>
+</div><div id="wp_tag_cloud" class="widget wp_widget_tag_cloud"><h3>Tags</h3><div style="overflow:hidden"><a href="http://towardsnext.wordpress.com/tag/net/" class="tag-link-2427" title="1 topic" style="font-size: 8pt;">.NET</a>
+<a href="http://towardsnext.wordpress.com/tag/aspnet/" class="tag-link-2425" title="10 topics" style="font-size: 17.592592592593pt;">ASP.NET</a>
+<a href="http://towardsnext.wordpress.com/tag/assembly/" class="tag-link-6595" title="2 topics" style="font-size: 10.333333333333pt;">ASSEMBLY</a>
+<a href="http://towardsnext.wordpress.com/tag/c/" class="tag-link-2426" title="23 topics" style="font-size: 22pt;">C#</a>
+<a href="http://towardsnext.wordpress.com/tag/c-4-0/" class="tag-link-20669058" title="2 topics" style="font-size: 10.333333333333pt;">C# 4.0</a>
+<a href="http://towardsnext.wordpress.com/tag/commands/" class="tag-link-319" title="1 topic" style="font-size: 8pt;">COMMANDS</a>
+<a href="http://towardsnext.wordpress.com/tag/connection/" class="tag-link-40112" title="1 topic" style="font-size: 8pt;">CONNECTION</a>
+<a href="http://towardsnext.wordpress.com/tag/cryptography/" class="tag-link-25818" title="4 topics" style="font-size: 13.185185185185pt;">CRYPTOGRAPHY</a>
+<a href="http://towardsnext.wordpress.com/tag/data-parallelism/" class="tag-link-33330423" title="2 topics" style="font-size: 10.333333333333pt;">Data Parallelism</a>
+<a href="http://towardsnext.wordpress.com/tag/decryption/" class="tag-link-1052188" title="4 topics" style="font-size: 13.185185185185pt;">DECRYPTION</a>
+<a href="http://towardsnext.wordpress.com/tag/details/" class="tag-link-13532" title="1 topic" style="font-size: 8pt;">DETAILS</a>
+<a href="http://towardsnext.wordpress.com/tag/encryption/" class="tag-link-6474" title="4 topics" style="font-size: 13.185185185185pt;">ENCRYPTION</a>
+<a href="http://towardsnext.wordpress.com/tag/execute/" class="tag-link-87917" title="1 topic" style="font-size: 8pt;">EXECUTE</a>
+<a href="http://towardsnext.wordpress.com/tag/foreign-keys/" class="tag-link-5407299" title="2 topics" style="font-size: 10.333333333333pt;">FOREIGN KEYS</a>
+<a href="http://towardsnext.wordpress.com/tag/framework/" class="tag-link-7136" title="3 topics" style="font-size: 11.888888888889pt;">FRAMEWORK</a>
+<a href="http://towardsnext.wordpress.com/tag/instances/" class="tag-link-23504" title="1 topic" style="font-size: 8pt;">INSTANCES</a>
+<a href="http://towardsnext.wordpress.com/tag/ipglobalproperties/" class="tag-link-11410875" title="2 topics" style="font-size: 10.333333333333pt;">IPGLOBALPROPERTIES</a>
+<a href="http://towardsnext.wordpress.com/tag/jquery/" class="tag-link-203308" title="5 topics" style="font-size: 14.222222222222pt;">JQUERY</a>
+<a href="http://towardsnext.wordpress.com/tag/linked/" class="tag-link-13782" title="2 topics" style="font-size: 10.333333333333pt;">LINKED</a>
+<a href="http://towardsnext.wordpress.com/tag/list/" class="tag-link-14608" title="2 topics" style="font-size: 10.333333333333pt;">LIST</a>
+<a href="http://towardsnext.wordpress.com/tag/microsoft/" class="tag-link-637" title="2 topics" style="font-size: 10.333333333333pt;">MICROSOFT</a>
+<a href="http://towardsnext.wordpress.com/tag/mssql/" class="tag-link-43808" title="2 topics" style="font-size: 10.333333333333pt;">MSSQL</a>
+<a href="http://towardsnext.wordpress.com/tag/ms-sql-server/" class="tag-link-7777" title="10 topics" style="font-size: 17.592592592593pt;">MS SQL SERVER</a>
+<a href="http://towardsnext.wordpress.com/tag/mvc/" class="tag-link-36699" title="4 topics" style="font-size: 13.185185185185pt;">MVC</a>
+<a href="http://towardsnext.wordpress.com/tag/network/" class="tag-link-3385" title="3 topics" style="font-size: 11.888888888889pt;">NETWORK</a>
+<a href="http://towardsnext.wordpress.com/tag/networkinformation/" class="tag-link-11410876" title="2 topics" style="font-size: 10.333333333333pt;">NETWORKINFORMATION</a>
+<a href="http://towardsnext.wordpress.com/tag/networking/" class="tag-link-7426" title="2 topics" style="font-size: 10.333333333333pt;">Networking</a>
+<a href="http://towardsnext.wordpress.com/tag/output/" class="tag-link-206097" title="1 topic" style="font-size: 8pt;">OUTPUT</a>
+<a href="http://towardsnext.wordpress.com/tag/paralel-foreach/" class="tag-link-40059713" title="2 topics" style="font-size: 10.333333333333pt;">Paralel.Foreach</a>
+<a href="http://towardsnext.wordpress.com/tag/parallel/" class="tag-link-327612" title="2 topics" style="font-size: 10.333333333333pt;">Parallel</a>
+<a href="http://towardsnext.wordpress.com/tag/parallel-programming/" class="tag-link-647643" title="2 topics" style="font-size: 10.333333333333pt;">Parallel Programming</a>
+<a href="http://towardsnext.wordpress.com/tag/query/" class="tag-link-195721" title="3 topics" style="font-size: 11.888888888889pt;">QUERY</a>
+<a href="http://towardsnext.wordpress.com/tag/query-multiple-server/" class="tag-link-11052475" title="2 topics" style="font-size: 10.333333333333pt;">QUERY MULTIPLE SERVER</a>
+<a href="http://towardsnext.wordpress.com/tag/reflection/" class="tag-link-8408" title="2 topics" style="font-size: 10.333333333333pt;">Reflection</a>
+<a href="http://towardsnext.wordpress.com/tag/shell/" class="tag-link-43912" title="1 topic" style="font-size: 8pt;">SHELL</a>
+<a href="http://towardsnext.wordpress.com/tag/spwan/" class="tag-link-10870367" title="1 topic" style="font-size: 8pt;">SPWAN</a>
+<a href="http://towardsnext.wordpress.com/tag/sp_addlinkedserver/" class="tag-link-8583282" title="2 topics" style="font-size: 10.333333333333pt;">SP_ADDLINKEDSERVER</a>
+<a href="http://towardsnext.wordpress.com/tag/stored-procedure/" class="tag-link-640221" title="1 topic" style="font-size: 8pt;">STORED PROCEDURE</a>
+<a href="http://towardsnext.wordpress.com/tag/system-tables/" class="tag-link-6833466" title="2 topics" style="font-size: 10.333333333333pt;">SYSTEM TABLES</a>
+<a href="http://towardsnext.wordpress.com/tag/track/" class="tag-link-9160" title="1 topic" style="font-size: 8pt;">TRACK</a>
+<a href="http://towardsnext.wordpress.com/tag/users/" class="tag-link-70411" title="1 topic" style="font-size: 8pt;">USERS</a>
+<a href="http://towardsnext.wordpress.com/tag/version/" class="tag-link-13432" title="1 topic" style="font-size: 8pt;">VERSION</a>
+<a href="http://towardsnext.wordpress.com/tag/windows/" class="tag-link-800" title="1 topic" style="font-size: 8pt;">WINDOWS</a>
+<a href="http://towardsnext.wordpress.com/tag/xml/" class="tag-link-6852" title="2 topics" style="font-size: 10.333333333333pt;">XML</a>
+<a href="http://towardsnext.wordpress.com/tag/xp_cmdshell/" class="tag-link-3071472" title="1 topic" style="font-size: 8pt;">XP_CMDSHELL</a></div></div>	<div id="recent-comments" class="widget widget_recent_comments">		<h3>Recent Comments</h3>		<table class="recentcommentsavatar" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td title="javed" class="recentcommentsavatartop" style="height:48px; width:48px"><img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/f0cbe7a4f0d885d305958c42d2078694" class="avatar avatar-48 grav-hashed grav-hijack" height="48" width="48" id="grav-f0cbe7a4f0d885d305958c42d2078694-3"></td><td class="recentcommentstexttop">javed on <a href="http://towardsnext.wordpress.com/2009/04/30/event-calendar-in-mvc-application-using-jmonthcalendarjquery/#comment-341">Event Calendar in MVC applicat…</a></td></tr><tr><td title="javed" class="recentcommentsavatarend" style="height:48px; width:48px"><img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/f0cbe7a4f0d885d305958c42d2078694" class="avatar avatar-48 grav-hashed grav-hijack" height="48" width="48" id="grav-f0cbe7a4f0d885d305958c42d2078694-0"></td><td class="recentcommentstextend">javed on <a href="http://towardsnext.wordpress.com/2009/04/30/event-calendar-in-mvc-application-using-jmonthcalendarjquery/#comment-340">Event Calendar in MVC applicat…</a></td></tr><tr><td title="A.Sethi" class="recentcommentsavatarend" style="height:48px; width:48px"><a href="http:" rel="nofollow"><img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/d572ac324d6be5d65351eba70d1a029d(1)" class="avatar avatar-48 grav-hashed" height="48" width="48" id="grav-d572ac324d6be5d65351eba70d1a029d-8"></a></td><td class="recentcommentstextend"><a href="http:" rel="nofollow">A.Sethi</a> on <a href="http://towardsnext.wordpress.com/2009/04/30/event-calendar-in-mvc-application-using-jmonthcalendarjquery/#comment-339">Event Calendar in MVC applicat…</a></td></tr><tr><td title="javed3459" class="recentcommentsavatarend" style="height:48px; width:48px"><img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/f0cbe7a4f0d885d305958c42d2078694" class="avatar avatar-48 grav-hashed grav-hijack" height="48" width="48" id="grav-f0cbe7a4f0d885d305958c42d2078694-1"></td><td class="recentcommentstextend">javed3459 on <a href="http://towardsnext.wordpress.com/2009/04/30/event-calendar-in-mvc-application-using-jmonthcalendarjquery/#comment-338">Event Calendar in MVC applicat…</a></td></tr><tr><td title="Alan Smith" class="recentcommentsavatarend" style="height:48px; width:48px"><img alt="" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/90a9a4800c73eecc6bf1011647eead18" class="avatar avatar-48 grav-hashed grav-hijack" height="48" width="48" id="grav-90a9a4800c73eecc6bf1011647eead18-1"></td><td class="recentcommentstextend">Alan Smith on <a href="http://towardsnext.wordpress.com/2009/02/26/captcha-control-sample-c-aspnet-server-control/#comment-337">Captcha Control Sample (C#, AS…</a></td></tr></tbody></table>
+	</div>		<div id="blog-stats" class="widget widget_statscounter">			<h3>Blog Stats</h3>			<ul>
+			<li>129,920 hits</li>
+			</ul>
+		</div><div id="linkcat-1356" class="widget widget_links"><h3>Blogroll</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://codingsense.wordpress.com/" title="Coding in C#, concepts of .Net and SQL Server">Coding Sense</a></li>
+<li><a href="http://dpatrickcaldwell.blogspot.com/" target="_blank">D. Patrick Caldwell on Software Engineering</a></li>
+<li><a href="http://www.johndcook.com/blog/">The Endeavour</a></li>
+
+	</ul>
+</div>
+<div id="linkcat-36319" class="widget widget_links"><h3>Recommended</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://www.smnetserv.com/" title="An Offshore Software Development Company India">SM NetServ</a></li>
+
+	</ul>
+</div>
+<div id="linkcat-1981" class="widget widget_links"><h3>Tools</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://feeds2.feedburner.com/TowardsNext" title="Feed Burner" target="_blank">Feed Burner</a></li>
+<li><a href="http://feedburner.google.com/fb/a/mailverify?uri=TowardsNext&loc=en_US" title="Subscribe to Next step of programming by Email" target="_blank">Subscribe to Next step of programming by Email</a></li>
+
+	</ul>
+</div>
+<div id="linkcat-38194" class="widget widget_links"><h3>Visits</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://www.geovisite.com/zoom.php?compte=456856805455" target="_blank"><img src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/geocounter.php" alt="http://www.geovisite.com/zoom.php?compte=456856805455"></a></li>
+
+	</ul>
+</div>
+<div id="blog_subscription-3" class="widget widget_blog_subscription"><h3><label for="subscribe-field">Email Subscription</label></h3>
+<form action="http://subscribe.wordpress.com/" method="post" accept-charset="utf-8" id="subscribe-blog">
+			<p>Enter your email address to subscribe to this blog and receive notifications of new posts by email.</p>
+		<p><input type="text" name="email" style="width: 95%; padding: 1px 2px" value="" id="subscribe-field"></p>
+	
+	<input type="hidden" name="action" value="subscribe">
+	<input type="hidden" name="blog_id" value="4711428">
+	<input type="hidden" name="source" value="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/">
+	<input type="hidden" name="sub-type" value="widget">
+
+	<input type="hidden" id="_wpnonce" name="_wpnonce" value="7804a62561"><input type="hidden" name="_wp_http_referer" value="/2009/04/10/using-jquery-ui-in-aspnet-mvc/">
+	<p><input type="submit" value="Sign me up!"></p>
+</form>
+
+</div><div id="twitter-3" class="widget widget_twitter"><h3><a href="http://twitter.com/SethiAV">Twitter Updates</a></h3><ul class="tweets">
+<li>Watching Documentary - How Large is the Universe?http://me.lt/3T1np <a href="http://twitter.com/SethiAV/statuses/8596477974675457" class="timesince">2&nbsp;weeks&nbsp;ago</a></li>
+<li>Styled my profile with a sweet Ryan Behner theme using Themeleon by @<a href="http://twitter.com/COLOURlovers">COLOURlovers</a> <a href="http://clrlv.rs/newthemeleon" rel="nofollow">http://clrlv.rs/newthemeleon</a> Love it? <a href="http://twitter.com/SethiAV/statuses/8595822652428288" class="timesince">2&nbsp;weeks&nbsp;ago</a></li>
+<li>Check out MathOverflow <a href="http://me.lt/6mRI" rel="nofollow">http://me.lt/6mRI</a> <a href="http://twitter.com/SethiAV/statuses/7490346581757952" class="timesince">2&nbsp;weeks&nbsp;ago</a></li>
+<li>Stephen Wolfram: Computing a theory of everything <a href="http://me.lt/3T5qP" rel="nofollow">http://me.lt/3T5qP</a> <a href="http://twitter.com/SethiAV/statuses/6463576520785920" class="timesince">3&nbsp;weeks&nbsp;ago</a></li>
+<li>Does God Play Dice? <a href="http://me.lt/6F7Ui" rel="nofollow">http://me.lt/6F7Ui</a> <a href="http://twitter.com/SethiAV/statuses/5298931919495168" class="timesince">3&nbsp;weeks&nbsp;ago</a></li>
+</ul>
+</div>	</div>
+</div>
+<!-- sidebar END -->
+	<div class="fixed"></div>
+</div>
+<!-- content END -->
+
+<!-- footer START -->
+<div id="footer">
+	<a id="gotop" href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#" onclick="MGJS.goTop();return false;">Top</a>
+	<a id="powered" href="http://wordpress.com/">WordPress</a>
+	<div id="copyright">
+		Copyright © 2008-2010 Towards Next	</div>
+	<div id="themeinfo">
+		<a href="http://wordpress.com/" rel="generator">Blog at WordPress.com</a>. Theme: INove by <a href="http://www.neoease.com/" rel="designer">NeoEase</a>.	</div>
+</div>
+<!-- footer END -->
+
+</div>
+<!-- container END -->
+</div>
+<!-- wrap END -->
+
+<script type="text/javascript">
+// <![CDATA[
+(function() {
+try{
+  if ( window.external &&'msIsSiteMode' in window.external) {
+    if (window.external.msIsSiteMode()) {
+      var jl = document.createElement('script');
+      jl.type='text/javascript';
+      jl.async=true;
+      jl.src='/wp-content/plugins/ie-sitemode/custom-jumplist.php';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jl, s);
+    }
+  }
+}catch(e){}
+})();
+// ]]>
+</script>	<script type="text/javascript">
+	/* <![CDATA[ */
+		jQuery( function() {
+			
+			jQuery('#wpl-button > a.like').click( function(e) {
+				e.preventDefault();
+				
+				jQuery('#wpl-mustlogin').remove();
+
+				jQuery.post( 'http://towardsnext.wordpress.com/wp-admin/admin-ajax.php', { 
+					'action': 'wpl_record_stat',
+					'stat_name': 'loggedout_like_click'
+				} );
+
+				var tenMins = new Date();
+				tenMins.setTime( tenMins.getTime() + 600000 );
+				document.cookie = 'wpl_rand=53d6fa7bb5; expires=' + tenMins.toGMTString() + '; domain=wordpress.com; path=/;';
+				
+				jQuery('#wpl-count').after( '\
+					<div id="wpl-mustlogin"> \
+						<form action="http://towardsnext.wordpress.com/wp-login.php" method="post"> \
+							<p>Just one more step to like this post:</p> \
+							<label><span>Username</span> <input type="text" name="log" id="user_login" class="input" value="" size="20" tabindex="80" /></label> \
+							<label><span>Password</span> <input type="password" name="pwd" id="user_pass" class="input" value="" size="20" tabindex="81" /></label> \
+							<input type="submit" name="wp-submit" id="wp-submit" class="button-primary" value="Log In" tabindex="82" /> \
+							<input type="hidden" name="redirect_to" value="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/?like=1" /> \
+							<input type="hidden" name="wpl_rand" value="53d6fa7bb5" /> \
+							<p>Not a member yet? <a href="http://wordpress.com/signup/?ref=likebox" id="wpl-signup-link">Sign up with WordPress.com</a></p> \
+						</form> \
+					</div> \
+				');
+				
+				jQuery('#wpl-mustlogin').hide().slideDown('fast');
+			} );
+			
+			jQuery('#wpl-mustlogin input.input').live( 'focus', function() {
+				jQuery(this).prev().hide();
+			}).live( 'blur', function() {
+				if ( jQuery(this).val() == '' )
+					jQuery(this).prev().show();
+			});
+			
+			jQuery('#wpl-mustlogin input#wp-submit').live( 'click', function(e) {
+				e.preventDefault();
+				
+				jQuery.post( 'http://towardsnext.wordpress.com/wp-admin/admin-ajax.php', { 
+					'action': 'wpl_record_stat',
+					'stat_name': 'loggedout_login_submit'
+				}, function() {
+					jQuery('#wpl-mustlogin form').submit();
+				} );
+			});			
+			
+			jQuery('#wpl-mustlogin a#wpl-signup-link').live( 'click', function(e) {
+				e.preventDefault();
+				
+				var link = jQuery(this).attr('href');
+				
+				jQuery.post( 'http://towardsnext.wordpress.com/wp-admin/admin-ajax.php', { 
+					'action': 'wpl_record_stat',
+					'stat_name': 'loggedout_signup_click'
+				}, function() {
+					location.href = link;
+				} );
+			});					
+			
+		});
+	/* ]]> */
+	</script>
+<script type="text/javascript">_qoptions={qacct:'p-18-mFEk4J448M',labels:'language.en,type.wpcom,posttag.aspnet,posttag.extension,posttag.htmlhelper,posttag.jquery,posttag.mvc,posttag.ui,as'};</script>
+<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/quant.js"></script>
+<noscript>&lt;p&gt;&lt;img class="robots-nocontent" src="http://pixel.quantserve.com/pixel/p-18-mFEk4J448M.gif?labels=language.en%2Ctype.wpcom%2Cposttag.aspnet%2Cposttag.extension%2Cposttag.htmlhelper%2Cposttag.jquery%2Cposttag.mvc%2Cposttag.ui%2Cas" style="display:none" height="1" width="1" alt="" /&gt;&lt;/p&gt;</noscript>
+<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/gprofiles.js"></script>
+	<script type="text/javascript">	
+	// <![CDATA[
+	WPGroHo = {
+		data: {},
+		renderers: {},
+		syncProfileData: function( hash, id ) {
+			if ( !WPGroHo.data[hash] ) {
+				WPGroHo.data[hash] = {};
+				a = jQuery( 'div.grofile-hash-map-' + hash + ' span' ).each( function() {
+					WPGroHo.data[hash][this.className] = jQuery( this ).text();
+				} );
+			}
+
+			WPGroHo.appendProfileData( WPGroHo.data[hash], hash, id );
+		},
+		appendProfileData: function( data, hash, id ) {
+			for ( var key in data ) {
+				if ( jQuery.isFunction( WPGroHo.renderers[key] ) ) {
+					return WPGroHo.renderers[key]( data[key], hash, id, key );
+				}
+
+				jQuery( '#' + id ).find( 'h4' ).after( jQuery( '<p class="grav-extra ' + key + '" />' ).html( data[key] ) );
+			}
+		}
+	};
+	jQuery(document).ready(function($){
+		Gravatar.profile_cb = function( h, d ) {
+			WPGroHo.syncProfileData( h, d );
+		};
+		Gravatar.attach_profiles();
+	});
+	// ]]>
+	</script>
+	<div style="display:none">
+	<div class="grofile-hash-map-62e4df82d52221751142c68ee5d2ae0b">
+	</div>
+	<div class="grofile-hash-map-d572ac324d6be5d65351eba70d1a029d">
+	</div>
+	<div class="grofile-hash-map-d27d87178ab506547a12b697cb3a8b17">
+	</div>
+	<div class="grofile-hash-map-a63ad26531b678b72d67a52ce31d449b">
+	</div>
+	<div class="grofile-hash-map-87f60ea777b0d9395d5d4ad7ea4be745">
+	</div>
+	<div class="grofile-hash-map-8fede765ad2d5acf82a20e0b5d331417">
+	</div>
+	<div class="grofile-hash-map-a3121b185ce0cbacd590fd5fea766062">
+	</div>
+	<div class="grofile-hash-map-b23855d2ced3d5ce6609c07114f77900">
+	</div>
+	<div class="grofile-hash-map-c3fcaaa6c118e600f09d04667e50d113">
+	</div>
+	<div class="grofile-hash-map-f5ddf306eae80d5cc37f6b58d9eafbad">
+	</div>
+	<div class="grofile-hash-map-954af989ba27830c2dc39eca853fa8fc">
+	</div>
+	<div class="grofile-hash-map-7ebe33d5d32e4a0489b19f7d7b6c6a48">
+	</div>
+	<div class="grofile-hash-map-f9065b5e969af82dd8e9c838731a44db">
+	</div>
+	<div class="grofile-hash-map-f0cbe7a4f0d885d305958c42d2078694">
+	</div>
+	<div class="grofile-hash-map-f0cbe7a4f0d885d305958c42d2078694">
+	</div>
+	<div class="grofile-hash-map-90a9a4800c73eecc6bf1011647eead18">
+	</div>
+	</div>
+<script type="text/javascript">_acseed='Nm01fCNhbSRHZikvZThEVCBbS28ybEBGdmYzfHhdcGQ8aj1POD9YWHszYj9MXmlreWUvNyYldUdqLil7LG9TUWtOXio9UyQodEIwaWRdOThCYSl+c2hAdjlJN1tKLzQsUUpBKXBNMHRKQXltRFVyIyg2dkF0VXEzYTxidTpb';</script>
+<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/sharing.js"></script>
+	<div id="sharing_email" style="display: none;">
+		<form action="" method="post">
+			<label for="target_email">Send to Email Address</label>
+			<input type="text" name="target_email" id="target_email" value="">
+			
+			
+				<label for="source_name">Your Name</label>
+				<input type="text" name="source_name" id="source_name" value="">
+				
+				<label for="source_email">Your Email Address</label>
+				<input type="text" name="source_email" id="source_email" value="">
+
+						
+			<div class="recaptcha" id="sharing_recaptcha"></div>
+			<img style="float: right; display: none" class="loading" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/loading.gif" alt="loading" width="16" height="16">
+			<input type="submit" value="Send Email" class="sharing_send">
+			<a href="http://towardsnext.wordpress.com/2009/04/10/using-jquery-ui-in-aspnet-mvc/#cancel" class="sharing_cancel">Cancel</a>
+			
+			<div class="errors errors-1" style="display: none;">
+				Post was not sent - check your email addresses!			</div>
+
+			<div class="errors errors-2" style="display: none;">
+				Email check failed, please try again			</div>
+			
+			<div class="errors errors-3" style="display: none;">
+				Sorry, your blog cannot share posts by email.			</div>
+		</form>
+	</div>
+<script type="text/javascript" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/beacon.js"></script><script type="text/javascript">try{COMSCORE.beacon({c1:2,c2:7518284});}catch(e){}</script><noscript>&lt;p class="robots-nocontent"&gt;&lt;img src="http://b.scorecardresearch.com/p?cj=1c1=2&amp;#038;c2=7518284" alt="" style="display:none" width="1" height="1" /&gt;&lt;/p&gt;</noscript><script src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/w.js" type="text/javascript"></script>
+<script type="text/javascript">
+st_go({'blog':'4711428','v':'wpcom','user_id':'0','post':'341','subd':'towardsnext'});
+ex_go({'crypt':'RDZ8LFkxbXFpUUhpYm5dQSx+QkxOP3hERUtUeUtbR1dPR0JtNDAlSlpwPThYUz0mY2E3X1E4QWI0eGJ3VWloalFQbT9bX0IwZWdTfkxQZklNOE9uaC1zfGk2dUplNC1GWWI1STYsNXc5LD1zWEswNmE5bSx2VStJbl1XUnwwLWRbby91JVUvZkJqSHIwcG9Odkhwb3NLWVRQaDQyeE5DeCxTX2RpVHpxfEcrfE9SdiY9dmU3RUJRWT9venU3clIrSlk1RllIW0dRST1GZVVdcytaczE4W0MtYnFNVz0reH5bcnlLYm9qP3BlU2xmfFZxNW1nVWp+MklYUVZRaFIyfHVdY1MuVllzJnpdYnNWNzhkbFZxLEd6RkJvMTVnZkJCeU5+Z0xPLnlOaEVfQk43Z0tyTldkX11rdV9NalosfEFTJU5nbXhKQXFIUUFnUWVVRXJkS3kyUEJXZT9sTiZiQ34lQjRteFlzOU1DUSs1N3BselJacGNObFhHfEgtYT01dlZVWTRBZUpRJQ=='});
+re_go({'d[rayaspnet.wordpress.com]':'1','d[seekdotnethosting.wordpress.com]':'1','d[mvcframework.wordpress.com]':'1','v':'sph','b':'4711428','p':'341'});
+addLoadEvent(function(){linktracker_init('4711428',341);});
+	</script><img id="wpstats" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/g.gif" alt=""><img id="wpstats2" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/g(1).gif" alt="" style="display:none"><img id="wpstats" src="./Using JQuery UI in ASP.NET MVC « Towards Next_files/g(2).gif" alt="" style="display:none">
+
+
+</body></html>

@@ -1,0 +1,5 @@
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo\bin\FirstApplicationDemo.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo\bin\FirstApplicationDemo.pdb
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo\obj\Debug\ResolveAssemblyReference.cache
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo\obj\Debug\FirstApplicationDemo.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo\obj\Debug\FirstApplicationDemo.pdb

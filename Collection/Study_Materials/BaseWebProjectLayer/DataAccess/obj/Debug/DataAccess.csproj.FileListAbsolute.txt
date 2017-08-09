@@ -1,0 +1,7 @@
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\DataAccess\bin\Debug\DataAccess.dll.config
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\DataAccess\bin\Debug\DataAccess.dll
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\DataAccess\bin\Debug\DataAccess.pdb
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\DataAccess\bin\Debug\EntityFramework.dll
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\DataAccess\bin\Debug\EntityFramework.xml
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\DataAccess\obj\Debug\DataAccess.dll
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\DataAccess\obj\Debug\DataAccess.pdb

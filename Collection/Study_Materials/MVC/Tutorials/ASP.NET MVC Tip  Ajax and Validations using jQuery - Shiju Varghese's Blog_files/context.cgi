@@ -1,0 +1,1 @@
+document.write('<P><span style="cursor: pointer" onmouseover="top.status=\'\'; return true" onmouseout="top.status=\'\'; return true" ><font color="#3399FF"><B></B></font><br><br><font color="#3399FF"><u></u></font></span></P>');

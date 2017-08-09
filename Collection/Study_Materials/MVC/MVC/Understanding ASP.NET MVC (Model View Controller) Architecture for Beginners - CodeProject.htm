@@ -1,0 +1,1646 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0058)http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject</title> 
+	<link type="text/css" rel="stylesheet" href="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/CodeProject.min.css">
+
+	
+
+<meta name="Description" content="Learning ASP.NET MVC (Model View Controller) architecture and fundamentals for beginners; Author: kiran dangar; Section: .NET Framework; Chapter: Platforms, Frameworks &amp; Libraries">
+<meta name="Keywords" content=".NET, Beginner, MVC,.NET Framework,Platforms, Frameworks &amp; Libraries,Free source code, tutorials">
+<meta name="Author" content="The Code Project">
+<meta name="Rating" content="General">
+<meta name="Robots" content="index, follow">
+<meta name="Revisit-After" content="1 days">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - All topics" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=1">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - MFC / C++" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=2">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - C#" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=3">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - ASP.NET" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=4">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - .NET" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=5">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Latest articles - VB.NET" href="http://www.codeproject.com/webservices/articlerss.aspx?cat=6">
+<link rel="alternate" type="application/rss+xml" title="CodeProject Lounge Postings" href="http://www.codeproject.com/webservices/LoungeRSS.aspx">
+<link rel="search" type="application/opensearchdescription+xml" title="CodeProject" href="http://www.codeproject.com/info/OpenSearch.xml">
+
+	<!--<base target="_top">--><base href="." target="_top">
+	<link rel="icon" href="http://www.codeproject.com/favicon.ico" type="image/ico">
+<link rel="shortcut icon" href="http://www.codeproject.com/favicon.ico" type="image/ico">
+<link rel="apple-touch-icon" href="http://www.codeproject.com/images/FavIcon-Apple.png" type="image/png">
+<script type="text/javascript" language="Javascript">//<![CDATA[
+if(top!=self)top.location.href=location.href; if(typeof(DemoUrl)!="undefined")document.write(unescape('%3Cme')+'ta http'+'-equiv="re' +'fresh" con'+'tent="1;url='+DemoUrl+unescape('"%3CE'));
+function SelfCheck(){ return window.confirm("You are about to reply to your own message. Is this really what you want?");}
+var Selected = "-1";
+function Pin(elm){
+ CloseMsg(Selected);
+ var wrk=elm.parentNode; if(wrk)wrk=wrk.children[0];
+ var fc=elm?elm.firstChild:null;
+ if (wrk&&!wrk.pinned) {
+  OpenMsg(wrk.name, true);wrk.pinned=true;fc.src='http://s.codeproject.com/script/forums/images/pinned.gif';fc.title='Pinned. Click to unpin'
+ } else {
+  wrk.pinned=false;CloseMsg(wrk.name); fc.src='http://s.codeproject.com/script/forums/images/pin.gif';fc.title='Click to pin message'
+ }
+ return false;
+}
+function CloseMsg(msgId) {
+ if(!msgId||msgId==''||msgId<0)return;
+ var lnk=document.getElementsByName(msgId);
+ if(lnk&&lnk.length>0&&lnk[0].pinned)return;
+ var hed=document.getElementById('F' + msgId.toString() + '_h0');
+ if(hed) hed.className = hed.className.replace("Sel", "UnSel");
+ var bdy=document.getElementById('F' + msgId.toString() + '_h1');
+ if(bdy) bdy.style.display = 'none';
+}
+function OpenMsg(msgId, keep) {
+ if(!msgId||msgId==''||msgId<0)return;
+ var bdy=document.getElementById('F' + msgId.toString() + '_h1');
+ if(bdy){
+  var lnk=document.getElementsByName(msgId);
+  if(lnk&&lnk.length>0&&lnk[0].pinned)keep=true;
+  if(keep&&bdy.style.display!='none')return;
+  if(bdy.style.display=='none') bdy.style.display='';
+  else bdy.style.display = 'none';
+ }
+ var hed=document.getElementById('F' + msgId.toString() + '_h0');
+ if (hed) hed.className = hed.className.replace('UnSel', 'Sel');
+ if(bdy&&hed&&bdy.style.display!='none'){
+  var webkitWeird=document.documentElement.scrollTop < document.body.scrollTop;
+  if (!webkitWeird)document.body.scrollTop = getRealPos(hed, 'Top') - document.body.clientHeight/10;
+  EnsureMessageVisible(msgId, true);
+ }
+}
+function EnsureMessageVisible(msgID, bShowTop) {
+	var webkitWeird = document.documentElement.scrollTop < document.body.scrollTop;
+	var msgHeader = document.getElementById('F' + msgID + '_h0');
+	var msgBody = document.getElementById('F' + msgID + '_h1');
+	if (!msgBody || !msgHeader) return;
+	var scrollContainer = document.documentElement;
+	var top = getRealPos(msgHeader, 'Top');
+	var bottom = getRealPos(msgBody, 'Top') + msgBody.offsetHeight;
+	var scrollTop = webkitWeird? scrollTop = document.body.scrollTop:document.documentElement.scrollTop;
+	if (scrollTop > top && !bShowTop) scrollTop = top - scrollContainer.clientHeight / 10;
+	if (scrollTop + scrollContainer.clientHeight < bottom) scrollTop = bottom - scrollContainer.clientHeight;
+	if (scrollTop > top && bShowTop) scrollTop = top - scrollContainer.clientHeight / 10;
+	if (webkitWeird) document.body.scrollTop = scrollTop; else scrollContainer.scrollTop = scrollTop;
+}
+function getRealPos(i,which) {
+	iPos = 0;
+	while (i!=null)  {
+		iPos += i['offset' + which];
+		i = i.offsetParent;
+	}
+	return iPos;
+}
+
+function SwitchMessage(e, msgId)
+{
+
+  if (msgId) msgId=msgId.toString();
+
+  else {
+
+    if(!e)e=window.event;
+
+    var target=e.target?e.target:e.srcElement;
+
+    while(target&&target.id!='DynMessLink')target=target.parentNode;
+    if(!target||target.id!='DynMessLink')return;
+    if(target.pinned){Selected='';return false;}
+    msgId=target.name;
+  }
+  CloseMsg(Selected)
+  if(Selected==msgId) Selected='';
+  else { OpenMsg(msgId, false); Selected=msgId;}
+  if (e){if(e.preventDefault)e.preventDefault;else e.returnValue=false;}
+  return false;
+}
+
+
+//]]>
+</script>
+
+<script type="text/javascript" async="" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/ga.js"></script></head>	
+
+<body>
+
+<a href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#Main"><img alt="Click here to Skip to main content" class="access-link" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t.gif"></a>
+
+
+
+
+<div class="container nav-memberbar clearfix">
+<div class="member-stats float-left">7,477,534 members and growing! (20,931 online)</div>
+<div class="float-left"></div>
+<div class="float-right">
+
+
+
+	<a name="SignUp"></a>
+	<form name="subForm" id="subForm" action="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx" method="post" class="tight">
+
+	<!-- This hidden field is used for identifying the form which has made post request.
+		 (This form posts to another page and we need to know which form did the post request) -->
+	<input id="FormName" name="FormName" value="MenuBarForm" type="hidden">
+
+	Email <input class="small-text" type="text" name="Email" id="Email" style="width:150px">
+	Password <input class="small-text" type="password" name="Password" id="Password" style="width:60px">
+	<input type="submit" value="Sign in" class="button">
+	<script type="text/javascript">
+function Join(){document.location.href='https://www.codeproject.com/script/Membership/Modify.aspx';return false;}
+document.write('<input type="button" class="button" onclick="return Join();" value="Join"');
+document.write('<input type="hidden" name="fld_quicksign" value="true" />');
+</script><input type="button" class="button" onclick="return Join();" value="Join" <input="" name="fld_quicksign">
+	<span class="nowrap">
+		<input type="checkbox" checked="checked" name="RememberMeCheck" id="RememberMeCheck" value="1">
+		<label for="RememberMeCheck">Remember&nbsp;me?</label>
+	</span>&nbsp;
+	<a id="ctl00_MemberMenu_SendPassword" href="http://www.codeproject.com/script/Membership/SendPassword.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Lost password?</a>
+	</form>
+
+</div>
+
+</div>
+
+
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr>
+	<td class="header"><a href="http://www.codeproject.com/"><img id="ctl00_Logo" title="The Code Project" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/logo225x90.gif" alt="Home" style="border-width:0px;"></a></td>
+	<td class="header" align="right">
+		<div class="lqm_ad" width="728px" height="90px" lqm_channel="1" lqm_publisher="495" lqm_zone="77" lqm_format="8" lqm_country="IN" lqm_tags=".NET,Beginner,MVC"><a href="http://a.lakequincy.com/c.ashx?channel=1&country=IN&format=8&pageid=AA10A25E-9817-8572-01CC-BDCA90D9F49A&publisher=495&tags=.NET%2cBeginner%2cMVC&target=_blank&ypos=72&zone=77&renderhtml=true&callback=jsonp1291875967535&&userguid=00000000-0000-0000-0000-000000000000&placement=7794&creative=5421" target="_blank"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/Citrix_021209_FXS_728x90s-f_19072010055159.gif" border="0" height="90" width="728" alt="Click Here"></a></div>
+	</td>
+</tr></tbody></table>
+
+<table cellpadding="0" cellspacing="0" class="contrast1-background extended"><tbody><tr><td nowrap="nowrap">
+	
+
+<div class="navbar clearfix">
+<ul id="nav">
+
+<li><a id="ctl00_TopNavBar_Home" class="down" href="http://www.codeproject.com/">Home</a>
+
+</li><li><a id="ctl00_TopNavBar_Art" class="down selected" href="http://www.codeproject.com/script/Articles/Latest.aspx">Articles</a>
+
+	<ul>
+		<li><a id="ctl00_TopNavBar_ArtTopicList" class="fly last" onmouseover="PopulateMap(this, &#39;siteMap&#39;, &#39;600px&#39;);" href="http://www.codeproject.com/script/Content/SiteMap.aspx">Chapters and Sections</a><ul id="ctl00_TopNavBar_MapFlyout"><li>
+				<div id="siteMap" style="height:0px;width:0px;border:1px solid green;background-color:white;overflow:scroll">
+					<img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/animated.gif" style="margin:150px;width:100px;height:100px;">
+				</div>
+			</li></ul>
+		</li>
+		<li><a id="ctl00_TopNavBar_ArtSearch" class="fly break" href="http://www.codeproject.com/info/search.aspx">Search</a></li>
+		<li><a id="ctl00_TopNavBar_ArtLatestArts" class="fly" href="http://www.codeproject.com/script/Articles/Latest.aspx">Latest Articles</a></li>
+		<li><a id="ctl00_TopNavBar_ArtLatestTips" class="fly" href="http://www.codeproject.com/script/Articles/Latest.aspx?at=6">Latest Tips/Tricks</a></li>
+		<li><a id="ctl00_TopNavBar_ArtTop" class="fly" href="http://www.codeproject.com/script/Articles/TopArticles.aspx?ta_so=4">Top Articles</a></li>
+		<li><a id="ctl00_TopNavBar_ArtBeginner" class="fly" href="http://www.codeproject.com/info/search.aspx?aidlst=152&sa_us=True">Beginner Articles</a></li>
+		<li><a id="ctl00_TopNavBar_ArtBlogArticles" class="fly break" href="http://www.codeproject.com/script/Articles/BlogArticleList.aspx">Technical Blogs</a></li>
+		<li><a id="ctl00_TopNavBar_ArtPostArticle" class="fly" href="http://www.codeproject.com/info/Submit.aspx">Post an Article</a></li>
+		<li><a id="ctl00_TopNavBar_ArtPostTipTrick" class="fly" href="http://www.codeproject.com/Tips/post.aspx">Post Tip &amp; Trick</a></li>
+		<li><a id="ctl00_TopNavBar_ArtPostBlog" class="fly break" href="http://www.codeproject.com/script/Articles/BlogFeed.aspx">Post your Blog</a></li>
+		<li><a id="ctl00_TopNavBar_ArtGuide" class="fly" href="http://www.codeproject.com/info/Submit.aspx">Posting/Update Guidelines</a></li>
+		<li><a id="ctl00_TopNavBar_ArtCompetition" class="fly last" href="http://www.codeproject.com/script/Awards/CurrentCompetitions.aspx?cmpTpId=1">Article Competition</a></li>
+	</ul>
+
+</li>
+
+
+
+<li><a id="ctl00_TopNavBar_Answers" href="http://www.codeproject.com/script/Answers/List.aspx?tab=active">Questions &amp; Answers</a>
+	<ul>
+		<li id="ctl00_TopNavBar_AQL"><a id="ctl00_TopNavBar_ArticleQuestion" class="fly highlight" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#_comments">Ask a Question about this article</a></li>
+
+		<li class="heading">Quick Answers</li>
+		<li><a id="ctl00_TopNavBar_QAAsk" class="fly" href="http://www.codeproject.com/Questions/ask.aspx">Ask a Question</a></li>
+		
+		
+		<li><a id="ctl00_TopNavBar_QAUnanswered" class="fly" href="http://www.codeproject.com/script/Answers/List.aspx?tab=unanswered">View Unanswered Questions</a></li>
+		<li><a id="ctl00_TopNavBar_QALatest" class="fly" href="http://www.codeproject.com/script/Answers/List.aspx?tab=active">View All Questions...</a></li>
+		
+				<li><a id="ctl00_TopNavBar_QATR_ctl00_Tag" class="fly" href="http://www.codeproject.com/script/Answers/List.aspx?tab=active&tags=81" style="padding-left:30px">C# questions</a></li>
+			
+				<li><a id="ctl00_TopNavBar_QATR_ctl01_Tag" class="fly" href="http://www.codeproject.com/script/Answers/List.aspx?tab=active&tags=85" style="padding-left:30px">ASP.NET questions</a></li>
+			
+				<li><a id="ctl00_TopNavBar_QATR_ctl02_Tag" class="fly" href="http://www.codeproject.com/script/Answers/List.aspx?tab=active&tags=842" style="padding-left:30px">VB.NET questions</a></li>
+			
+				<li><a id="ctl00_TopNavBar_QATR_ctl03_Tag" class="fly" href="http://www.codeproject.com/script/Answers/List.aspx?tab=active&tags=78" style="padding-left:30px">C++ questions</a></li>
+			
+				<li><a id="ctl00_TopNavBar_QATR_ctl04_Tag" class="fly" href="http://www.codeproject.com/script/Answers/List.aspx?tab=active&tags=69" style="padding-left:30px">C#3.0 questions</a></li>
+			
+		<li class="heading">Programming Discussions</li>
+		<li><a id="ctl00_TopNavBar_MessageBoardsAll" class="fly" href="http://www.codeproject.com/script/Forums/List.aspx">All Message Boards...</a></li>
+		<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1580997/Application-Lifecycle.aspx">Application Lifecycle<span class="fly-menu">&gt;</span></a>
+<ul><li><a class="fly" href="http://www.codeproject.com/Forums/369270/Design-and-Architecture.aspx">Design and Architecture</a></li>
+<li><a class="fly" href="http://www.codeproject.com/Forums/1533717/Running-a-Business.aspx">Running a Business</a></li>
+<li><a class="fly" href="http://www.codeproject.com/Forums/1533716/Sales-Marketing.aspx">Sales / Marketing</a></li>
+<li><a class="fly" href="http://www.codeproject.com/Forums/1651/Collaboration-Beta-Testing.aspx">Collaboration / Beta Testing</a></li>
+<li><a class="fly" href="http://www.codeproject.com/Forums/3304/Work-Training-Issues.aspx">Work &amp; Training Issues</a></li>
+</ul></li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1647/C-Cplusplus-MFC.aspx">C / C++ / MFC<span class="fly-menu">&gt;</span></a>
+<ul><li><a class="fly" href="http://www.codeproject.com/Forums/4486/ATL-WTL-STL.aspx">ATL /  WTL / STL</a></li>
+<li><a class="fly" href="http://www.codeproject.com/Forums/3785/Managed-Cplusplus-CLI.aspx">Managed C++/CLI</a></li>
+</ul></li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1649/Csharp.aspx">C#</a>
+</li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1725/Database.aspx">Database</a>
+</li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1642/IT-Infrastructure.aspx">IT &amp; Infrastructure<span class="fly-menu">&gt;</span></a>
+<ul><li><a class="fly" href="http://www.codeproject.com/Forums/186301/Hardware-Devices.aspx">Hardware &amp; Devices</a></li>
+<li><a class="fly" href="http://www.codeproject.com/Forums/1644/System-Admin.aspx">System Admin</a></li>
+</ul></li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1643/Java.aspx">Java</a>
+</li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1650/NET-Framework.aspx">.NET Framework</a>
+</li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/13695/Mobile.aspx">Mobile</a>
+</li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1540733/Sharepoint.aspx">Sharepoint</a>
+</li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1004257/Silverlight-WPF.aspx">Silverlight / WPF</a>
+</li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1646/Visual-Basic.aspx">Visual Basic</a>
+</li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1640/Web-Development.aspx">Web Development<span class="fly-menu">&gt;</span></a>
+<ul><li><a class="fly" href="http://www.codeproject.com/Forums/12076/ASP-NET.aspx">ASP.NET</a></li>
+<li><a class="fly" href="http://www.codeproject.com/Forums/1580227/CSS.aspx">CSS</a></li>
+<li><a class="fly" href="http://www.codeproject.com/Forums/1580226/Javascript.aspx">Javascript</a></li>
+<li><a class="fly" href="http://www.codeproject.com/Forums/1213656/PHP.aspx">PHP</a></li>
+</ul></li>
+<li><a class="fly" style="padding-left:30px" href="http://www.codeproject.com/Forums/1645/Site-Bugs-Suggestions.aspx">Site Bugs / Suggestions</a>
+</li>
+
+
+		<li class="heading">Other Languages<span class="fly-menu">&gt;</span>
+		<ul>
+		<li><a class="fly" href="http://www.codeproject.com/Forums/1580229/Hindi.aspx">General Indian Topics</a></li>
+		<li><a class="fly" href="http://www.codeproject.com/Forums/1580230/Chinese.aspx">General Chinese Topics</a></li>
+		</ul></li>
+	
+	</ul>
+
+</li>
+
+
+<li><a id="ctl00_TopNavBar_Zones" href="http://www.codeproject.com/Zones/index.aspx">Learning Zones</a>
+
+	<ul>
+		<!--<li class="heading">Zones</li>-->
+		<li><a href="http://www.codeproject.com/Zones/Commerce/" class="fly">The Commerce Zone</a></li><li><a href="http://www.codeproject.com/Zones/Mobile/" class="fly">The Mobile Zone</a></li><li><a href="http://www.codeproject.com/Zones/Cloud/" class="fly">The Cloud Zone</a></li><li><a href="http://www.codeproject.com/Zones/Hardware/" class="fly">The Hardware Zone</a></li><li><a href="http://www.codeproject.com/Zones/Parallelism/" class="fly">The Parallelism Zone</a></li><li><a href="http://www.codeproject.com/Zones/WPF-Silverlight/" class="fly">The WPF Silverlight Zone</a></li><li><a href="http://www.codeproject.com/Zones/SqlServer/" class="fly">The SQL Zone</a></li><li><a href="http://www.codeproject.com/Zones/WhitePapers/" class="fly">WhitePapers / Webcasts</a></li>
+	</ul>
+
+</li>
+
+
+
+
+
+
+
+
+
+
+<li><a id="ctl00_TopNavBar_Community">Features</a>
+
+	<ul>
+		<li><a id="ctl00_TopNavBar_WhosWho" class="fly" href="http://www.codeproject.com/script/Membership/Profiles.aspx">Who's Who</a></li>
+		<li><a id="ctl00_TopNavBar_MVPs" class="fly" href="http://www.codeproject.com/script/Awards/MVPWinners.aspx">CodeProject MVPs</a></li>
+		<li><a id="ctl00_TopNavBar_Companies" class="fly break" href="http://www.codeproject.com/script/Membership/Profiles.aspx?mgtid=1&mgm=True">Company Listings</a></li>
+		<li><a id="ctl00_TopNavBar_Catalog" class="fly" href="http://www.codeproject.com/script/Catalog/List.aspx">Component &amp; Service Catalog</a></li>
+		<li><a id="ctl00_TopNavBar_Comps" class="fly" href="http://www.codeproject.com/script/Awards/CurrentCompetitions.aspx?cmpTpId=1&awsac=true">Competitions</a></li>
+		<li><a id="ctl00_TopNavBar_News" class="fly" href="http://www.codeproject.com/script/News/List.aspx">News</a></li>
+		<li><a id="ctl00_TopNavBar_Insider" class="fly" href="http://www.codeproject.com/Feature/Insider/">Daily Insider</a></li>
+		<li><a id="ctl00_TopNavBar_Newsletters" class="fly" href="http://www.codeproject.com/script/Mailouts/Archive.aspx?mtpid=1">Newsletter archive</a></li>
+		<li><a id="ctl00_TopNavBar_PressRelease" class="fly" href="http://www.codeproject.com/script/PressReleases/Preview.aspx">Press Releases</a></li>
+		<li><a id="ctl00_TopNavBar_Surveys" class="fly" href="http://www.codeproject.com/script/Surveys/List.aspx">Surveys</a></li>
+		<li><a id="ctl00_TopNavBar_Stuff" class="fly" href="http://www.codeproject.com/Info/Stuff.aspx">CodeProject Stuff</a></li>
+		<li><a id="ctl00_TopNavBar_AddIn" class="fly last" href="http://www.codeproject.com/Services/Addins/">CodeProject VS Addin </a></li>
+	</ul>
+
+</li>
+
+
+<li><a id="ctl00_TopNavBar_Help" href="http://www.codeproject.com/KB/FAQs/">Help!</a>
+
+	<ul>
+		<li><a id="ctl00_TopNavBar_HelpWhatIs" class="fly" href="http://www.codeproject.com/info/guide.aspx">What is 'The Code Project'?</a></li>
+		<li><a id="ctl00_TopNavBar_HelpGeneral" class="fly" href="http://www.codeproject.com/KB/FAQs/">General FAQ</a></li>
+		<li><a id="ctl00_TopNavBar_HelpPostQuestion" class="fly" href="http://www.codeproject.com/Questions/ask.aspx">Post a Question</a></li>
+		<li><a id="ctl00_TopNavBar_HelpBugs" class="fly" href="http://www.codeproject.com/Forums/1645/Site-Bugs-Suggestions.aspx">Bugs and Suggestions</a></li>
+		<li><a id="ctl00_TopNavBar_HelpSiteMap" class="fly" href="http://www.codeproject.com/script/Content/SiteMap.aspx">Site Directory</a></li>
+		<li><a id="ctl00_TopNavBar_HelpAdvertise" class="fly" href="http://www.codeproject.com/info/MediaKit.aspx">Advertise with us</a></li>
+		<li><a id="ctl00_TopNavBar_HelpAboutUs" class="fly last" href="http://www.codeproject.com/info/about.aspx">About Us</a></li>
+	</ul>
+
+</li>
+
+
+<li style="margin-left:10px">
+<a id="ctl00_TopNavBar_Lounge" class="simple" href="http://www.codeproject.com/Lounge.aspx">The Lounge</a>
+
+	<ul>
+		<li><a id="ctl00_TopNavBar_LoungeLnk" class="fly" href="http://www.codeproject.com/Lounge.aspx">The Lounge &nbsp;</a></li>
+		<li><a id="ctl00_TopNavBar_CleverLnk" class="fly" href="http://www.codeproject.com/feature/CleverCode.aspx">Clever Code</a></li>
+		<li><a id="ctl00_TopNavBar_ShameLnk" class="fly" href="http://www.codeproject.com/feature/HallOfSHame.aspx">Hall of Shame</a></li>
+		<li><a id="ctl00_TopNavBar_SoapBoxLnk" class="fly" href="http://www.codeproject.com/Forums/1536756/The-Soapbox-2-0.aspx">The Soapbox</a></li>
+		
+	</ul>
+
+</li>
+
+</ul>
+
+</div>
+
+<script type="text/javascript">
+function PopulateMap(prnt, elmId, width, height) {
+	var map;
+	if (!prnt.populated && !prnt.populating) {
+		prnt.populating = true;
+		map = $('#' + elmId);
+		map.css('height', '400px');
+		map.css('width', '400px');
+		map.load("/script/content/ajax/SiteMap.aspx", function () {
+			if (height) map.css('height', height); else map.css('height', 'auto');
+			prnt.populated = true;
+		});
+		prnt.populating = false;
+	}
+	if (prnt.populated) {
+		map = map||$('#' + elmId);
+		var defWidth = ($(window).width() * 0.9);
+		if (defWidth > 1000) defWidth = 1000;
+		if (width) map.css('width', width); else map.css('width', defWidth+'px');
+	}
+}
+</script>
+</td><td align="right">
+	
+
+<div class="search-bar">
+
+<form method="get" action="http://www.codeproject.com/info/search.aspx" name="Search" class="tight">
+
+
+<input class="search  subdue" id="sb_tb" value="" name="artkw">
+
+<div class="hover-container">
+	<div id="SearchFilter" class="search-advanced small-text align-left" style="display: none; ">
+	<b>Search within:<br></b>
+		
+		<input type="radio" id="sb_kw" name="sbo" value="kw" checked="true"><label for="sb_kw">Articles</label><br>
+<input type="radio" id="sb_qa" name="sbo" value="qa"><label for="sb_qa">Quick Answers</label><br>
+<input type="radio" id="sb_fm" name="sbo" value="fm"><label for="sb_fm">Messages</label><br>
+<input type="radio" id="sb_ctlk" name="sbo" value="ctlk"><label for="sb_ctlk">Product Catalog</label><br>
+
+
+		
+		
+	</div>
+</div>
+</form>
+
+</div>
+</td></tr></tbody></table>
+
+
+
+
+
+<div class="page-background">
+<div id="AW" class="container-article-wrap"><a name="Main"></a>
+
+
+<div id="A" class="container-article">
+
+	
+	
+
+	<div id="ctl00_Top" class="header">
+
+		
+		<a name="_top"></a>
+		
+
+
+<div class="clearfix">
+
+	<div class="clearfix">
+		
+		<div class="float-right"><a id="ctl00_TitleArea_PageWidth_Fixed" title="Fixed width layout" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?PageFlow=FixedWidth"><img class="toolbar" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/fixed-width.png" style="width:18px;height:18px"></a>
+
+<a id="ctl00_TitleArea_PageWidth_Fluid" title="Fluid layout" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?PageFlow=Fluid"><img class="toolbar" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/fluid-width.png" style="width:18px;height:18px"></a></div>
+		
+		<div class="breadcrumb"><a href="http://www.codeproject.com/script/Content/SiteMap.aspx"><span class="sitemap-anchor" onmouseover="PopulateMap(this,&#39;map&#39;);"><img width="16px" height="16px" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/sitemap16.png" border="0" alt="Site map" style="vertical-align:middle"><div id="map"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/animated.gif" style="margin:150px;width:100px;height:100px;border:0;"></div></span></a> » <a href="http://www.codeproject.com/Chapters/8/Platforms-Frameworks-Libraries.aspx">Platforms, Frameworks &amp; Libraries</a> » <a href="http://www.codeproject.com/KB/dotnet/">.NET Framework</a> » <a href="http://www.codeproject.com/KB/dotnet/#General">General</a></div>
+	</div>
+
+	
+	<div id="ctl00_TitleArea_InfoArea" class="float-right">
+		
+
+<div class="infobox">
+	<table class="tight small-text" cellpadding="0" cellspacing="1">
+	<tbody><tr><td>Licence&nbsp;</td><td><a href="http://www.codeproject.com/info/cpol10.aspx" title="The Code Project Open License (CPOL)">CPOL</a></td></tr>
+	
+	<tr><td>First Posted&nbsp;</td><td nowrap="nowrap"><b>26 Jan 2010</b></td></tr>
+	<tr><td>Views&nbsp;</td><td><b>21,314</b></td></tr>
+	
+	<tr><td>Bookmarked&nbsp;</td><td><b>25 times</b></td></tr>
+	
+	
+	
+	
+	<tr valign="top">
+		<td>Tags&nbsp;</td>
+		<td nowrap="nowrap">
+			
+
+<div id="ctl00_TitleArea_InfoBox_TagsList_TagWrp" class="tags">
+
+<span id="ctl00_TitleArea_InfoBox_TagsList_TagLabel" class="bold"></span>
+
+<span id="ctl00_TitleArea_InfoBox_TagsList_VisibleTags"><a href="http://www.codeproject.com/info/search.aspx?aidlst=98">.NET</a>, <a href="http://www.codeproject.com/info/search.aspx?aidlst=152">Beginner</a>,<br><a href="http://www.codeproject.com/info/search.aspx?aidlst=313">MVC</a></span>
+
+
+</div>
+
+		</td>
+	</tr>
+	</tbody></table>
+</div>	
+	</div>
+
+	
+	<h1 id="ctl00_TitleArea_ArticleTitle">Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners</h1>
+
+	
+	<div class="author">
+		By <b><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=3820048">kiran dangar</a></b> | 
+		26 Jan 2010 
+		
+
+
+		
+		
+	</div>
+
+	
+
+	
+	<div class="abstract"><span id="ctl00_TitleArea_ArticleDescr">Learning ASP.NET MVC (Model View Controller) architecture and fundamentals for beginners</span></div>
+</div>
+
+
+
+		
+	
+		<div id="ctl00_ActionsRow" class="clearfix tab-wrapper pad-top">
+		
+			
+			<div class="float-right"> 
+				<a id="ctl00_ActionLinks_PrintLnk" class="tooltip" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?display=Print">
+	<img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/print.gif" width="24px" height="24px" style="vertical-align:middle;border:0">
+	<div class="speech-bubble-container-up">
+		<div class="speech-bubble-up">Print Article</div>
+		<div class="speech-bubble-pointer-up">
+			<div class="speech-bubble-pointer-up-inner"></div>
+		</div>
+	</div>
+</a>
+
+ 
+
+ 
+
+<span class="tooltip">
+	 
+	<div class="speech-bubble-container-up">
+		<div class="speech-bubble-up">Add to your CodeProject bookmarks</div>
+		<div class="speech-bubble-pointer-up">
+			<div class="speech-bubble-pointer-up-inner"></div>
+		</div>
+	</div>
+</span>
+
+<a href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#_comments" class="tooltip">
+	
+	<img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/discuss.gif" width="24px" height="24px" alt="Discuss" style="vertical-align:middle;border:0">
+	<div class="speech-bubble-container-up">
+		<div class="speech-bubble-up">Discuss this article</div>
+		<div class="speech-bubble-pointer-up">
+			<div class="speech-bubble-pointer-up-inner"></div>
+		</div>
+	</div>
+</a>
+<span id="ctl00_ActionLinks_cmtcnt" class="subdue small-text align-middle" style="margin-left:-4px">18</span>
+
+<a id="ctl00_ActionLinks_BrokenLnk" class="tooltip" href="http://www.codeproject.com/script/Articles/Report.aspx?aid=54576">
+	<img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/report.gif" width="24px" height="24px" alt="Broken Article?" style="vertical-align:middle;border:0">
+	<div class="speech-bubble-container-up">
+		<div class="speech-bubble-up">Report this article as inappropriate</div>
+		<div class="speech-bubble-pointer-up">
+			<div class="speech-bubble-pointer-up-inner"></div>
+		</div>
+	</div>
+</a>
+			</div>
+
+			
+			
+
+<div class="float-left"><table cellpadding="0" cellspacing="0"><tbody><tr>
+	<td class="tab-selected">Article</td><td class="tab-unselected"><a href="http://www.codeproject.com/script/Articles/ViewDownloads.aspx?aid=54576">Browse Code</a></td><td class="tab-unselected"><a href="http://www.codeproject.com/script/Articles/Statistics.aspx?aid=54576">Stats</a></td><td class="tab-unselected"><a href="http://www.codeproject.com/script/Articles/ListVersions.aspx?aid=54576">Revisions (4)</a></td>
+</tr></tbody></table></div>	
+
+
+			
+			<div class="float-left" style="margin-left:15px">
+				<div id="ctl00_CurRat" class="tooltip" name="CurRat_54576">
+					
+<table cellpadding="0" cellspacing="0" class="small-text">
+<tbody><tr>
+	
+	<td><div style="height:24px;width:120px;position:relative;">
+	<table border="0" cellpadding="0" cellspacing="0" class="rating-bar-stars">
+		<tbody><tr>
+			<td width="85px" height="24px" class="filled"></td>
+			<td width="35px" height="24px"></td>
+		</tr>
+	</tbody></table>
+	<img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/stars3.gif" style="position:absolute;top:0;left:0;z-index:10;" width="120" height="24">
+</div></td>
+	<td id="ctl00_ArticleRating_VR" class="nowrap">
+		<span id="ctl00_ArticleRating_VotesR">&nbsp;3.58 (20 votes)</span>
+		
+	</td>
+
+</tr>
+
+</tbody></table>
+
+					<div id="ctl00_RB" class="speech-bubble-container-up">
+						<div class="speech-bubble-up" style="width:150px !important">
+							            
+<div>
+<table class="feature" title="Voting Distribution. Recent data only" cellpadding="0" cellspacing="0"><tbody><tr><td class="chart-column"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pollcol.gif" width="16px" height="21px" border="0px" alt="3 votes, 15.0%" title="3 votes, 15.0%"><br><span title="3 votes">1</span></td>
+<td class="chart-column"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t.gif" width="16px" height="1px" border="0px" alt="" title=""><br><span title="0 votes">2</span></td>
+<td class="chart-column"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pollcol.gif" width="16px" height="28px" border="0px" alt="4 votes, 20.0%" title="4 votes, 20.0%"><br><span title="4 votes">3</span></td>
+<td class="chart-column"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pollcol.gif" width="16px" height="50px" border="0px" alt="7 votes, 35.0%" title="7 votes, 35.0%"><br><span title="7 votes">4</span></td>
+<td class="chart-column"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pollcol.gif" width="16px" height="42px" border="0px" alt="6 votes, 30.0%" title="6 votes, 30.0%"><br><span title="6 votes">5</span></td>
+</tr></tbody></table>
+</div>
+
+
+
+
+						</div>
+						<div class="speech-bubble-pointer-up">
+							<div class="speech-bubble-pointer-up-inner"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	
+
+	
+	
+	
+	
+
+	
+
+	<form name="aspnetForm" method="post" action="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject.htm" id="aspnetForm" style="margin:0;padding:0">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTAyMTMzODg1Ng9kFgJmD2QWAgIJD2QWBAIBD2QWBAIDD2QWAgIBD2QWAgIBD2QWBmYPDxYCHgtOYXZpZ2F0ZVVybAUuL0tCL2RvdG5ldC9NVkNfYXJjaGl0ZWN0dXJlLmFzcHg/ZGlzcGxheT1QcmludGRkAgQPFgIeCWlubmVyaHRtbAUCMThkAgUPDxYCHwAFJi9zY3JpcHQvQXJ0aWNsZXMvUmVwb3J0LmFzcHg/YWlkPTU0NTc2ZGQCDw9kFggCAw8WAh4GYWN0aW9uBSAvS0IvZG90bmV0L01WQ19hcmNoaXRlY3R1cmUuYXNweBYEAgMPZBYCAgIPZBYCAgEPEGRkFgBkAgkPFgIeC18hSXRlbUNvdW50AgFkAgsPDxYCHwAFIC9LQi9kb3RuZXQvTVZDX2FyY2hpdGVjdHVyZS5hc3B4ZGQCEQ8WAh4EVGV4dAULMjYgSmFuIDIwMTBkAhUPFgIfBAUeQ29weXJpZ2h0IDIwMTAgYnkga2lyYW4gZGFuZ2FyZAIDD2QWAgIFDw8WAh4HVmlzaWJsZWhkZGRj51ElShdVNuPbd3nz9oTUr6Xa5w==">
+</div>
+
+
+			<!-- Main Page Contents Start -->
+			<div id="contentdiv" class="article">
+			
+
+<!-- Article Starts -->
+
+
+<h2>Introduction</h2>
+
+<p>This article is intended to provide basic concepts and fundamentals of ASP.NET MVC (Model View Controller) architecture workflow for beginners. </p>
+
+<p>“M” “V” “C” stands for “MODEL” “VIEW” “CONTROLLER”. ASP.NET MVC is an architecture to develop ASP.NET web applications in a different manner than the traditional ASP.NET web development. Web applications developed with ASP.NET MVC are even more SEO (Search Engine) friendly. </p>
+
+<p>Developing ASP.NET MVC application requires Microsoft .NET Framework 3.5 or higher. </p>
+
+<h2>MVC Interaction with Browser </h2>
+
+<p>Like a normal web server interaction, MVC application also accepts requests and responds to the web browser in the same way. </p>
+<img style="BORDER-BOTTOM-STYLE: none; BORDER-LEFT: rgb(238,238,238) 1px solid; PADDING-BOTTOM: 10px; BORDER-RIGHT-STYLE: none; MARGIN: 0px; PADDING-LEFT: 4px; PADDING-RIGHT: 10px; BORDER-TOP: rgb(238,238,238) 1px solid; PADDING-TOP: 4px; background-origin: initial; background-clip: initial" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/012610_1218_understandi11.png" complete="true"> 
+<h2>Inside MVC Architecture </h2>
+
+<p>The entire ASP.NET MVC architecture is based on Microsoft .NET Framework 3.5 and in addition uses LINQ to SQL Server.</p>
+
+<h4>What is a Model?</h4>
+
+<ol>
+<li>MVC <strong>model</strong> is basically a C# or VB.NET class </li>
+
+<li>A <strong>model</strong> is accessible by both <strong>controller</strong> and <strong>view</strong> </li>
+
+<li>A <strong>model</strong> can be used to pass data from <strong>Controller</strong> to <strong>view</strong></li>
+
+<li>A <strong>view</strong> can use model to display data in page.</li>
+</ol>
+
+<h4>What is a View? </h4>
+
+<ol>
+<li>View is an ASPX page without having a code behind file </li>
+
+<li>All page specific HTML generation and formatting can be done inside view </li>
+
+<li>One can use Inline code (server tags ) to develop dynamic pages </li>
+
+<li>A request to <strong>view</strong> (ASPX page) can be made only from a controller’s action method</li>
+</ol>
+
+<p><strong>What is a Controller?</strong> </p>
+
+<ol>
+<li><strong>Controller</strong> is basically a C# or VB.NET class which inherits <strong>system.mvc.controller</strong> </li>
+
+<li><strong>Controller</strong> is a heart of the entire MVC architecture </li>
+
+<li>Inside<strong> Controller’s class </strong>action methods can be implemented which are responsible for responding to browser OR calling views. </li>
+
+<li><strong>Controller</strong> can access and use <strong>model</strong> class to pass data to <strong>views</strong> </li>
+
+<li><strong>Controller </strong>uses <strong>ViewData </strong>to pass any data to <strong>view</strong> </li>
+</ol>
+<img width="490" height="322" style="BORDER-BOTTOM-STYLE: none; BORDER-LEFT: rgb(238,238,238) 1px solid; PADDING-BOTTOM: 10px; BORDER-RIGHT-STYLE: none; MARGIN: 0px; PADDING-LEFT: 4px; PADDING-RIGHT: 10px; BORDER-TOP: rgb(238,238,238) 1px solid; PADDING-TOP: 4px; background-origin: initial; background-clip: initial" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/012610_1218_understandi21.png" border="0" hspace="0" complete="true"> 
+<h2>MVC File Structure &amp; File Naming Standards </h2>
+
+<p>MVC uses a standard directory structure and file naming standards which are a very important part of MVC application development. </p>
+
+<p>Inside the ROOT directory of the application, there must be 3 directories each for model, view and Controller.</p>
+
+<p>Apart from 3 directories, there must have a <strong><em>Global.asax</em> </strong>file in root folder, and a <em>web.config</em> like a traditional ASP.NET application.</p>
+
+<ul>
+<li><strong>Root </strong>[directory] 
+<ul>
+<li><strong>Controller</strong> [directory] 
+<ul>
+<li>Controller CS files</li>
+</ul>
+</li>
+
+<li><strong>Models</strong> [directory] 
+<ul>
+<li>Model CS files</li>
+</ul>
+</li>
+
+<li><strong>Views </strong>[directory] 
+<ul>
+<li>View CS files</li>
+</ul>
+</li>
+
+<li><em>Global.asax</em> </li>
+
+<li><em>Web.config </em></li>
+</ul>
+</li>
+</ul>
+
+<h2>ASP.NET MVC Execution Life Cycle </h2>
+
+<p>Here is how MVC architecture executes the requests to browser and objects interactions with each other. </p>
+
+<p>A step by step process is explained below <strong>[Refer to the figure as given below]</strong>: </p>
+<img width="500" height="409" style="BORDER-BOTTOM-STYLE: none; BORDER-LEFT: rgb(238,238,238) 1px solid; PADDING-BOTTOM: 10px; BORDER-RIGHT-STYLE: none; MARGIN: 0px; PADDING-LEFT: 4px; PADDING-RIGHT: 10px; BORDER-TOP: rgb(238,238,238) 1px solid; PADDING-TOP: 4px; background-origin: initial; background-clip: initial" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/012610_1218_understandi31.png" border="0" hspace="0" complete="true"> 
+<h3>Browser Request (Step 1) </h3>
+
+<p>Browser request happens with a specific URL. Let’s assume that the user enters URL like: [xyz.com]/home/index/ </p>
+
+<h3>Job of Global.asax – MVC routing (Step 2) </h3>
+
+<p>The specified URL will first get parsed via <code>application_start()</code> method inside <em>Global.asax</em> file. From the requested URL, it will parse the <strong>Controller, Action and ID.</strong></p>
+
+<p>So for [xyz.com]/home/index/:</p>
+
+<ul>
+<li>Controller = home </li>
+
+<li>Action = index() </li>
+
+<li>ID = empty — we have not specified ID in [xyz.com]/home/index/, so it will consider as empty string </li>
+</ul>
+
+<h3>Controller and Action methods (Step 3)</h3>
+
+<p>MVC now finds the <strong>home controller</strong> class in controller directory. A controller class contains different action methods,</p>
+
+<p>There can be more than one action method, but MVC will only invoke the action method which has been parsed from the URL, its <code>index() </code>in our case.</p>
+
+<p>So something like: <code>homeController.index() </code>will happen inside MVC controller class.</p>
+
+<p>Invoking action method can return plain text string OR rendered HTML by using view. </p>
+
+<h3>Call to View (Step 4)</h3>
+
+<p>Invoking view will return <code>view()</code>. A call to view will access the particular ASPX page inside the view directory and generate the rendered HTML from the ASPX and will respond back to the browser.</p>
+
+<p>In our case, controller was <strong>home </strong>and action was <code>index()</code>. So calling <code>view() </code>will return a rendered HTML from the ASPX page located at <em>/views/home/index.aspx</em>.</p>
+
+<p><strong>This is it, the whole process ends here. So this is how MVC architecture works.</strong> </p>
+
+<h2>History</h2>
+
+<ul>
+<li>26<sup>th</sup> January, 2010: Initial post </li>
+</ul>
+
+
+
+
+
+
+			</div>
+			<!-- Main Page Contents End -->
+
+			
+			
+			<h2>License</h2>
+			<div id="LicenseTerms"><p>This article, along with any associated source code and files, is licensed under <a href="http://www.codeproject.com/info/cpol10.aspx">The Code Project Open License (CPOL)</a></p></div>
+			
+
+			
+			<h2 id="ctl00_AboutHeading">About the Author</h2>
+
+			<div class="float-right">
+			<div class="lqm_ad" width="300px" height="250px" lqm_channel="1" lqm_publisher="495" lqm_zone="77" lqm_format="6" lqm_country="IN" lqm_tags=".NET,Beginner,MVC"><a href="http://a.lakequincy.com/c.ashx?channel=1&country=IN&format=6&pageid=AA10A25E-9817-8572-01CC-BDCA90D9F49A&publisher=495&tags=.NET%2cBeginner%2cMVC&target=_blank&ypos=3110&zone=77&renderhtml=true&callback=jsonp1291875967536&&userguid=00000000-0000-0000-0000-000000000000&placement=8018&creative=7624" target="_blank"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/634239533517979688.gif" border="0" height="250" width="300" alt="Click Here"></a></div>
+			</div>
+
+			
+			
+   
+<table cellpadding="0" cellspacing="5" border="0">
+<tbody><tr valign="top">
+<td id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberPhotoTable" valign="top" style="width:155px;">
+	<b><a id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberProfileLink" href="http://www.codeproject.com/Members/kiran-dangar">kiran dangar</a></b><br><br>
+	<center></center>
+
+	<div class="small-text">
+		<span id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberJobTitle">Software Developer (Senior)</span><br>
+		<span id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberCompany">Gateway Technolabs Pvt. Ltd</span><br>
+		<span id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberLocation"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/IN.gif" alt="India" width="16px" height="11px"> India</span><br>
+		<br>
+		<span id="ctl00_AboutAuthorRptr_ctl00_AboutAuthor_memberType">Member</span><br>
+		<br><a class="small-text" href="http://www.twitter.com/kirandangar"> <img style="vertical-align:middle;border:0;" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t_mini-b.png" alt="Follow on Twitter"> Follow on Twitter</a>
+
+		
+	</div>
+</td>
+
+<td>
+	I am a Sr. Software Eng. in a leading Software Company.<br>Proficient in asp.net,c#.net, SQL Server 2005,AJAX, XML,JQuery, JavaScript, web development, .net framework, WCF , WPF/Silverlight , asp.net MVC.<br>	
+</td>
+</tr>
+</tbody></table><br>
+			
+			
+
+			<div class="clearfix"></div>
+
+			
+			<div id="ctl00_RateArticleRow" class="clearfix voting-bar">
+			<div class="column8_1" style="padding-top:8px"> <a href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#_top">Article Top</a></div>
+			<div class="column8_7 align-right"><div id="ctl00_RateArticle_RateItemWrapper" class="small-text" name="RateItem_54576">
+
+	<table width="100%" cellpadding="0" cellspacing="0" small-text="">
+	<tbody><tr>
+		
+	
+		<td class="voteTbl" style="white-space:nowrap" align="right">
+			<table class="small-text">
+			<tbody><tr valign="middle">
+				<td id="ctl00_RateArticle_SignIn" nowrap="nowrap">
+					<a href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#SignUp">Sign Up</a> to vote for this article
+				</td>
+
+				
+				
+				
+				
+				
+			</tr>
+			</tbody></table>
+			<span id="ctl00_RateArticle_ErrorMessage" class="error"></span>
+		</td>
+	</tr>
+	</tbody></table>
+	<div class="hover-container">
+		<div id="ctl00_RateArticle_RCD" class="rating-comment align-left float-right">
+			Add a reason or comment to your vote: <a href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" id="clear-rate_ctl00_RateArticle_RCD" title="close">x</a><br>
+			<textarea class="RateComment" rows="5" cols="60" style="width:98%;"></textarea>
+		</div>
+	</div>
+</div>
+</div>
+			</div>
+			
+
+		</form>
+
+		
+		<div style="margin:auto;padding:0px 10px;white-space:nowrap;overflow:hidden;width:460px;height:60px">		  
+			<div class="lqm_ad" width="468px" height="60px" lqm_channel="1" lqm_publisher="495" lqm_zone="77" lqm_format="1" lqm_country="IN" lqm_tags=".NET,Beginner,MVC"><a href="http://a.lakequincy.com/c.ashx?channel=1&country=IN&format=1&pageid=AA10A25E-9817-8572-01CC-BDCA90D9F49A&publisher=495&tags=.NET%2cBeginner%2cMVC&target=_blank&ypos=3339&zone=77&renderhtml=true&callback=jsonp1291875967537&&userguid=00000000-0000-0000-0000-000000000000&placement=7322&creative=7781" target="_blank"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/634249843024772298.jpg" border="0" height="60" width="468" alt="Click Here"></a></div>
+		</div>
+		
+
+		
+		
+		<h2>Comments and Discussions</h2>
+		<a name="_comments"></a><!-- Forum Start -->
+<div id="_MessageBoard" onclick="return SwitchMessage(event, null)">
+<table id="ForumTable" class="box forum" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td class="forum-header1 highlight"><b>You must <a href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx%3ffid%3d1558631%26df%3d90%26mpp%3d25%26noise%3d3%26sort%3dPosition%26view%3dQuick">Sign In</a> to use this message board.</b></td>
+</tr><tr>
+<td><table width="100%" border="0" cellpadding="3px" cellspacing="0">
+<tbody><tr class="forum-header1">
+<td style="white-space:nowrap;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/info-16.gif" alt="FAQ" style="border-width:0;width:16px;height:16px;vertical-align:middle;">&nbsp;<a href="http://www.codeproject.com/KB/FAQs/MessageBoardsFAQ.aspx"><b>FAQ</b></a>&nbsp;</td><td colspan="2" style="white-space:nowrap;text-align:right;"><form action="http://www.codeproject.com/script/Forums/Search.aspx?fid=0" method="get" style="margin:0;padding:0;">
+<input type="hidden" name="fid" value="1558631"><input type="text" class="Frm_Input" name="kw">&nbsp;<input type="submit" value="Search" name="FrmSrch" class="button">
+</form></td>
+</tr><tr class="forum-header2">
+<td colspan="3" style="width:100%;"><div style="text-align:right;">
+<form action="http://www.codeproject.com/script/Forums/SetOptions.aspx?floc=%2fKB%2fdotnet%2fMVC_architecture.aspx&fid=1558631&df=90&mpp=25&noise=3&sort=Position&view=Quick" method="get" style="margin:0;padding:0;">
+<input type="hidden" name="fid" value="1558631"><input type="hidden" name="currentQS" value="?floc=%2fKB%2fdotnet%2fMVC_architecture.aspx&amp;fid=1558631&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick"><input type="hidden" name="floc" value="/KB/dotnet/MVC_architecture.aspx">Noise Tolerance<select size="1" class="Frm_DropDown" name="noise">
+<option value="1">Very High</option><option value="2">High</option><option selected="" value="3">Medium</option><option value="4">Low</option><option value="5">Very Low</option>
+</select>&nbsp;&nbsp;Layout<select size="1" class="Frm_DropDown" name="view">
+<option selected="" value="Quick">Normal</option><option value="Topic">Expand Posts only</option><option value="Expanded">Expand Posts &amp; Replies</option><option value="Thread">Thread View</option><option value="Normal">No Javascript</option><option value="Preview">No JS + Preview</option>
+</select>&nbsp;&nbsp;Per page<select size="1" class="Frm_DropDown" name="mpp">
+<option value="10">10</option><option selected="" value="25">25</option><option value="50">50</option>
+</select>&nbsp;&nbsp;&nbsp;<input type="submit" value="Update" name="SetOpt" class="button">
+</form>
+</div></td>
+</tr>
+</tbody></table></td>
+</tr><tr>
+<td><a name="xx0xx"></a><table border="0" cellpadding="2px" cellspacing="0" width="100%">
+<tbody><tr class="forum-navbar">
+<td>&nbsp;</td><td>Msgs 1 to 18 of 18 (Total in Forum: 18) (<a href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&noise=3&sort=Position&view=Quick">Refresh</a>)</td><td style="text-align:right;white-space:nowrap;"><span class="toolbar">First</span><span class="toolbar">Prev</span><span class="toolbar">Next</span></td>
+</tr>
+</tbody></table></td>
+</tr><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%" class="fixed-layout blank-background">
+<tbody><tr>
+<td><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="5px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd Rt HdUnSel " id="F3687571_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="16px" class="Frm_MsgIndent"><a name="xx3687571xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3687571" href="http://www.codeproject.com/Messages/3687571/My-vote-of-3.aspx">My vote of 3</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=4231933">Member 4231933</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">15:14 4 Dec '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3687571_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:16px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="16px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">good<br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3687571" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3687571/My-vote-of-3.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3687571" style="white-space:nowrap;"></span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HdUnSel " id="F3688295_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="34px" class="Frm_MsgIndent"><a name="xx3688295xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3688295" href="http://www.codeproject.com/Messages/3688295/Re-My-vote-of-3.aspx">Re: My vote of 3</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=3820048">kiran dangar</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">21:18 5 Dec '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3688295_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:34px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="34px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Thanks<br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3687571" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3688295/Re-My-vote-of-3.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3688295" style="white-space:nowrap;">4.00/5 (1 vote) </span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="root msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd Rt HdUnSel " id="F3647635_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="16px" class="Frm_MsgIndent"><a name="xx3647635xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3647635" href="http://www.codeproject.com/Messages/3647635/My-vote-of-5.aspx">My vote of 5</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=2137544">ketkale</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">18:47 26 Oct '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3647635_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:16px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="16px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Very good explaination<br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3647635" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3647635/My-vote-of-5.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3647635" style="white-space:nowrap;"></span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="root msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HiVote Rt HdUnSel " id="F3607354_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="16px" class="Frm_MsgIndent"><a name="xx3607354xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3607354" href="http://www.codeproject.com/Messages/3607354/My-vote-of-5.aspx">My vote of 5</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=7411706">Bharti Kohad</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">21:37 22 Sep '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3607354_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:16px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="16px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Gives the basic knowlwdge<br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3607354" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3607354/My-vote-of-5.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3607354" style="white-space:nowrap;">5.00/5 (1 vote) </span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HdUnSel " id="F3608477_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="34px" class="Frm_MsgIndent"><a name="xx3608477xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3608477" href="http://www.codeproject.com/Messages/3608477/Re-My-vote-of-5.aspx">Re: My vote of 5</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=3820048">kiran dangar</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">20:21 23 Sep '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3608477_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:34px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="34px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Hey Bharti,<br>thanks for your appreciation ,<br><br>---<br>Regards,<br>Kiran<br><a href="http://kirandangar.wordpress.com/">http://kirandangar.wordpress.com/</a><br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3607354" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3608477/Re-My-vote-of-5.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3608477" style="white-space:nowrap;"></span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="root msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd LoVote Rt HdUnSel " id="F3605711_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="16px" class="Frm_MsgIndent"><a name="xx3605711xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3605711" href="http://www.codeproject.com/Messages/3605711/My-vote-of-1.aspx">My vote of 1</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=7415201">ShashankRastogi</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">9:29 21 Sep '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3605711_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:16px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="16px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">why does it says it applies to framework 3.5<br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3605711" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3605711/My-vote-of-1.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3605711" style="white-space:nowrap;">1.00/5 (1 vote) </span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="root msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd Rt HdUnSel " id="F3505956_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="16px" class="Frm_MsgIndent"><a name="xx3505956xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3505956" href="http://www.codeproject.com/Messages/3505956/My-vote-of-1.aspx">My vote of 1</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=5285146">levteck</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">7:09 16 Jun '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3505956_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:16px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="16px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Explanations are difficult to follow.  Nice graphics but some difficult to read because the font is too small.<br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3505956" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3505956/My-vote-of-1.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3505956" style="white-space:nowrap;"></span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HdUnSel " id="F3608474_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="34px" class="Frm_MsgIndent"><a name="xx3608474xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3608474" href="http://www.codeproject.com/Messages/3608474/Re-My-vote-of-1.aspx">Re: My vote of 1</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=3820048">kiran dangar</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">20:18 23 Sep '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3608474_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:34px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="34px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Hi, <br>Agreed about less readability of text and graphic, will surely edit with readable images,<br>---<br>Thanks,<br>Kiran Dangar<br><a href="http://kirandangar.wordpress.com/">http://kirandangar.wordpress.com/</a><br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3505956" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3608474/Re-My-vote-of-1.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3608474" style="white-space:nowrap;"></span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="root msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HiVote Rt HdUnSel " id="F3502741_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="16px" class="Frm_MsgIndent"><a name="xx3502741xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3502741" href="http://www.codeproject.com/Messages/3502741/Nice-Work-One-can-easily-understand.aspx">Nice Work - One can easily understand.</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=3764927">Chetan Patel</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">3:08 14 Jun '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3502741_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:16px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="16px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Nice work, simple and straight, one can easily understand.<br><br>Chetan<br><div class="signature">Best Regards,<br>Chetan Patel</div><br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3502741" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3502741/Nice-Work-One-can-easily-understand.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3502741" style="white-space:nowrap;">5.00/5 (1 vote) </span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HdUnSel " id="F3608471_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="34px" class="Frm_MsgIndent"><a name="xx3608471xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3608471" href="http://www.codeproject.com/Messages/3608471/Re-Nice-Work-One-can-easily-understand.aspx">Re: Nice Work - One can easily understand.</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=3820048">kiran dangar</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">20:16 23 Sep '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3608471_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:34px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="34px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Thanks Chetan,<br><br>---<br>Regards,<br>Kiran Dangar<br><a href="http://kirandangar.wordpress.com/">http://kirandangar.wordpress.com/</a><br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3502741" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3608471/Re-Nice-Work-One-can-easily-understand.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3608471" style="white-space:nowrap;"></span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="root msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HiVote Rt HdUnSel " id="F3501158_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="16px" class="Frm_MsgIndent"><a name="xx3501158xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3501158" href="http://www.codeproject.com/Messages/3501158/nice-overview.aspx">nice overview</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=483675">Donsw</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">9:40 11 Jun '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3501158_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:16px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="16px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Nice overview, You might also want to show an example of a MVC application net time. even if it is the sample generated from the IDE.<br><div class="signature">cheers,<br>Donsw<br>My Recent Article : CDC - Change Data Capture</div><br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3501158" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3501158/nice-overview.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3501158" style="white-space:nowrap;">5.00/5 (1 vote) </span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HdUnSel " id="F3608469_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="34px" class="Frm_MsgIndent"><a name="xx3608469xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3608469" href="http://www.codeproject.com/Messages/3608469/Re-nice-overview.aspx">Re: nice overview</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=3820048">kiran dangar</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">20:15 23 Sep '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3608469_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:34px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="34px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Hi, Thanks for appreciation. <br><br>---<br>Cheeers !!<br>Kiran Dangar<br><a href="http://kirandangar.wordpress.com/">http://kirandangar.wordpress.com/</a><br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3501158" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3608469/Re-nice-overview.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3608469" style="white-space:nowrap;"></span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="root msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HiVote Rt HdUnSel " id="F3345554_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="16px" class="Frm_MsgIndent"><a name="xx3345554xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3345554" href="http://www.codeproject.com/Messages/3345554/Good-article-for-beginners.aspx">Good article for beginners</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=5253133">Ravi Kallamadi</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">9:43 26 Jan '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3345554_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:16px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="16px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Good job!  You have explained it very clearly. Can you tell us the advantages of using MVC architecture other than SEO friendly?<br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3345554" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3345554/Good-article-for-beginners.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3345554" style="white-space:nowrap;">5.00/5 (1 vote) </span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HdUnSel " id="F3345964_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="34px" class="Frm_MsgIndent"><a name="xx3345964xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3345964" href="http://www.codeproject.com/Messages/3345964/Re-Good-article-for-beginners.aspx">Re: Good article for beginners</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=3820048">kiran dangar</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">19:51 26 Jan '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3345964_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:34px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="34px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Hi, Thanks for complement,<br>Sure i will post an article sooner for advantages as well. <br><br>Cheeers !!<br>Kiran Dangar<br><a target="_blank" href="http://kirandangar.wordpress.com/">http://kirandangar.wordpress.com/</a><br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3345554" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3345964/Re-Good-article-for-beginners.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3345964" style="white-space:nowrap;"></span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="root msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd Rt HdUnSel " id="F3345463_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="16px" class="Frm_MsgIndent"><a name="xx3345463xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3345463" href="http://www.codeproject.com/Messages/3345463/My-vote-of-1-Poor-explaination.aspx">[My vote of 1] Poor explaination!</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=2336166">Ruchit S.</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">8:31 26 Jan '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3345463_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:16px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="16px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Very scattered and poorly outlined article. There's no single objective clearly achieved in this article. <br><br><div class="signature"><div class="ForumSig">Ruchit S.<br><a href="http://ruchitsurati.net/">http://ruchitsurati.net</a>
+<br>******************************************</div></div><br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3345463" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3345463/My-vote-of-1-Poor-explaination.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3345463" style="white-space:nowrap;">3.00/5 (2 votes) </span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HdUnSel " id="F3345956_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="34px" class="Frm_MsgIndent"><a name="xx3345956xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3345956" href="http://www.codeproject.com/Messages/3345956/Re-My-vote-of-1-Poor-explaination.aspx">Re: [My vote of 1] Poor explaination!</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=3820048">kiran dangar</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">19:43 26 Jan '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3345956_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:34px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="34px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">hey Thanks,<br>well i am not an expert article writer but a beginner, this was a kind try to give basic idea of MVC upto some level for beginners like me, yes you are right perhaps my writing failed to convince you.<br>I will try to make it better for sure, ( so i can expect some good rank from you than the ONE  <img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/smiley_smile.gif" align="top" alt="Smile">  ) <br><br>Cheeers !!<br>Kiran Dangar<br><a target="_blank" href="http://kirandangar.wordpress.com/">http://kirandangar.wordpress.com/</a><br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3345463" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3345956/Re-My-vote-of-1-Poor-explaination.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3345956" style="white-space:nowrap;"></span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="root msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd Rt HdUnSel " id="F3345385_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="16px" class="Frm_MsgIndent"><a name="xx3345385xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3345385" href="http://www.codeproject.com/Messages/3345385/Good-article-but-is-the-architecture-explaination-.aspx">Good article but is the architecture explaination correct?</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=5745297">peterkelly</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">7:42 26 Jan '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3345385_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:16px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="16px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">Hi,<br><br>Good article and well-thought out for the audience you mentioned. Just one thing though - the diagram you show of the ASP.NET MVC pattern describes what I always understood to be classic MVC pattern i.e. the View talks to the Model as well as the Controller. I thought that ASP.NET MVC was a "Passive View" flavour of the classic MVC pattern - that is to say the View does not have any interaction with the Model at all. The Controller orchestrates everything and the View simply renders what is passed back? Just a thought, apologies if I'm wrong... <img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/smiley_smile.gif" align="top" alt="Smile"> <br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3345385" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3345385/Good-article-but-is-the-architecture-explaination-.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3345385" style="white-space:nowrap;">4.00/5 (2 votes) </span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr class="quick">
+<td class="msg-divide"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="1px" alt=""></td>
+</tr>
+<!-- Start Message head -->
+
+<tr class="MsgHd HdUnSel " id="F3345988_h0">
+<td width="100%"><table class="quickHd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="hover-row">
+<td width="34px" class="Frm_MsgIndent"><a name="xx3345988xx"></a><img height="16px" width="16px" align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" alt="General"></td><td class="Frm_MsgSubject hover-container"><a id="DynMessLink" name="3345988" href="http://www.codeproject.com/Messages/3345988/Re-Good-article-but-is-the-architecture-explainati.aspx">Re: Good article but is the architecture explaination correct?</a> <a onclick="return Pin(this);" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx#" title="Click to pin message"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/pin.gif" border="0" align="top" alt="Pin" width="13px" height="12px"></a></td><td style="width:20px;white-space:nowrap;"><img border="0" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/member_sm.gif" title="member" alt="member" height="16px"></td><td class="Frm_MsgAuthor"><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=3820048">kiran dangar</a></td><td class="Frm_MsgDate" style="vertical-align:top;white-space:nowrap;">20:35 26 Jan '10 &nbsp;</td>
+</tr>
+</tbody></table></td>
+</tr><!-- End Message head -->
+
+<tr id="F3345988_h1" style="display:none;">
+<td width="100%"><table class="quickBd" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="Frm_MsgIndent" style="width:34px;"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" height="1px" width="34px" alt=""></td><td class="MsgBd BdSel "><table border="0" cellpadding="0" cellspacing="5px" width="100%">
+<tbody><tr>
+<td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td colspan="2">hey thanks,<br>this link  may clear your doubts regarding to accessibility of MODEL in VIEW :  <a href="http://www.asp.net/learn/mvc/tutorial-11-cs.aspx">http://www.asp.net/learn/mvc/tutorial-11-cs.aspx</a>[<a href="http://www.asp.net/learn/mvc/tutorial-11-cs.aspx" target="_blank" title="New Window">^</a>]<br><br>refer the <b>Listing 3</b> in above link... <br><br>Cheeers !<br>Kiran Dangar<br><a href="http://kirandangar.wordpress.com/">http://kirandangar.wordpress.com/</a>[<a href="http://kirandangar.wordpress.com/" target="_blank" title="New Window">^</a>]<br></td>
+</tr><tr style="vertical-align:middle;">
+<td class="msg-footer"><a class="toolbar" href="https://www.codeproject.com/script/Membership/LogOn.aspx?rp=%2fKB%2fdotnet%2fMVC_architecture.aspx">Sign In</a>·<a class="toolbar" href="http://www.codeproject.com/KB/dotnet/MVC_architecture.aspx?fid=1558631&df=90&mpp=25&sort=Position&tid=3345385" title="View Thread">View&nbsp;Thread</a>·<a class="toolbar" href="http://www.codeproject.com/Messages/3345988/Re-Good-article-but-is-the-architecture-explainati.aspx" title="Get permanent link">PermaLink</a></td><td class="msg-footer" style="text-align:right;"><span id="MVF3345988" style="white-space:nowrap;"></span></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table></td>
+</tr><tr>
+<td><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/t(1).gif" border="0" width="1px" height="5px" alt=""></td>
+</tr>
+</tbody></table></td>
+</tr><tr>
+<td><table width="100%" cellpadding="2px" cellspacing="0">
+<tbody><tr class="forum-footer">
+<td>Last Visit: 21:19 24 Nov '10  &nbsp; &nbsp; Last Update: 20:26 8 Dec '10 </td><td style="text-align:right;white-space:nowrap;"><input id="_mbnUrl" type="hidden" value="/KB/dotnet/MVC_architecture.aspx?fid=1558631&amp;df=90&amp;mpp=25&amp;noise=3&amp;sort=Position&amp;view=Quick&amp;fr=19"><b>1</b></td>
+</tr>
+</tbody></table></td>
+</tr>
+</tbody></table>
+</div><p class="small-text"><img align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_general.gif" width="16px" height="16px" alt="General"> General &nbsp;&nbsp; <img align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_news.gif" width="16px" height="16px" alt="News"> News &nbsp;&nbsp; <img align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_question.gif" width="16px" height="16px" alt="Question"> Question &nbsp;&nbsp; <img align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_answer.gif" width="16px" height="16px" alt="Answer"> Answer &nbsp;&nbsp; <img align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_joke.gif" width="16px" height="16px" alt="Joke"> Joke &nbsp;&nbsp; <img align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_rant.gif" width="16px" height="16px" alt="Rant"> Rant &nbsp;&nbsp; <img align="top" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/msg_admin.gif" width="16px" height="16px" alt="Admin"> Admin &nbsp;&nbsp; </p><p class="small-text">Use Ctrl+Left/Right to switch messages, Ctrl+Up/Down to switch threads, Ctrl+PgUp/PgDown to switch pages.</p>
+<!-- Forum End -->
+
+
+
+
+		
+		<div class="theme1-background" style="height:2px"></div>
+
+		<div class="extended tiny-text">
+			<div class="row" style="margin:auto;">
+				<div class="float-left">
+					<a id="ctl00_PermaLink" href="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject.htm">PermaLink</a> | 
+					<a id="ctl00_PrivacyLink" href="http://www.codeproject.com/info/privacy.aspx">Privacy</a> |
+					<a id="ctl00_TermsOfUseLink" href="http://www.codeproject.com/info/TermsOfUse.aspx">Terms of Use</a>
+					<br>Last Updated: 26 Jan 2010<br>
+					<br>
+				</div>
+				<div class="float-right align-right">
+					Copyright 2010 by kiran dangar<br>Everything else
+					Copyright © <a href="mailto:webmaster@codeproject.com">CodeProject</a>, 1999-2010 <br>
+					Web19 |
+					<a id="ctl00_AdvertiseLink" href="http://www.codeproject.com/info/MediaKit.aspx">Advertise on the Code Project </a>
+				</div>
+			</div>
+		</div>
+		
+
+	
+
+</div>
+
+
+
+<div id="ctl00_NavRight" class="nav-right">
+
+	
+
+	<script type="text/javascript">document.write(unescape('%0d%0a%3cdiv class%3d%22announce%22%3e%0d%0a%3cdiv class%3d%22announce-header%22%3eSponsored Links%3c%2fdiv%3e%0d%0a%3cdiv class%3d%22announce-content%22%3e%09%0d%0a%0d%0a%0d%0a%3cdiv class%3d%22container-adwords%22%3e%0d%0a%09%3ca id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl00_Link%22 href%3d%22%2fscript%2fCatalog%2fRedir.aspx%3fctid%3d2968%26amp%3bcttype%3d2%22 target%3d%22_blank%22%3e%3cspan id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl00_Title%22 class%3d%22title%22%3eSpread for Windows Forms by GrapeCity%3c%2fspan%3e%3cbr %2f%3e%0d%0a%09%09%3cspan id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl00_Teaser%22 title%3d%22New! Spread for Windows Forms 5 by GrapeCity is a full-featured Microsoft Excel compatible spreadsheet component with hundreds of chart styles%2c supports importing and exporting of native Excel files and unlimited customization options.%22 class%3d%22desc%22%3eNew! Spread for Windows Forms 5 by GrapeCity...%3c%2fspan%3e%3cbr %2f%3e%0d%0a%09%09%3cspan id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl00_Url%22 class%3d%22link%22%3ewww.farpointspread.com%3c%2fspan%3e%3c%2fa%3e%0d%0a%3c%2fdiv%3e%0d%0a%0d%0a%3cdiv class%3d%22container-adwords%22%3e%0d%0a%09%3ca id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl01_Link%22 href%3d%22%2fscript%2fCatalog%2fRedir.aspx%3fctid%3d3348%26amp%3bcttype%3d2%22 target%3d%22_blank%22%3e%3cspan id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl01_Title%22 class%3d%22title%22%3eResco MobileApp Studio%3c%2fspan%3e%3cbr %2f%3e%0d%0a%09%09%3cspan id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl01_Teaser%22 title%3d%22Resco MobileApp Studio is a Microsoft Visual Studio based developer platform%2c which can be used for development of mobile applications for multiple mobile device types %e2%80%94 Windows Mobile%2c Windows CE%2c Tablet PC%2c Windows Phone 7%2c iPhone%2c iPad and Android (Android support is scheduled for Q1 2011).%22 class%3d%22desc%22%3eResco MobileApp Studio is a Microsoft Visual...%3c%2fspan%3e%3cbr %2f%3e%0d%0a%09%09%3cspan id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl01_Url%22 class%3d%22link%22%3ewww.resco.net%3c%2fspan%3e%3c%2fa%3e%0d%0a%3c%2fdiv%3e%0d%0a%0d%0a%3cdiv class%3d%22container-adwords%22%3e%0d%0a%09%3ca id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl02_Link%22 href%3d%22%2fscript%2fCatalog%2fRedir.aspx%3fctid%3d2394%26amp%3bcttype%3d2%22 target%3d%22_blank%22%3e%3cspan id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl02_Title%22 class%3d%22title%22%3eESRI Developer Network (EDN)%3c%2fspan%3e%3cbr %2f%3e%0d%0a%09%09%3cspan id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl02_Teaser%22 title%3d%22EDN is an annual subscription to a suite of GIS software that provides you with the necessary tools to build custom mapping applications on every platform.%22 class%3d%22desc%22%3eEDN is an annual subscription to a suite of...%3c%2fspan%3e%3cbr %2f%3e%0d%0a%09%09%3cspan id%3d%22ctl00_CatalogItems_FeatureItemRptr_ctl02_Url%22 class%3d%22link%22%3ewww.esri.com%3c%2fspan%3e%3c%2fa%3e%0d%0a%3c%2fdiv%3e%0d%0a%0d%0a%0d%0a%3c%2fdiv%3e%0d%0a%3c%2fdiv%3e%0d%0a%0d%0a%0d%0a'));</script>
+<div class="announce">
+<div class="announce-header">Sponsored Links</div>
+<div class="announce-content">	
+
+
+<div class="container-adwords">
+	<a id="ctl00_CatalogItems_FeatureItemRptr_ctl00_Link" href="http://www.codeproject.com/script/Catalog/Redir.aspx?ctid=2968&cttype=2" target="_blank"><span id="ctl00_CatalogItems_FeatureItemRptr_ctl00_Title" class="title">Spread for Windows Forms by GrapeCity</span><br>
+		<span id="ctl00_CatalogItems_FeatureItemRptr_ctl00_Teaser" title="New! Spread for Windows Forms 5 by GrapeCity is a full-featured Microsoft Excel compatible spreadsheet component with hundreds of chart styles, supports importing and exporting of native Excel files and unlimited customization options." class="desc">New! Spread for Windows Forms 5 by GrapeCity...</span><br>
+		<span id="ctl00_CatalogItems_FeatureItemRptr_ctl00_Url" class="link">www.farpointspread.com</span></a>
+</div>
+
+<div class="container-adwords">
+	<a id="ctl00_CatalogItems_FeatureItemRptr_ctl01_Link" href="http://www.codeproject.com/script/Catalog/Redir.aspx?ctid=3348&cttype=2" target="_blank"><span id="ctl00_CatalogItems_FeatureItemRptr_ctl01_Title" class="title">Resco MobileApp Studio</span><br>
+		<span id="ctl00_CatalogItems_FeatureItemRptr_ctl01_Teaser" title="Resco MobileApp Studio is a Microsoft Visual Studio based developer platform, which can be used for development of mobile applications for multiple mobile device types â Windows Mobile, Windows CE, Tablet PC, Windows Phone 7, iPhone, iPad and Android (Android support is scheduled for Q1 2011)." class="desc">Resco MobileApp Studio is a Microsoft Visual...</span><br>
+		<span id="ctl00_CatalogItems_FeatureItemRptr_ctl01_Url" class="link">www.resco.net</span></a>
+</div>
+
+<div class="container-adwords">
+	<a id="ctl00_CatalogItems_FeatureItemRptr_ctl02_Link" href="http://www.codeproject.com/script/Catalog/Redir.aspx?ctid=2394&cttype=2" target="_blank"><span id="ctl00_CatalogItems_FeatureItemRptr_ctl02_Title" class="title">ESRI Developer Network (EDN)</span><br>
+		<span id="ctl00_CatalogItems_FeatureItemRptr_ctl02_Teaser" title="EDN is an annual subscription to a suite of GIS software that provides you with the necessary tools to build custom mapping applications on every platform." class="desc">EDN is an annual subscription to a suite of...</span><br>
+		<span id="ctl00_CatalogItems_FeatureItemRptr_ctl02_Url" class="link">www.esri.com</span></a>
+</div>
+
+
+</div>
+</div>
+
+
+
+
+	
+
+	
+<div class="announce">
+<div class="announce-header">See Also...</div>
+<div class="announce-content">	
+
+
+<div class="container-related-item">
+	<a id="ctl00_RelatedArticles_RelatedItemRptr_ctl00_TitleLink" class="title" href="http://www.codeproject.com/KB/aspnet/Creating_PDF_documents_in.aspx">Creating PDF Documents in ASP.NET</a><br>
+	<span id="ctl00_RelatedArticles_RelatedItemRptr_ctl00_Teaser" class="desc">How to create PDF documents in ASP.NET.</span><br>
+</div>
+
+<div class="container-related-item">
+	<a id="ctl00_RelatedArticles_RelatedItemRptr_ctl01_TitleLink" class="title" href="http://www.codeproject.com/KB/database/CsvReader.aspx">A Fast CSV Reader</a><br>
+	<span id="ctl00_RelatedArticles_RelatedItemRptr_ctl01_Teaser" class="desc">A reader that provides fast, non-cached,...</span><br>
+</div>
+
+<div class="container-related-item">
+	<a id="ctl00_RelatedArticles_RelatedItemRptr_ctl02_TitleLink" class="title" href="http://www.codeproject.com/KB/aspnet/ImportExportCSV.aspx">A Simplified SQL-CSV Import/Export Functionality</a><br>
+	<span id="ctl00_RelatedArticles_RelatedItemRptr_ctl02_Teaser" class="desc">A simplified SQL-CSV import/export functionality.</span><br>
+</div>
+
+<div class="container-related-item">
+	<a id="ctl00_RelatedArticles_RelatedItemRptr_ctl03_TitleLink" class="title" href="http://www.codeproject.com/KB/database/FinalCSVReader.aspx">Importing CSV Data and saving it in database</a><br>
+	<span id="ctl00_RelatedArticles_RelatedItemRptr_ctl03_Teaser" class="desc">This article shows how to import CSV data and...</span><br>
+</div>
+
+<div class="container-related-item">
+	<a id="ctl00_RelatedArticles_RelatedItemRptr_ctl04_TitleLink" class="title" href="http://www.codeproject.com/KB/database/TransferUsingSQLBulkCopy.aspx">Transferring Data Using SqlBulkCopy</a><br>
+	<span id="ctl00_RelatedArticles_RelatedItemRptr_ctl04_Teaser" class="desc">An article on how to transfer data using...</span><br>
+</div>
+
+</div>
+</div>
+
+
+
+
+	
+
+<div class="announce ">
+<div class="announce-header">Announcements</div>
+<div class="announce-content">
+<table cellpadding="2">
+
+
+
+
+
+
+
+
+
+
+
+<tbody><tr valign="middle"><td><img id="ctl00_Announcements_News_ctl00_Img" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/13673.jpg" alt="News" align="middle" style="height:24px;width:24px;border-width:0px;"></td>
+<td><a id="ctl00_Announcements_News_ctl00_Link" href="http://www.codeproject.com/Competitions/447/Windows-Phone-7-Competition.aspx">WP7 Comp - Post an Article, Share an App</a></td></tr>
+
+<tr valign="middle"><td><img id="ctl00_Announcements_News_ctl01_Img" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/13270.png" alt="News" align="middle" style="height:24px;width:24px;border-width:0px;"></td>
+<td><a id="ctl00_Announcements_News_ctl01_Link" href="http://www.codeproject.com/Competitions/440/Windows-Azure-App-Competition.aspx">Got an Azure app? Win an Xbox &amp; Kinect</a></td></tr>
+
+
+
+
+</tbody></table>
+</div>
+</div>
+
+	
+<div class="announce">
+<div class="announce-header">The Daily Insider</div>
+<div class="announce-content">
+
+<div><a id="ctl00_News_News_ctl01_Link" href="http://citizen428.net/archives/434">30 free programming books</a></div>
+
+Daily News: <a id="ctl00_News_News_ctl02_Subscribe" href="http://www.codeproject.com/Feature/Insider/">Signup now</a>.
+</div>
+</div>
+		
+
+	<div style="margin:auto;width:150px"><div class="lqm_ad" width="150px" height="80px" lqm_channel="1" lqm_publisher="495" lqm_zone="77" lqm_format="21" lqm_country="IN" lqm_tags=".NET,Beginner,MVC"><iframe src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/f.htm" height="80" width="150" marginwidth="0" marginheight="0" frameborder="0" scrolling="no"></iframe></div>
+	</div>
+	
+	<div style="margin:auto;width:160px;margin-top:10px"><div class="lqm_ad" width="160px" height="600px" lqm_channel="1" lqm_publisher="495" lqm_zone="77" lqm_format="18" lqm_country="IN" lqm_tags=".NET,Beginner,MVC"><a href="http://a.lakequincy.com/c.ashx?channel=1&country=IN&format=18&pageid=AA10A25E-9817-8572-01CC-BDCA90D9F49A&publisher=495&tags=.NET%2cBeginner%2cMVC&target=_blank&ypos=1006&zone=77&renderhtml=true&callback=jsonp1291875967539&&userguid=00000000-0000-0000-0000-000000000000&placement=8055&creative=7721" target="_blank"><img src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/634245722031187825.jpg" border="0" height="600" width="160" alt="Click Here"></a></div>
+	</div>
+
+</div>
+
+
+</div>
+</div>
+
+
+<script type="text/javascript" language="Javascript" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/jquery-1.4.2.min.js"></script><script type="text/javascript">//<![CDATA[
+if (typeof jQuery == 'undefined') {
+    document.write(unescape("%3Cscript src='/script/JS/jquery-1.4.2.min.js' type='text/javascript' %3E%3C/script%3E"));
+}//]]></script>
+<script type="text/javascript" language="Javascript" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/article.min.js"></script>
+<script type="text/javascript" language="Javascript" src="./Understanding ASP.NET MVC (Model View Controller) Architecture for Beginners - CodeProject_files/m.min.js"></script>
+<script type="text/javascript" language="Javascript">//<![CDATA[
+if($.LqmAds)$.LqmAds();
+var oSrchFlt = false, oSrchBox=false,srchBoxFoc=false;
+$(document).ready(function() {
+ InitWatermark('sb_tb', 'Search');
+ var sbar = $('#sb_tb'); 
+ var sfilter = $('#SearchFilter');
+ if (sbar && sfilter) {
+  sfilter.removeClass('popup'); sfilter.hide();
+  sbar.blur(function() { if (!oSrchFlt)sfilter.hide();srchBoxFoc=false; });
+  sbar.focus(function() { oSrchFlt=false;srchBoxFoc=true;sfilter.show(); });
+  sbar.mouseleave(function() { oSrchBox=false; });
+  sbar.mouseover(function() { oSrchBox=true; });
+  sfilter.mouseleave(function() { oSrchFlt=false; if (!srchBoxFoc&&!oSrchBox)sfilter.hide();});
+  sfilter.mouseover(function() { oSrchFlt=true; });
+ }
+});
+$("#ctl00_RateArticle_RateItemWrapper").removeClass("container-rating");$('#clear-rate_ctl00_RateArticle_RCD').click(function () { $('#ctl00_RateArticle_RCD').hide(); return false;});
+function ChkRtctl00_RateArticle(val, objId) {if (val<=3||true) {
+$('div[name=RateItem_' + objId + '] .rating-comment').css("display","");}
+else $('div[name=RateItem_' + objId + '] .rating-comment').css("display","none");}
+
+
+//]]>
+</script>
+
+
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-1735123-1']);
+	_gaq.push(['_trackPageview']);
+	_gaq.push(['_setDomainName', 'www.codeproject.com']);
+	_gaq.push(['_setSessionTimeout', '1200']); 
+
+	(function () {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+	})(); 
+</script>
+
+
+
+</body></html>

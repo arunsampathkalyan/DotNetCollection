@@ -1,0 +1,22 @@
+﻿<root>
+  <lvl1 id="elem11" value="val11">
+    <lvl2 name="elem21" value="val21">txt21</lvl2>
+    <lvl2 name="elem22" value="val22">txt22</lvl2>txt11
+  </lvl1>
+  <lvl1 id="elem12" value="val12">
+    <lvl2 name="elem21" value="val21">txt21</lvl2>
+    <lvl2 name="elem22" value="val22">txt22</lvl2>txt12
+  </lvl1>
+  <lvl1 id="elem13" value="val13">
+    <lvl2 name="elem21" value="val21">txt21</lvl2>
+    <lvl2 name="elem22" value="val22">txt22</lvl2>txt13
+  </lvl1>
+  <lvl1 id="elem14" value="val14">
+    <lvl2 name="elem21" value="val21">txt21</lvl2>
+    <lvl2 name="elem22" value="val22">txt22</lvl2>txt14
+  </lvl1>
+  <lvl1 id="elem15" value="val15">
+    <lvl2 name="elem21" value="val21">txt21</lvl2>
+    <lvl2 name="elem22" value="val22">txt22</lvl2>txt15
+  </lvl1>
+</root>

@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "VirtualElement";
+}
+
+<h2>
+    VirtualElement</h2>
+
+<script src="../../Ko/knockout-latest.js" type="text/javascript"></script>
+
+<ul>
+ 
+    <li>Planets </li>
+
+    <!-- ko foreach: planets -->
+
+    <li>Planet: <b data-bind="text: name"></b>
+
+        <!-- ko if: capital --> 
+
+            Capital: <b data-bind="text: capital.cityName"></b> 
+
+        <!-- /ko -->       
+
+    </li>
+
+     <!-- /ko -->
+
+</ul>
+
+<div>
+
+    <!-- ko with: person -->
+
+    <p>
+        First Name : <span data-bind="text:firstName"></span>
+    </p>
+
+    <p>
+        Last Name : <span data-bind="text:lastName"></span>
+    </p>
+
+         <!-- /ko -->
+</div>
+
+<script type="text/javascript">
+    ko.applyBindings({
+        planets: [
+            { name: 'Mercury', capital: null },
+            { name: 'Earth', capital: { cityName: 'Barnsley'} }
+        ],
+        person: {
+            firstName: 'logesh',
+            lastName: 'shanmugam'
+        }
+    });
+</script>

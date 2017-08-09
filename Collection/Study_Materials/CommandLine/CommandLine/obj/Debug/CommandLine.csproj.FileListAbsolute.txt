@@ -1,0 +1,4 @@
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\CommandLine\CommandLine\bin\Debug\CommandLine.exe
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\CommandLine\CommandLine\bin\Debug\CommandLine.pdb
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\CommandLine\CommandLine\obj\Debug\CommandLine.exe
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\CommandLine\CommandLine\obj\Debug\CommandLine.pdb

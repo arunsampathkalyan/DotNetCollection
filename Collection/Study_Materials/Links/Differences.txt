@@ -1,0 +1,3 @@
+http://www.dotnetuncle.com/difference/35_dll_exe.aspx
+http://www.albahari.com/threading/
+http://csharpindepth.com/

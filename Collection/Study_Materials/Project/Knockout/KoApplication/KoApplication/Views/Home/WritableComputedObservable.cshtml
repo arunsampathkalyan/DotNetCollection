@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "WritableComputedObservable";
+}
+
+<h2>WritableComputedObservable</h2>
+
+
+
+<script src="../../Ko/knockout-latest.js" type="text/javascript"></script>
+
+<p>
+    First Name :
+    <input data-bind="value:firstName"></input></p>
+<p>
+    Last Name :
+    <input data-bind="value:lastName"></input></p>
+<p>
+    Full Name : <span data-bind="text:fullName"></span>
+</p>
+
+<script type="text/javascript">
+
+    var viewModel = {
+        firstName: ko.observable("Logesh"),
+        lastName: ko.observable("Shanmugam")
+    };
+
+    viewModel.fullName = ko.computed({
+       read : function () {
+           return viewModel.firstName() + " " + viewModel.lastName();
+        },
+       write : function (value) {
+            var lastSpacePos = value.lastIndexOf(" ");
+            if (lastSpacePos > 0) { // Ignore values with no space character
+                viewModel.firstName(value.substring(0, lastSpacePos)); // Update "firstName"
+                viewModel.lastName(value.substring(lastSpacePos + 1)); // Update "lastName"
+            }
+        },
+        owner: viewModel        
+    });
+
+    ko.applyBindings(viewModel);
+
+    viewModel.fullName("Selva Kumar");
+
+
+</script>

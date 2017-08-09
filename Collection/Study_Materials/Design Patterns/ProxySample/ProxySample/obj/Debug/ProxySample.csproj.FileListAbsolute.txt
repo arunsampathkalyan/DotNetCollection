@@ -1,0 +1,5 @@
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Design Patterns\ProxySample\ProxySample\bin\ProxySample.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Design Patterns\ProxySample\ProxySample\bin\ProxySample.pdb
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Design Patterns\ProxySample\ProxySample\obj\Debug\ResolveAssemblyReference.cache
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Design Patterns\ProxySample\ProxySample\obj\Debug\ProxySample.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Design Patterns\ProxySample\ProxySample\obj\Debug\ProxySample.pdb

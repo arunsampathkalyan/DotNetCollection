@@ -1,0 +1,4 @@
+http://www.wiziq.com/tests/net-framework
+http://www.codeproject.com/Articles/7333/Understanding-NET-Framework-at-a-glance
+http://www.codeproject.com/Articles/3992/What-is-NET
+http://www.codeproject.com/Articles/5381/What-Is-A-Framework

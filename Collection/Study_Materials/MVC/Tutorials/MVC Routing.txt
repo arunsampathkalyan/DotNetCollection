@@ -1,0 +1,173 @@
+ASP.NET MVC Routing Overview:
+
+ASP.NET Routing module is responsible for mapping incoming browser requests to particular MVC controller actions.
+
+1. Using the Default Route Table
+
+When you create a new ASP.NET MVC applicaiton, the application is already configured to use ASP.NET Routing.
+
+ASP.NET Routing is setup in two places:
+
+First, ASP.NET Routing is enabled in your application's web configuration file (Web.config file). There are four sections in the configuration file that are relevant to routing:
+
+	1. System.web.httpModules section
+
+	2. System.web.httpHandlers section
+
+	3. System.webserver.Modules section
+
+	4. System.webserver.Handlers section
+
+Be careful not to delete these sections because without these sections routing will no longer work.
+
+Second, and more importantly, a route table is created in the application's Global.asax file. 
+
+The Global.asax file is a special file that contains event handlers for ASP.NET application lifecycle events. The route table is created during the Application Start event.
+
+When an MVC application first starts, the Application_Start() method is called. This method in turn, calls the RegisterRoutes() method. The RegisterRoutes() method creates the route table.
+
+The default route table contains a single route(named Default). The Default route maps the first segment of a URL to a controller name, the second segment of a URL to a controller action, and the third segment to a parameter named id.
+
+Imagine that you enter the following URL into your web browser's address bar: /Home/Index/3
+
+The Default route maps this URL to the following parameters:
+
+	controller = Home;	action = Index;	id =3
+
+when you request the URL /Home/Index/3, the following code is exeucted:
+
+		HomeController.Index(3)
+
+The Default route includes defaults for all three parameters. If you don't supply a controller, then the controller parameter defaults to the value Home. If you don't supply an action, the action parameter defaults to the value Index. Finally, if you don't supply an id, the id parameter defaults to an empty string.
+
+Creating Custom Routes:
+--------------------------
+
+You can create a custom route when you need specialized routing.
+
+For example, If you are building a blog application, you might want to handle incoming requests that look like this: /Archive/12-15-2010
+
+When a user enters this request, you want to return the blog entry that corresponds to the date 12/15/2010. In order to handle this type of request, you need to create a custom route.
+
+	routes.MapRoute(
+		"Blog",
+		"Archive/{entryDate}",
+		new { controller = "Archive", action = "Entry" }
+	);
+
+The order of the routes that you add to the route table is important. Our new custom Blog route is added before the existing Default route. If you reversed the order, then the Default route always will get called instead of the custom route.
+
+The custom Blog route matches any request that starts with /Archive/. So it matches all of the following URLs:
+
+	/Archive/12-15-2010
+
+	/Archive/10-6-2010
+	
+	/Archive/Apple
+
+The custom route maps the incoming request to a controller named Archive and invokes the Entry() action. When the Entry() method is called, the entry date is passed as a parameter named entryDate.
+
+NOTE: the Entry() method accepts a parameter of type DateTime. The MVC framework is smart enough to convert the entry date from the URL into a DateTime value automatically. If the entry date parameter from the URL cannot be converted to a DateTime, an error is raised.
+
+Creating a Route Constraint:
+-----------------------------
+
+You use route constraints to restrict the browser requests that match a particular route.. You can use a regular expression to specify a route constraint.
+
+Problem: If the action method expects integer parameter, making a request that contains something other than an integer value will cause an error.
+
+	routes.MapRoute(
+		"Product",
+		"Product/{ProductId}",
+		new {controller="Product", action="Details"}
+		);
+
+You can use a constraint when defining a route to restrict the URLs that match the route. 
+
+	routes.MapRoute(
+		"Product",
+		"Product/{ProductId}",
+		new {controller="Product", action="Details"},
+		new {ProductId= @"\d+" }
+		);
+
+The regular expression \d+ matches one or more integers. This constraints causes the Product route to match the following URLs:
+	1. /Product/3
+	2. /Product/8999
+
+But not the following URLs:
+
+	1. /Product/apple
+	2. /Product
+These browser request will be handled by another route or, if there are no matching route, a "The resource could not be found error" will be returned.
+
+Creating a Custom Route Constraint:
+--------------------------------------
+A custom route constraint enables you to prevent a route from being matched unless some custom condition is matched.
+
+we create a Localhost route constraint. The Localhost route constraint only matches requests made from the local computer. Remote requests from across the Internet are not matched.
+
+You implement a custom route constraint by implementing the IRouteConstraint interface. This is an extremely simple interface which describes a single method.
+
+	bool Match(
+		HttpContextBase httpContext, 
+		Route route, 
+		string parameterName,
+		RouteValueDictionary values, 
+		RouteDirection routeDirection
+	          )
+
+The method returns a Boolean value. If you return false, the route associated with the constraint won't match the browser request.
+
+	using System.Web;
+	using System.Web.Routing;
+
+	namespace MvcApplication1.Constraints
+	{
+	    public class LocalhostConstraint : IRouteConstraint
+	    {
+	        public bool Match
+	            (
+	                HttpContextBase httpContext, 
+	                Route route, 
+	                string parameterName, 
+	                RouteValueDictionary values, 
+	                RouteDirection routeDirection
+	            )
+	        {
+	            return httpContext.Request.IsLocal;
+	        }
+	    }
+	}
+
+This property (IsLocal) returns true when the IP address of the request is either 127.0.0.1 or when the IP of the request is the same as the server's IP address.
+
+The Global.asax file uses the Localhost constraint to prevent anyone from requesting an Admin page unless they make the request from the local server.
+
+	routes.MapRoute(
+	                "Admin",
+	                "Admin/{action}",
+	                new {controller="Admin"},
+	                new {isLocal=new LocalhostConstraint()}
+	            );
+
+It is important to understand that a constraint prevents a particular route from matching a request and not all routes defined in the Global.asax file.
+
+NOTE: Default route should have been commented out from the Global.asax file. If you include the Default route, then the Default route would watch requests for the Admin controller. In that case, remote users could still invoke actions of the Admin controller even though their requests wouldn't match the Admin route.
+
+
+
+
+
+		
+		
+	
+
+
+
+
+
+
+	
+
+

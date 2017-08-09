@@ -1,0 +1,4 @@
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\KMeansAlgorithm\KMeansAlgorithm\bin\Debug\KMeansAlgorithm.exe
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\KMeansAlgorithm\KMeansAlgorithm\bin\Debug\KMeansAlgorithm.pdb
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\KMeansAlgorithm\KMeansAlgorithm\obj\x86\Debug\KMeansAlgorithm.exe
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\KMeansAlgorithm\KMeansAlgorithm\obj\x86\Debug\KMeansAlgorithm.pdb

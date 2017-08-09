@@ -1,0 +1,7 @@
+E:\Logesh Shanmugam\Projects\Praxis\SSO\KoApplication\KoApplication\bin\KoApplication.dll
+E:\Logesh Shanmugam\Projects\Praxis\SSO\KoApplication\KoApplication\bin\KoApplication.pdb
+E:\Logesh Shanmugam\Projects\Praxis\SSO\KoApplication\KoApplication\bin\EntityFramework.dll
+E:\Logesh Shanmugam\Projects\Praxis\SSO\KoApplication\KoApplication\bin\EntityFramework.xml
+E:\Logesh Shanmugam\Projects\Praxis\SSO\KoApplication\KoApplication\obj\Debug\KoApplication.dll
+E:\Logesh Shanmugam\Projects\Praxis\SSO\KoApplication\KoApplication\obj\Debug\KoApplication.pdb
+E:\Logesh Shanmugam\Projects\Praxis\SSO\KoApplication\KoApplication\obj\Debug\KoApplication.csprojResolveAssemblyReference.cache

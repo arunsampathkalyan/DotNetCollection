@@ -1,0 +1,10 @@
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\WhatsAppMessenger\WhatsAppMessenger\bin\Debug\WhatsAppMessenger.exe.config
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\WhatsAppMessenger\WhatsAppMessenger\bin\Debug\WhatsAppMessenger.exe
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\WhatsAppMessenger\WhatsAppMessenger\bin\Debug\WhatsAppMessenger.pdb
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\WhatsAppMessenger\WhatsAppMessenger\bin\Debug\WhatsAppApi.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\WhatsAppMessenger\WhatsAppMessenger\obj\Debug\WhatsAppMessenger.Form1.resources
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\WhatsAppMessenger\WhatsAppMessenger\obj\Debug\WhatsAppMessenger.Properties.Resources.resources
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\WhatsAppMessenger\WhatsAppMessenger\obj\Debug\WhatsAppMessenger.csproj.GenerateResource.Cache
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\WhatsAppMessenger\WhatsAppMessenger\obj\Debug\WhatsAppMessenger.exe
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\WhatsAppMessenger\WhatsAppMessenger\obj\Debug\WhatsAppMessenger.pdb
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\WhatsAppMessenger\WhatsAppMessenger\obj\Debug\WhatsAppMessenger.csprojResolveAssemblyReference.cache

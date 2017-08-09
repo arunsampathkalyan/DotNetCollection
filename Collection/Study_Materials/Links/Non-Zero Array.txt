@@ -1,0 +1,1 @@
+http://www.codeproject.com/Articles/34195/Non-Zero-Based-Arrays-and-Interface

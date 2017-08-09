@@ -1,0 +1,62 @@
+br[mce_bogus] {display: none;}
+#mscTooltip{display:none;position:absolute;width:250px;background:#e6ecfb;padding:3px;border:solid 2px #ffffff;z-index:20}
+#mscTooltip div{background:#ffffff none repeat scroll 0%;border:1px solid #5C8AD0;padding:6px 8px 10px;font-size:0.7em;z-index:21}
+.pagination {font-size:0.7em;text-align:right;}
+div.note {background-color:#EEEEEE;border:2px solid black;margin:10px;padding:5px;}
+div.warning {background-color:#FFFF66;border:2px solid black;margin:10px;padding:5px;}
+.tableTable {border-collapse:collapse;}
+.tableTable td {border:1px solid black;padding:5px;}
+.tableTable th {border:1px solid black;padding:5px;}
+#WLSearchBoxDiv {top:30px;}
+input.search_box {background:transparent;}
+ul.tabbed { list-style-image: none;list-style-position: outside;list-style-type: none;margin: 5px 0px 0px 0px;padding: 5px;background: #DCE4F9 none repeat scroll 0 0;width: 280px;min-height: 18px;}
+ul.tabbed li { float: left;margin: 2;padding: 2px;border: 0 none;vertical-align: baseline;width: 16px;height: 16px;cursor: hand;}
+ul.tabbed li.selected { background-color: #fff; }
+.posts_container { clear: left;float: left;background: #DCE4F9 none repeat scroll 0 0;width: 280px;min-height: 250px;padding: 5px;}
+.posts_container .postgroup { display: none;width: auto;min-height: 250px;padding: 5px;}
+.posts_container .postgroup.selected { display: block;background-color: #fff;}
+.icon_rss_header {text-decoration:none !important}
+.tabs_blogs .ms_bloggers_phil_haack { background-position:center -399px; }
+.header_bottom_right { z-index:-1 }
+.welcome_nav_get_started_steps li{min-height:150px;height:auto!important;height:150px;margin:0 15px 0 0;}
+code.code_block { font-size:1em }
+.list_paging li { cursor:pointer }
+.post_item .post_date_spotlight { color:#B2B4B8 !important; font-size:0.65em;  /* add !important to this property if you'd like the date font smaller */margin:-0.4em 0 0;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* EDITOR PROPERTIES - PLEASE DON'T DELETE THIS LINE TO AVOID DUPLICATE PROPERTIES */

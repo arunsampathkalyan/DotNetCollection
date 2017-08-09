@@ -1,0 +1,64 @@
+Intro to ASP.NET MVC
+-----------------------
+
+MVC stands for Model, View, Controller. MVC is a pattern for developing applications such that each part has a responsibility that is different from another.
+
+Model: - The data of your application.
+
+Views: - The template files your application will use to dynamically generate HTML responses.
+
+Controllers: - Classes that handle incoming URL requests to the applicaiton, retrieve model data, and then specify view templates that render a response back to the client.
+
+Adding a Controller:
+--------------------
+
+ASP.NET MVC invokes different Controller classes (and different Action methods within them) depending on the incoming URL.  The default mapping logic used by ASP.NET MVC uses a format like this to control whtat code is run:
+
+	/[Controller]/[ActionName]/[Parameters]
+
+The first part of the URL determines the Controller class to execute. So /HelloWorld maps to the HelloWorldController class.
+
+The second part of the URL determines the Action method on the class to excute. So /HelloWorld/Index would cause the Index() method of the HelloWorldController class to execute. 
+
+	- "Index" is the default method that will be called on a controller if one is not explicitly specified.
+
+Now, lets visit "http://localhost:xx/HelloWorld/Welcome" Now our Welcome method has executed and returned its HTML string.
+
+NOTE: Method overloading is not supported in Controller Action method class.
+
+In both these examples the controller has been doing all the work, and has been returning HTML directly. 
+
+Ordinally we don't want our Controllers returning HTML directly - since that ends up being very cumbersome to code. Instead we will typically use a separate view template file to help generate the HTML repsonses.
+
+Adding a View
+--------------
+
+	public ActionResult Index()
+	{
+		return View(); 
+	}
+
+The Index method in our controller in this example didn't do any work, but did call "return View()" which indicated that we wanted to use a view template file to render a response back to the client.
+
+Because we did not explicitly specify the name of the view template file to use, ASP.NET MVC defaulted to using  the Index.aspx view file within the \Views\HelloWorld folder. 
+
+1. Changing Views and Master Pages
+--------------------------------------
+
+2. Passing a ViewModel
+------------------------
+
+- Before we go to a database and talk about Models, though, lets first talk about "ViewModels". 
+
+- These are objects that represent what a View template requires to render an HTML response back to a client. 
+
+- They are typically created and passed by a Controller class to a View template, and should only contain the data that the View template requries - and no more.
+
+- Here, the Controller make a small class to hold that data and then pass it to over to a View tempalte to render back the HTML response using it.
+
+- This way the Controller is concerned with one thing and the View template another - enabling us to maintain clean "separation of concerns" within our application.
+
+
+
+
+

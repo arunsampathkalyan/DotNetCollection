@@ -1,0 +1,8 @@
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.ViewEngines.NVelocity\bin\Debug\MvcContrib.ViewEngines.NVelocity.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.ViewEngines.NVelocity\bin\Debug\MvcContrib.ViewEngines.NVelocity.pdb
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.ViewEngines.NVelocity\bin\Debug\Microsoft.Web.Mvc.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.ViewEngines.NVelocity\bin\Debug\NVelocity.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.ViewEngines.NVelocity\bin\Debug\NVelocity.xml
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.ViewEngines.NVelocity\obj\Debug\ResolveAssemblyReference.cache
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.ViewEngines.NVelocity\obj\Debug\MvcContrib.ViewEngines.NVelocity.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.ViewEngines.NVelocity\obj\Debug\MvcContrib.ViewEngines.NVelocity.pdb

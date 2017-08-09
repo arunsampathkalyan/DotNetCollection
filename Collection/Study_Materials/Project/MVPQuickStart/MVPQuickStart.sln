@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebSites", "WebSites", "{F9F4808E-439E-4268-84B0-B9E07ABD6A82}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MVPQuickStart", "WebSites\MVPQuickStart\", "{16A0C80D-B535-4434-AEDE-E9408D288DA5}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{A90AB682-44E3-4C18-A021-C7B6944E2807}|Shell.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/MVPQuickStart"
+		Debug.AspNetCompiler.PhysicalPath = "WebSites\MVPQuickStart\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\MVPQuickStart\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/MVPQuickStart"
+		Release.AspNetCompiler.PhysicalPath = "WebSites\MVPQuickStart\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\MVPQuickStart\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "59122"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{8FED67CA-CF14-4133-9FB2-AD230737A727}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell", "Modules\Shell\Shell.csproj", "{A90AB682-44E3-4C18-A021-C7B6944E2807}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16A0C80D-B535-4434-AEDE-E9408D288DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16A0C80D-B535-4434-AEDE-E9408D288DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16A0C80D-B535-4434-AEDE-E9408D288DA5}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{16A0C80D-B535-4434-AEDE-E9408D288DA5}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{A90AB682-44E3-4C18-A021-C7B6944E2807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A90AB682-44E3-4C18-A021-C7B6944E2807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A90AB682-44E3-4C18-A021-C7B6944E2807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A90AB682-44E3-4C18-A021-C7B6944E2807}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{16A0C80D-B535-4434-AEDE-E9408D288DA5} = {F9F4808E-439E-4268-84B0-B9E07ABD6A82}
+		{A90AB682-44E3-4C18-A021-C7B6944E2807} = {8FED67CA-CF14-4133-9FB2-AD230737A727}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		RootNamespace = MVPQuickStart
+		IsWCSFSolution = True
+	EndGlobalSection
+EndGlobal

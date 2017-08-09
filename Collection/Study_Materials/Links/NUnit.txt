@@ -1,0 +1,5 @@
+http://www.marthijnvandenheuvel.com/2010/06/09/using-nunit-in-visual-studio-2010/
+
+http://www.codeproject.com/Articles/162041/Introduction-to-NUnit-and-TDD
+
+http://www.codeproject.com/Articles/292902/How-to-run-NUnit-tests-in-Visual-Studio-2010-MSTes

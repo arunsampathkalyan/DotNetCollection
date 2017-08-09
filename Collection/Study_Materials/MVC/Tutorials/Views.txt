@@ -1,0 +1,265 @@
+Views:
+
+1. Understanding Views:
+
+ - The path of the view is inferred from the name of the controller and the name of the controller action.
+
+2. Adding Content to a View:
+
+ - A view is a standard (X)HTML document that can contain scripts. You use scripts to add dynamic content to a view.
+
+ - Use the script delimiters <% and %> to mark the beginning and end of  a script. This script is written in C#. 
+
+ - It displays the current date and time by calling the Response.Write() method to render content to the browser. The script delimiters <% and %> can be used to execute one or more statements.
+
+3. Using HTML Helpers to Generate View Content:
+
+ - To make it easier to add content to a view, you can take advantage of something called an "HTML Helper". 
+
+ - An HTML Helper is a method that generates a string which used to generate standard HTML elements such as textboxes, links, dropdown list and list boxes.
+
+<div>
+    
+    <% using (Html.BeginForm())
+       { %>
+    
+    
+        <label for="UserName">User Name:</label>
+        <br />
+        <%= Html.TextBox("UserName") %>
+        
+        <br /><br />
+            
+        <label for="Password">Password:</label>
+        <br />
+        <%= Html.Password("Password") %>
+        
+        <br /><br />
+
+        <input type="submit" value="Log in" />        
+    
+    <% } %>
+ 
+</div>
+
+ - All of the HTML Helper methods are called on the Html property of the view. For example, you render a TextBox by calling the Html.TextBox() method.
+
+ - Using HTML Helper methods is optional. The above renders the exact same form.
+
+<div>
+
+    <form method="post" action="/Home/Login">
+    
+    <label for="userName">User Name:</label>
+    <br />
+    <input name="userName" />
+    
+    <br /><br />
+    
+    <label for="password">Password:</label>
+    <br />
+    <input name="password" type="password" />
+    
+    <br /><br />
+    <input type="submit" value="Log In" />
+    
+    </form>
+ 
+</div>
+
+ - You also have the option of creating your own HTML Helpers. For example, you can create a GridView() helper method that displays a set of database records in an HTML table automatically.
+
+4. Using View Data to Pass Data to a View
+
+ - Use "ViewData" to pass data from a controller to a view. It is like package that all data passed from a controller to a view must be sent using this package.
+
+ - The controller "ViewData" property represents a collection of name and value pairs.
+
+ - The Html.Encode() HTML Helper encodes special characters such as < and > into characters that are safe to display in a web page. 
+
+ - Whenever you render content that a user submits to a website, you should encode the content to prevent JavaScript injection attacks.
+
+ - NOTE: Because we created the message ourselves in the ProductController, we don't really need to encode the message. However, it is a good habit to always call the Html.Encode() method when displaying content retrieved from view data within a view.
+
+ - You also can use ViewData to pass other types of data, such as a collection of database records, from a controller to a view.
+
+ - You also have the option of passing strongly typed view data from a controller to a view. 
+
+Creating Custom HTML Helpers
+=====================
+
+1. Understanding HTML Helpers
+
+ - An HTML Helper is just a method that returns a string. The string can represent any type of content that you want.
+
+ - IMPORTANT: notice that the Html.TextBox() - HTML Helper is rendered with <%= %> tags instead of <% %> tags. If you don't include the equal sign, then nothing gets rendered to the browser.
+
+- You can create custom HTML Helpers by creating a static method and by creating an extension method.
+
+2. Creating HTML Helpers with Static Methods
+
+ - The easiest way to create a new HTML Helper is to create a static method that returns a string. 
+
+ - For example, If you decide to create a new HTML Helper that renders an HTML <lable> tag.
+
+	using System;
+	namespace MvcApplication1.Helpers
+	{
+		public class LabelHelper
+		{
+		               public static string Label(string target, string text)
+		               {
+                  		       return String.Format("<label for='{0}'>{1}</label>", target, text);
+		               }
+		}
+	}
+
+ - We can use the LabelHelper in View as,
+	
+	<%@ Import Namespace="MvcApplication1.Helpers" %>
+
+	<div>
+          		<% using (Html.BeginForm())
+		{ %>
+		               <%= LabelHelper.Label("firstName", "First Name:") %>
+		               <br />
+
+		               <%= Html.TextBox("firstName")%>
+		               <br /><br />
+		               <%= LabelHelper.Label("lastName", "Last Name:") %>
+		               <br />
+		               <%= Html.TextBox("lastName")%>
+		               <br /><br />
+		               <input type="submit" value="Register" />
+		 <% } %>
+	</div>
+
+ 3. Creating HTML Helpers with Extension Methods
+
+ - If you want to create HTML Helpers that work just like the standard HTML Helpers included in the ASP.NET MVC framework then you need to create extension methods.
+
+ - Extension methods enables you to add new methods to an existing class. 
+
+ - When creating an HTML Helper method, you add new methods to the HtmlHelper class represented by a view's Html property.
+
+ - There are a couple of things that you should notice when adding an extension method.
+
+1. Notice that the class is a static class. You must define an extension method with a static class.
+
+2. Notice that the first parameter of the Label() method is preceded by the keyword "this". The first parameter of an extension method indicates the class that the extension method extends.
+
+	using System;
+	using System.Web.Mvc;
+
+	namespace MvcApplication1.Helpers
+	{
+	     public static class LabelExtensions
+	     {
+	          public static string Label(this HtmlHelper helper, string target, string text)
+	          {
+	               return String.Format("<label for='{0}'>{1}</label>", target, text);
+	          }
+	     }
+	}
+
+ - The modified Index view in Listing 4 uses the Html.Label() extension method to render all of its <label> tags.
+
+	<%@ Import Namespace="MvcApplication1.Helpers" %>
+
+	<div>
+	          <% using (Html.BeginForm())
+	          { %>
+		               <%= Html.Label("firstName", "First Name:") %>    		
+		               <br />
+		               <%= Html.TextBox("firstName")%>
+		               <br /><br />
+		               <%= Html.Label("lastName", "Last Name:") %>    
+		               <br />
+		               <%= Html.TextBox("lastName")%>
+		               <br /><br />
+		               <input type="submit" value="Register" />
+	          <% } %>
+	</div>
+
+Using the TagBuilder Class to Create HTML Helpers
+=================================
+
+ - TagBuilder is a useful utility class that you can use when building HTML helpers.
+
+1. Overview of the TagBuilder Class
+
+ The TagBuilder class is contained in the System.Web.Mvc namespace. It has five methods:
+
+AddCssClass() - Enables you to add a new class=”” attribute to a tag.
+GenerateId() - Enables you to add an id attribute to a tag. This method automatically replaces periods in the id (by default, periods are replaced by underscores)
+MergeAttribute() - Enables you to add attributes to a tag. There are multiple overloads of this method.
+SetInnerText() - Enables you to set the inner text of the tag. The inner text is HTML encode automatically.
+ToString() - Enables you to render the tag. You can specify whether you want to create a normal tag, a start tag, an end tag, or a self-closing tag.
+
+The TagBuilder class has four important properties:
+
+Attributes - Represents all of the attributes of the tag.
+IdAttributeDotReplacement - Represents the character used by the GenerateId() method to replace periods (the default is an underscore).
+InnerHTML - Represents the inner contents of the tag. Assigning a string to this property does not HTML encode the string.
+TagName - Represents the name of the tag.
+
+ - These methods and properties give you all of the basic methods and properties that you need to build up an HTML tag.
+
+ - You don't really need to use the TagBuilder class. You could use a StringBuilder class instead. However, the TagBuilder class makes your life a little easier.
+
+2. Example - Creating an Image HTML Helper
+
+ - When you create an instance of the TagBuilder class, you pass the name of the tag that you want to build to the TagBuilder constructor.
+
+ - You can call methods like the AddCssClass and MergeAttribute() methods to modify the attributes of the tag. Finally, you call the ToString() method to render the tag.
+
+namespace MvcApplication1.Helpers
+{
+    public static class ImageHelper
+    {
+        public static string Image(this HtmlHelper helper, string id, string url, string alternateText)
+        {
+            return Image(helper, id, url, alternateText, null);
+        }
+
+        public static string Image(this HtmlHelper helper, string id, string url, string alternateText, object htmlAttributes)
+        {
+            // Create tag builder
+            var builder = new TagBuilder("img");
+            
+            // Create valid id
+            builder.GenerateId(id);
+
+            // Add attributes
+            builder.MergeAttribute("src", url);
+            builder.MergeAttribute("alt", alternateText);
+            builder.MergeAttributes(new RouteValueDictionary(htmlAttributes));
+
+            // Render tag
+            return builder.ToString(TagRenderMode.SelfClosing);
+        }
+
+    }
+}
+
+ - Notice how the TagBuilder.MergeAttribute() method is used to add individual attributes such as the "src" attribute to the TagBuilder.
+
+ - The MergeAttributes() method accepts a Dictionary<string, object> parameter. The RouteValueDictionary class is used to convert the Object representing the collection of attributes into a Dictionary <string, object>.
+
+ - After you create the Image helper, you can use the helper in your ASP.NET MVC views just like any of the other standard HTML helpers.
+
+	<%@ Page Language="C#" MasterPageFile="/Views/Shared/Site.Master" 	Inherits="System.Web.Mvc.ViewPage" %>
+	<%@ Import Namespace="MvcApplication1.Helpers" %>
+
+	<asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
+
+	    <!-- Calling helper without HTML attributes -->
+	    <%= Html.Image("img1", ResolveUrl("/Content/XBox.jpg"), "XBox Console") %>
+
+
+	    <!-- Calling helper with HTML attributes -->
+	    <%= Html.Image("img1", ResolveUrl("/Content/XBox.jpg"), "XBox Console", new 	    {border="4px"})%>
+
+	</asp:Content>
+
+ 

@@ -1,0 +1,2500 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0083)http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.google.com/2005/gml/b" xmlns:data="http://www.google.com/2005/gml/data" xmlns:expr="http://www.google.com/2005/gml/expr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script type="text/javascript">(function() { var a=window;function c(b){this.t={};this.tick=function(d,i,e){e=e?e:(new Date).getTime();this.t[d]=[e,i]};this.tick("start",null,b)}var f=new c;a.jstiming={Timer:c,load:f};try{var g=null;if(a.chrome&&a.chrome.csi)g=Math.floor(a.chrome.csi().pageT);if(g==null)if(a.gtbExternal)g=a.gtbExternal.pageT();if(g==null)if(a.external)g=a.external.pageT;if(g)a.jstiming.pt=g}catch(h){};a.tickAboveFold=function(b){b=b;var d=0;if(b.offsetParent){do d+=b.offsetTop;while(b=b.offsetParent)}b=d;b<=750&&a.jstiming.load.tick("aft")};var j=false;function k(){if(!j){j=true;a.jstiming.load.tick("firstScrollTime")}}a.addEventListener?a.addEventListener("scroll",k,false):a.attachEvent("onscroll",k);
+ })();</script>
+<meta content="true" name="MSSmartTagsPreventParsing">
+<meta content="blogger" name="generator">
+<link href="http://www.blogger.com/favicon.ico" rel="icon" type="image/vnd.microsoft.icon">
+<link href="./Code rant  Forms Authentication with the MVC Framework_files/Code rant  Forms Authentication with the MVC Framework.htm" rel="canonical">
+<link rel="alternate" type="application/atom+xml" title="Code rant - Atom" href="http://mikehadlow.blogspot.com/feeds/posts/default">
+<link rel="alternate" type="application/rss+xml" title="Code rant - RSS" href="http://mikehadlow.blogspot.com/feeds/posts/default?alt=rss">
+<link rel="service.post" type="application/atom+xml" title="Code rant - Atom" href="http://www.blogger.com/feeds/15136575/posts/default">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.blogger.com/rsd.g?blogID=15136575">
+<link rel="alternate" type="application/atom+xml" title="Code rant - Atom" href="http://mikehadlow.blogspot.com/feeds/4989705216537191843/comments/default">
+<!--[if IE]> <script> (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i < html5.length; i++) { document.createElement(html5[i]); } })(); </script> <![endif]-->
+<title>Code rant: Forms Authentication with the MVC Framework</title>
+<link type="text/css" rel="stylesheet" href="./Code rant  Forms Authentication with the MVC Framework_files/1743847221-widget_css_bundle.css">
+ <link rel="stylesheet" type="text/css" href="./Code rant  Forms Authentication with the MVC Framework_files/authorization.css">
+<style type="text/css">#navbar-iframe { display:block }
+</style>
+
+<style id="page-skin-1" type="text/css"><!--
+/*
+-----------------------------------------------
+Blogger Template Style
+Name:     Minima Lefty Stretch
+Date:     14 Jul 2006
+----------------------------------------------- */
+/* Variable definitions
+====================
+<Variable name="bgcolor" description="Page Background Color"
+type="color" default="#fff">
+<Variable name="textcolor" description="Text Color"
+type="color" default="#333">
+<Variable name="linkcolor" description="Link Color"
+type="color" default="#58a">
+<Variable name="pagetitlecolor" description="Blog Title Color"
+type="color" default="#666">
+<Variable name="descriptioncolor" description="Blog Description Color"
+type="color" default="#999">
+<Variable name="titlecolor" description="Post Title Color"
+type="color" default="#c60">
+<Variable name="bordercolor" description="Border Color"
+type="color" default="#ccc">
+<Variable name="sidebarcolor" description="Sidebar Title Color"
+type="color" default="#999">
+<Variable name="sidebartextcolor" description="Sidebar Text Color"
+type="color" default="#666">
+<Variable name="visitedlinkcolor" description="Visited Link Color"
+type="color" default="#999">
+<Variable name="bodyfont" description="Text Font"
+type="font" default="normal normal 100% Georgia, Serif">
+<Variable name="headerfont" description="Sidebar Title Font"
+type="font"
+default="normal normal 78% 'Trebuchet MS',Trebuchet,Arial,Verdana,Sans-serif">
+<Variable name="pagetitlefont" description="Blog Title Font"
+type="font"
+default="normal normal 200% Georgia, Serif">
+<Variable name="descriptionfont" description="Blog Description Font"
+type="font"
+default="normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif">
+<Variable name="postfooterfont" description="Post Footer Font"
+type="font"
+default="normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif">
+<Variable name="startSide" description="Start side in blog language"
+type="automatic" default="left">
+<Variable name="endSide" description="End side in blog language"
+type="automatic" default="right">
+*/
+/* Use this with templates/template-twocol.html */
+body {
+background:#ffffff;
+margin:0;
+color:#333333;
+font:x-small Georgia Serif;
+font-size/* */:/**/small;
+font-size: /**/small;
+text-align: center;
+}
+a:link {
+color:#5588aa;
+text-decoration:none;
+}
+a:visited {
+color:#999999;
+text-decoration:none;
+}
+a:hover {
+color:#cc6600;
+text-decoration:underline;
+}
+a img {
+border-width:0;
+}
+/* Header
+-----------------------------------------------
+*/
+#header-wrapper {
+margin:0 2% 10px;
+border:1px solid #cccccc;
+}
+#header-inner {
+background-position: center;
+margin-left: auto;
+margin-right: auto;
+}
+#header {
+margin: 5px;
+border: 1px solid #cccccc;
+text-align: center;
+color:#666666;
+}
+#header h1 {
+margin:5px 5px 0;
+padding:15px 20px .25em;
+line-height:1.2em;
+text-transform:uppercase;
+letter-spacing:.2em;
+font: normal normal 200% Georgia, Serif;
+}
+#header a {
+color:#666666;
+text-decoration:none;
+}
+#header a:hover {
+color:#666666;
+}
+#header .description {
+margin:0 5px 5px;
+padding:0 20px 15px;
+text-transform:uppercase;
+letter-spacing:.2em;
+line-height: 1.4em;
+font: normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif;
+color: #999999;
+}
+#header img {
+margin-left: auto;
+margin-right: auto;
+}
+/* Outer-Wrapper
+----------------------------------------------- */
+#outer-wrapper {
+margin:0;
+padding:10px;
+text-align:left;
+font: normal normal 100% Georgia, Serif;
+}
+#main-wrapper {
+margin-right: 2%;
+width: 67%;
+float: right;
+display: inline;       /* fix for doubling margin in IE */
+word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+overflow: hidden;      /* fix for long non-text content breaking IE sidebar float */
+}
+#sidebar-wrapper {
+margin-left: 2%;
+width: 25%;
+float: left;
+display: inline;       /* fix for doubling margin in IE */
+word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+overflow: hidden;      /* fix for long non-text content breaking IE sidebar float */
+}
+/* Headings
+----------------------------------------------- */
+h2 {
+margin:1.5em 0 .75em;
+font:normal normal 78% 'Trebuchet MS',Trebuchet,Arial,Verdana,Sans-serif;
+line-height: 1.4em;
+text-transform:uppercase;
+letter-spacing:.2em;
+color:#999999;
+}
+/* Posts
+-----------------------------------------------
+*/
+h2.date-header {
+margin:1.5em 0 .5em;
+}
+.post {
+margin:.5em 0 1.5em;
+border-bottom:1px dotted #cccccc;
+padding-bottom:1.5em;
+}
+.post h3 {
+margin:.25em 0 0;
+padding:0 0 4px;
+font-size:140%;
+font-weight:normal;
+line-height:1.4em;
+color:#cc6600;
+}
+.post h3 a, .post h3 a:visited, .post h3 strong {
+display:block;
+text-decoration:none;
+color:#cc6600;
+font-weight:normal;
+}
+.post h3 strong, .post h3 a:hover {
+color:#333333;
+}
+.post-body {
+margin:0 0 .75em;
+line-height:1.6em;
+}
+.post-body blockquote {
+line-height:1.3em;
+}
+.post-footer {
+margin: .75em 0;
+color:#999999;
+text-transform:uppercase;
+letter-spacing:.1em;
+font: normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif;
+line-height: 1.4em;
+}
+.comment-link {
+margin-left:.6em;
+}
+.post img, table.tr-caption-container {
+padding:4px;
+border:1px solid #cccccc;
+}
+.tr-caption-container img {
+border: none;
+padding: 0;
+}
+.post blockquote {
+margin:1em 20px;
+}
+.post blockquote p {
+margin:.75em 0;
+}
+/* Comments
+----------------------------------------------- */
+#comments h4 {
+margin:1em 0;
+font-weight: bold;
+line-height: 1.4em;
+text-transform:uppercase;
+letter-spacing:.2em;
+color: #999999;
+}
+#comments-block {
+margin:1em 0 1.5em;
+line-height:1.6em;
+}
+#comments-block .comment-author {
+margin:.5em 0;
+}
+#comments-block .comment-body {
+margin:.25em 0 0;
+}
+#comments-block .comment-footer {
+margin:-.25em 0 2em;
+line-height: 1.4em;
+text-transform:uppercase;
+letter-spacing:.1em;
+}
+#comments-block .comment-body p {
+margin:0 0 .75em;
+}
+.deleted-comment {
+font-style:italic;
+color:gray;
+}
+.feed-links {
+clear: both;
+line-height: 2.5em;
+}
+#blog-pager-newer-link {
+float: left;
+}
+#blog-pager-older-link {
+float: right;
+}
+#blog-pager {
+text-align: center;
+}
+/* Sidebar Content
+----------------------------------------------- */
+.sidebar {
+color: #666666;
+line-height: 1.5em;
+}
+.sidebar ul {
+list-style:none;
+margin:0 0 0;
+padding:0 0 0;
+}
+.sidebar li {
+margin:0;
+padding-top:0;
+padding-right:0;
+padding-bottom:.25em;
+padding-left:15px;
+text-indent:-15px;
+line-height:1.5em;
+}
+.sidebar .widget, .main .widget {
+border-bottom:1px dotted #cccccc;
+margin:0 0 1.5em;
+padding:0 0 1.5em;
+}
+.main .Blog {
+border-bottom-width: 0;
+}
+/* Profile
+----------------------------------------------- */
+.profile-img {
+float: left;
+margin-top: 0;
+margin-right: 5px;
+margin-bottom: 5px;
+margin-left: 0;
+padding: 4px;
+border: 1px solid #cccccc;
+}
+.profile-data {
+margin:0;
+text-transform:uppercase;
+letter-spacing:.1em;
+font: normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif;
+color: #999999;
+font-weight: bold;
+line-height: 1.6em;
+}
+.profile-datablock {
+margin:.5em 0 .5em;
+}
+.profile-textblock {
+margin: 0.5em 0;
+line-height: 1.6em;
+}
+.profile-link {
+font: normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif;
+text-transform: uppercase;
+letter-spacing: .1em;
+}
+/* Footer
+----------------------------------------------- */
+#footer {
+width:660px;
+clear:both;
+margin:0 auto;
+padding-top:15px;
+line-height: 1.6em;
+text-transform:uppercase;
+letter-spacing:.1em;
+text-align: center;
+}
+
+--></style>
+<script type="text/javascript">
+if (window.jstiming) window.jstiming.load.tick('headEnd');
+</script></head>
+<body>
+<div class="navbar section" id="navbar"><div class="widget Navbar" id="Navbar1"><script type="text/javascript">
+    function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener("load",
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+  </script>
+<iframe src="./Code rant  Forms Authentication with the MVC Framework_files/navbar.htm" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" height="30px" width="100%" id="navbar-iframe" allowtransparency="true" title="Blogger Navigation and Search"></iframe>
+<div></div></div></div>
+<div id="outer-wrapper"><div id="wrap2">
+<!-- skip links for text browsers -->
+<span id="skiplinks" style="display:none;">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html#main">skip to main </a> |
+      <a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html#sidebar">skip to sidebar</a>
+</span>
+<div id="header-wrapper">
+<div class="header section" id="header"><div class="widget Header" id="Header1">
+<div id="header-inner">
+<div class="titlewrapper">
+<h1 class="title">
+<a href="http://mikehadlow.blogspot.com/">Code rant</a>
+</h1>
+</div>
+<div class="descriptionwrapper">
+<p class="description"><span>Life as a mort.</span></p>
+</div>
+</div>
+</div></div>
+</div>
+<div id="content-wrapper">
+<div id="crosscol-wrapper" style="text-align:center">
+<div class="crosscol section" id="crosscol"></div>
+</div>
+<div id="main-wrapper">
+<div class="main section" id="main"><div class="widget Blog" id="Blog1">
+<div class="blog-posts hfeed">
+<!-- google_ad_section_start(name=default) -->
+
+          <div class="date-outer">
+        
+<h2 class="date-header"><span>Thursday, March 06, 2008</span></h2>
+
+          <div class="date-posts">
+        
+<div class="post-outer">
+<div class="post hentry">
+<a name="4989705216537191843"></a>
+<h3 class="post-title entry-title">
+<a href="./Code rant  Forms Authentication with the MVC Framework_files/Code rant  Forms Authentication with the MVC Framework.htm">Forms Authentication with the MVC Framework</a>
+</h3>
+<div class="post-header">
+<div class="post-header-line-1"></div>
+</div>
+<div class="post-body entry-content">
+<p>I'm just wrapping up writing my first commercial application with the new <a href="http://weblogs.asp.net/scottgu/archive/2007/10/14/asp-net-mvc-framework.aspx">MVC Framework</a>. Because it sits on top of ASP.NET, simply replacing the Web Forms model, you can use all of the ASP.NET infrastructure. This includes Forms Authentication. I want to show how I used Forms Authentication with my own database rather than using the membership API, but you can plug in membership quite easily too.</p>  <p>The first thing you need to do is set up your Web.config file to use Forms authentication:</p>  <pre>&lt;!--Using forms authentication--&gt;
+&lt;authentication mode="Forms"&gt;
+  &lt;forms loginUrl="/login.mvc/index" defaultUrl="/home.mvc/index" /&gt;
+&lt;/authentication&gt;
+</pre>  <p>Just set mode to Forms and the login URL to your login page. This means that any unauthenticated users are redirected to the login page. I've also set the default URL to my home page. The other change you'll need to make to your web.config file is to allow unauthenticated users to see your login page and any CSS and image files (although this depends on how you configure IIS). If you've got public areas of your web site you will need to add these as well.</p>  <pre>  &lt;!-- we don't want to stop anyone seeing the css and images --&gt;
+  &lt;location path="Content"&gt;
+    &lt;system.web&gt;
+      &lt;authorization&gt;
+        &lt;allow users="*" /&gt;
+      &lt;/authorization&gt;
+    &lt;/system.web&gt;
+  &lt;/location&gt;
+  &lt;!-- allow any user to see the login controller --&gt;
+  &lt;location path="login.mvc"&gt;
+    &lt;system.web&gt;
+      &lt;authorization&gt;
+        &lt;allow users="*" /&gt;
+      &lt;/authorization&gt;
+    &lt;/system.web&gt;
+  &lt;/location&gt;
+</pre>  <p>Next we need to set up the login controller. Since I'm using my own data access I need to pass in my user repository; that's the class that wraps my user data access.</p>  <pre>public class LoginController : Controller
+{
+    readonly IUserRepository userRepository;
+
+    public LoginController(IUserRepository userRepository)
+    {
+        this.userRepository = userRepository;
+    }
+}
+</pre>  <p>We need a controller action method to render the login form. I've called mine Index. The LoginViewData simply allows me to include an error message, we'll see how that works later on.</p>  <pre>[ControllerAction]
+public void Index()
+{
+    RenderView("index", new LoginViewData());
+}
+</pre>  <p>Next we need to create the view for the login form. I've just rendered a simple form.</p>  <pre>&lt;%= Html.ErrorBox(ViewData.ErrorMessage) %&gt;
+
+&lt;% using(Html.Form("Authenticate", "Login")) { %&gt;
+&lt;div id="login_form"&gt;
+
+    &lt;p&gt;Enter your details&lt;/p&gt;
+    
+    &lt;label for="username"&gt;User name&lt;/label&gt;
+    &lt;%= Html.TextBox("username") %&gt;
+    
+    &lt;label for="password"&gt;Password&lt;/label&gt;
+    &lt;%= Html.Password("password") %&gt;
+
+    &lt;%= Html.SubmitButton() %&gt;
+&lt;/div&gt;
+&lt;% } %&gt;
+</pre>  <p>Note that the form posts to the Authenticate action. This action is where we do all the work of checking the user's credentials and logging them in.</p>  <pre>[ControllerAction]
+public void Authenticate(string username, string password)
+{
+    User user = userRepository.GetUserByName(username);
+
+    if (user != null &amp;&amp; user.Password == password)
+    {
+        SetAuthenticationCookie(username);
+        RedirectToAction("Index", "Home");
+    }
+    else
+    {
+        // If we got here then something is wrong with the supplied username/password
+        RenderView("Index", new LoginViewData
+            {
+                ErrorMessage = "Invalid User Name or Password."
+            });
+    }
+}
+
+public virtual void SetAuthenticationCookie(string username)
+{
+    FormsAuthentication.SetAuthCookie(username, false);
+}
+</pre>  <p>Yes, I know, it's very naughty storing passwords unencrypted in the database, but I wanted to keep this demonstration simple. That's my excuse anyway :) You can see that we simply get the user with the given username from the database (my user repository) , make sure the passwords match and call the public virtual method SetAuthenticationCookie which calls the forms authentication API's SetAuthCookie method. This effectively logs the user in. Why is SetAuthenticationCookie a separate method, why not just call SetAuthCookie in the Authenticate action? This is so that we can unit test the Login controller without invoking the forms authentication API. We can create a partial mock of the Login controller and set up an expectation for SetAuthenticationCookie because it's marked public and virtual.</p>  <p>This is all you need to do to make forms authentication work with the MVC Framework. However, there was one additional thing I wanted to achieve. I have my own User class that implements IPrinciple:</p>  <pre>public partial class User : IPrincipal
+{
+    public static User Guest
+    {
+        get
+        {
+            return new User() { Username = "Guest", Role = Role.Guest };
+        }
+    }
+
+    #region IPrincipal Members
+
+    public IIdentity Identity
+    {
+        get 
+        {
+            bool isAuthenticated = !(Role.Name == Role.Guest.Name);
+            return new Identity(isAuthenticated, this.Username);
+        }
+    }
+
+    public bool IsInRole(string role)
+    {
+        return this.Role.Name == role;
+    }
+
+    #endregion
+}
+</pre>  <p>This User class was generated by the LINQ to SQL designer and the above code is simply a partial extension of it. My data model also includes Roles so I can supply an implementation of IsInRole method. The identity property is handled by returning a simple implementation of IIdentity. To be able to make use of my IPrinciple implementation I need to supply my User to the HttpContext on each request and the best way of doing this is to handle the OnAuthenticateRequest event in Global.asax. </p>  <pre>protected void Application_OnAuthenticateRequest(Object sender, EventArgs e)
+{
+    if (Context.User != null)
+    {
+        if (Context.User.Identity.IsAuthenticated)
+        {
+            User user = userRepository.GetUserByName(Context.User.Identity.Name);
+
+            if (user == null)
+            {
+                throw new ApplicationException("Context.User.Identity.Name is not a recognised user.");
+            }
+
+            System.Threading.Thread.CurrentPrincipal = Context.User = user;
+            return;
+        }
+    }
+    System.Threading.Thread.CurrentPrincipal = Context.User = CreateGuestUser();
+}
+</pre>  <p>We get HttpContext's user, check if it's been authenticated. If it has, it means this user has already logged in and is one of the users in our database. We retrieve the user from our user repository and set the HttpContext's User to our user. We also set the current thread's currentPrinciple to our user. If the user is not authenticated we create a guest user and use that instead.</p>  <p>Now that the current thread's currentPrinciple is one of our users, we can do role based checks on any bit of code we want. Here, for example we're making sure that only administrators can execute this DeleteSomethingImportant action:</p>  <pre>[ControllerAction]
+[PrincipalPermission(SecurityAction.Demand, Role = "Administrator")]
+public void DeleteSomethingImportant(int id)
+{
+ ....
+}
+</pre>  <p>You can access the current user at any time in the application simply by casting the HttpContext's User to your User. This makes role based menu's or features trivial to write.</p>
+<p><b>Update</b></p>
+<p>I had a question recently (hi Jasper) about the Identity class returned by the Identity property of my User class. This is a simple implementation of the System.Security.Principle.IIdentity interface that just returns the Username of my User class. Here it is in full:</p>
+<pre>public class Identity : IIdentity
+{
+    bool isAuthenticated;
+    string name;
+
+    public Identity(bool isAuthenticated, string name)
+    {
+        this.isAuthenticated = isAuthenticated;
+        this.name = name;
+    }
+
+    #region IIdentity Members
+
+    public string AuthenticationType
+    {
+        get { return "Forms"; }
+    }
+
+    public bool IsAuthenticated
+    {
+        get { return isAuthenticated; }
+    }
+
+    public string Name
+    {
+        get { return name; }
+    }
+
+    #endregion
+}
+</pre>
+<p>Hopefully this makes things a little clearer.</p>
+<div style="clear: both;"></div>
+</div>
+<div class="post-footer">
+<div class="post-footer-line post-footer-line-1"><span class="post-author vcard">
+Posted by
+<span class="fn">Mike Hadlow</span>
+</span>
+<span class="post-timestamp">
+at
+<a class="timestamp-link" href="./Code rant  Forms Authentication with the MVC Framework_files/Code rant  Forms Authentication with the MVC Framework.htm" rel="bookmark" title="permanent link"><abbr class="published" title="2008-03-06T12:13:00Z">12:13 PM</abbr></a>
+</span>
+<span class="post-comment-link">
+</span>
+<span class="post-icons">
+<span class="item-action">
+<a href="http://www.blogger.com/email-post.g?blogID=15136575&postID=4989705216537191843" title="Email Post">
+<img alt="" class="icon-action" height="13" src="./Code rant  Forms Authentication with the MVC Framework_files/icon18_email.gif" width="18">
+</a>
+</span>
+<span class="item-control blog-admin pid-881047165">
+<a href="http://www.blogger.com/post-edit.g?blogID=15136575&postID=4989705216537191843" title="Edit Post">
+<img alt="" class="icon-action" height="18" src="./Code rant  Forms Authentication with the MVC Framework_files/icon18_edit_allbkg.gif" width="18">
+</a>
+</span>
+</span>
+<span class="post-backlinks post-comment-link">
+</span>
+</div>
+<div class="post-footer-line post-footer-line-2"><span class="post-labels">
+Labels:
+<a href="http://mikehadlow.blogspot.com/search/label/Forms%20Authentication" rel="tag">Forms Authentication</a>,
+<a href="http://mikehadlow.blogspot.com/search/label/MVC%20Framework" rel="tag">MVC Framework</a>
+</span>
+</div>
+<div class="post-footer-line post-footer-line-3"><span class="post-location">
+</span>
+</div>
+</div>
+</div>
+<div class="comments" id="comments">
+<a name="comments"></a>
+<h4>
+19
+comments:
+        
+</h4>
+<div id="Blog1_comments-block-wrapper">
+<dl class="avatar-comment-indent" id="comments-block">
+<dt class="comment-author " id="c1381708113852842840">
+<a name="c1381708113852842840"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><a href="http://www.blogger.com/profile/02347291987413158114" rel="nofollow" onclick="" class="avatar-hovercard" id="av-0-02347291987413158114"><img src="./Code rant  Forms Authentication with the MVC Framework_files/b16-rounded.gif" width="16" height="16" alt="" title="sunil">
+
+</a></span></div>
+<a href="http://www.blogger.com/profile/02347291987413158114" rel="nofollow">sunil</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-1381708113852842840">
+<p>
+Nice blog regarding form authentication. Thanks.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1205265120000#c1381708113852842840" title="comment permalink">
+7:52 PM
+</a>
+<span class="item-control blog-admin pid-1330622701">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=1381708113852842840" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c7152049254916963217">
+<a name="c7152049254916963217"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="./Code rant  Forms Authentication with the MVC Framework_files/blank.gif" width="16" height="16" alt="" title="Anonymous">
+
+</span></div>
+Anonymous
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-7152049254916963217">
+<p>
+Great stuff. I am trying to use unit test with my Controllers. The tests have no HTTPContext (I'd have to use System.Threading.Thread.CurrentPrincipal to get user info) - how would your code have to be modified to take that into account?<br><br>Thanks.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1205784900000#c7152049254916963217" title="comment permalink">
+8:15 PM
+</a>
+<span class="item-control blog-admin pid-1634122864">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=7152049254916963217" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author blog-author" id="c3168327404685978034">
+<a name="c3168327404685978034"></a>
+<div class="avatar-image-container vcard"><span dir="ltr"><a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow" onclick="" class="avatar-hovercard" id="av-2-16441901713967254504"><img src="./Code rant  Forms Authentication with the MVC Framework_files/BlogPhoto.jpg" width="28" height="35" alt="" class="delayLoad" style="" longdesc="http://photos1.blogger.com/blogger/164/1392/1600/BlogPhoto.jpg" title="Mike Hadlow">
+
+<noscript>&lt;img src="http://photos1.blogger.com/blogger/164/1392/1600/BlogPhoto.jpg" width="28" height="35" class="photo" alt=""&gt;</noscript></a></span></div>
+<a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow">Mike Hadlow</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-3168327404685978034">
+<p>
+Hi Anonymous, I have a controller base class 'ControllerBase' with a public virtual property 'LoggedInUser', which simply returns the HttpContext.User. I use Rhino Mocks for my tests and always create the controller as a PartialMock. In the expectations I set up an expectation for a call to LoggedInUser and get it to return whatever user I need in my tests.<br><br>I hope this is useful. Let me know if it makes no sense and I'll try and dig out some code.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1205788020000#c3168327404685978034" title="comment permalink">
+9:07 PM
+</a>
+<span class="item-control blog-admin pid-881047165">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=3168327404685978034" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c5735156100962207034">
+<a name="c5735156100962207034"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="./Code rant  Forms Authentication with the MVC Framework_files/blank.gif" width="16" height="16" alt="" title="Anonymous">
+
+</span></div>
+Anonymous
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-5735156100962207034">
+<p>
+That does make sense. I believe (please correct me if wrong) that HttpContext.User = Thread.CurrentPrincipal. I also believe that HttpContext.User is always null in the case of unit tests because the web server isn't actually fired. <br><br>Can you throw up some sample code showing your ControllerBase as well as how you have implemented a user logon framework for MVC?<br><br>Thanks.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1205854920000#c5735156100962207034" title="comment permalink">
+3:42 PM
+</a>
+<span class="item-control blog-admin pid-1197869921">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=5735156100962207034" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c3286193620636177168">
+<a name="c3286193620636177168"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><a href="http://godofcsharp.wordpress.com/" rel="nofollow" onclick="" class="avatar-hovercard" id="av-4-04930172233358400623"><img src="./Code rant  Forms Authentication with the MVC Framework_files/openid16-rounded.gif" width="16" height="16" alt="" title="godofCsharp">
+
+</a></span></div>
+<a href="http://godofcsharp.wordpress.com/" rel="nofollow">godofCsharp</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-3286193620636177168">
+<p>
+Cool. Just in time.<br>Maybe you can write a custom HTMLHelper method (e.g. LoginForm) and spread it in the Internet?
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1205940000000#c3286193620636177168" title="comment permalink">
+3:20 PM
+</a>
+<span class="item-control blog-admin pid-947240269">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=3286193620636177168" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author blog-author" id="c4998840291610573806">
+<a name="c4998840291610573806"></a>
+<div class="avatar-image-container vcard"><span dir="ltr"><a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow" onclick="" class="avatar-hovercard" id="av-5-16441901713967254504"><img src="./Code rant  Forms Authentication with the MVC Framework_files/BlogPhoto.jpg" width="28" height="35" alt="" class="delayLoad" style="" longdesc="http://photos1.blogger.com/blogger/164/1392/1600/BlogPhoto.jpg" title="Mike Hadlow">
+
+<noscript>&lt;img src="http://photos1.blogger.com/blogger/164/1392/1600/BlogPhoto.jpg" width="28" height="35" class="photo" alt=""&gt;</noscript></a></span></div>
+<a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow">Mike Hadlow</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-4998840291610573806">
+<p>
+Hi Godofcsharp,<br><br>Great name! I guess one could create an HtmlHelper extension for a login form, but you'd have to provide the controller too. It kinda goes against the 'you have control over your HTML' philosophy of MVC rather than the drag-and-drop theme of Web Forms.<br><br>What do you think?
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1205943780000#c4998840291610573806" title="comment permalink">
+4:23 PM
+</a>
+<span class="item-control blog-admin pid-881047165">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=4998840291610573806" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c232446876687540312">
+<a name="c232446876687540312"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="./Code rant  Forms Authentication with the MVC Framework_files/blank.gif" width="16" height="16" alt="" title="Cameron Singe">
+
+</span></div>
+<a href="http://mikehadlow.blogspot.com/2008/03/cameronsinge.com" rel="nofollow">Cameron Singe</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-232446876687540312">
+<p>
+Omg thank you for this, u saved me a heap of time.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1219900620000#c232446876687540312" title="comment permalink">
+6:17 AM
+</a>
+<span class="item-control blog-admin pid-1380718009">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=232446876687540312" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c5543369699104845139">
+<a name="c5543369699104845139"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="./Code rant  Forms Authentication with the MVC Framework_files/blank.gif" width="16" height="16" alt="" title="Anonymous">
+
+</span></div>
+Anonymous
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-5543369699104845139">
+<p>
+Is there any security concern by only using the username from the authentication cookie to set the active user?<br><br>Has it been hacked?<br><br>Forgive my ignorance, but your code looks great and I want to make sure everything is thought out 100%.<br><br>Thanks.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1223015940000#c5543369699104845139" title="comment permalink">
+7:39 AM
+</a>
+<span class="item-control blog-admin pid-404856245">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=5543369699104845139" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author blog-author" id="c714209334410174961">
+<a name="c714209334410174961"></a>
+<div class="avatar-image-container vcard"><span dir="ltr"><a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow" onclick="" class="avatar-hovercard" id="av-8-16441901713967254504"><img src="./Code rant  Forms Authentication with the MVC Framework_files/BlogPhoto.jpg" width="28" height="35" alt="" class="delayLoad" style="" longdesc="http://photos1.blogger.com/blogger/164/1392/1600/BlogPhoto.jpg" title="Mike Hadlow">
+
+<noscript>&lt;img src="http://photos1.blogger.com/blogger/164/1392/1600/BlogPhoto.jpg" width="28" height="35" class="photo" alt=""&gt;</noscript></a></span></div>
+<a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow">Mike Hadlow</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-714209334410174961">
+<p>
+Hi Anonymous, Setting the authentication cookie based on the username isn't my idea, that's part of the ASP.NET forms authentication infrastructure. I believe it to be secure, but I'd be very interested if you know otherwise.<br><br>You also might want to check out the most recent MVC Framework code from Preview 5. When you create a new MVC Framework project, much of the authorisation code is created for you.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1223021640000#c714209334410174961" title="comment permalink">
+9:14 AM
+</a>
+<span class="item-control blog-admin pid-881047165">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=714209334410174961" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c8912180229985955515">
+<a name="c8912180229985955515"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="./Code rant  Forms Authentication with the MVC Framework_files/blank.gif" width="16" height="16" alt="" title="Anonymous">
+
+</span></div>
+Anonymous
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-8912180229985955515">
+<p>
+Thanks Mike,<br><br>I am working on an active project from an earlier preview. The assemblies have been upgraded, but i never tried a creating new project.<br><br>I appreciate it.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1223051640000#c8912180229985955515" title="comment permalink">
+5:34 PM
+</a>
+<span class="item-control blog-admin pid-1136495666">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=8912180229985955515" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c7626529986881423158">
+<a name="c7626529986881423158"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><a href="http://www.blogger.com/profile/15370151690557124550" rel="nofollow" onclick="" class="avatar-hovercard" id="av-10-15370151690557124550"><img src="./Code rant  Forms Authentication with the MVC Framework_files/b16-rounded.gif" width="16" height="16" alt="" title="Brooks">
+
+</a></span></div>
+<a href="http://www.blogger.com/profile/15370151690557124550" rel="nofollow">Brooks</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-7626529986881423158">
+<p>
+This looks great, but how do you get the reference to userRepository into the MvcApplication class where Application_OnAuthenticateRequest lives? I tried to pass it in as a constructor argument and hoped that my IoC container would do all the work, but it wouldn't compile without an argumentless constructor. Any ideas?
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1246910031574#c7626529986881423158" title="comment permalink">
+8:53 PM
+</a>
+<span class="item-control blog-admin pid-140104250">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=7626529986881423158" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author blog-author" id="c5371627840098612048">
+<a name="c5371627840098612048"></a>
+<div class="avatar-image-container vcard"><span dir="ltr"><a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow" onclick="" class="avatar-hovercard" id="av-11-16441901713967254504"><img src="./Code rant  Forms Authentication with the MVC Framework_files/BlogPhoto(1).jpg" width="35" height="35" alt="" class="delayLoad" style="" longdesc="http://2.bp.blogspot.com/_159eVJubwBA/Saqcxs7vKtI/AAAAAAAAAZo/ef5y5XbzXbQ/S45/BlogPhoto.jpg" title="Mike Hadlow">
+
+<noscript>&lt;img src="http://2.bp.blogspot.com/_159eVJubwBA/Saqcxs7vKtI/AAAAAAAAAZo/ef5y5XbzXbQ/S45/BlogPhoto.jpg" width="35" height="35" class="photo" alt=""&gt;</noscript></a></span></div>
+<a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow">Mike Hadlow</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-5371627840098612048">
+<p>
+Hi Brooks,<br><br>I usually set my Application class up as an IContainerAccessor, so I can always get a reference to the container. Check out the suteki shop code: <br><br>http://code.google.com/p/sutekishop/source/browse/trunk/Suteki.Shop/Suteki.Shop/Global.asax.cs
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1246911176071#c5371627840098612048" title="comment permalink">
+9:12 PM
+</a>
+<span class="item-control blog-admin pid-881047165">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=5371627840098612048" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c1828447573128772099">
+<a name="c1828447573128772099"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><a href="http://www.blogger.com/profile/15370151690557124550" rel="nofollow" onclick="" class="avatar-hovercard" id="av-12-15370151690557124550"><img src="./Code rant  Forms Authentication with the MVC Framework_files/b16-rounded.gif" width="16" height="16" alt="" title="Brooks">
+
+</a></span></div>
+<a href="http://www.blogger.com/profile/15370151690557124550" rel="nofollow">Brooks</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-1828447573128772099">
+<p>
+Hey Mike - Thanks for the quick response!<br><br>I noticed that you decided to move this code to an action filter for SutekiShop, which seems like a better idea since it won't get executed for unnecessary requests (images, CSS, and controllers that don't require any kind of authorization). Is that the main reason you did that or is there another advantage to doing it that way?<br><br>PS: Thanks for linking me to the SutekiShop source. I'm an MVC beginner, and it looks like a great resource.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1246915448184#c1828447573128772099" title="comment permalink">
+10:24 PM
+</a>
+<span class="item-control blog-admin pid-140104250">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=1828447573128772099" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author blog-author" id="c119523632565622984">
+<a name="c119523632565622984"></a>
+<div class="avatar-image-container vcard"><span dir="ltr"><a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow" onclick="" class="avatar-hovercard" id="av-13-16441901713967254504"><img src="./Code rant  Forms Authentication with the MVC Framework_files/BlogPhoto(1).jpg" width="35" height="35" alt="" class="delayLoad" style="" longdesc="http://2.bp.blogspot.com/_159eVJubwBA/Saqcxs7vKtI/AAAAAAAAAZo/ef5y5XbzXbQ/S45/BlogPhoto.jpg" title="Mike Hadlow">
+
+<noscript>&lt;img src="http://2.bp.blogspot.com/_159eVJubwBA/Saqcxs7vKtI/AAAAAAAAAZo/ef5y5XbzXbQ/S45/BlogPhoto.jpg" width="35" height="35" class="photo" alt=""&gt;</noscript></a></span></div>
+<a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow">Mike Hadlow</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-119523632565622984">
+<p>
+Hi Brooks, Actually is was Jeremy Skinner who came up with the Action Filter idea. I really like it.<br><br>Glad you like Suteki Shop. Let me know if you have any comments/feedback.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1246996944696#c119523632565622984" title="comment permalink">
+9:02 PM
+</a>
+<span class="item-control blog-admin pid-881047165">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=119523632565622984" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c6727048379629444963">
+<a name="c6727048379629444963"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="./Code rant  Forms Authentication with the MVC Framework_files/blank.gif" width="16" height="16" alt="" title="Patrick">
+
+</span></div>
+Patrick
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-6727048379629444963">
+<p>
+I have spent a few hours searching for a good resource and I finally found it:) You are an ace mate thanks, great work
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1250318516278#c6727048379629444963" title="comment permalink">
+7:41 AM
+</a>
+<span class="item-control blog-admin pid-732090592">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=6727048379629444963" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c5671494689478452844">
+<a name="c5671494689478452844"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><a href="http://www.blogger.com/profile/15826026307920013586" rel="nofollow" onclick="" class="avatar-hovercard" id="av-15-15826026307920013586"><img src="./Code rant  Forms Authentication with the MVC Framework_files/b16-rounded.gif" width="16" height="16" alt="" title="Gaz">
+
+</a></span></div>
+<a href="http://www.blogger.com/profile/15826026307920013586" rel="nofollow">Gaz</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-5671494689478452844">
+<p>
+Just found this article and its exactly what I've been searching for. I'm looking at the best way to handle my authentication and have seen various ways including the use of base controller classes overriding either initialize or OnAuthorization or by creating a custom attribute filter. The final option I'd seen was what you have above on the AuthenticateRequest in the Global.asax but my worry was that this code would be executed too much (every image, css file). I notice from your replies that you've moved this into an attribute. Do you think this is the best place for implementing custom authentication as I've seen a number of posts questing this due to output caching problems?<br><br>Thanks<br>Gaz
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1257341421647#c5671494689478452844" title="comment permalink">
+1:30 PM
+</a>
+<span class="item-control blog-admin pid-1995932687">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=5671494689478452844" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c3066404028080448895">
+<a name="c3066404028080448895"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><a href="http://www.blogger.com/profile/17660002158531752758" rel="nofollow" onclick="" class="avatar-hovercard" id="av-16-17660002158531752758"><img src="./Code rant  Forms Authentication with the MVC Framework_files/b16-rounded.gif" width="16" height="16" alt="" title="Emo">
+
+</a></span></div>
+<a href="http://www.blogger.com/profile/17660002158531752758" rel="nofollow">Emo</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-3066404028080448895">
+<p>
+Great article!<br>Could you provide a demo project with the source code showing how it works?<br>It would be great
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1271557400642#c3066404028080448895" title="comment permalink">
+3:23 AM
+</a>
+<span class="item-control blog-admin pid-1667673178">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=3066404028080448895" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author blog-author" id="c8819932378977881600">
+<a name="c8819932378977881600"></a>
+<div class="avatar-image-container vcard"><span dir="ltr"><a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow" onclick="" class="avatar-hovercard" id="av-17-16441901713967254504"><img src="./Code rant  Forms Authentication with the MVC Framework_files/BlogPhoto(1).jpg" width="35" height="35" alt="" class="delayLoad" style="" longdesc="http://2.bp.blogspot.com/_159eVJubwBA/Saqcxs7vKtI/AAAAAAAAAZo/ef5y5XbzXbQ/S45/BlogPhoto.jpg" title="Mike Hadlow">
+
+<noscript>&lt;img src="http://2.bp.blogspot.com/_159eVJubwBA/Saqcxs7vKtI/AAAAAAAAAZo/ef5y5XbzXbQ/S45/BlogPhoto.jpg" width="35" height="35" class="photo" alt=""&gt;</noscript></a></span></div>
+<a href="http://www.blogger.com/profile/16441901713967254504" rel="nofollow">Mike Hadlow</a>
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-8819932378977881600">
+<p>
+Hi Emo,<br><br>Check out Suteki Shop:<br><a href="http://code.google.com/p/sutekishop/" rel="nofollow">http://code.google.com/p/sutekishop/</a>
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1271574564072#c8819932378977881600" title="comment permalink">
+8:09 AM
+</a>
+<span class="item-control blog-admin pid-881047165">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=8819932378977881600" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+<dt class="comment-author " id="c899764602428210864">
+<a name="c899764602428210864"></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><img src="./Code rant  Forms Authentication with the MVC Framework_files/blank.gif" width="16" height="16" alt="" title="Anonymous">
+
+</span></div>
+Anonymous
+said...
+</dt>
+<dd class="comment-body" id="Blog1_cmt-899764602428210864">
+<p>
+For some reason it will not work with Visual Studio development server! See this post http://forums.asp.net/t/1469217.aspx<br>I have the same problem.
+</p>
+</dd>
+<dd class="comment-footer">
+<span class="comment-timestamp">
+<a href="http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html?showComment=1279116513941#c899764602428210864" title="comment permalink">
+3:08 PM
+</a>
+<span class="item-control blog-admin pid-495313880">
+<a class="comment-delete" href="http://www.blogger.com/delete-comment.g?blogID=15136575&postID=899764602428210864" title="Delete Comment">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</span>
+</dd>
+</dl>
+</div>
+<p class="comment-footer">
+<a href="https://www.blogger.com/comment.g?blogID=15136575&postID=4989705216537191843" onclick="">Post a Comment</a>
+</p>
+<div id="backlinks-container">
+<div id="Blog1_backlinks-container"><a name="links"></a><h4>Links to this post</h4>
+<dl class="comments-block" id="comments-block">
+<div class="collapsed-backlink backlink-control">
+<dt class="comment-title">
+<span class="backlink-toggle-zippy">&nbsp;</span>
+<a href="http://blog.cwa.me.uk/2008/03/07/the-morning-brew-48/" rel="nofollow">The Morning Brew #48</a>
+<span class="item-control pid-881047165">
+<a href="http://www.blogger.com/delete-backlink.g?blogID=15136575&postID=4989705216537191843&backlinkURL=http%3A%2F%2Fblog.cwa.me.uk%2F2008%2F03%2F07%2Fthe-morning-brew-48%2F" title="">
+<img src="./Code rant  Forms Authentication with the MVC Framework_files/icon_delete13.gif">
+</a>
+</span>
+</dt>
+<dd class="comment-body collapseable">
+OK, I'm now suffering from MIX08 content overload - there is an awful lot being blogged out of MIX08, and lots of it is interesting, but if I see any more posts of the same silverlight samples and the same links I think I might go crazy <b>...</b> 
+</dd>
+<dd class="comment-footer collapseable">
+<span class="comment-author">Posted by
+Chris Alcock</span>
+<span class="comment-timestamp">at
+7:49 AM</span>
+</dd>
+</div>
+</dl>
+<p class="comment-footer">
+<a class="comment-link" href="http://www.blogger.com/blog-this.g" id="Blog1_backlinks-create-link" target="_blank">Create a Link</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="latency-4989705216537191843"></div><script type="text/javascript">if (window['tickAboveFold']) {window['tickAboveFold'](document.getElementById("latency-4989705216537191843")); } </script>
+
+        </div></div>
+      
+<!-- google_ad_section_end -->
+</div>
+<div class="blog-pager" id="blog-pager">
+<span id="blog-pager-newer-link">
+<a class="blog-pager-newer-link" href="http://mikehadlow.blogspot.com/2008/03/windsor-ioc-container-and-mvc-framework.html" id="Blog1_blog-pager-newer-link" title="Newer Post">Newer Post</a>
+</span>
+<span id="blog-pager-older-link">
+<a class="blog-pager-older-link" href="http://mikehadlow.blogspot.com/2008/03/how-to-output-windsor-container.html" id="Blog1_blog-pager-older-link" title="Older Post">Older Post</a>
+</span>
+<a class="home-link" href="http://mikehadlow.blogspot.com/">Home</a>
+</div>
+<div class="clear"></div>
+<div class="post-feeds">
+<div class="feed-links">
+Subscribe to:
+<a class="feed-link" href="http://mikehadlow.blogspot.com/feeds/4989705216537191843/comments/default" target="_blank" type="application/atom+xml">Post Comments (Atom)</a>
+</div>
+</div>
+</div></div>
+</div>
+<div id="sidebar-wrapper">
+<iframe allowtransparency="true" frameborder="0" scrolling="no" src="./Code rant  Forms Authentication with the MVC Framework_files/like.htm" style="border:none; overflow:hidden; width:200px; height:80px;"></iframe>
+<div class="sidebar section" id="sidebar"><div class="widget Profile" id="Profile1">
+<h2>About Me</h2>
+<div class="widget-content">
+<a href="http://www.blogger.com/profile/16441901713967254504"><img alt="My Photo" class="profile-img" height="80" src="./Code rant  Forms Authentication with the MVC Framework_files/BlogPhoto.jpg" width="64"></a>
+<dl class="profile-datablock">
+<dt class="profile-data">Mike Hadlow</dt>
+<dd class="profile-textblock">Based in Brighton, England, I work as a freelance programmer, specialising in enterprise application development with Microsoft tools. I'm very interested in the art of programming and I frequently get excited by new technology. As well as rants on the state of the art, I also use this blog as a repository of tips and techniques. I hope you enjoy it.
+
+I'm always looking for exciting new projects, so if you need an application built, help with architecture or just .NET development in general, please get in touch.
+
+Contact me at mikehadlow&lt;at&gt;yahoo&lt;dot&gt;com</dd>
+</dl>
+<a class="profile-link" href="http://www.blogger.com/profile/16441901713967254504">View my complete profile</a>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=15136575&widgetType=Profile&widgetId=Profile1&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;Profile1&quot;));" target="configProfile1" title="Edit">
+<img alt="" height="18" src="./Code rant  Forms Authentication with the MVC Framework_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div>
+</div><div class="widget HTML" id="HTML1">
+<h2 class="title">Twitter</h2>
+<div class="widget-content">
+<div id="twitter_div"><ul id="twitter_update_list"><li><span>@<a href="http://twitter.com/robertpi">robertpi</a> What I need is a programming language without nulls.... Hmm...</span> <a style="font-size:85%" href="http://twitter.com/mikehadlow/statuses/14322612490477570">14 minutes ago</a></li><li><span>@<a href="http://twitter.com/ExploreMqt">ExploreMqt</a> Aware of both, implemented neither :p I definitely intend taking a closer look at Pex.</span> <a style="font-size:85%" href="http://twitter.com/mikehadlow/statuses/14321197764313088">19 minutes ago</a></li><li><span>Bitten by null _again_ . Null reference exceptions are by far my most prevalent error.</span> <a style="font-size:85%" href="http://twitter.com/mikehadlow/statuses/14319813442674688">25 minutes ago</a></li><li><span>Warning! I watched <a href="http://bit.ly/fAtH9d">http://bit.ly/fAtH9d</a> for 10 minutes, now I am a zombie automation controlled by @<a href="http://twitter.com/markembling">markembling</a></span> <a style="font-size:85%" href="http://twitter.com/mikehadlow/statuses/14271350067699712">about 3 hours ago</a></li><li><span>@<a href="http://twitter.com/ICooper">ICooper</a> Thanks for that, SproutCore and JavascriptMVC both look very nice. I should probably have used one or the other in my last project.</span> <a style="font-size:85%" href="http://twitter.com/mikehadlow/statuses/14270449680650240">about 3 hours ago</a></li><li><span>@<a href="http://twitter.com/ICooper">ICooper</a> ... with more MS backing for OSS that could change. NuGet is a step in the right direction IMHO.</span> <a style="font-size:85%" href="http://twitter.com/mikehadlow/statuses/14267284419780608">about 3 hours ago</a></li><li><span>@<a href="http://twitter.com/ICooper">ICooper</a> And there's still a huge wedge of businesses out there that think of MS as a one-stop-shop and won't consider OSS...</span> <a style="font-size:85%" href="http://twitter.com/mikehadlow/statuses/14267174235406336">about 3 hours ago</a></li><li><span>@<a href="http://twitter.com/kkozmic">kkozmic</a> Agreed. Also any framework baked onto ASP.NET is bound to look somewhat legacy these days.</span> <a style="font-size:85%" href="http://twitter.com/mikehadlow/statuses/14263444932919296">about 4 hours ago</a></li><li><span>@<a href="http://twitter.com/ICooper">ICooper</a> ... it's scary how quickly ASP.NET MVC has become an 'old style' framework :)</span> <a style="font-size:85%" href="http://twitter.com/mikehadlow/statuses/14262421417885696">about 4 hours ago</a></li><li><span>@<a href="http://twitter.com/ICooper">ICooper</a> Both those are new to me. Yup it's hard to keep up with so much excellent work being done. Rate of change is astonishing...</span> <a style="font-size:85%" href="http://twitter.com/mikehadlow/statuses/14262260159488000">about 4 hours ago</a></li></ul>
+<a id="twitter-link" style="display:block;text-align:right;" href="http://twitter.com/mikehadlow">follow me on Twitter</a>
+</div>
+<script src="./Code rant  Forms Authentication with the MVC Framework_files/blogger.js" type="text/javascript"></script>
+<script src="./Code rant  Forms Authentication with the MVC Framework_files/mikehadlow.json" type="text/javascript"></script>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=15136575&widgetType=HTML&widgetId=HTML1&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;HTML1&quot;));" target="configHTML1" title="Edit">
+<img alt="" height="18" src="./Code rant  Forms Authentication with the MVC Framework_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div><div class="widget BlogArchive" id="BlogArchive1">
+<h2>Blog Archive</h2>
+<div class="widget-content">
+<div id="ArchiveList">
+<div id="BlogArchive1_ArchiveList">
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/search?updated-min=2010-01-01T00%3A00%3A00Z&updated-max=2011-01-01T00%3A00%3A00Z&max-results=50">2010</a>
+<span class="post-count" dir="ltr">(79)</span>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_12_01_archive.html">December</a>
+<span class="post-count" dir="ltr">(2)</span>
+<ul class="posts">
+<li><a href="http://mikehadlow.blogspot.com/2010/12/explosion-of-alternative-web-frameworks.html">An Explosion of Alternative Web Frameworks</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/12/javascript-defining-classes-with.html">Javascript: Defining Classes with Closures</a></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_11_01_archive.html">November</a>
+<span class="post-count" dir="ltr">(9)</span>
+<ul class="posts">
+<li><a href="http://mikehadlow.blogspot.com/2010/11/aspnet-mvc-creating-url-from-route.html">ASP.NET MVC: Creating a URL From Route Values</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/11/sammyjs.html">Sammy.JS</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/11/pedant-corner-clarifying-ioc-dip-and-di.html">Pedant Corner: Clarifying IoC, DIP and DI</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/11/first-commandment-thou-shalt-not.html">The first Commandment: Thou shalt not reference th...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/11/tardis-bank-at-5app.html">Tardis Bank at £5App</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/11/aspnet-httpmodule-to-set-current.html">An ASP.NET HttpModule to set the current culture t...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/11/composing-sequential-tasks-with-linq.html">Composing Sequential Tasks With Linq</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/11/tardis-bank-is-now-live.html">Tardis Bank is now live</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/11/using-task-parallel-library-with-aspnet.html">Using the Task Parallel Library with ASP.NET MVC f...</a></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_10_01_archive.html">October</a>
+<span class="post-count" dir="ltr">(12)</span>
+<ul class="posts">
+<li><a href="http://mikehadlow.blogspot.com/2010/10/ravendb-indexes-1st-attempt.html">RavenDb Indexes : 1st Attempt</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/tardis-bank-online-pocket-money-banking.html">Tardis Bank – online pocket money banking for pare...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/ravendb-aspnet-mvc-and-windsor-working.html">RavenDb, ASP.NET MVC and Windsor working together</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/ravendb-playing-with-inheritance-and.html">RavenDb: Playing with Inheritance and Polymorphism...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/powershell-script-for-monitoring-web.html">A Powershell Script for Monitoring Web Site Status...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/populating-drop-down-lists-in-aspnet.html">Populating Drop Down Lists in ASP.NET MVC</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/aspnet-mvc-controller-action-unit-test.html">ASP.NET MVC Controller Action Unit Test Extension ...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/use-single-version-file-for-all.html">Use a Single Version File For All Projects in a So...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/nhibernate-schema-export-in-suteki-shop.html">NHibernate Schema Export in Suteki Shop</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/quick-play-with-nupack.html">A Quick Play With NuPack</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/experimental-aspnet-mvc-add-ins-updated.html">Experimental ASP.NET MVC Add-ins : Updated (or why...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/10/experimental-aspnet-mvc-add-ins.html">Experimental ASP.NET MVC Add-ins</a></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_09_01_archive.html">September</a>
+<span class="post-count" dir="ltr">(8)</span>
+<ul class="posts">
+<li><a href="http://mikehadlow.blogspot.com/2010/09/separation-of-concerns-with-domain.html">Separation of Concerns with Domain Events</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/09/how-conventions-can-massively-save.html">How Conventions Can Massively Save Typing</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/09/implementing-money-type-in-aspnet-mvc.html">Implementing a ‘Money’ type in an ASP.NET MVC and ...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/09/getting-property-name-from-property.html">Getting the Property Name From a Property Expressi...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/09/trust-your-instincts-or-how-to-stay.html">Trust Your Instincts! Or how to stay interested in...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/09/more-boilerplate-code-removal.html">More Boilerplate Code Removal</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/09/adventures-in-repetitive-code.html">Adventures in Repetitive Code</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/09/using-visitor-pattern-with-domain.html">Using the Visitor Pattern with Domain Entities</a></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_08_01_archive.html">August</a>
+<span class="post-count" dir="ltr">(7)</span>
+<ul class="posts">
+<li><a href="http://mikehadlow.blogspot.com/2010/08/how-to-fix-public-sector-it.html">How to Fix Public Sector IT</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/08/new-brighton-altnet-wiki.html">The New Brighton ALT.NET Wiki</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/08/how-to-send-email-via-gmail-using-net.html">How to send an email via GMail using .NET</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/08/bending-linq-syntax-to-your-will.html">Bending Linq Syntax to your will</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/08/nhibernate-linq-eager-fetching.html">NHibernate Linq Eager Fetching</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/08/how-do-you-stress-test-your-web.html">How do You Stress Test Your Web Application?</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/08/you-dont-need-application-server.html">You Don’t Need an Application Server</a></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_07_01_archive.html">July</a>
+<span class="post-count" dir="ltr">(2)</span>
+<ul class="posts">
+<li><a href="http://mikehadlow.blogspot.com/2010/07/book-review-rework-by-jason-fried-and.html">Book Review: Rework by Jason Fried and David Heine...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/07/brighton-altnet-beers-7pm-tuesday-6th.html">Brighton ALT.NET Beers. 7pm Tuesday 6th July at Th...</a></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_06_01_archive.html">June</a>
+<span class="post-count" dir="ltr">(1)</span>
+<ul class="posts">
+<li><a href="http://mikehadlow.blogspot.com/2010/06/is-microsoft-ibm-of-2010s.html">Is Microsoft the IBM of the 2010’s?</a></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_05_01_archive.html">May</a>
+<span class="post-count" dir="ltr">(3)</span>
+<ul class="posts">
+<li><a href="http://mikehadlow.blogspot.com/2010/05/brighton-altnet-beers-7pm-tuesday-1st.html">Brighton ALT.NET Beers. 7pm Tuesday 1st June at Th...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/05/skillsmatter-progressive-net-tutorials.html">Skillsmatter Progressive .NET Tutorials May 12-14t...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/05/10-advanced-windsor-tricks-13-use.html">10 Advanced Windsor Tricks – 13. Use SubContainers...</a></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_04_01_archive.html">April</a>
+<span class="post-count" dir="ltr">(8)</span>
+<ul class="posts">
+<li><a href="http://mikehadlow.blogspot.com/2010/04/brighton-altnet-beers-7pm-tuesday-4th.html">Brighton ALT.NET Beers. 7pm Tuesday 4th May at The...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/04/currying-vs-partial-function.html">Currying vs Partial Function Application</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/04/nhibernate-get-vs-load-and-sub-types.html">NHibernate Get&lt;T&gt; vs Load&lt;T&gt; and sub types</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/04/moving-suteki-shop-from-linq-to-sql-to.html">Moving Suteki Shop from Linq-to-SQL to NHibernate</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/04/custom-aspnet-mvc-model-binder-for.html">A Custom ASP.NET MVC Model Binder for Repositories...</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2010/04/microsoft-techdays-open-source-on-net.html">Microsoft TechDays – Open Source on .NET. April 14...</a></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_03_01_archive.html">March</a>
+<span class="post-count" dir="ltr">(7)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_02_01_archive.html">February</a>
+<span class="post-count" dir="ltr">(8)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2010_01_01_archive.html">January</a>
+<span class="post-count" dir="ltr">(12)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/search?updated-min=2009-01-01T00%3A00%3A00Z&updated-max=2010-01-01T00%3A00%3A00Z&max-results=50">2009</a>
+<span class="post-count" dir="ltr">(55)</span>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_12_01_archive.html">December</a>
+<span class="post-count" dir="ltr">(3)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_11_01_archive.html">November</a>
+<span class="post-count" dir="ltr">(3)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_10_01_archive.html">October</a>
+<span class="post-count" dir="ltr">(6)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_09_01_archive.html">September</a>
+<span class="post-count" dir="ltr">(4)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_08_01_archive.html">August</a>
+<span class="post-count" dir="ltr">(1)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_07_01_archive.html">July</a>
+<span class="post-count" dir="ltr">(2)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_06_01_archive.html">June</a>
+<span class="post-count" dir="ltr">(2)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_05_01_archive.html">May</a>
+<span class="post-count" dir="ltr">(8)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_04_01_archive.html">April</a>
+<span class="post-count" dir="ltr">(7)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_03_01_archive.html">March</a>
+<span class="post-count" dir="ltr">(6)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_02_01_archive.html">February</a>
+<span class="post-count" dir="ltr">(3)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2009_01_01_archive.html">January</a>
+<span class="post-count" dir="ltr">(10)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate expanded">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy toggle-open">▼&nbsp;</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/search?updated-min=2008-01-01T00%3A00%3A00Z&updated-max=2009-01-01T00%3A00%3A00Z&max-results=50">2008</a>
+<span class="post-count" dir="ltr">(103)</span>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_12_01_archive.html">December</a>
+<span class="post-count" dir="ltr">(2)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_11_01_archive.html">November</a>
+<span class="post-count" dir="ltr">(7)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_10_01_archive.html">October</a>
+<span class="post-count" dir="ltr">(13)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_09_01_archive.html">September</a>
+<span class="post-count" dir="ltr">(12)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_08_01_archive.html">August</a>
+<span class="post-count" dir="ltr">(12)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_07_01_archive.html">July</a>
+<span class="post-count" dir="ltr">(10)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_06_01_archive.html">June</a>
+<span class="post-count" dir="ltr">(5)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate expanded">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy toggle-open">▼&nbsp;</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_05_01_archive.html">May</a>
+<span class="post-count" dir="ltr">(11)</span>
+<ul class="posts"><li><a href="http://mikehadlow.blogspot.com/2008/05/interface-extension-methods-mixin.html">Interface + Extension Methods = Mixin</a></li><li><a href="http://mikehadlow.blogspot.com/2008/05/upgrading-suteki-shop-to-mvc-framework.html">Upgrading Suteki Shop to MVC Framework CTP 3</a></li><li><a href="http://mikehadlow.blogspot.com/2008/05/compiling-aspx-templates-using.html">Compiling aspx templates using aspnet_compiler</a></li><li><a href="http://mikehadlow.blogspot.com/2008/05/what-is-rsd-making-my-suteki-shop-to.html">What is RSD? Making my Suteki Shop to Live Writer ...</a></li><li><a href="http://mikehadlow.blogspot.com/2008/05/using-live-writer-to-post-content-to.html">Using Live Writer to Post Content to a Web Site</a></li><li><a href="http://mikehadlow.blogspot.com/2008/05/nested-master-pages-with-mvc-framework.html">Nested Master Pages with the MVC Framework</a></li><li><a href="http://mikehadlow.blogspot.com/2008/05/mvc-framework-scaffolding.html">MVC Framework Scaffolding</a></li><li><a href="http://mikehadlow.blogspot.com/2008/05/credit-card-validation-with-linq.html">Credit Card Validation With LINQ</a></li><li><a href="http://mikehadlow.blogspot.com/2008/05/collecting-validation-exceptions.html">Collecting Validation Exceptions</a></li><li><a href="http://mikehadlow.blogspot.com/2008/05/css-based-foldout-menus.html">CSS Based Foldout Menus</a></li><li><a href="http://mikehadlow.blogspot.com/2008/05/mvc-framework-defaultaspx-routes-no.html">MVC Framework - default.aspx routes no longer work...</a></li></ul></li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate expanded">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy toggle-open">▼&nbsp;</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_04_01_archive.html">April</a>
+<span class="post-count" dir="ltr">(11)</span>
+<ul class="posts"><li><a href="http://mikehadlow.blogspot.com/2008/04/generic-reordering.html">Generic reordering</a></li><li><a href="http://mikehadlow.blogspot.com/2008/04/last-night-sussex-geek-dinner.html">Last night's Sussex Geek Dinner</a></li><li><a href="http://mikehadlow.blogspot.com/2008/04/problems-with-mvc-framework.html">Problems with the MVC Framework RenderComponent he...</a></li><li><a href="http://mikehadlow.blogspot.com/2008/04/design-coding.html">Design Coding</a></li><li><a href="http://mikehadlow.blogspot.com/2008/04/mvc-storefront.html">MVC Storefront</a></li><li><a href="http://mikehadlow.blogspot.com/2008/04/do-not-use-webhostingukcom.html">Do Not Use Webhosting.uk.com</a></li><li><a href="http://mikehadlow.blogspot.com/2008/04/ioc-container-purse-fight.html">IoC Container Purse Fight</a></li><li><a href="http://mikehadlow.blogspot.com/2008/04/repositorygetbyid-using-linq-expression.html">Repository.GetById using LINQ Expression Syntax</a></li><li><a href="http://mikehadlow.blogspot.com/2008/04/extension-properties-for-easy.html">Extension Properties for easy Reflection in C#</a></li><li><a href="http://mikehadlow.blogspot.com/2008/04/software-factories-and-battery.html">Software Factories and Battery Programmers</a></li><li><a href="http://mikehadlow.blogspot.com/2008/04/visual-tools-marketing-dream-programmer.html">Visual Tools: Marketing Dream, Programmer's Nightm...</a></li></ul></li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate expanded">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy toggle-open">▼&nbsp;</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_03_01_archive.html">March</a>
+<span class="post-count" dir="ltr">(8)</span>
+<ul class="posts">
+<li><a href="http://mikehadlow.blogspot.com/2008/03/i-speaking-at-next-sussex-geek-dinner.html">I'm speaking at the next Sussex Geek Dinner</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2008/03/file-uploads-with-mvc-framework.html">File uploads with the MVC Framework</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2008/03/using-irepository-pattern-with-linq-to.html">Using the IRepository pattern with LINQ to SQL</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2008/03/linq-to-string.html">LINQ to String</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2008/03/currying-in-c-with-oliver-sturm.html">Currying in C# with Oliver Sturm</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2008/03/windsor-ioc-container-and-mvc-framework.html">Windsor IoC Container and MVC Framework CTP 2</a></li>
+<li><a href="./Code rant  Forms Authentication with the MVC Framework_files/Code rant  Forms Authentication with the MVC Framework.htm">Forms Authentication with the MVC Framework</a></li>
+<li><a href="http://mikehadlow.blogspot.com/2008/03/how-to-output-windsor-container.html">How to output Windsor Container's dependency graph...</a></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">►&nbsp;</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_02_01_archive.html">February</a>
+<span class="post-count" dir="ltr">(5)</span>
+<ul class="posts"><li><a href="http://mikehadlow.blogspot.com/2008/02/nasty-ie-margin-inheritance-bug.html">Nasty IE margin inheritance bug</a></li><li><a href="http://mikehadlow.blogspot.com/2008/02/extension-method-validators.html">Extension method validators</a></li><li><a href="http://mikehadlow.blogspot.com/2008/02/restful-file-uploads-with.html">RESTful file uploads with HttpWebRequest and IHttp...</a></li><li><a href="http://mikehadlow.blogspot.com/2008/02/never-write-for-loop-again-fun-with.html">Never write a for loop again! Fun with Linq style ...</a></li><li><a href="http://mikehadlow.blogspot.com/2008/02/altnet-uk.html">ALT.NET UK</a></li></ul></li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">►&nbsp;</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2008_01_01_archive.html">January</a>
+<span class="post-count" dir="ltr">(7)</span>
+<ul class="posts"><li><a href="http://mikehadlow.blogspot.com/2008/01/writing-unit-tests-for-mvc-framework.html">Writing unit tests for an MVC Framework controller...</a></li><li><a href="http://mikehadlow.blogspot.com/2008/01/ddd6-feedback.html">DDD6 Feedback</a></li><li><a href="http://mikehadlow.blogspot.com/2008/01/you-have-to-stay-up-late-for-altnet.html">You have to stay up late for ALT.NET</a></li><li><a href="http://mikehadlow.blogspot.com/2008/01/rob-conery-on-choosing-your-data-access.html">Rob Conery on choosing your data access method</a></li><li><a href="http://mikehadlow.blogspot.com/2008/01/more-on-source-repository-hosting-what.html">More on source repository hosting: What about Cont...</a></li><li><a href="http://mikehadlow.blogspot.com/2008/01/source-repository-hosting-why-do-it.html">Source repository hosting: Why do it yourself?</a></li><li><a href="http://mikehadlow.blogspot.com/2008/01/building-my-first-monorail-application.html">Building my first Monorail application</a></li></ul></li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/search?updated-min=2007-01-01T00%3A00%3A00Z&updated-max=2008-01-01T00%3A00%3A00Z&max-results=50">2007</a>
+<span class="post-count" dir="ltr">(59)</span>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_12_01_archive.html">December</a>
+<span class="post-count" dir="ltr">(3)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_11_01_archive.html">November</a>
+<span class="post-count" dir="ltr">(9)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_10_01_archive.html">October</a>
+<span class="post-count" dir="ltr">(16)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_09_01_archive.html">September</a>
+<span class="post-count" dir="ltr">(3)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_08_01_archive.html">August</a>
+<span class="post-count" dir="ltr">(3)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_07_01_archive.html">July</a>
+<span class="post-count" dir="ltr">(3)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_06_01_archive.html">June</a>
+<span class="post-count" dir="ltr">(1)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_05_01_archive.html">May</a>
+<span class="post-count" dir="ltr">(4)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_04_01_archive.html">April</a>
+<span class="post-count" dir="ltr">(5)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_03_01_archive.html">March</a>
+<span class="post-count" dir="ltr">(5)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_02_01_archive.html">February</a>
+<span class="post-count" dir="ltr">(2)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2007_01_01_archive.html">January</a>
+<span class="post-count" dir="ltr">(5)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/search?updated-min=2006-01-01T00%3A00%3A00Z&updated-max=2007-01-01T00%3A00%3A00Z&max-results=50">2006</a>
+<span class="post-count" dir="ltr">(55)</span>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_12_01_archive.html">December</a>
+<span class="post-count" dir="ltr">(2)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_11_01_archive.html">November</a>
+<span class="post-count" dir="ltr">(4)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_10_01_archive.html">October</a>
+<span class="post-count" dir="ltr">(7)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_09_01_archive.html">September</a>
+<span class="post-count" dir="ltr">(10)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_08_01_archive.html">August</a>
+<span class="post-count" dir="ltr">(4)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_07_01_archive.html">July</a>
+<span class="post-count" dir="ltr">(2)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_06_01_archive.html">June</a>
+<span class="post-count" dir="ltr">(6)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_05_01_archive.html">May</a>
+<span class="post-count" dir="ltr">(4)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_04_01_archive.html">April</a>
+<span class="post-count" dir="ltr">(3)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_03_01_archive.html">March</a>
+<span class="post-count" dir="ltr">(7)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_02_01_archive.html">February</a>
+<span class="post-count" dir="ltr">(3)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2006_01_01_archive.html">January</a>
+<span class="post-count" dir="ltr">(3)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/search?updated-min=2005-01-01T00%3A00%3A00Z&updated-max=2006-01-01T00%3A00%3A00Z&max-results=6">2005</a>
+<span class="post-count" dir="ltr">(6)</span>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2005_10_01_archive.html">October</a>
+<span class="post-count" dir="ltr">(1)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://mikehadlow.blogspot.com/2005_08_01_archive.html">August</a>
+<span class="post-count" dir="ltr">(5)</span>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=15136575&widgetType=BlogArchive&widgetId=BlogArchive1&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;BlogArchive1&quot;));" target="configBlogArchive1" title="Edit">
+<img alt="" height="18" src="./Code rant  Forms Authentication with the MVC Framework_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div>
+</div><div class="widget Label" id="Label1">
+<h2>Labels</h2>
+<div class="widget-content list-label-widget-content">
+<ul>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/ADO.NET%20Data%20Services">ADO.NET Data Services</a>
+<span dir="ltr">(4)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Ajax">Ajax</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/ALT.NET">ALT.NET</a>
+<span dir="ltr">(5)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/ALT.NET%20UK">ALT.NET UK</a>
+<span dir="ltr">(5)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/AltNetUK">AltNetUK</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Architecture">Architecture</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/asp.net">asp.net</a>
+<span dir="ltr">(5)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/blogging">blogging</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/C%23%204.0">C# 4.0</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Castle%20Windsor">Castle Windsor</a>
+<span dir="ltr">(4)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/CSS">CSS</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/custom%20iterators">custom iterators</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/DDD7">DDD7</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/DDD8">DDD8</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Extension%20methods">Extension methods</a>
+<span dir="ltr">(4)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/F%23">F#</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Forms%20Authentication">Forms Authentication</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Google">Google</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Google%20maps">Google maps</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/IE">IE</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/IoC">IoC</a>
+<span dir="ltr">(21)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/IRepository">IRepository</a>
+<span dir="ltr">(5)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/IServiceLocator">IServiceLocator</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/jQuery">jQuery</a>
+<span dir="ltr">(3)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Linq">Linq</a>
+<span dir="ltr">(12)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/LINQ%20to%20SQL">LINQ to SQL</a>
+<span dir="ltr">(8)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Live%20Writer">Live Writer</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Load%20Testing">Load Testing</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Log4net">Log4net</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/MEF">MEF</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/MetaWeblog%20API">MetaWeblog API</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Monorail">Monorail</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/msbuild">msbuild</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/MSTest">MSTest</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Multi-tenancy">Multi-tenancy</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/MVC%20Framework">MVC Framework</a>
+<span dir="ltr">(34)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/MVCContrib">MVCContrib</a>
+<span dir="ltr">(3)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/NHibernate">NHibernate</a>
+<span dir="ltr">(7)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/PDC">PDC</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Photosynth">Photosynth</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Rap">Rap</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/RavenDb">RavenDb</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/REMIX">REMIX</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/REST">REST</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/RSD">RSD</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/software%20factories">software factories</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/sussex%20geek%20dinner">sussex geek dinner</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Suteki%20Shop">Suteki Shop</a>
+<span dir="ltr">(5)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Task%20Parallel%20Library">Task Parallel Library</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Unit%20Tests">Unit Tests</a>
+<span dir="ltr">(4)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Validation">Validation</a>
+<span dir="ltr">(3)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/visual%20studio">visual studio</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Visual%20Tools">Visual Tools</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/WCF">WCF</a>
+<span dir="ltr">(5)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/WCF%20Facility">WCF Facility</a>
+<span dir="ltr">(3)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Web%20Design">Web Design</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Web%20Hosting">Web Hosting</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Web%20Services">Web Services</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/Windsor">Windsor</a>
+<span dir="ltr">(33)</span>
+</li>
+<li>
+<a dir="ltr" href="http://mikehadlow.blogspot.com/search/label/WTF">WTF</a>
+<span dir="ltr">(3)</span>
+</li>
+</ul>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=15136575&widgetType=Label&widgetId=Label1&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;Label1&quot;));" target="configLabel1" title="Edit">
+<img alt="" height="18" src="./Code rant  Forms Authentication with the MVC Framework_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div>
+</div><div class="widget HTML" id="HTML2">
+<h2 class="title">Subscribe</h2>
+<div class="widget-content">
+<p><a href="http://feeds.feedburner.com/CodeRant" rel="alternate" type="application/rss+xml"><img alt="" style="vertical-align:middle;border:0" src="./Code rant  Forms Authentication with the MVC Framework_files/feed-icon32x32.png"></a>&nbsp;<a href="http://feeds.feedburner.com/CodeRant" rel="alternate" type="application/rss+xml">Subscribe now</a></p>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=15136575&widgetType=HTML&widgetId=HTML2&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;HTML2&quot;));" target="configHTML2" title="Edit">
+<img alt="" height="18" src="./Code rant  Forms Authentication with the MVC Framework_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div><div class="widget LinkList" id="LinkList1">
+<h2>Links</h2>
+<div class="widget-content">
+<ul>
+<li><a href="http://code.google.com/p/sutekishop/">Suteki Shop Code</a></li>
+</ul>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=15136575&widgetType=LinkList&widgetId=LinkList1&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;LinkList1&quot;));" target="configLinkList1" title="Edit">
+<img alt="" height="18" src="./Code rant  Forms Authentication with the MVC Framework_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div>
+</div></div>
+<style type="text/css"> 
+           .altnetgeekcode
+   {
+	background: #ffffff url(http://www.hanselman.com/altnetgeekcode/altnetgeekcodesmall.png) no-repeat top center;
+	border:1px solid black;
+	width:160px;
+	padding:2px;
+	padding-top: 62px;
+	font-weight:bold;
+	font-size:11px;
+text-align:center;
+margin:auto;
+}
+
+.altnetgeekcode a
+{
+	text-decoration:none;
+}
+ </style>
+<div class="altnetgeekcode"><a href="http://www.hanselman.com/altnetgeekcode/default.aspx?q=IOC(SM):IOC(CW):IOC(Nin):MOC(RM):MOC(MQ):MOC(TM):MOC(!?):TDD(NU):TDD(Xu):TDD(Mb):SCC(Svn):SCC(Git):SCC(TFS):SCC(Lame):SCC(Gmail):ORM(NH):ORM(SS):ORM(L2S):ORM(!):XPP(++):XPP(?):DDD(T+):DDD(+):DDD(!?):JSL(Jq):JSL(MS):JSL(p+):JSL(s+):JSL?:CIS(CC):CIS(psh+):CIS(bat-):GoF(S):GoF(TC):GoF(B):GoF(C):GoF(V):GoF(++)">IOC(SM):<wbr>IOC(CW):<wbr>IOC(Nin):<wbr>MOC(RM):<wbr>MOC(MQ):<wbr>MOC(TM):<wbr>MOC(!?):<wbr>TDD(NU):<wbr>TDD(Xu):<wbr>TDD(Mb):<wbr>SCC(Svn):<wbr>SCC(Git):<wbr>SCC(TFS):<wbr>SCC(Lame):<wbr>SCC(Gmail):<wbr>ORM(NH):<wbr>ORM(SS):<wbr>ORM(L2S):<wbr>ORM(!):<wbr>XPP(++):<wbr>XPP(?):<wbr>DDD(T+):<wbr>DDD(+):<wbr>DDD(!?):<wbr>JSL(Jq):<wbr>JSL(MS):<wbr>JSL(p+):<wbr>JSL(s+):<wbr>JSL?:<wbr>CIS(CC):<wbr>CIS(psh+):<wbr>CIS(bat-):<wbr>GoF(S):<wbr>GoF(TC):<wbr>GoF(B):<wbr>GoF(C):<wbr>GoF(V):<wbr>GoF(++)</a></div>
+</div>
+<!-- spacer for skins that want sidebar and main to be the same height-->
+<div class="clear">&nbsp;</div>
+</div>
+<!-- end content-wrapper -->
+<div id="footer-wrapper">
+<div class="footer section" id="footer"></div>
+</div>
+</div></div>
+<!-- end outer-wrapper -->
+<script src="./Code rant  Forms Authentication with the MVC Framework_files/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-1643677-1";
+urchinTracker();
+</script>
+<script type="text/javascript">
+if (window.jstiming) window.jstiming.load.tick('widgetJsBefore');
+</script><script type="text/javascript" src="./Code rant  Forms Authentication with the MVC Framework_files/512629240-widgets.js"></script>
+<script type="text/javascript">
+if (typeof(BLOG_attachCsiOnload) != 'undefined' && BLOG_attachCsiOnload != null) { window['blogger_templates_experiment_id'] = "templatesV1";window['blogger_blog_id'] = '15136575';BLOG_attachCsiOnload('item_'); }_WidgetManager._Init('http://www.blogger.com/rearrange?blogID=15136575','http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html','15136575');
+_WidgetManager._SetPageActionUrl('http://www.blogger.com/display?blogID=15136575','bx9ugvUd1Z4Rgr6ZuX1gzIBxxxY:1292250592954','AOuZoY6WA_5MwlyQIPlfm1nqYqRuNwlR5g:1292250592954');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'title': 'Code rant', 'pageType': 'item', 'url': 'http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html', 'canonicalUrl': 'http://mikehadlow.blogspot.com/2008/03/forms-authentication-with-mvc-framework.html', 'homepageUrl': 'http://mikehadlow.blogspot.com/', 'enabledCommentProfileImages': true, 'searchLabel': '', 'searchQuery': '', 'pageName': 'Forms Authentication with the MVC Framework', 'pageTitle': 'Code rant: Forms Authentication with the MVC Framework', 'encoding': 'UTF-8', 'locale': 'en-GB', 'isPrivate': false, 'isMobile': false, 'mobileClass': '', 'languageDirection': 'ltr', 'feedLinks': '\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42Code rant - Atom\42 href\75\42http://mikehadlow.blogspot.com/feeds/posts/default\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/rss+xml\42 title\75\42Code rant - RSS\42 href\75\42http://mikehadlow.blogspot.com/feeds/posts/default?alt\75rss\42 /\76\n\74link rel\75\42service.post\42 type\75\42application/atom+xml\42 title\75\42Code rant - Atom\42 href\75\42http://www.blogger.com/feeds/15136575/posts/default\42 /\76\n\74link rel\75\42EditURI\42 type\75\42application/rsd+xml\42 title\75\42RSD\42 href\75\42http://www.blogger.com/rsd.g?blogID\07515136575\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42Code rant - Atom\42 href\75\42http://mikehadlow.blogspot.com/feeds/4989705216537191843/comments/default\42 /\76\n', 'meTag': '', 'openIdOpTag': '', 'imageSrcTag': '', 'latencyHeadScript': '\74script type\75\42text/javascript\42\76(function() { var a\75window;function c(b){this.t\75{};this.tick\75function(d,i,e){e\75e?e:(new Date).getTime();this.t[d]\75[e,i]};this.tick(\42start\42,null,b)}var f\75new c;a.jstiming\75{Timer:c,load:f};try{var g\75null;if(a.chrome\46\46a.chrome.csi)g\75Math.floor(a.chrome.csi().pageT);if(g\75\75null)if(a.gtbExternal)g\75a.gtbExternal.pageT();if(g\75\75null)if(a.external)g\75a.external.pageT;if(g)a.jstiming.pt\75g}catch(h){};a.tickAboveFold\75function(b){b\75b;var d\0750;if(b.offsetParent){do d+\75b.offsetTop;while(b\75b.offsetParent)}b\75d;b\74\075750\46\46a.jstiming.load.tick(\42aft\42)};var j\75false;function k(){if(!j){j\75true;a.jstiming.load.tick(\42firstScrollTime\42)}}a.addEventListener?a.addEventListener(\42scroll\42,k,false):a.attachEvent(\42onscroll\42,k);\n })();\74/script\076', 'mobileHeadScript': ''}}]);
+_WidgetManager._RegisterWidget('_ProfileView', new _WidgetInfo('Profile1', 'sidebar', null, document.getElementById('Profile1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML1', 'sidebar', null, document.getElementById('HTML1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive1', 'sidebar', null, document.getElementById('BlogArchive1'), {'languageDirection': 'ltr'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_LabelView', new _WidgetInfo('Label1', 'sidebar', null, document.getElementById('Label1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML2', 'sidebar', null, document.getElementById('HTML2'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_LinkListView', new _WidgetInfo('LinkList1', 'sidebar', null, document.getElementById('LinkList1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header'));
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', null, document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'commentInteractionIframeUrl': 'http://www.blogger.com/comment-interaction-iframe.g?blogId\07515136575', 'showBacklinks': true, 'postId': '4989705216537191843', 'mobile': false}, 'displayModeFull'));
+</script>
+
+</body></html>

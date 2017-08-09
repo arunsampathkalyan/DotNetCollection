@@ -1,0 +1,6 @@
+<Modules>
+  <Module PersistentId="A90AB682-44E3-4C18-A021-C7B6944E2807" ModuleId="Shell" />
+  <Module PersistentId="16A0C80D-B535-4434-AEDE-E9408D288DA5" ModuleId="MVPQuickStart" />
+  <Module PersistentId="d:Miscellaneous Files" ModuleId="Microsoft.Practices.ObjectBuilder" />
+  <Module PersistentId="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" ModuleId="Microsoft.Practices.ObjectBuilder_1" />
+</Modules>

@@ -1,0 +1,16 @@
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Shell.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Shell.pdb
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.CompositeWeb.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.CompositeWeb.EnterpriseLibrary.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Logging.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Security.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.ObjectBuilder.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.ServiceLocation.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.Unity.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\bin\Debug\Microsoft.Practices.Unity.Interception.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\obj\Debug\Shell.csprojResolveAssemblyReference.cache
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\obj\Debug\Shell.dll
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Modules\Shell\obj\Debug\Shell.pdb

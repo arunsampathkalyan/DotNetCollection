@@ -1,0 +1,652 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0084)http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-cs -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Creating Model Classes with the Entity Framework: The Official Microsoft ASP.NET Site</title>
+  
+  
+  <link href="http://i2.asp.net/common/www-css/i/favicon.ico?cdn_id=2010-10-26-001" rel="shortcut icon">
+  <link href="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/main.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/titanoverrides.css" rel="stylesheet" type="text/css" media="screen">
+  
+  <script src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/jquery-1.4.2.min.js" type="text/javascript"></script>
+  <script src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/msc_all.js" type="text/javascript"></script>  
+  
+
+	
+	<link href="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/shCore.css" rel="stylesheet" type="text/css" media="screen">
+	<link href="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/shThemeDefault.css" rel="stylesheet" type="text/css" media="screen">
+
+	<script type="text/javascript" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/shComposite.js"></script>
+	<script type="text/javascript">	    SyntaxHighlighter.defaults['gutter'] = false; SyntaxHighlighter.defaults['toolbar'] = true; SyntaxHighlighter.all();</script>
+
+    <script type="text/javascript">
+        function initTutorialTooltip() {
+            $("div.syntaxhighlighter").mouseover(function () {
+                ShowMscTooltip(this, 'To preserve the line breaks in a code block, place your mouse pointer within the block and double-click to select the block before you copy it.');
+            });
+            $("div.syntaxhighlighter").mouseout(function () {
+                HideMscTooltip();
+            });
+        }
+        window.setTimeout(initTutorialTooltip, 2000);
+    </script>
+
+
+
+
+
+</head>
+<body>
+<form method="post" action="http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-cs?" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUENTM4MQ9kFgJmD2QWAmYPZBYCZg9kFgJmD2QWAmYPZBYCZg9kFgICBRBkZBYCAg0PZBYCAgEPZBYCZg9kFgJmDxYCHgdWaXNpYmxlZ2RktqQmrcLHo0/KSomLABiV1Ib+w+Y=">
+</div>
+
+<div id="content_container" class="content_container">
+<div class="header_container">
+    <div class="header_top"><div class="header_top_right">&nbsp;</div></div>
+    
+    <div class="header_content">
+        <div class="header_content_right">
+            <a href="http://www.asp.net/" title="Home Page">
+                <img class="logo" style="border-width: 0px;" alt="" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/logo.png" title="Microsoft ASP.NET">
+            </a>
+        <div id="WLSearchBoxDiv"><div id="WLSearchBoxPlaceholder"><input class="search_box" id="WLSearchBoxInput" name="WLSearchBoxInput" value="Search"><input class="search_button" id="WLSearchBoxButton" type="button" value="" name="WLSearchBoxButton"></div></div><div id="mainnav"><ul class="nav_main"><li class="first"><a href="http://www.asp.net/home">Home</a></li><li><a href="http://www.asp.net/get-started">Get Started</a></li><li><a href="http://www.asp.net/downloads">Downloads</a></li><li><a href="http://www.asp.net/web-forms">Web Forms</a></li><li class="active"><a href="http://www.asp.net/mvc">MVC</a></li><li><a href="http://www.asp.net/ajax">AJAX</a></li><li><a href="http://www.asp.net/community">Community</a></li><li><a href="http://wiki.asp.net/">Wiki</a></li><li><a href="http://forums.asp.net/">Forums</a></li></ul></div>            
+      <div class="nav_login_user"><ul><li class="first"><a href="http://login.asp.net/login/signin.aspx?ReturnUrl=http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-cs">Sign In</a></li><li><a href="http://login.asp.net/login/createuser.aspx?ReturnUrl=http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-cs">Join</a></li></ul></div>
+        </div>
+    </div>
+    <div class="header_breadcrumb_top">
+  <div class="header_breadcrumb_top_right"></div>
+</div>
+<div class="header_breadcrumb_content">
+  <div class="header_breadcrumb_content_right"><span><span><a href="http://www.asp.net/home">Home</a></span><span> › </span><span><a href="http://www.asp.net/mvc">ASP.NET MVC</a></span><span> › </span><span><a href="http://www.asp.net/mvc/tutorials">ASP.NET MVC Tutorials</a></span><span> › </span><span>Creating Model Classes with the Entity Framework</span></span></div>
+</div>
+<div class="header_breadcrumb_bottom">
+  <div class="header_breadcrumb_bottom_right"></div>
+</div>
+</div>
+
+
+
+
+<div class="columns_container">
+ <div class="columns_left">
+  <div class="columns_left_padding">
+
+
+
+<div class="heading_container"><div class="heading_right_top">&nbsp;</div>
+   <h1>Creating Model Classes with the Entity Framework</h1>
+   
+</div>
+<div class="heading_bottom heading_bottom_connected"><span></span></div>
+<div class="rounded_box_top_connected"><span></span></div>
+<div class="rounded_box blue_rounded_box rounded_box_connected">
+     <div class="rounded_box_content">
+	
+	<p>This is the <strong>C#</strong> tutorial
+	  
+                (<a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-vb">Switch to the Visual Basic tutorial</a>) 
+              </p>
+
+	<p class="first introduction">In this tutorial, you learn how to use ASP.NET MVC with the Microsoft Entity Framework. You learn how to use the Entity Wizard to create an ADO.NET Entity Data Model. Over the course of this tutorial, we build a web application that illustrates how to select, insert, update, and delete database data by using the Entity Framework.</p>
+	
+	
+	<div class="pagination"><span class="light">« Previous Tutorial </span><span class="light"> | </span><a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-linq-to-sql-cs"> Next Tutorial »</a></div>
+
+     </div>
+     <div class="rounded_box_bottom"><span></span></div>
+</div>
+
+
+
+	
+
+	<p>The goal of this tutorial is to explain how you can create data access 
+classes using the Microsoft Entity Framework when building an ASP.NET MVC 
+application. This tutorial assumes no previous knowledge of the Microsoft Entity 
+Framework. By the end of this tutorial, you’ll understand how to use the Entity 
+Framework to select, insert, update, and delete database records.</p>
+<p>The Microsoft Entity Framework is an Object Relational Mapping (O/RM) tool 
+that enables you to generate a data access layer from a database automatically. 
+The Entity Framework enables you to avoid the tedious work of building your data 
+access classes by hand.</p>
+<p>In order to illustrate how you can use the Microsoft Entity Framework with 
+ASP.NET MVC, we’ll build a simple sample application. We’ll create a Movie 
+Database application that enables you to display and edit movie database 
+records.</p>
+<p>This tutorial assumes that you have Visual Studio 2008 or Visual Web 
+Developer 2008 with Service Pack 1. You need Service Pack 1 in order to use the 
+Entity Framework. You can download Visual Studio 2008 Service Pack 1 or Visual 
+Web Developer with Service Pack 1 from the following address:</p>
+<blockquote>
+  <p><a href="http://www.asp.net/downloads/">http://www.asp.net/downloads/</a></p></blockquote>
+<div class="note">
+<p>There is no essential connection between ASP.NET MVC and the Microsoft Entity 
+Framework. There are several alternatives to the Entity Framework that you can 
+use with ASP.NET MVC. For example, you can build your MVC Model classes using 
+other O/RM tools such as Microsoft LINQ to SQL, NHibernate, or SubSonic. 
+</p></div>
+<h4>Creating the Movie Sample Database</h4>
+<p>The Movie Database application uses a database table named Movies that 
+contains the following columns:</p>
+<table class="tableTable">
+  <tbody>
+  <tr>
+    <th>Column Name</th>
+    <th>Data Type</th>
+    <th>Allow Nulls?</th>
+    <th>Is Primary Key?</th></tr>
+  <tr>
+    <td>Id</td>
+    <td>int</td>
+    <td>False</td>
+    <td>True</td></tr>
+  <tr>
+    <td>Title</td>
+    <td>nvarchar(100)</td>
+    <td>False</td>
+    <td>False</td></tr>
+  <tr>
+    <td>Director</td>
+    <td>nvarchar(100)</td>
+    <td>False</td>
+    <td>False</td></tr></tbody></table>
+<p>You can add this table to an ASP.NET MVC project by following these 
+steps:</p>
+<ol>
+  <li>Right-click the App_Data folder in the Solution Explorer window and select 
+  the menu option <b>Add, New Item.</b> 
+  </li><li>From the <b>Add New Item</b> dialog box, select <b>SQL Server 
+  Database</b>, give the database the name MoviesDB.mdf, and click the 
+  <b>Add</b> button. 
+  </li><li>Double-click the MoviesDB.mdf file to open the Server Explorer/Database 
+  Explorer window. 
+  </li><li>Expand the MoviesDB.mdf database connection, right-click the Tables 
+  folder, and select the menu option <b>Add New Table</b>. 
+  </li><li>In the Table Designer, add the Id, Title, and Director columns. 
+  </li><li>Click the <b>Save</b> button (it has the icon of the floppy) to save the 
+  new table with the name Movies. </li></ol>
+<p>After you create the Movies database table, you should add some sample data 
+to the table. Right-click the Movies table and select the menu option <b>Show 
+Table Data</b>. You can enter fake movie data into the grid that appears. </p>
+<h4>Creating the ADO.NET Entity Data Model</h4>
+<p>In order to use the Entity Framework, you need to create an Entity Data 
+Model. You can take advantage of the Visual Studio <i>Entity Data Model 
+Wizard</i> to generate an Entity Data Model from a database automatically.</p>
+<p>Follow these steps:</p>
+<ol>
+  <li>Right-click the Models folder in the Solution Explorer window and select 
+  the menu option <b>Add, New Item</b>. 
+  </li><li>In the <b>Add New Item</b> dialog, select the Data category (see Figure 
+  1). 
+  </li><li>Select the <b>ADO.NET Entity Data Model</b> template, give the Entity Data 
+  Model the name MoviesDBModel.edmx, and click the <b>Add</b> button. Clicking 
+  the <b>Add</b> button launches the Data Model Wizard. 
+  </li><li>In the <b>Choose Model Contents</b> step, choose the <b>Generate from a 
+  database</b> option and click the <b>Next</b> button (see Figure 2). 
+  </li><li>In the <b>Choose Your Data Connection</b> step, select the MoviesDB.mdf 
+  database connection, enter the entities connection settings name 
+  MoviesDBEntities, and click the <b>Next</b> button (see Figure 3). 
+  </li><li>In the <b>Choose Your Database Objects</b> step, select the Movie database 
+  table and click the <b>Finish</b> button (see Figure 4). </li></ol>
+<p>After you complete these steps, the ADO.NET Entity Data Model Designer 
+(Entity Designer) opens. </p>
+<p><b>Figure 1 – Creating a new Entity Data Model</b></p>
+<p><img style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px" border="0" alt="clip_image002" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/clip_image002_3.jpg" width="319" height="239"></p>
+<p><b>Figure 2 – Choose Model Contents Step</b></p>
+<p><img style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px" border="0" alt="clip_image004" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/clip_image004_3.jpg" width="335" height="298"></p>
+<p><b>Figure 3 – Choose Your Data Connection</b></p>
+<p><img style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px" border="0" alt="clip_image006" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/clip_image006_3.jpg" width="325" height="290"></p>
+<p><b>Figure 4 – Choose Your Database Objects</b></p>
+<p><img style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px" border="0" alt="clip_image008" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/clip_image008_3.jpg" width="337" height="300"></p>
+<h4>Modifying the ADO.NET Entity Data Model</h4>
+<p>After you create an Entity Data Model, you can modify the model by taking 
+advantage of the Entity Designer (see Figure 5). You can open the Entity 
+Designer at any time by double-clicking the MoviesDBModel.edmx file contained in 
+the Models folder within the Solution Explorer window.</p>
+<p><b>Figure 5 – The ADO.NET Entity Data Model Designer</b></p>
+<p><img style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px" border="0" alt="clip_image010" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/clip_image010_3.jpg" width="316" height="351"></p>
+<p>For example, you can use the Entity Designer to change the names of the 
+classes that the Entity Model Data Wizard generates. The Wizard created a new 
+data access class named Movies. In other words, the Wizard gave the class the 
+very same name as the database table. Because we will use this class to 
+represent a particular Movie instance, we should rename the class from Movies to 
+Movie.</p>
+<p>If you want to rename an entity class, you can double-click on the class name 
+in the Entity Designer and enter a new name (see Figure 6). Alternatively, you 
+can change the name of an entity in the Properties window after selecting an 
+entity in the Entity Designer.</p>
+<p><b>Figure 6 – Changing an entity name</b></p>
+<p><img style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px" border="0" alt="clip_image012" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/clip_image012_3.jpg" width="452" height="436"></p>
+<p>Remember to save your Entity Data Model after making a modification by 
+clicking the Save button (the icon of the floppy disk). Behind the scenes, the 
+Entity Designer generates a set of C# classes. You can view these classes by 
+opening the MoviesDBModel.Designer.cs file from the Solution Explorer 
+window.</p>
+<div class="warning">
+<p>Don’t modify the code in the Designer.cs file since your changes will be 
+overwritten the next time you use the Entity Designer. If you want to extend the 
+functionality of the entity classes defined in the Designer.cs file then you can 
+create <i>partial classes</i> in separate files. </p></div>
+<h4>Selecting Database Records with the Entity Framework</h4>
+<p>Let’s start building our Movie Database application by creating a page that 
+displays a list of movie records. The Home controller in Listing 1 exposes an 
+action named Index(). The Index() action returns all of the movie records from 
+the Movie database table by taking advantage of the Entity Framework.</p>
+<p><b>Listing 1 – Controllers\HomeController.cs</b></p><pre class="c#:nocontrols" name="code">using System.Linq;
+using System.Web.Mvc;
+using MovieEntityApp.Models;
+
+namespace MovieEntityApp.Controllers
+{
+    [HandleError]
+    public class HomeController : Controller
+    {
+        MoviesDBEntities _db;
+
+        public HomeController()
+        {
+            _db = new MoviesDBEntities();
+        }
+
+
+        public ActionResult Index()
+        {
+            ViewData.Model = _db.MovieSet.ToList();
+            return View();
+        }
+
+    }
+}</pre>
+<p>Notice that the controller in Listing 1 includes a constructor. The 
+constructor initializes a class-level field named _db. The _db field represents 
+the database entities generated by the Microsoft Entity Framework. The _db field 
+is an instance of the MoviesDBEntities class that was generated by the Entity 
+Designer.</p>
+<div class="warning">
+<p>In order to use theMoviesDBEntities class in the Home controller, you must 
+import the MovieEntityApp.Models namespace 
+(<i>MVCProjectName</i>.Models).</p></div>
+<p>The _db field is used within the Index() action to retrieve the records from 
+the Movies database table. The expression _db.MovieSet represents all of the 
+records from the Movies database table. The ToList() method is used to convert 
+the set of movies into a generic collection of Movie objects 
+(List&lt;Movie&gt;).</p>
+<p>The movie records are retrieved with the help of LINQ to Entities. The 
+Index() action in Listing 1 uses LINQ <i>method syntax</i> to retrieve the set 
+of database records. If you prefer, you can use LINQ <i>query syntax</i> 
+instead. The following two statements do the very same thing:</p><pre class="c#:nogutter:nocontrols" name="code">ViewData.Model = _db.MovieSet.ToList();
+ViewData.Model = (from m in _db.MovieSet select m).ToList();</pre>
+<p>Use whichever LINQ syntax – method syntax or query syntax – that you find 
+most intuitive. There is no difference in performance between the two approaches 
+– the only difference is style.</p>
+<p>The view in Listing 2 is used to display the movie records.</p>
+<p><b>Listing 2 – Views\Home\Index.aspx</b></p><pre class="xml:nocontrols" name="code">&lt;%@ Page Language="C#"  
+  Inherits="System.Web.Mvc.ViewPage&lt;List&lt;MovieEntityApp.Models.Movie&gt;&gt;" %&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" &gt;
+&lt;head runat="server"&gt;
+    &lt;title&gt;Index&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div&gt;
+    
+&lt;% foreach (var m in ViewData.Model)
+   { %&gt;
+
+    Title: &lt;%= m.Title %&gt;
+    &lt;br /&gt;
+    Director: &lt;%= m.Director %&gt;
+    &lt;br /&gt;
+    &lt;%= Html.ActionLink("Edit", "Edit", new { id = m.Id })%&gt;
+    &lt;%= Html.ActionLink("Delete", "Delete", new { id = m.Id })%&gt;
+       
+        &lt;hr /&gt;
+&lt;% } %&gt;
+
+
+&lt;%= Html.ActionLink("Add Movie", "Add") %&gt;
+    
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<p>The view in Listing 2 contains a <b>foreach</b> loop that iterates through 
+each movie record and displays the values of the movie record’s Title and 
+Director properties. Notice that an Edit and Delete link is displayed next to 
+each record. Furthermore, an Add Movie link appears at the bottom of the view 
+(see Figure 7).</p>
+<p><b>Figure 7 – The Index view</b></p>
+<p><img style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px" border="0" alt="clip_image014" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/clip_image014_3.jpg" width="362" height="421"></p>
+<p>The Index view is a <i>typed view</i>. The Index view includes a &lt;%@ Page 
+%&gt; directive with an <em>Inherits</em> attribute that casts the Model 
+property to a strongly typed generic List collection of Movie objects 
+(List&lt;Movie).</p>
+<p> </p>
+<h4>Inserting Database Records with the Entity Framework</h4>
+<p>You can use the Entity Framework to make it easy to insert new records into a 
+database table. Listing 3 contains two new actions added to the Home controller 
+class that you can use to insert new records into the Movie database table.</p>
+<p><b>Listing 3 – Controllers\HomeController.cs (Add methods)</b></p><pre class="vb:nogutter:nocontrols" name="code">public ActionResult Add()
+{
+    return View();
+}
+
+[AcceptVerbs(HttpVerbs.Post)]
+public ActionResult Add(FormCollection form)
+{
+    var movieToAdd = new Movie();
+
+    // Deserialize (Include white list!)
+    TryUpdateModel(movieToAdd, new string[] { "Title", "Director" }, form.ToValueProvider());
+
+    // Validate
+    if (String.IsNullOrEmpty(movieToAdd.Title))
+        ModelState.AddModelError("Title", "Title is required!");
+    if (String.IsNullOrEmpty(movieToAdd.Director))
+        ModelState.AddModelError("Director", "Director is required!");
+
+    // If valid, save movie to database
+    if (ModelState.IsValid)
+    {
+        _db.AddToMovieSet(movieToAdd);
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+    }
+
+    // Otherwise, reshow form
+    return View(movieToAdd);
+}</pre>
+<p>The first Add() action simply returns a view. The view contains a form for 
+adding a new movie database record (see Figure 8). When you submit the form, the 
+second Add() action is invoked.</p>
+<p>Notice that the second Add() action is decorated with the AcceptVerbs 
+attribute. This action can be invoked only when performing an HTTP POST 
+operation. In other words, this action can only be invoked when posting an HTML 
+form. </p>
+<p>The second Add() action creates a new instance of the Entity Framework Movie 
+class with the help of the ASP.NET MVC TryUpdateModel() method. The 
+TryUpdateModel() method takes the fields in the FormCollection passed to the 
+Add() method and assigns the values of these HTML form fields to the Movie 
+class.</p>
+<div class="warning">
+<p>When using the Entity Framework, you must supply a “white list” of properties 
+when using the TryUpdateModel or UpdateModel methods to update the properties of 
+an entity class.</p></div>
+<p>Next, the Add() action performs some simple form validation. The action 
+verifies that both the Title and Director properties have values. If there is a 
+validation error, then a validation error message is added to ModelState.</p>
+<p>If there are no validation errors then a new movie record is added to the 
+Movies database table with the help of the Entity Framework. The new record is 
+added to the database with the following two lines of code:</p><pre class="c#:nogutter:nocontrols" name="code">_db.AddToMovieSet(movieToAdd);
+_db.SaveChanges();</pre>
+<p>The first line of code adds the new Movie entity to the set of movies being 
+tracked by the Entity Framework. The second line of code saves whatever changes 
+have been made to the Movies being tracked back to the underlying database.</p>
+<p><b>Figure 8 – The Add view</b></p>
+<p><img style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px" border="0" alt="clip_image016" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/clip_image016_3.jpg" width="281" height="444"></p>
+<h4>Updating Database Records with the Entity Framework</h4>
+<p>You can follow almost the same approach to edit a database record with the 
+Entity Framework as the approach that we just followed to insert a new database 
+record. Listing 4 contains two new controller actions named Edit(). The first 
+Edit() action returns an HTML form for editing a movie record. The second Edit() 
+action attempts to update the database.</p>
+<p><b>Listing 4 – Controllers\HomeController.cs (Edit methods)</b></p><pre class="vb:nogutter:nocontrols" name="code">public ActionResult Edit(int id)
+{
+    // Get movie to update
+    var movieToUpdate = _db.MovieSet.First(m =&gt; m.Id == id);
+
+    ViewData.Model = movieToUpdate;
+    return View();
+}
+
+[AcceptVerbs(HttpVerbs.Post)]
+public ActionResult Edit(FormCollection form)
+{
+    // Get movie to update
+    var id = Int32.Parse(form["id"]);
+    var movieToUpdate = _db.MovieSet.First(m =&gt; m.Id == id);
+
+    // Deserialize (Include white list!)
+    TryUpdateModel(movieToUpdate, new string[] { "Title", "Director" }, form.ToValueProvider());
+
+    // Validate
+    if (String.IsNullOrEmpty(movieToUpdate.Title))
+        ModelState.AddModelError("Title", "Title is required!");
+    if (String.IsNullOrEmpty(movieToUpdate.Director))
+        ModelState.AddModelError("Director", "Director is required!");
+
+    // If valid, save movie to database
+    if (ModelState.IsValid)
+    {
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+    }
+
+    // Otherwise, reshow form
+    return View(movieToUpdate);
+}</pre>
+<p>The second Edit() action starts by retrieving the Movie record from the 
+database that matches the Id of the movie being edited. The following LINQ to 
+Entities statement grabs the first database record that matches a particular 
+Id:</p><pre class="c#:nogutter:nocontrols" name="code">var movieToUpdate = _db.MovieSet.First(m =&gt; m.Id == id);</pre>
+<p>Next, the TryUpdateModel() method is used to assign the values of the HTML 
+form fields to the properties of the movie entity. Notice that a white list is 
+supplied to specify the exact properties to update.</p>
+<p>Next, some simple validation is performed to verify that both the Movie Title 
+and Director properties have values. If either property is missing a value, then 
+a validation error message is added to ModelState and ModelState.IsValid returns 
+the value false.</p>
+<p>Finally, if there are no validation errors, then the underlying Movies 
+database table is updated with any changes by calling the SaveChanges() 
+method.</p>
+<p>When editing database records, you need to pass the Id of the record being 
+edited to the controller action that performs the database update. Otherwise, 
+the controller action will not know which record to update in the underlying 
+database. The Edit view, contained in Listing 5, includes a hidden form field 
+that represents the Id of the database record being edited.</p>
+<p><b>Listing 5 – Views\Home\Edit.aspx </b></p><pre class="xml:nocontrols" name="code">&lt;%@ Page Language="C#" 
+  Inherits="System.Web.Mvc.ViewPage&lt;MovieEntityApp.Models.Movie&gt;" %&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" &gt;
+&lt;head runat="server"&gt;
+    &lt;title&gt;Edit&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+    
+    .input-validation-error
+    {
+        background-color:Yellow;
+    }
+    
+    &lt;/style&gt;    
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div&gt;
+
+&lt;h1&gt;Edit Movie&lt;/h1&gt;
+
+&lt;form method="post" action="/Home/Edit"&gt;
+
+    &lt;!-- Include Hidden Id --&gt;
+    &lt;%= Html.Hidden("id") %&gt;
+
+    Title:
+    &lt;br /&gt;
+    &lt;%= Html.TextBox("title") %&gt;
+    
+    &lt;br /&gt;&lt;br /&gt;
+    Director:
+    &lt;br /&gt;
+    &lt;%= Html.TextBox("director") %&gt;
+    
+    &lt;br /&gt;&lt;br /&gt;
+    &lt;input type="submit" value="Edit Movie" /&gt;
+&lt;/form&gt;
+    
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<h4>Deleting Database Records with the Entity Framework</h4>
+<p>The final database operation, which we need to tackle in this tutorial, is 
+deleting database records. You can use the controller action in Listing 6 to 
+delete a particular database record.</p>
+<p><b>Listing 6 -- \Controllers\HomeController.cs (Delete action)</b></p><pre class="c#:nocontrols" name="code">public ActionResult Delete(int id)
+{
+    // Get movie to delete
+    var movieToDelete = _db.MovieSet.First(m =&gt; m.Id == id);
+
+    // Delete 
+    _db.DeleteObject(movieToDelete);
+    _db.SaveChanges();
+
+    // Show Index view
+    return RedirectToAction("Index");
+}</pre>
+<p>The Delete() action first retrieves the Movie entity that matches the Id 
+passed to the action. Next, the movie is deleted from the database by calling 
+the DeleteObject() method followed by the SaveChanges() method. Finally, the 
+user is redirected back to the Index view.</p>
+<h4>Summary</h4>
+<p>The purpose of this tutorial was to demonstrate how you can build 
+database-driven web applications by taking advantage of ASP.NET MVC and the 
+Microsoft Entity Framework. You learned how to build an application that enables 
+you to select, insert, update, and delete database records. </p>
+<p>First, we discussed how you can use the Entity Data Model Wizard to generate 
+an Entity Data Model from within Visual Studio. Next, you learn how to use LINQ 
+to Entities to retrieve a set of database records from a database table. 
+Finally, we used the Entity Framework to insert, update, and delete database 
+records. </p>
+	<div class="pagination"><span class="light">« Previous Tutorial </span><span class="light"> | </span><a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-linq-to-sql-cs"> Next Tutorial »</a></div>
+	<div class="heading_container"><div class="heading_right_top">&nbsp;</div><h1>Comments (<span id="spanCommentCount">25</span>)</h1><a class="icon_rss_header" target="_blank" href="http://www.asp.net/rss/comments/12031">&nbsp;</a></div><div class="bucket_container"><div class="bucket_top"><span>&nbsp;</span></div><div class="bucket_content region_absminheight"><div><table width="100%" cellspacing="0" cellpadding="5"><tbody id="mscCommentOutput"><tr><td class="icon_contract"><a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-cs#" onclick="initComments();return false;"><strong>Show all 25 comments</strong></a></td></tr></tbody></table></div><div><p style="padding-left: 10px;">You must be logged in to leave a comment.&nbsp;<a href="http://login.asp.net/login/signin.aspx?ReturnUrl=http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-cs">Click here</a> to log in.</p></div></div><div class="bucket_bottom"><span>&nbsp;</span></div></div><script type="text/javascript"> 
+  var umbCurrentNodeId = 12031;
+  function initComments() {
+	BindTemplateData("mscCommentTemplate","mscCommentOutput",
+	    "/base/MscComment/GetCommentsForDocument/12031", "initCommentsCallback");
+	$("#txtNewComment").val("");
+  }
+  function initCommentsCallback(json){
+	if( json != null ) { $("#spanCommentCount").html(json.length); }
+  }
+  function submitComment() {
+    var url = "/base/MscComment/CreateComment/" + umbCurrentNodeId + ""; 
+    var comment = $("#txtNewComment").val();
+    if (comment != "") {
+      $("#pCommentError").html("");
+      jQuery.post(url, { comment: $("#txtNewComment").val() }, function(data) { initComments(); });
+    }
+    else { 
+	$("#pCommentError").html("Comment is empty. Please enter comment and try submitting again.");
+    }
+  }
+
+</script>	
+
+
+
+      
+  </div>
+ </div>
+ <div class="columns_right">
+	
+	<div id="firstregion"><div class="heading_container"><div class="heading_right_top">&nbsp;</div><h2 id="mscTutorialSideBarTitle">C# Tutorials</h2></div><div class="heading_bottom heading_bottom_connected"><span>&nbsp;</span></div><div class="rounded_box_top_connected"><span>&nbsp;</span></div><div class="rounded_box blue_rounded_box rounded_box_connected"><div class="rounded_box_content"><p>
+              (<a id="mscTutorialSideBarSwitchLang" href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-cs#" onclick="swapTutorialSidebarLanguage();return false;">Switch to Visual Basic tutorials</a>)
+            </p></div><div class="rounded_box_content sub_nav" id="mscTutorialSidebarVb" style="display:none"><h3 id="Overview">ASP.NET MVC Overview</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/create-a-movie-database-application-in-15-minutes-with-asp-net-mvc-vb">Create a Movie Database Application in 15 Minutes with ASP.NET MVC</a></li><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-overview-vb">ASP.NET MVC Overview </a></li><li><a href="http://www.asp.net/mvc/tutorials/understanding-the-asp-net-mvc-execution-process-vb">Understanding the ASP.NET MVC Execution Process</a></li><li><a href="http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-vb">Understanding Models, Views, and Controllers</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-mvc-3-application-with-razor-and-unobtrusive-javascript">Creating a MVC 3 Application with Razor and Unobtrusive JavaScript</a></li></ul><h3 id="Routing">ASP.NET MVC Routing</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-routing-overview-vb">ASP.NET MVC Routing Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-custom-routes-vb">Creating Custom Routes</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-custom-route-constraint-vb">Creating a Custom Route Constraint</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-route-constraint-vb">Creating a Route Constraint</a></li></ul><h3 id="Controllers">ASP.NET MVC Controllers</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-controller-overview-vb">ASP.NET MVC Controller Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-controller-vb">Creating a Controller </a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-an-action-vb">Creating an Action </a></li></ul><h3 id="Views">ASP.NET MVC Views</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-views-overview-vb">ASP.NET MVC Views Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-custom-html-helpers-vb">Creating Custom HTML Helpers</a></li><li><a href="http://www.asp.net/mvc/tutorials/displaying-a-table-of-database-data-vb">Displaying a Table of Database Data</a></li><li><a href="http://www.asp.net/mvc/tutorials/using-the-tagbuilder-class-to-build-html-helpers-vb">Using the TagBuilder Class to Build HTML Helpers</a></li></ul><h3 id="Models">ASP.NET MVC Models</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-the-entity-framework-vb">Creating Model Classes with the Entity Framework</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-linq-to-sql-vb">Creating Model Classes with LINQ to SQL</a></li></ul><h3 id="Validation">ASP.NET MVC Validation</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/performing-simple-validation-vb">Performing Simple Validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/validating-with-the-idataerrorinfo-interface-vb">Validating with the IDataErrorInfo Interface </a></li><li><a href="http://www.asp.net/mvc/tutorials/validating-with-a-service-layer-vb">Validating with a Service Layer </a></li><li><a href="http://www.asp.net/mvc/tutorials/validation-with-the-data-annotation-validators-vb">Validation with the Data Annotation Validators</a></li></ul><h3 id="Master Pages">Master Pages</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-page-layouts-with-view-master-pages-vb">Creating Page Layouts with View Master Pages</a></li><li><a href="http://www.asp.net/mvc/tutorials/passing-data-to-view-master-pages-vb">Passing Data to View Master Pages</a></li></ul><h3 id="Action Filters and Model Binders">Action Filters and Model Binders</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/understanding-action-filters-vb">Understanding Action Filters</a></li></ul><h3 id="Improving Performance with Caching">Improving Performance with Caching</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/improving-performance-with-output-caching-vb">Improving Performance with Output Caching</a></li><li><a href="http://www.asp.net/mvc/tutorials/adding-dynamic-content-to-a-cached-page-vb">Adding Dynamic Content to a Cached Page</a></li></ul><h3 id="Security">Security</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/authenticating-users-with-forms-authentication-vb">Authenticating Users with Forms Authentication</a></li><li><a href="http://www.asp.net/mvc/tutorials/authenticating-users-with-windows-authentication-vb">Authenticating Users with Windows Authentication</a></li><li><a href="http://www.asp.net/mvc/tutorials/preventing-javascript-injection-attacks-vb">Preventing JavaScript Injection Attacks</a></li></ul><h3 id="Testing">ASP.NET MVC Testing</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-unit-tests-for-asp-net-mvc-applications-vb">Creating Unit Tests for ASP.NET MVC Applications</a></li></ul><h3 id="Navigation">Navigation</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/providing-website-navigation-with-sitemaps-vb">Providing Website Navigation with SiteMaps</a></li></ul><h3 id="Deploying Applications">Deploying ASP.NET MVC Applications</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/using-asp-net-mvc-with-different-versions-of-iis-vb">Using ASP.NET MVC with Different Versions of IIS</a></li></ul><h3 id="Tutorials for Contact Manager">Tutorials for Contact Manager</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/iteration-1-create-the-application-vb">Iteration #1 – Create the Application</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-2-make-the-application-look-nice-vb">Iteration #2 – Make the application look nice</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-3-add-form-validation-vb">Iteration #3 – Add form validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-4-make-the-application-loosely-coupled-vb">Iteration #4 – Make the application loosely coupled</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-5-create-unit-tests-vb">Iteration #5 – Create unit tests</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-6-use-test-driven-development-vb">Iteration #6 – Use test-driven development</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-7-add-ajax-functionality-vb">Iteration #7 – Add Ajax functionality</a></li></ul><h3 id="ASP.NET MVC Music Store">ASP.NET MVC Music Store</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-1">Part 1: Overview and File-&gt;New Project</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-2">Part 2: Controllers</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-3">Part 3: Views and ViewModels</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-4">Part 4: Models and Data Access</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-5">Part 5: Edit Forms and Templating</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-6">Part 6: Using Data Annotations for Model Validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-7">Part 7: Membership and Authorization</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-8">Part 8: Shopping Cart with Ajax Updates</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-9">Part 9: Registration and Checkout</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-10">Part 10: Final Updates to Navigation and Site Design, Conclusion</a></li></ul><h3 id="NerdDinner">NerdDinner Tutorials</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/introducing-the-nerddinner-tutorial">Introducing the NerdDinner Tutorial</a></li><li><a href="http://www.asp.net/mvc/tutorials/create-a-new-aspnet-mvc-project">Create a New ASP.NET MVC Project</a></li><li><a href="http://www.asp.net/mvc/tutorials/create-a-database">Create a Database</a></li><li><a href="http://www.asp.net/mvc/tutorials/build-a-model-with-business-rule-validations">Build a Model with Business Rule Validations</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-controllers-and-views-to-implement-a-listingdetails-ui">Use Controllers and Views to Implement a Listing/Details UI</a></li><li><a href="http://www.asp.net/mvc/tutorials/provide-crud-(create,-read,-update,-delete)-data-form-entry-support">Provide CRUD (Create, Read, Update, Delete) Data Form Entry Support</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-viewdata-and-implement-viewmodel-classes">Use ViewData and Implement ViewModel Classes</a></li><li><a href="http://www.asp.net/mvc/tutorials/re-use-ui-using-master-pages-and-partials">Re-use UI Using Master Pages and Partials</a></li><li><a href="http://www.asp.net/mvc/tutorials/implement-efficient-data-paging">Implement Efficient Data Paging</a></li><li><a href="http://www.asp.net/mvc/tutorials/secure-applications-using-authentication-and-authorization">Secure Applications Using Authentication and Authorization</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-ajax-to-deliver-dynamic-updates">Use AJAX to Deliver Dynamic Updates</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-ajax-to-implement-mapping-scenarios">Use AJAX to Implement Mapping Scenarios</a></li><li><a href="http://www.asp.net/mvc/tutorials/enable-automated-unit-testing">Enable Automated Unit Testing</a></li><li><a href="http://www.asp.net/mvc/tutorials/nerddinner-wrap-up">NerdDinner Wrap Up</a></li></ul><h3 id="Getting-Started-With-MVC">Getting Started with MVC</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part1">Intro to ASP.NET MVC</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part2">Adding a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part3">Adding a View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part4">Creating a Database</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part5">Accessing your Model's Data from a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part6">Adding a Create Method and Create View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part7">Adding Validation to the Model</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part8">Adding a Column to the Model</a></li></ul></div><div class="rounded_box_content sub_nav" id="mscTutorialSidebarCs"><h3 id="Overview">ASP.NET MVC Overview</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/create-a-movie-database-application-in-15-minutes-with-asp-net-mvc-cs">Create a Movie Database Application in 15 Minutes with ASP.NET MVC</a></li><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-overview-cs">ASP.NET MVC Overview </a></li><li><a href="http://www.asp.net/mvc/tutorials/understanding-the-asp-net-mvc-execution-process-cs">Understanding the ASP.NET MVC Execution Process</a></li><li><a href="http://www.asp.net/mvc/tutorials/understanding-models-views-and-controllers-cs">Understanding Models, Views, and Controllers</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-mvc-3-application-with-razor-and-unobtrusive-javascript">Creating a MVC 3 Application with Razor and Unobtrusive JavaScript</a></li></ul><h3 id="Routing">ASP.NET MVC Routing</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-routing-overview-cs">ASP.NET MVC Routing Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-custom-routes-cs">Creating Custom Routes</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-route-constraint-cs">Creating a Route Constraint</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-custom-route-constraint-cs">Creating a Custom Route Constraint</a></li></ul><h3 id="Controllers">ASP.NET MVC Controllers</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-controller-overview-cs">ASP.NET MVC Controller Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-a-controller-cs">Creating a Controller </a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-an-action-cs">Creating an Action </a></li></ul><h3 id="Views">ASP.NET MVC Views</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/asp-net-mvc-views-overview-cs">ASP.NET MVC Views Overview</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-custom-html-helpers-cs">Creating Custom HTML Helpers</a></li><li><a href="http://www.asp.net/mvc/tutorials/displaying-a-table-of-database-data-cs">Displaying a Table of Database Data</a></li><li><a href="http://www.asp.net/mvc/tutorials/using-the-tagbuilder-class-to-build-html-helpers-cs">Using the TagBuilder Class to Build HTML Helpers</a></li></ul><h3 id="Models">ASP.NET MVC Models</h3><ul><li class="active"><a href="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site.htm">Creating Model Classes with the Entity Framework</a></li><li><a href="http://www.asp.net/mvc/tutorials/creating-model-classes-with-linq-to-sql-cs">Creating Model Classes with LINQ to SQL</a></li></ul><h3 id="Validation">ASP.NET MVC Validation</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/performing-simple-validation-cs">Performing Simple Validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/validating-with-the-idataerrorinfo-interface-cs">Validating with the IDataErrorInfo Interface </a></li><li><a href="http://www.asp.net/mvc/tutorials/validating-with-a-service-layer-cs">Validating with a Service Layer </a></li><li><a href="http://www.asp.net/mvc/tutorials/validation-with-the-data-annotation-validators-cs">Validation with the Data Annotation Validators</a></li></ul><h3 id="Master Pages">Master Pages</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-page-layouts-with-view-master-pages-cs">Creating Page Layouts with View Master Pages</a></li><li><a href="http://www.asp.net/mvc/tutorials/passing-data-to-view-master-pages-cs">Passing Data to View Master Pages</a></li></ul><h3 id="Action Filters and Model Binders">Action Filters and Model Binders</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/understanding-action-filters-cs">Understanding Action Filters</a></li></ul><h3 id="Improving Performance with Caching">Improving Performance with Caching</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/improving-performance-with-output-caching-cs">Improving Performance with Output Caching</a></li><li><a href="http://www.asp.net/mvc/tutorials/adding-dynamic-content-to-a-cached-page-cs">Adding Dynamic Content to a Cached Page</a></li></ul><h3 id="Security">Security</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/authenticating-users-with-forms-authentication-cs">Authenticating Users with Forms Authentication</a></li><li><a href="http://www.asp.net/mvc/tutorials/authenticating-users-with-windows-authentication-cs">Authenticating Users with Windows Authentication</a></li><li><a href="http://www.asp.net/mvc/tutorials/preventing-javascript-injection-attacks-cs">Preventing JavaScript Injection Attacks</a></li></ul><h3 id="Testing">ASP.NET MVC Testing</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/creating-unit-tests-for-asp-net-mvc-applications-cs">Creating Unit Tests for ASP.NET MVC Applications</a></li></ul><h3 id="Navigation">Navigation</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/providing-website-navigation-with-sitemaps-cs">Providing Website Navigation with SiteMaps</a></li></ul><h3 id="Deploying Applications">Deploying ASP.NET MVC Applications</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/using-asp-net-mvc-with-different-versions-of-iis-cs">Using ASP.NET MVC with Different Versions of IIS</a></li></ul><h3 id="Tutorials for Contact Manager">Tutorials for Contact Manager</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/iteration-1-create-the-application-cs">Iteration #1 – Create the Application</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-2-make-the-application-look-nice-cs">Iteration #2 – Make the application look nice</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-3-add-form-validation-cs">Iteration #3 – Add form validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-4-make-the-application-loosely-coupled-cs">Iteration #4 – Make the application loosely coupled</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-5-create-unit-tests-cs">Iteration #5 – Create unit tests</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-6-use-test-driven-development-cs">Iteration #6 – Use test-driven development</a></li><li><a href="http://www.asp.net/mvc/tutorials/iteration-7-add-ajax-functionality-cs">Iteration #7 – Add Ajax functionality</a></li></ul><h3 id="ASP.NET MVC Music Store">ASP.NET MVC Music Store</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-1">Part 1: Overview and File-&gt;New Project</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-2">Part 2: Controllers</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-3">Part 3: Views and ViewModels</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-4">Part 4: Models and Data Access</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-5">Part 5: Edit Forms and Templating</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-6">Part 6: Using Data Annotations for Model Validation</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-7">Part 7: Membership and Authorization</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-8">Part 8: Shopping Cart with Ajax Updates</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-9">Part 9: Registration and Checkout</a></li><li><a href="http://www.asp.net/mvc/tutorials/mvc-music-store-part-10">Part 10: Final Updates to Navigation and Site Design, Conclusion</a></li></ul><h3 id="NerdDinner">NerdDinner Tutorials</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/introducing-the-nerddinner-tutorial">Introducing the NerdDinner Tutorial</a></li><li><a href="http://www.asp.net/mvc/tutorials/create-a-new-aspnet-mvc-project">Create a New ASP.NET MVC Project</a></li><li><a href="http://www.asp.net/mvc/tutorials/create-a-database">Create a Database</a></li><li><a href="http://www.asp.net/mvc/tutorials/build-a-model-with-business-rule-validations">Build a Model with Business Rule Validations</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-controllers-and-views-to-implement-a-listingdetails-ui">Use Controllers and Views to Implement a Listing/Details UI</a></li><li><a href="http://www.asp.net/mvc/tutorials/provide-crud-(create,-read,-update,-delete)-data-form-entry-support">Provide CRUD (Create, Read, Update, Delete) Data Form Entry Support</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-viewdata-and-implement-viewmodel-classes">Use ViewData and Implement ViewModel Classes</a></li><li><a href="http://www.asp.net/mvc/tutorials/re-use-ui-using-master-pages-and-partials">Re-use UI Using Master Pages and Partials</a></li><li><a href="http://www.asp.net/mvc/tutorials/implement-efficient-data-paging">Implement Efficient Data Paging</a></li><li><a href="http://www.asp.net/mvc/tutorials/secure-applications-using-authentication-and-authorization">Secure Applications Using Authentication and Authorization</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-ajax-to-deliver-dynamic-updates">Use AJAX to Deliver Dynamic Updates</a></li><li><a href="http://www.asp.net/mvc/tutorials/use-ajax-to-implement-mapping-scenarios">Use AJAX to Implement Mapping Scenarios</a></li><li><a href="http://www.asp.net/mvc/tutorials/enable-automated-unit-testing">Enable Automated Unit Testing</a></li><li><a href="http://www.asp.net/mvc/tutorials/nerddinner-wrap-up">NerdDinner Wrap Up</a></li></ul><h3 id="Getting-Started-With-MVC">Getting Started with MVC</h3><ul><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part1">Intro to ASP.NET MVC</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part2">Adding a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part3">Adding a View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part4">Creating a Database</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part5">Accessing your Model's Data from a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part6">Adding a Create Method and Create View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part7">Adding Validation to the Model</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part8">Adding a Column to the Model</a></li></ul></div><div class="rounded_box_bottom"><span>&nbsp;</span></div></div></div><script type="text/javascript">
+      function swapTutorialSidebarLanguage() {
+      $("#mscTutorialSidebarVb").toggle();
+      $("#mscTutorialSidebarCs").toggle();
+      if ($("#mscTutorialSidebarCs").is(":visible")) {
+      $("#mscTutorialSideBarTitle").html("C# Tutorials");
+      $("#mscTutorialSideBarSwitchLang").html("Switch to Visual Basic tutorials");
+      }
+      else {
+      $("#mscTutorialSideBarTitle").html("Visual Basic Tutorials");
+      $("#mscTutorialSideBarSwitchLang").html("Switch to Visual C# tutorials");
+      }
+      }
+
+      </script>
+	
+		
+
+	<iframe width="300" height="283" scrolling="no" frameborder="0" style="border:none;margin:0" src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/adchain.htm"></iframe>
+	
+	
+	
+
+
+ </div>
+</div>     
+
+    <div style="clear:both">&nbsp;</div>
+    <div class="center bottom_banner"><iframe src="./1. Creating Model Classes with the Entity Framework  The Official Microsoft ASP.NET Site_files/adbanner.htm" width="728" height="90" scrolling="no" frameborder="0" marginheight="0" marginwidth="0">&nbsp;</iframe>&nbsp;</div>
+    <div class="footer_container"> 
+        <div class="footer_content">
+        <p class="footer_links">
+            <a href="http://www.asp.net/feedback/">Contact</a> | 
+            <a href="http://www.neudesicmediagroup.com/Advertising.aspx?site=ASP">Advertise</a> |
+      <a href="http://umbraco.org/" target="_blank">Powered by Umbraco</a>
+    <br>
+            <a href="http://www.asp.net/Terms-Of-Use">Terms of Use</a> | 
+            <a href="http://www.microsoft.com/library/toolbar/3.0/trademarks/en-us.mspx">Trademarks</a> | 
+            <a href="http://www.asp.net/privacy/">Privacy Statement</a><br>
+            © 2010 Microsoft Corporation. All Rights Reserved.
+        </p>
+        <ul class="footer_site_logos">
+      <li class="footer_site_logos"><a href="http://msdn.microsoft.com/" class="footer_site_logos logo-footer-msdn"></a></li>           
+            <li class="footer_site_logos"><a href="http://www.silverlight.net/" class="footer_site_logos logo-footer-silverlight"></a></li>
+            <li class="footer_site_logos"><a href="http://channel9.msdn.com/" class="footer_site_logos logo-footer-ch9"></a></li>
+            <li class="footer_site_logos"><a href="http://www.iis.net/" class="footer_site_logos logo-footer-iis"></a></li>
+            <li class="footer_site_logos"><a href="http://visitmix.com/" class="footer_site_logos logo-footer-mix"></a></li>
+            <li class="footer_site_logos"><a href="http://windowsclient.net/" class="footer_site_logos logo-footer-wc"></a></li>
+        </ul>
+      </div>
+    </div>
+</div>
+
+                    <noscript>&lt;a href="http://www.omniture.com" title="Web Analytics"&gt;&lt;img
+                    src="http://msstonojsaspnet.112.2O7.net/b/ss/msstonojsaspnet/1/H.20.2--NS/0"
+                    height="1" width="1" border="0" alt="" /&gt;&lt;/a&gt;</noscript>
+<div style="position: absolute; display: none;" id="mscTooltip">
+  <div></div>
+</div>               
+
+
+    <script id="mscCommentTemplate" type="text/html">
+        <# 
+            for(var i=0; i < obj.length && obj[i] != null; i++)
+            {
+                var item = obj[i];             
+        #>
+        <tr>
+            <td valign="top" style="border-top: 1px solid black;width:105px;"><img style="border-width: 0px;" alt="<#= item.username #>" src="<#= item.avatar #>" /></td>
+            <td width="100%" valign="top" align="left" style="border-top: 1px solid black;">
+                <table style="table-layout:fixed;">
+                <tr>
+                    <# if( item.time.Hours > 0 || item.time.Minutes > 0 || item.time.Seconds > 0 ) { #>
+                        <p>Posted at <a href="javascript:SetPlayerTime('<#= item.time.Hours #>:<#= item.time.Minutes #>:<#= item.time.Seconds #>');"><#= ( item.time.Hours > 0 ) ? item.time.Hours + ":" : ""#><#= item.time.Minutes #>:<#= item.time.Seconds #></a> in the video</p>
+                    <# } #>
+                    <td style="padding-bottom: 5px;width:500px;">
+                        <a href="http://forums.asp.net/members/<#= item.username#>.aspx"><#= item.username #></a> : <font style="font-style: italic;">On <span><#= item.created #></span> said: </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td><div style="word-wrap:break-word;"><#= item.comment #></div></td>
+                </tr>
+                </table>
+            </td>
+        </tr>
+        <#
+            }
+        #>  
+    </script>
+
+
+
+
+
+
+
+</form>
+
+
+</body></html>

@@ -1,0 +1,18 @@
+
+#FeaturedAd ul
+{
+}
+
+#FeaturedAd ul li
+{
+    font-weight: normal;
+    color: #111111;    
+}
+
+#FeaturedAd ul li a:link, 
+#FeaturedAd ul li a:visited, 
+#FeaturedAd ul li a:hover,
+#FeaturedAd ul li a:active
+{
+	color : #006ff7;       
+}

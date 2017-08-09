@@ -1,0 +1,1264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0075)http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html -->
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.google.com/2005/gml/b" xmlns:data="http://www.google.com/2005/gml/data" xmlns:expr="http://www.google.com/2005/gml/expr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript" async="true" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/count"></script><link rel="stylesheet" type="text/css" href="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/buttons.css">
+
+<script type="text/javascript">(function() { var a=window;function c(b){this.t={};this.tick=function(d,i,e){e=e?e:(new Date).getTime();this.t[d]=[e,i]};this.tick("start",null,b)}var f=new c;a.jstiming={Timer:c,load:f};try{var g=null;if(a.chrome&&a.chrome.csi)g=Math.floor(a.chrome.csi().pageT);if(g==null)if(a.gtbExternal)g=a.gtbExternal.pageT();if(g==null)if(a.external)g=a.external.pageT;if(g)a.jstiming.pt=g}catch(h){};a.tickAboveFold=function(b){b=b;var d=0;if(b.offsetParent){do d+=b.offsetTop;while(b=b.offsetParent)}b=d;b<=750&&a.jstiming.load.tick("aft")};var j=false;function k(){if(!j){j=true;a.jstiming.load.tick("firstScrollTime")}}a.addEventListener?a.addEventListener("scroll",k,false):a.attachEvent("onscroll",k);
+ })();</script>
+<meta content="true" name="MSSmartTagsPreventParsing">
+<meta content="blogger" name="generator">
+<link href="http://www.blogger.com/favicon.ico" rel="icon" type="image/vnd.microsoft.icon">
+<link href="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/Difference Between ASP.NET WebForms and ASP.NET MVC.htm" rel="canonical">
+<link rel="alternate" type="application/atom+xml" title="DevCurry - Atom" href="http://www.devcurry.com/feeds/posts/default">
+<link rel="alternate" type="application/rss+xml" title="DevCurry - RSS" href="http://www.devcurry.com/feeds/posts/default?alt=rss">
+<link rel="service.post" type="application/atom+xml" title="DevCurry - Atom" href="http://www.blogger.com/feeds/8980734269859237005/posts/default">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.blogger.com/rsd.g?blogID=8980734269859237005">
+<link rel="alternate" type="application/atom+xml" title="DevCurry - Atom" href="http://www.devcurry.com/feeds/2610929328791374849/comments/default">
+<!--[if IE]> <script> (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i < html5.length; i++) { document.createElement(html5[i]); } })(); </script> <![endif]-->
+<title>Difference Between ASP.NET WebForms and ASP.NET MVC</title>
+<meta content="DevCurry: Difference Between ASP.NET WebForms and ASP.NET MVC" name="description">
+<meta content="aGUg7ZiOsa35TAhrFUtSjn45w9HYR2W_mTqSsO27gAY" name="google-site-verification">
+<meta content="E955EFBD00D192E201791FA2FC6342E7" name="msvalidate.01">
+<meta content="63eab69485099315" name="y_key">
+<link href="http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/favicon.png" rel="shortcut icon" type="image/vnd.microsoft.icon">
+<link type="text/css" rel="stylesheet" href="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/3734822104-widget_css_bundle.css">
+ <link rel="stylesheet" type="text/css" href="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/authorization.css">
+<style type="text/css">#navbar-iframe { display:block }
+</style>
+
+<style id="page-skin-1" type="text/css"><!--
+
+/*
+/* Variables
+====================
+<Variable name="blogtitlefont" description="Blog Title Font"
+type="font"
+default="normal normal 230% Georgia,Times New Roman">
+<Variable name="headertextcolor" description="Blog Title Color"
+type="color" default="#313029">
+<Variable name="descriptionfont" description="Blog Description Font"
+type="font"
+default="normal normal 90% Arial, Helvetica, sans-serif">
+<Variable name="descriptiontextcolor" description="Blog Description Color"
+type="color" default="#A91B33">
+<Variable name="bgcolorwrap" description="Page Background Color"
+type="color" default="#EAF4F5">
+<Variable name="bgcolorwraphead" description="Page Background Header Color"
+type="color" default="#9AC3C4">
+<Variable name="headertext" description="Page Header Text"
+type="color" default="#FFF">
+<Variable name="navbarcolor" description="Nav Bar Color"
+type="color" default="#495D5C">
+<Variable name="subnavbar" description="Adsense Nav Bar"
+type="color" default="#666">
+<Variable name="textboxcolor" description="Text Box Color"
+type="color" default="#F7F5EF">
+<Variable name="bgcolorpage" description="Post Background Color"
+type="color" default="#FFF">
+<Variable name="sidebarheadcolor" description="Sidebar Header Color"
+type="color" default="#EAF4F5">
+<Variable name="sidebarheadfontcolor" description="Sidebar Header Font Color"
+type="color" default="#000">
+<Variable name="posttitle" description="Post Title Color"
+type="color" default="#000000">
+<Variable name="linkhovercolor" description="Link Hover Color"
+type="color" default="#1E608E">
+<Variable name="textcolor" description="General Text Color"
+type="color" default="#444444">
+<Variable name="postbodyimgcolor" description="Post Image Background Color"
+type="color" default="#EEE">
+*/
+#navbar-iframe{height:0px; visibility:hidden; display:none}
+body{background:#FFF none repeat scroll 0 0; width:980px; color:#444444; font-size:13px; font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif, Tahoma; margin:0 auto 0; padding:0}
+#wrap{background:#FFFFFF; width:960px; margin:10px auto 10px; padding:0; position:relative; border:10px solid #EAF4F5}
+a, a:visited{color:#1E608E; text-decoration:none}
+a:hover{text-decoration:underline}
+a img{border-width:0}
+h5{font-size:19px; font-family:Georgia, "Times New Roman", Times, serif; line-height: 21px; font-weight:normal; display:block; padding-bottom:9px; color:#000000;}
+tr.spacetr > td
+{
+padding-bottom: 1em;
+}
+#topnavbar{background:#353535; width:960px; height:30px; color:#FFFFFF; margin:0; padding:0}
+#topnavbar a, #topnavbar a:visited{font-size:11px; font-weight:bold; color:#FFFFFF; text-decoration:none}
+#topnavbar a:hover{text-decoration:underline}
+#topnavbar p{font-size:11px; font-weight:bold; padding:0; margin:0}
+.topnavbarleft{width:230px; float:left; margin:0; padding:8px 0 0 10px}
+.topnavbarright{width:600px; float:right; margin:0; padding:7px 10px 0 0; text-transform:uppercase; text-align:right}
+.topnavbarright a img{border:none; margin:0 3px 3px 0; padding:0}
+.highlite {border: 1px solid #888; padding: 0.5em; margin: 0.5em 0; }
+#header{background:#FFF; width:960px; height:100px; color:#FFF; font-size:11px; margin:0; padding:0; overflow:hidden}
+#header-inner{background-position:left; background-repeat:no}
+#header h1 {color:#313029; font:normal normal 230% Georgia,Times New Roman; margin:0; padding:5px 0 0 10px; text-decoration:none}
+#header h1 a, #header h1 a:visited {color:#313029; text-decoration:none}
+#header h3{color:#A91B33; font-size:16px; font-family:Arial,Tahoma,Verdana; font-weight:normal; margin:0; padding:0}
+#header p{color:#313029; padding:0; margin:0}
+.headerleft{width:460px; float:left; font-size:14px; margin:0; padding:0}
+.headerleft a img{border:none; margin:0; padding:0}
+.headerright{width:486px; float:right; margin:0; padding:18px 0 0; font-weight:bold}
+.headerright a img{border:1px solid #FFF; margin:0 0 3px; padding:0}
+#header .description{color:#A91B33; font:normal normal 90% Arial, Helvetica, sans-serif; margin-left:10px; padding:0}
+#navbarcontainer{background:#DFD9C2; width:960px; height:35px; font-size:12px; font-family:Arial,Tahoma,Verdana; color:#FFF; font-weight:bold; margin:0; padding:0}
+#navbarleft{width:680px; float:left; margin:0; padding:0}
+#navbarright{width:280px; font-size:11px; float:right; margin:0; padding:6px 0 0}
+#ArchiveList a, #Archivelist a:visited {background:#FFFFFF url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/icon.gif) no-repeat scroll left top;margin:0;padding:0 0 5px 20px;}
+.divAd{
+display:inline-block;
+text-align:center;
+margin-top: 2px;
+margin-bottom: 3px;
+/*border: 1px solid;*/
+}
+.divad1, .divad2 {
+/*border: 1px solid;*/
+float:left;
+width:200px;
+height:200px;
+margin-left:2px;
+margin-right:1px;
+}
+.divad3 {
+/*border: 1px solid;*/
+float:left;
+width:192px;
+height:200px;
+margin-left:2px;
+margin-right:0px;
+}
+.status-msg-body{}
+.post-body img {-moz-border-radius-bottomleft:3px;-moz-border-radius-bottomright:3px;-moz-border-radius-topleft:3px;-moz-border-radius-topright:3px;background-color:#EEEEEE;border:1px solid #DDDDDD;padding:5px;text-align:center;}
+#nav{margin:0; padding:0}
+#nav ul{float:left; list-style:none; margin:0; padding:0}
+#nav li{list-style:none; margin:0; padding:0}
+#nav li a, #nav li a:link, #nav li a:visited{color:#333333; display:block; font-size:14px; font-family: Georgia,Times New Roman, Arial; font-weight:normal; margin:0; padding:9px 15px 8px}
+#nav li a:hover, #nav li a:active{background:#EBE6D4 url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/navhov.png); color:#FFF; margin:0; padding:9px 15px 8px; text-decoration:none}
+#nav li li a, #nav li li a:link, #nav li li a:visited{background:#555; width:150px; color:#FFF; font-size:14px; font-family:Georgia,Times New Roman; font-weight:normal; text-transform:lowercase; float:none; margin:0; padding:7px 10px; border-bottom:1px solid #FFF; border-left:1px solid #FFF; border-right:1px solid #FFF}
+#nav li li a:hover, #nav li li a:active{background:#777; color:#FFF; padding:7px 10px}
+#nav li{float:left; padding:0}
+#nav li ul{z-index:9999; position:absolute; left:-999em; height:auto; width:170px; margin:0; padding:0}
+#nav li ul a{width:140px}
+#nav li ul ul{margin:-32px 0 0 171px}
+#nav li:hover ul ul, #nav li:hover ul ul ul, #nav li.sfhover ul ul, #nav li.sfhover ul ul ul{left:-999em}
+#nav li:hover ul, #nav li li:hover ul, #nav li li li:hover ul, #nav li.sfhover ul, #nav li li.sfhover ul, #nav li li li.sfhover ul{left:auto}
+#nav li:hover, #nav li.sfhover{position:static}
+#searchform{margin:0; padding:0; overflow:hidden; display:inline}
+#searchbox {background:#F7F5EF none repeat scroll 0 0 !important;border-color:#759697 #A3BAB9 #A3BAB9 #759697;border-style:solid;border-width:1px;color:#202020;display:inline;font-family:Georgia,Times New Roman,Trebuchet MS;font-size:12px;font-weight:normal;margin:0;padding:4px 0 3px 5px;width:220px;}
+#searchbutton{background:#93BBBC url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/topnav.png) repeat scroll 0 0;border-color:#A3BAB9 #759697 #759697 #A3BAB9;border-style:solid;border-width:1px;color:#FFFFFF;font-family:Georgia,Times New Roman,Trebuchet MS;font-size:11px;font-weight:bold;margin:0 0 0 5px;padding:3px 3px 2px;}
+.rss {background: url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/rss-icon.gif) no-repeat scroll center top; float:left; width:40px; height:40px}
+#subscribe{margin:0;padding:5px 0 0 !important;padding:15px 0 0;width:300px !important;width:295px}
+#subbox{background:#F7F5EF !important; width:245px !important; width:150px; color:#202020; font-size:12px; font-family:Georgia,Times New Roman,Trebuchet MS; font-weight:normal; margin:5px 0 0; padding:3px 0 3px 5px; border-top:1px solid #666; border-right:1px solid #DDD; border-left:1px solid #666; border-bottom:1px solid #DDD; display:inline}
+#subbutton{background:#93BBBC url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/topnav.png) repeat scroll 0 0;border-color:#A3BAB9 #759697 #759697 #A3BAB9;border-style:solid;border-width:1px;color:#FFFFFF;font-family:Georgia,Times New Roman,Trebuchet MS;font-size:11px;font-weight:bold;margin:0 0 0 5px;padding:3px 3px 2px; width:28px;}
+#subnavbar{background:#F7F5EF; width:960px; height:24px; color:#FFF; margin:0; padding:0}
+#navbar-adsense{padding: 3px 0 0 10px;}
+#subnav{margin:0; padding:0}
+#subnav ul{float:left; list-style:none; margin:0; padding:0}
+#subnav li{list-style:none; margin:0; padding:0}
+#subnav li a, #subnav li a:link, #subnav li a:visited{color:#FFF; display:block; font-size:10px; font-weight:bold; text-transform:uppercase; margin:0 5px 0 0; padding:6px 13px}
+#subnav li a:hover, #subnav li a:active{background:#888; color:#FFF; display:block; text-decoration:none; margin:0 5px 0 0; padding:6px 13px}
+#subnav li li a, #subnav li li a:link, #subnav li li a:visited{background:#666; width:140px; float:none; margin:0; padding:6px 10px; border-bottom:1px solid #FFF; border-left:1px solid #FFF; border-right:1px solid #FFF}
+#subnav li li a:hover, #subnav li li a:active{background:#888; margin:0; padding:6px 10px}
+#subnav li{float:left; padding:0}
+#subnav li ul{z-index:9999; position:absolute; left:-999em; height:auto; width:160px; margin:0; padding:0}
+#subnav li ul a{width:140px}
+#subnav li ul ul{margin:-25px 0 0 161px}
+#subnav li:hover ul ul, #subnav li:hover ul ul ul, #subnav li.sfhover ul ul, #subnav li.sfhover ul ul ul{left:-999em}
+#subnav li:hover ul, #subnav li li:hover ul, #subnav li li li:hover ul, #subnav li.sfhover ul, #subnav li li.sfhover ul, #subnav li li li.sfhover ul{left:auto}
+#subnav li:hover, #subnav li.sfhover{position:static}
+#outer-wrapper{width:940px; margin:0 auto 0; padding:10px 0 0; line-height:18px}
+#main-wrapper{float:left; min-height:800px; width:600px; margin:0; padding:0 0 20px}
+#sidebar-wrapper{float:right; width:320px; margin:0; padding:0; display:inline}
+#lsidebar{background:#FFF url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/leftsidebartop.gif) top no-repeat; float:left; width:150px; margin:0; padding:10px; border:1px solid #DDD; display:inline}
+#rsidebar{background:#FFF url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/rightsidebartop.gif) top no-repeat; float:right; width:120px; margin:0; padding:10px; border:1px solid #DDD; display:inline}
+h2.date-header{margin:1.5em 0 .5em; display:none}
+.post{background:#FFF url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/homepagetop.gif) top no-repeat; float:left; width:590px; margin:0 0 10px; padding:10px; border:1px solid #DDD}
+.post h3{color:#000000; font-size:25px; font-family:Georgia, "Times New Roman", Times, serif; line-height: 32px; font-weight:normal; margin:0 0 10px; padding:10px 0 0}
+.post h3 a, #content h1 a:visited{color:#000000; text-decoration:none; margin:0 0 5px; padding:10px 0 0}
+.post h3 a:hover{text-decoration:underline;}
+.post-body{float:left; padding-top:15px; line-height:18px}
+.post-body blockquote{line-height:16px}
+.comment-link{margin-left:.6em}
+.post blockquote{background:#E8E8E8; margin:0 25px 15px; padding:10px 20px 0 15px; border-top:1px solid #DDD; border-right:1px solid #666; border-left:1px solid #DDD; border-bottom:1px solid #666}
+.post blockquote p{margin:0; padding:0 0 15px}
+.post-labels{}
+.post-icons{float: right; margin-top:-20px;padding-right:5px}
+.reaction-buttons{padding-top:15px;}
+.reactions-label{font-size:12px;}
+.adsense-post{background:#FFF url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/homepagetop.gif) top no-repeat; float:left; width:590px; margin:0 0 10px; padding:10px; border:1px solid #DDD}
+.comments{background:#FFF url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/homepagetop.gif) top no-repeat; float:left; width:590px; margin:0 0 10px; padding:10px; border:1px solid #DDD}
+#comments h4{color:#A91B33; font-size:22px; font-family:Georgia,Times New Roman; font-weight:normal; margin:0 0 20px; padding:10px 0 0}
+#comments-block{width:590px; float:left; padding:0; margin:0}
+#comments-block .comment-author{margin:.5em 0; font-weight:bold}
+#comments-block .comment-body{margin:.25em 0 10px; padding-left:20px}
+#comments-block .comment-body p{margin:0 0 .75em}
+#comments-block li.not-author {list-style-image:none;list-style-position:outside;list-style-type:none;margin:15px 0 10px;padding:10px 5px 10px 10px;border:1px dotted #BBBBBB;}
+#comments-block li.author {list-style-image:none;list-style-position:outside;list-style-type:none;margin:15px 0 10px;padding:10px 5px 10px 10px;border:1px dotted #BBBBBB;background:#EEEEEE none repeat scroll 0 0;}
+.comment-meta {display:block;font-size:10px;margin:0;}
+.deleted-comment{font-style:italic; color:gray}
+.blogger-iframe-colorize textarea {background:#EEEEEE none repeat scroll 0 0;border-color:#666666 #DDDDDD #DDDDDD #666666;border-style:solid;border-width:1px;color:#202020;display:inline;font-size:12px;font-weight:normal;margin:5px 0 0;padding:3px 0 3px 5px;width:460px;}
+#blog-pager-newer-link{float:left}
+#blog-pager-older-link{float:right}
+#blog-pager{padding:40px 15px 0px; text-align:center}
+.sidebar{color:#000; line-height:20px}
+.sidebar h2, .rsidebar h2, .lsidebar h2{background:#EAF4F5; color:#000000; font-size:12px; font-family:Arial,Tahoma,Verdana; font-weight:bold; text-transform:uppercase; margin:0 0 10px; padding:3px 0 3px 7px; 	border:solid 1px #DEDEDE; border-bottom:none;
+}
+#sidebar p{margin:0; padding:0 0 0 45px}
+.sidebar ul, .rsidebar ul, .lsidebar ul{list-style-type:none; margin:0; padding:0}
+.sidebar ul li, .rsidebar ul li, .lsidebar ul li{background:#FFF url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/icon.gif) no-repeat; list-style-type:none; margin:0 0 5px; padding-left:20px}
+.sidebar .widget{background:#FFF url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/sidebartop.gif) top no-repeat; float:left; width:300px; margin:0 0 10px; padding:10px; border:1px solid #DDD}
+.sidebar .widget, .main .widget{margin:0 0 1.5em; padding:0 0 1.5em}
+.sidebar .widget{background:#FFF url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/sidebartop.gif) top no-repeat; float:left; width:300px; margin:0 0 10px; padding:10px; border:1px solid #DDD}
+.sidebar a img{border:1px solid #CCCCCC;margin:0 0 0 7px;padding:5px;}
+.sidebar a:hover img{border:1px solid #999999;margin:0 0 0 7px;padding:5px;}
+.main .Blog{border-bottom-width:0}
+#footer{width:660px; clear:both; margin:0 auto; padding-top:15px; line-height:1.6em; text-transform:uppercase; letter-spacing:.1em; text-align:center}
+#credits{background:#353535; width:960px; height:30px; margin:0; padding:0; text-align:center}
+#credits p{color:#FFFFFF; font-size:11px; font-family:Arial,Tahoma,Verdana; margin:0; padding:9px 0 0}
+#credits a, #footer a:visited{color:#FFFFFF; text-decoration:none}
+#credits a:hover{color:#FFFFFF; text-decoration:underline}
+/** Page structure tweaks for layout editor wireframe */
+body#layout #navbarright{display:none;}
+body#layout #topnavbar{display:none;}
+body#layout #credits{display:none;}
+body#layout #navbarcontainer{margin:0 auto; padding-bottom:42px;}
+body#layout #main-wrapper{padding-bottom:50px;}
+/*
+body#layout #outer-wrapper{padding:0px;width:0px;}
+body#layout #sidebar-wrapper{width:0px;}
+body#layout #rsidebar{padding:0px;width:150px}
+body#layout #lsidebar{padding:0px;width:150px}
+*/
+
+--></style>
+<script type="text/javascript">
+function displayDate()
+{
+var mydate=new Date()
+var year=mydate.getYear()
+if (year < 1000)
+year+=1900
+var day=mydate.getDay()
+var month=mydate.getMonth()
+var daym=mydate.getDate()
+if (daym<10) daym='0'+daym
+var dayarray=new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday')
+var montharray=new Array('January','February','March','April','May','June','July','August','September','October','November','December')
+return ('<p>'+dayarray[day]+', '+montharray[month]+' '+daym+', '+year+'</p>')
+}
+
+
+</script>
+<style media="print" type="text/css">
+#header-wrapper, #header, .header, #navbarcontainer, #sidebar-wrapper, .sidebar, #footer-wrapper, #footer, #topnavbar, #subnavbar, #nac, #searchbox, .date-header, .post-meta-data, .comment-link, .comment-footer, #blog-pager, #backlinks-container, #navbar-section, .subscribe_notice, .similar, .noprint {display: none;}
+#main-wrapper {width: 95%}
+</style>
+<!--Related Posts Scripts and Styles Start-->
+<!--Remove-->
+<style type="text/css">
+.facebookLike{
+float:center;
+text-transform:none;
+line-height:2em;
+padding-top:4px;
+padding-bottom:4px;
+padding-left:5px;
+background:none repeat scroll 0 0 #EEEEEE;
+border:1px dashed #AAAAAA;
+
+}
+
+#related-posts {
+float:center;
+text-transform:none;
+height:100%;
+min-height:100%;
+padding-top:2px;
+padding-left:5px;
+background:none repeat scroll 0 0 #EEEEEE;
+border:1px dashed #AAAAAA;
+
+}
+#related-posts .widget{
+padding-left:6px;
+margin-bottom:10px;
+
+
+}
+#related-posts .widget h2, #related-posts h2{
+font-size: 1.1em;
+font-weight: bold;
+color: black;
+margin-bottom: 0.75em;
+margin-top: 0em;
+padding-top: 0em;
+}
+
+#related-posts ul{
+list-style-type:none;
+margin:0 0 0px 0;
+padding:0px;
+text-color:#000000
+}
+#related-posts ul li{
+background:transparent url(http://4.bp.blogspot.com/_0j4bzarlOBg/TDol80q4jaI/AAAAAAAABMU/4skFhoIhQEE/s1600/Arrow.jpg) no-repeat ; 
+display:block;
+list-style-type:none;
+margin-bottom: 3px;
+padding-left: 20px;
+padding-top:0px;}
+</style>
+<script type="text/javascript">
+var relatedpoststitle="Others also read";
+</script>
+<script type="text/javascript">
+
+//<![CDATA[
+var relatedTitles = new Array();
+var relatedTitlesNum = 0;
+var relatedUrls = new Array();
+function related_results_labels(json) {
+for (var i = 0; i < json.feed.entry.length; i++) {
+var entry = json.feed.entry[i];
+relatedTitles[relatedTitlesNum] = entry.title.$t;
+for (var k = 0; k < entry.link.length; k++) {
+if (entry.link[k].rel == 'alternate') {
+relatedUrls[relatedTitlesNum] = entry.link[k].href;
+relatedTitlesNum++;
+break;
+}
+}
+}
+}
+function removeRelatedDuplicates() {
+var tmp = new Array(0);
+var tmp2 = new Array(0);
+for(var i = 0; i < relatedUrls.length; i++) {
+if(!contains(tmp, relatedUrls[i])) {
+tmp.length += 1;
+tmp[tmp.length - 1] = relatedUrls[i];
+tmp2.length += 1;
+tmp2[tmp2.length - 1] = relatedTitles[i];
+}
+}
+relatedTitles = tmp2;
+relatedUrls = tmp;
+
+}
+function contains(a, e) {
+for(var j = 0; j < a.length; j++) if (a[j]==e) return true;
+return false;
+}
+function printRelatedLabels(currenturl) {
+for(var i = 0; i < relatedUrls.length; i++)
+{
+if(relatedUrls[i]==currenturl)
+{
+relatedUrls.splice(i,1)
+relatedTitles.splice(i,1)
+
+}
+}
+var r = Math.floor((relatedTitles.length - 1) * Math.random());
+var i = 0;
+
+if(relatedTitles.length>1) document.write('<h2>'+relatedpoststitle+'</h2>');
+document.write('<ul>');
+while (i < relatedTitles.length && i < 20 && i<maxresults) {
+document.write('<li><a href="' + relatedUrls[r] + '">' + relatedTitles[r] + '</a></li>');
+if (r < relatedTitles.length - 1) {
+r++;
+} else {
+r = 0;
+}
+i++;
+}
+document.write('</ul>');
+relatedUrls.splice(0,relatedUrls.length);
+relatedTitles.splice(0,relatedTitles.length);
+}
+//]]>
+
+</script>
+<!--Remove-->
+<!--Related Posts Scripts and Styles End-->
+<script type="text/javascript">
+if (window.jstiming) window.jstiming.load.tick('headEnd');
+</script></head>
+<body>
+<div class="navbar section" id="navbar"><div class="widget Navbar" id="Navbar1"><script type="text/javascript">
+    function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener("load",
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+  </script>
+<iframe src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/navbar.htm" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" height="30px" width="100%" id="navbar-iframe" allowtransparency="true" title="Blogger Navigation and Search"></iframe>
+<div></div></div></div>
+<div id="wrap">
+<span id="skiplinks" style="display:none;">
+<a href="http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html#main">skip to main </a> |
+      <a href="http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html#sidebar">skip to sidebar</a>
+</span>
+<div id="topnavbar">
+<div class="topnavbarleft">
+<p><script type="text/javascript">document.write(displayDate())</script></p><p>Monday, December 06, 2010</p><p></p>
+</div>
+<div class="topnavbarright">
+<p><a href="http://www.devcurry.com/feeds/posts/default/"><img src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/rss.gif" style="vertical-align:middle"></a><a href="http://www.devcurry.com/feeds/posts/default/">News Feed</a>
+<a href="http://www.devcurry.com/feeds/comments/default/"><img src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/rss.gif" style="vertical-align:middle;margin-left:7px;"></a><a href="http://www.devcurry.com/feeds/comments/default/">Comments</a></p>
+</div>
+</div>
+<div id="header">
+<div class="header section" id="header"><div class="widget Header" id="Header1">
+<div id="header-inner">
+<div class="headerleft">
+<a href="http://www.devcurry.com/" style="display: block">
+<img alt="DevCurry" height="100px; " id="Header1_headerimg" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/devcurrylogo.png" style="display: block" width="350px; ">
+</a>
+</div>
+</div>
+</div><div class="widget HTML" id="HTML51">
+<div class="headerright">
+<a></a>
+</div>
+</div></div>
+</div>
+<div id="navbarcontainer">
+<div class="header-tabs section" id="header-tabs"><div class="widget LinkList" id="LinkList34">
+<div class="widget-content">
+<div id="navbarleft">
+<ul id="nav">
+<li><a href="http://www.devcurry.com/">Home</a></li>
+<li><a href="http://www.devcurry.com/search/label/ASP.NET">ASP.NET</a></li>
+<li><a href="http://www.devcurry.com/search/label/jQuery">jQuery</a></li>
+<li><a href="http://www.sqlservercurry.com/">SQL Server</a></li>
+<li><a href="http://www.dotnetcurry.com/">My Other Site</a></li>
+<li><a href="http://www.devcurry.com/2009/01/about.html">About Me</a></li>
+<li><a href="http://www.devcurry.com/2009/01/contact-us.html">Contact Us</a></li>
+</ul>
+</div>
+</div>
+</div></div>
+<div id="navbarright">
+<form action="http://www.devcurry.com/search" id="searchform" method="get" name="searchform">
+		<input type="text" value="Search this website..." name="q" id="searchbox" onfocus="if (this.value == &#39;Search this website...&#39;) {this.value = &#39;&#39;;}" onblur="if (this.value == &#39;&#39;) {this.value = &#39;Search this website...&#39;;}">
+		<input id="searchbutton" type="submit" value="GO"></form>
+</div>
+</div>
+<div style="clear:both;"></div>
+<div class="adsense-header section" id="adsense-header"></div>
+<div style="clear:both;"></div>
+<div id="outer-wrapper"><div id="wrap2">
+<div id="content-wrapper">
+<div id="crosscol-wrapper" style="text-align:center">
+<div class="crosscol section" id="crosscol"></div>
+</div>
+<div id="main-wrapper">
+<!-- START[Home Page Section] -->
+<div class="divAd">
+<div class="divad1">
+
+<!--/* OpenX Javascript Tag v2.8.2-rc25 */-->
+
+<script type="text/javascript"><!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://d1.openx.org/ajs.php':'http://d1.openx.org/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=98805&amp;source=_self&amp;target=_top");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>--></script><script type="text/javascript" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/ajs.php"></script><a href="http://d1.openx.org/ck.php?oaparams=2__bannerid=237614__zoneid=98805__source=_self__OXLCA=1__cb=12d4e070bb__r_id=77be4afb251781a708d93521a59e818a__r_ts=ld0a45__oadest=http%3A%2F%2Fwww.dotnetcurry.com%2Forder%2FjQueryASPNETRecipesBook.aspx" target="_top"><img src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/748192025846e8e111e7ffbc3db2f347.png" width="200" height="200" alt="jQuery and ASP.NET EBook" title="jQuery and ASP.NET EBook" border="0"></a><div id="beacon_12d4e070bb" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/lg.php" width="0" height="0" alt="" style="width: 0px; height: 0px;"></div>
+<noscript>&lt;a href='http://d1.openx.org/ck.php?n=a3cf717c&amp;amp;cb=8822' target='_top'&gt;&lt;img src='http://d1.openx.org/avw.php?zoneid=98805&amp;amp;source=_self&amp;amp;cb=8822&amp;amp;n=a3cf717c' border='0' alt='' /&gt;&lt;/a&gt;</noscript>
+
+</div>
+<div class="divad2">
+<a href="http://www.sqlservercurry.com/search/label/Transact%20SQL%20T-SQL" target="_blank"><img alt="T-SQL Tips" border="0" height="200" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/tsql_ad-1.png" style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="T-SQL Tips"></a>
+</div>
+<div class="divad3">
+<a href="http://www.dotnetcurry.com/order/jQueryASPNETRecipesBook.aspx" target="_blank"><img alt="jQuery and ASP.NET" border="0" height="200" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/EBook-Copy.jpg" style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="jQuery and ASP.NET book" width="167"></a>
+</div>
+</div>
+<!-- END[Home Page Section]-->
+<div class="main section" id="main"><div class="widget Blog" id="Blog1">
+<div class="blog-posts hfeed">
+<!-- google_ad_section_start -->
+<h2 class="date-header">September 13, 2009</h2>
+<div class="post hentry">
+<a name="2610929328791374849"></a>
+<h3 class="post-title entry-title">
+<a href="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/Difference Between ASP.NET WebForms and ASP.NET MVC.htm">Difference Between ASP.NET WebForms and ASP.NET MVC</a>
+</h3>
+<div class="post-header-line-1">
+<span class="post-comment-link" style="Float:right;">
+</span>
+<span class="post-author vcard" style="background:url(http://i496.photobucket.com/albums/rr329/suprotimagarwal/DevCurry/icon_time.gif) no-repeat;padding-left:20px;">
+Sunday, September 13, 2009
+Posted by
+<span class="fn">Suprotim Agarwal</span>
+</span>
+<br>
+<span class="post-labels">
+Labels:
+<a href="http://www.devcurry.com/search/label/ASP.NET" rel="tag">ASP.NET</a>,
+<a href="http://www.devcurry.com/search/label/ASP.NET%20MVC" rel="tag">ASP.NET MVC</a>
+</span>
+<span class="post-icons">
+<span class="item-control blog-admin pid-185591272">
+<a href="http://www.blogger.com/post-edit.g?blogID=8980734269859237005&postID=2610929328791374849" title="Edit Post">
+<img alt="" class="icon-action" height="18" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon18_edit_allbkg.gif" width="18">
+</a>
+</span>
+</span>
+<br><br>
+</div>
+<div class="post-body entry-content">
+<div style="float:right; margin-left:10px;">
+<table>
+<tbody><tr><td>
+<script type="text/javascript">
+tweetmeme_url = 'http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html';
+</script>
+<script src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/button.js" type="text/javascript">
+</script><iframe src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/button.htm" height="61" width="50" frameborder="0" scrolling="no"></iframe>
+</td><td>
+<script src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/hostedbadge.php"></script><iframe src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/saved_resource.htm" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height: 60px;" allowtransparency="true"></iframe>
+</td></tr>
+</tbody></table>
+</div>
+<p>One of the frequently asked questions about ASP.NET MVC is that how is different from ASP.NET WebForms. Is ASP.NET MVC a replacement for WebForms.</p><p>The answer is No. ASP.NET MVC, is not a replacement for WebForms. Both ASP.NET MVC and ASP.NET WebForms are built on top of the Core ASP.NET Framework. In fact a lot of features we use in ASP.NET such as Roles, Membership, Authentication and a lot of namespaces, classes and interfaces can be used in an ASP.NET MVC application</p><p>Here are some points that I wrote in an article for <a href="http://www.dotnetcurry.com/">www.dotnetcurry.com</a> that differentiate ASP.NET WebForms from ASP.NET MVC:</p><table cellspacing="0" cellpadding="2" width="540" border="1"><tbody><tr><td valign="top" width="271"><p align="center"><b>ASP.NET WebForms</b></p></td><td valign="top" width="267"><p align="center"><b>ASP.NET MVC</b></p></td></tr><tr><td valign="top" width="271">Uses the ‘Page Controller’ pattern. Each page has a code-behind class that acts as a controller and is responsible for rendering the layout.</td><td valign="top" width="267">Uses the ‘Front Controller’ pattern. There is a single central controller for all pages to process web application requests and facilitates a rich routing architecture</td></tr><tr><td valign="top" width="271">Uses an architecture that combines the Controller (code behind) and the View (.aspx). Thus the Controller has a dependency on the View. Due to this, testing and maintainability becomes an issue.</td><td valign="top" width="267">ASP.NET MVC enforces a "separation of concerns". The Model does not know anything about the View. The View does not know there’s a Controller. This makes MVC applications easier to test and maintain</td></tr><tr><td valign="top" width="271">The View is called before the Controller.</td><td valign="top" width="267">Controller renders View based on actions as a result of the User Interactions on the UI.</td></tr><tr><td valign="top" width="271">At its core, you ‘cannot’ test your controller without instantiating a View. There are ways to get around it using tools.</td><td valign="top" width="267">At its core, ASP.NET MVC was designed to make test-driven development easier. You ‘can’ test your Controller without instantiating a View and carry out unit-tests without having to run the controllers in an ASP.NET process.</td></tr><tr><td valign="top" width="271">WebForms manage state by using view state and server-based controls.</td><td valign="top" width="267">ASP.NET MVC does not maintain state information by using view state</td></tr><tr><td valign="top" width="271">WebForms supports an event-driven programming style that is like Windows applications and is abstracted from the user. The State management is made transparent by using sessions, viewstate etc. In the process, the HTML output is not clean making it difficult to manage later. The ViewState also increases your page size.</td><td valign="top" width="267">In ASP.NET MVC, the output is clean and you have full control over the rendered HTML. The orientation is towards building standard compliant pages and provides full control over the behavior of an application. </td></tr><tr><td valign="top" width="271">Deep understanding of HTML, CSS and JavaScript is not required to a large extent since the WebForm model abstracts a lot of these details and provides automatic plumbing. While abstracting details to provide ease of use, sometimes a solution is overcomplicated, than it needs to be.</td><td valign="top" width="267">A thorough understanding of how HTML, CSS and JavaScript work together is required. The advantage is you can do a lot of jQuery and AJAX stuff in an efficient and simple manner than you would do in an ASP.NET application.</td></tr><tr><td valign="top" width="271">WebForms can drastically reduce time while building up intranet and internet applications that use a lot of controls (drag and drop model). Although this is true for development, a lot of time is spent later to code around limitations.</td><td valign="top" width="267">You lose the 'drag and drop' quick model of building your web applications. The focus is on control over the application behavior and test-driven development. The model is extensible and you do not have to spend time working around limitations.</td></tr><tr><td valign="top" width="271">Relatively simple to learn and pickup. Works very well for developers who initially have trouble with the HTTP/HTML model and are coming from a similar WinForms oriented event model.</td><td valign="top" width="267">There is a learning curve to understand the why, when and how of ASP.NET MVC.</td></tr><tr><td valign="top" width="271">Lesser amount of code is required to build webapps since a lot of components are integrated and provided out of the box. You can also use a lot of data controls provided out of the box that rely on ViewState.</td><td valign="top" width="267">Since the application tasks are separated into different components, amount of code required is more. Since ASP.NET MVC does not use ViewState, you cannot use Data controls like GridView, Repeater.</td></tr><tr><td valign="top" width="271">Works very well for small teams where focus is on rapid application development</td><td valign="top" width="267">Works well for large projects where focus in on testability and maintainability</td></tr></tbody></table><p>I hope devcurry.com viewers will find this table useful. The entire article can be read over here <a href="http://www.dotnetcurry.com/ShowArticle.aspx?ID=370">ASP.NET MVC - Some Frequently Asked Questions</a></p>
+<p>
+</p>
+<br>
+<a href="http://del.icio.us/post?url=http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html&title=Difference%20Between%20ASP.NET%20WebForms%20and%20ASP.NET%20MVC" target="_blank"><b>Bookmark this link</b> on del.icio.us</a>
+(saved by <span class="delsquare" id="a2610929328791374849">8</span> users)
+<script type="text/javascript">
+function displayURL(data) {
+var urlinfo = data[0];
+if (!urlinfo.total_posts) return;
+document.getElementById('a2610929328791374849').innerHTML = urlinfo.total_posts;
+}
+</script>
+<script src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/data"></script>
+<br><br>
+<div class="highlite">
+  <!--/* OpenX Javascript Tag v2.8.5-rc7 */-->
+
+<script type="text/javascript"><!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://d1.openx.org/ajs.php':'http://d1.openx.org/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=165601");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'></scr"+"ipt>");
+//]]>--></script><script type="text/javascript" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/ajs(1).php"></script>
+            </div>
+<br>
+<h5>Did you like this post?</h5>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr class="spacetr">
+<td valign="top" width="5%">
+<img border="0" height="16" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/DZone.jpg" width="16">
+</td>
+<td>
+<script type="text/javascript"> 
+var dzone_url = 'http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html';
+</script>
+<script type="text/javascript"> 
+var dzone_title = 'Difference Between ASP.NET WebForms and ASP.NET MVC';
+</script>
+<script type="text/javascript"> 
+var dzone_style = '2';
+</script>
+<script language="javascript" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/zoneit.js">
+</script><iframe src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/zoneit.htm" height="25" width="155" scrolling="no" frameborder="0"></iframe>
+</td>
+<td valign="top" width="5%">
+<img border="0" height="16" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/reddit.gif" width="16">
+</td>
+<td>
+<script>reddit_url='http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html'</script>
+<script>reddit_title='Difference Between ASP.NET WebForms and ASP.NET MVC'</script>
+<script language="javascript" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/button(1).js"></script><iframe src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/button1.htm" height="22" width="120" scrolling="no" frameborder="0"></iframe>
+</td>
+</tr>
+<tr class="spacetr">
+<td valign="top" width="5%">
+<img border="0" height="16" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/DotNetKicks.jpg" width="16">
+</td>
+<td>
+<a href="http://www.dotnetkicks.com/kick/?url=http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html"><img alt="kick it on DotNetKicks.com" border="0" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/KickItImageGenerator.ashx"></a>
+</td>
+<td valign="top" width="5%">
+<img border="0" height="16" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/digg.gif" width="16">
+</td>
+<td>
+<script type="text/javascript"> digg_url="http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html"; digg_skin="compact"; </script>
+<script src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/diggthis.js" type="text/javascript"></script><span class="db-wrapper db-clear db-compact"><span><span class="db-container db-submit"><span class="db-body db-compact"><span class="db-count">0</span><span class="db-copy">diggs</span><a class="db-anchor">digg</a></span></span></span></span>
+</td>
+</tr>
+<tr class="spacetr">
+<td valign="top" width="5%">
+<img border="0" height="16" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/rss.gif" width="16">
+</td>
+<td>
+<a href="http://feeds2.feedburner.com/devcurry">subscribe via rss</a>
+</td>
+<td valign="top" width="5%">
+<img border="0" height="16" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/rss.gif" width="16">
+</td>
+<td>
+<a href="http://feedburner.google.com/fb/a/mailverify?uri=devcurry">subscribe via e-mail</a>
+</td>
+</tr>
+<tr>
+<td valign="top" width="5%">
+<img border="0" height="16" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/print.gif" width="16">
+</td>
+<td>
+<a href="javascript:window.print()">print this post</a>
+</td>
+<td valign="top" width="5%">
+<img border="0" height="16" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/twitter.png" width="16">
+</td>
+<td>
+<a href="http://twitter.com/suprotimagarwal">follow me on twitter</a>
+</td>
+</tr>
+</tbody></table>
+<br>
+<div id="related-posts">
+<script src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/ASP.NET" type="text/javascript"></script>
+<script src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/ASP.NET MVC" type="text/javascript"></script><a href="http://www.bloggerplugins.org/2009/08/related-posts-for-blogger-widget.html"><img alt="Related Posts Widget for Blogger" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/blogger-widgets.png" style="border: 0"></a>
+<script type="text/javascript">
+var maxresults=7;
+removeRelatedDuplicates(); printRelatedLabels("http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html");
+</script><h2>Others also read</h2><ul><li><a href="http://www.devcurry.com/2010/12/aspnet-gridview-data-caching.html">ASP.NET GridView Data Caching</a></li><li><a href="http://www.devcurry.com/2010/11/render-dynamic-metatags-in-aspnet-page.html">Render Dynamic MetaTags in ASP.NET Page in Separate Lines</a></li><li><a href="http://www.devcurry.com/2010/11/using-deployment-retailtrue-attribute.html">Using the Deployment retail=true attribute - ASP.NET Settings</a></li><li><a href="http://www.devcurry.com/2010/11/merge-gridview-header-columns.html">Merge GridView Header Columns</a></li><li><a href="http://www.devcurry.com/2010/11/aspnet-with-razor-syntax-beta-3-free.html">ASP.NET with Razor Syntax Beta 3 Free EBook and Tutorials</a></li><li><a href="http://www.devcurry.com/2010/11/set-width-of-gridview-textbox-in-edit.html">Set Width of GridView TextBox in Edit mode</a></li><li><a href="http://www.devcurry.com/2010/11/call-aspnet-handler-ashx-using.html">Call ASP.NET Handler (ASHX) using JavaScript</a></li></ul>
+</div>
+<div style="clear: both;"></div>
+<span class="reaction-buttons">
+</span>
+</div>
+<div class="post-footer">
+<div class="post-footer-line post-footer-line-1"></div>
+<div class="post-footer-line post-footer-line-2"></div>
+<div class="post-footer-line post-footer-line-3"></div>
+</div>
+</div>
+<div class="comments" id="comments">
+<a name="comments"></a>
+<h4>comments</h4>
+<b>4 Responses to "Difference Between ASP.NET WebForms and ASP.NET MVC"</b>
+<ol id="comments-block">
+<li class="not-author">
+<dt class="comment-author " id="c7141305801609780904">
+<a name="c7141305801609780904"></a>
+Anonymous
+said...
+<br>
+<div class="comment-meta">May 20, 2010 5:21 AM</div>
+<span class="item-control blog-admin pid-1858048701">
+<a href="http://www.blogger.com/delete-comment.g?blogID=8980734269859237005&postID=7141305801609780904" title="Delete Comment">
+<span class="post-icons"><img src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon_delete13.gif"></span>
+</a>
+</span>
+</dt>
+<dd class="comment-body">
+<p>excellent</p>
+</dd>
+</li>
+<li class="not-author">
+<dt class="comment-author " id="c8068910744949621257">
+<a name="c8068910744949621257"></a>
+Hiran
+said...
+<br>
+<div class="comment-meta">June 12, 2010 4:35 AM</div>
+<span class="item-control blog-admin pid-1249347846">
+<a href="http://www.blogger.com/delete-comment.g?blogID=8980734269859237005&postID=8068910744949621257" title="Delete Comment">
+<span class="post-icons"><img src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon_delete13.gif"></span>
+</a>
+</span>
+</dt>
+<dd class="comment-body">
+<p>Hi it really helped me to learn the differences between those. Are there any good resources to learn ASP.NET MVC 2.0.</p>
+</dd>
+</li>
+<li class="author">
+<dt class="comment-author blog-author" id="c4189291369614377626">
+<a name="c4189291369614377626"></a>
+<a href="http://www.blogger.com/profile/08349831623922214390" rel="nofollow">Suprotim Agarwal</a>
+said...
+<br>
+<div class="comment-meta">June 12, 2010 6:25 AM</div>
+<span class="item-control blog-admin pid-185591272">
+<a href="http://www.blogger.com/delete-comment.g?blogID=8980734269859237005&postID=4189291369614377626" title="Delete Comment">
+<span class="post-icons"><img src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon_delete13.gif"></span>
+</a>
+</span>
+</dt>
+<dd class="comment-body">
+<p>Some ASP.NET MVC resources:<br><br><a href="http://www.asp.net/mvc" rel="nofollow">ASP.NET MVC Free Training</a><br><br><a href="http://www.dotnetcurry.com/BrowseArticles.aspx?CatID=67" rel="nofollow">ASP.NET MVC Articles</a></p>
+</dd>
+</li>
+<li class="not-author">
+<dt class="comment-author " id="c9017110680274464392">
+<a name="c9017110680274464392"></a>
+<a href="http://www.blogger.com/profile/16060292077497497128" rel="nofollow">haris</a>
+said...
+<br>
+<div class="comment-meta">July 7, 2010 1:30 AM</div>
+<span class="item-control blog-admin pid-1829197901">
+<a href="http://www.blogger.com/delete-comment.g?blogID=8980734269859237005&postID=9017110680274464392" title="Delete Comment">
+<span class="post-icons"><img src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon_delete13.gif"></span>
+</a>
+</span>
+</dt>
+<dd class="comment-body">
+<p>Hello Evey One,<br><br>I am very new to ASP.NET MVC.<br>Can you please tell me how to create TreeView Dynamically at runtime with user input in ASP.NET MVC.<br><br>where User should able to create Root, Parent and child nodes.<br>User should be able to Add , edit, delete Nodes.<br><br>Please post code here or send me at this email. haris105@hotmail.com<br><br>Thank you in adnavce.</p>
+</dd>
+</li>
+</ol>
+<p class="comment-footer">
+<a href="https://www.blogger.com/comment.g?blogID=8980734269859237005&postID=2610929328791374849&isPopup=true" onclick="javascript:window.open(this.href, &quot;bloggerPopup&quot;, &quot;toolbar=0,location=0,statusbar=1,menubar=0,scrollbars=yes,width=400,height=450&quot;); return false;">Post a Comment</a>
+</p>
+<div id="backlinks-container">
+<div id="Blog1_backlinks-container"><a name="links"></a><h4>Links to this post</h4>
+<p class="comment-footer">
+<a class="comment-link" href="http://www.blogger.com/blog-this.g" id="Blog1_backlinks-create-link" target="_blank">Create a Link</a>
+</p>
+</div>
+</div>
+</div>
+<!-- google_ad_section_end -->
+</div>
+<div class="blog-pager" id="blog-pager">
+<span id="blog-pager-newer-link">
+<a class="blog-pager-newer-link" href="http://www.devcurry.com/2009/09/programmatically-load-gridview-row-in.html" id="Blog1_blog-pager-newer-link" title="Newer Post">Newer Post</a>
+</span>
+<span id="blog-pager-older-link">
+<a class="blog-pager-older-link" href="http://www.devcurry.com/2009/09/access-values-from-all-or-selected.html" id="Blog1_blog-pager-older-link" title="Older Post">Older Post</a>
+</span>
+<a class="home-link" href="http://www.devcurry.com/">Home</a>
+</div>
+<div class="clear"></div>
+<div class="post-feeds">
+<div class="feed-links">
+Subscribe to:
+<a class="feed-link" href="http://www.devcurry.com/feeds/2610929328791374849/comments/default" target="_blank" type="application/atom+xml">Post Comments (Atom)</a>
+</div>
+</div>
+</div></div>
+</div>
+<div id="sidebar-wrapper">
+<div class="sidebar section" id="sidebar"><div class="widget HTML" id="HTML37">
+<h2 class="title">Enews &amp; Updates</h2>
+<div class="widget-content">
+<a href="http://feeds.feedburner.com/devcurry"><div class="rss"></div></a>
+<p>Sign up to receive breaking news <br> as well as receive other site updates!</p>
+<form action="http://www.feedburner.com/fb/a/emailverify" id="subscribe" method="post" onsubmit="window.open(\" http:="" www.feedburner.com="" fb="" a="" emailverifysubmit?feedid="2786473\&#39;," \'popupwindow\',="" \'scrollbars="yes,width=550,height=520\&#39;);return" true'="" target="popupwindow">
+			<input type="text" value="Enter your email address..." id="subbox" onfocus="if (this.value == &#39;Enter your email address...&#39;) {this.value = &#39;&#39;;}" onblur="if (this.value == &#39;&#39;) {this.value = &#39;Enter your email address...&#39;;}" name="email">
+			<input name="url" type="hidden" value="http://feeds.feedburner.com/~e?ffid=2786473">
+<input name="title" type="hidden" value="DevCurry">
+<input id="subbutton" type="submit" value="GO">
+</form>
+<br>
+<div style="text-align: left;">
+<a href="http://feeds.feedburner.com/devcurry">
+<img alt="RSS Feed" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/feed.png" style="border: medium none ;">
+</a>
+<a href="http://www.feedburner.com/fb/a/emailverifySubmit?feedId=2786473">
+<img alt="RSS Email" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/email.png" style="border: medium none ;">
+</a>
+<a href="http://twitter.com/SuprotimAgarwal">
+<img alt="Follow us on Twitter" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/twitter(1).png" style="border: medium none ;">
+</a>
+<a href="http://feeds.feedburner.com/devcurry"><img alt="" height="26" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/devcurry" style="border:0" width="88"></a>
+</div>
+</div>
+</div><div class="widget HTML" id="HTML38">
+<h2 class="title">Featured</h2>
+<div class="widget-content">
+<script type="text/javascript">
+<!-- 
+lqm_channel=1;
+lqm_publisher=443;
+lqm_zone=1;
+lqm_format=6;
+//-->
+</script>
+<script type="text/javascript" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/s.js"></script><script type="text/javascript" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/i.ashx"></script><a href="http://a.lakequincy.com/c.ashx?channel=1&format=6&pageid=74D07C01-B7D3-1B12-04E9-FF32D750E53F&publisher=443&ypos=442&zone=1&url=http%3a%2f%2fwww.devcurry.com%2f2009%2f09%2fdifference-between-aspnet-webforms-and.html&country=IN&userguid=00000000-0000-0000-0000-000000000000&placement=8289&creative=5408" target="_top"><img src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/Citrix_040910_FXS_300x250_Static-f_19072010055101.gif" border="0" height="250" width="300" alt="Click Here"></a>
+</div>
+</div><div class="widget Feed" id="Feed1">
+<h2>Recent Posts</h2>
+<div class="widget-content" id="Feed1_feedItemListDisplay"><ul><li><span class="item-title"><a href="http://feedproxy.google.com/~r/devcurry/~3/3dKvCIJPoqM/learn-adonet-entity-framework-4-free.html" target="_self">Learn ADO.NET Entity Framework 4 – Free Tutorials</a></span></li><li><span class="item-title"><a href="http://feedproxy.google.com/~r/devcurry/~3/YaPBVLroQUY/change-url-of-all-anchor-elements-using.html" target="_self">Change Url of all Anchor Elements using jQuery</a></span></li><li><span class="item-title"><a href="http://feedproxy.google.com/~r/devcurry/~3/a_Xxg2Rg45c/split-string-collection-into-groups.html" target="_self">Split a String Collection into Groups using LINQ</a></span></li><li><span class="item-title"><a href="http://feedproxy.google.com/~r/devcurry/~3/wmu7gwHnGiY/change-background-color-of-jquery.html" target="_self">Change the Background Color of jQuery Datepicker</a></span></li><li><span class="item-title"><a href="http://feedproxy.google.com/~r/devcurry/~3/Kn3wIC-RqD0/aspnet-gridview-data-caching.html" target="_self">ASP.NET GridView Data Caching</a></span></li></ul></div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=8980734269859237005&widgetType=Feed&widgetId=Feed1&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;Feed1&quot;));" target="configFeed1" title="Edit">
+<img alt="" height="18" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div><div class="widget HTML" id="HTML39">
+<h2 class="title">Featured</h2>
+<div class="widget-content">
+<script type="text/javascript">
+<!-- 
+lqm_channel=1;
+lqm_publisher=443;
+lqm_zone=1;
+lqm_format=6;
+//-->
+</script>
+<script type="text/javascript" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/s.js"></script><script type="text/javascript" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/i(1).ashx"></script><script type="text/javascript" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/3484-106634-29238-0">
+</script><a target="_blank" href="http://a.lakequincy.com/c.ashx?channel=1&format=6&pageid=74D07C01-B7D3-1B12-04E9-FF32D750E53F&publisher=443&ypos=867&zone=1&url=http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html&country=IN&userguid=00000000-0000-0000-0000-000000000000&placement=5243&creative=4017&clickurl=http://altfarm.mediaplex.com/ad/ck/3484-106634-29238-0?mpt=0.416091535434169"><img ismap="" border="0" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/pp10_my_x_banners_rentalic_300x250.gif"></a>
+<noscript>
+  &lt;a href="http://a.lakequincy.com/c.ashx?channel=1&amp;format=6&amp;pageid=74D07C01-B7D3-1B12-04E9-FF32D750E53F&amp;publisher=443&amp;ypos=867&amp;zone=1&amp;url=http%3a%2f%2fwww.devcurry.com%2f2009%2f09%2fdifference-between-aspnet-webforms-and.html&amp;country=IN&amp;userguid=00000000-0000-0000-0000-000000000000&amp;placement=5243&amp;creative=4017&amp;clickurl="&gt;
+    &lt;img src="http://altfarm.mediaplex.com/ad/nb/3484-106634-29238-0?mpt=0.416091535434169"
+alt="Click Here" border="0"&gt;
+&lt;/a&gt;
+</noscript>
+</div>
+</div><div class="widget HTML" id="HTML3">
+<h2 class="title">Join us on FaceBook</h2>
+<div class="widget-content">
+<iframe src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/likebox.htm" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:292px; height:260px;" allowtransparency="true"></iframe>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=8980734269859237005&widgetType=HTML&widgetId=HTML3&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;HTML3&quot;));" target="configHTML3" title="Edit">
+<img alt="" height="18" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div><div class="widget Feed" id="Feed2">
+<h2>Recent Comments</h2>
+<div class="widget-content" id="Feed2_feedItemListDisplay"><ul><li><span class="item-title"><a href="http://www.devcurry.com/2010/12/learn-adonet-entity-framework-4-free.html?showComment=1291624560417#c898935371139329053" target="_self">Thanks for sharing that. :)
+
+But before working th...</a></span><span class="item-author">&nbsp;-&nbsp;Anonymous</span></li><li><span class="item-title"><a href="http://www.devcurry.com/2010/12/change-background-color-of-jquery.html?showComment=1291345388726#c2221490970674627912" target="_self">I will be using this code. We thought of using the...</a></span><span class="item-author">&nbsp;-&nbsp;shaileja</span></li><li><span class="item-title"><a href="http://www.devcurry.com/2010/12/aspnet-gridview-data-caching.html?showComment=1291281064962#c6179139972297504320" target="_self">Great tip! Please share some more tips on improvin...</a></span><span class="item-author">&nbsp;-&nbsp;Anonymous</span></li><li><span class="item-title"><a href="http://www.devcurry.com/2010/11/merge-gridview-header-columns.html?showComment=1291279024495#c2357006609265659691" target="_self">Very Useful , THX for sharing.</a></span><span class="item-author">&nbsp;-&nbsp;sami</span></li><li><span class="item-title"><a href="http://www.devcurry.com/2010/11/pass-function-as-parameter-in.html?showComment=1291245613383#c741741799319177334" target="_self">Function literals assigned to variables is one of ...</a></span><span class="item-author">&nbsp;-&nbsp;Avelis</span></li></ul></div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=8980734269859237005&widgetType=Feed&widgetId=Feed2&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;Feed2&quot;));" target="configFeed2" title="Edit">
+<img alt="" height="18" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div>
+</div>
+<div class="lsidebar section" id="lsidebar"><div class="widget Label" id="Label34">
+<h2>Categories</h2>
+<div class="widget-content">
+<ul>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/.NET">
+.NET
+</a>
+<span dir="ltr">(18)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Architecture">
+Architecture
+</a>
+<span dir="ltr">(5)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/ASP.NET">
+ASP.NET
+</a>
+<span dir="ltr">(210)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/ASP.NET%20AJAX">
+ASP.NET AJAX
+</a>
+<span dir="ltr">(11)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/ASP.NET%20MVC">
+ASP.NET MVC
+</a>
+<span dir="ltr">(14)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Azure">
+Azure
+</a>
+<span dir="ltr">(4)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Blogging%20Tools">
+Blogging Tools
+</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/C%23">
+C#
+</a>
+<span dir="ltr">(61)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Contests">
+Contests
+</a>
+<span dir="ltr">(3)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/CSS">
+CSS
+</a>
+<span dir="ltr">(15)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Entity%20FW">
+Entity FW
+</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Free%20EBook">
+Free EBook
+</a>
+<span dir="ltr">(15)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Free%20Learning">
+Free Learning
+</a>
+<span dir="ltr">(40)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/General">
+General
+</a>
+<span dir="ltr">(12)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/JavaScript">
+JavaScript
+</a>
+<span dir="ltr">(43)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/jQuery">
+jQuery
+</a>
+<span dir="ltr">(164)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Link%20List">
+Link List
+</a>
+<span dir="ltr">(2)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/LINQ">
+LINQ
+</a>
+<span dir="ltr">(62)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Misc%20Ramblings">
+Misc Ramblings
+</a>
+<span dir="ltr">(37)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Product%20Releases">
+Product Releases
+</a>
+<span dir="ltr">(45)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Regex">
+Regex
+</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Reviews">
+Reviews
+</a>
+<span dir="ltr">(3)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Screencast">
+Screencast
+</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Silverlight">
+Silverlight
+</a>
+<span dir="ltr">(29)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Technology">
+Technology
+</a>
+<span dir="ltr">(5)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Tips">
+Tips
+</a>
+<span dir="ltr">(3)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Tools">
+Tools
+</a>
+<span dir="ltr">(39)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/VB.NET">
+VB.NET
+</a>
+<span dir="ltr">(57)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Visual%20Studio">
+Visual Studio
+</a>
+<span dir="ltr">(34)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/WCF">
+WCF
+</a>
+<span dir="ltr">(1)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Windows%207">
+Windows 7
+</a>
+<span dir="ltr">(21)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/Windows%20Vista">
+Windows Vista
+</a>
+<span dir="ltr">(3)</span>
+</li>
+<li>
+<a dir="ltr" href="http://www.devcurry.com/search/label/WPF">
+WPF
+</a>
+<span dir="ltr">(9)</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="widget HTML" id="HTML1">
+<h2 class="title">About Me</h2>
+<div class="widget-content">
+<a href="http://www.dotnetcurry.com/about.aspx" target="_blank"><img border="0" alt="Suprotim - MVP" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/MVP_Horizontal_FullColor-1-2.png"></a>
+<br>
+<a href="http://www.twitter.com/suprotimagarwal" target="_blank"><img border="0" alt="Follow Me on Twitter" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/twitter9.png"></a>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=8980734269859237005&widgetType=HTML&widgetId=HTML1&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;HTML1&quot;));" target="configHTML1" title="Edit">
+<img alt="" height="18" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div></div>
+<div class="rsidebar section" id="rsidebar"><div class="widget HTML" id="HTML2">
+<h2 class="title">Top Authors</h2>
+<div class="widget-content">
+<script type="text/javascript">
+function pipeCallback(obj) {
+ var i;
+ for (i = 0; i < obj.count ; i++)
+ {
+ var href = "'" + obj.value.items[i].link + "'";
+ if(obj.value.items[i].link == "")
+var item ="-" + obj.value.items[i].title;
+else
+var item = "-" + "<a href=" + href + ">" + obj.value.items[i].title + "</a>";
+ document.write(item + "<br/>");
+ }
+
+ }
+ </script>
+<script src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/pipe.run" type="text/javascript"></script>-<a href="http://www.blogger.com/profile/08349831623922214390">Suprotim Agarwal (651)</a><br>-<a href="http://www.blogger.com/profile/09426272652931591157">Malcolm Sheridan (44)</a><br>-<a href="http://www.blogger.com/profile/12831394632830145738">Mahesh Sabnis (9)</a><br>-<a href="http://www.blogger.com/profile/02463859451733232599">Aamir Hasan (3)</a><br>-<a href="http://www.blogger.com/profile/04577030958803677592">Gouri Sohoni (1)</a><br>
+<!--<span style="font-size: 80%">Widget by <a href="http://www.solidblogger.com/top-authors-widget-for-blogger-blogspot">Blogger Widgets </a></span>-->
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=8980734269859237005&widgetType=HTML&widgetId=HTML2&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;HTML2&quot;));" target="configHTML2" title="Edit">
+<img alt="" height="18" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div><div class="widget BlogArchive" id="BlogArchive2">
+<h2>Archives</h2>
+<div class="widget-content">
+<div id="ArchiveList">
+<div id="BlogArchive2_ArchiveList">
+<ul class="flat">
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_12_01_archive.html">December</a> (6)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_11_01_archive.html">November</a> (30)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_10_01_archive.html">October</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_09_01_archive.html">September</a> (30)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_08_01_archive.html">August</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_07_01_archive.html">July</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_06_01_archive.html">June</a> (30)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_05_01_archive.html">May</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_04_01_archive.html">April</a> (30)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_03_01_archive.html">March</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_02_01_archive.html">February</a> (28)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2010_01_01_archive.html">January</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_12_01_archive.html">December</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_11_01_archive.html">November</a> (30)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_10_01_archive.html">October</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_09_01_archive.html">September</a> (30)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_08_01_archive.html">August</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_07_01_archive.html">July</a> (32)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_06_01_archive.html">June</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_05_01_archive.html">May</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_04_01_archive.html">April</a> (30)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_03_01_archive.html">March</a> (31)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_02_01_archive.html">February</a> (28)
+      </li>
+<li class="archivedate">
+<a href="http://www.devcurry.com/2009_01_01_archive.html">January</a> (33)
+      </li>
+</ul>
+</div>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=8980734269859237005&widgetType=BlogArchive&widgetId=BlogArchive2&action=editWidget" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;BlogArchive2&quot;));" target="configBlogArchive2" title="Edit">
+<img alt="" height="18" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div>
+</div><div class="widget HTML" id="HTML60">
+<h2 class="title">Featured</h2>
+<div class="widget-content">
+Display your product <a href="http://www.devcurry.com/2009/01/contact-us.html">here</a>
+</div>
+</div></div>
+</div>
+<div class="clear">&nbsp;</div>
+</div>
+<!-- end content-wrapper -->
+<div id="footer-wrapper">
+<div class="footer section" id="footer"></div>
+</div>
+</div></div>
+<!-- end outer-wrapper -->
+<div id="credits">
+<p>Copyright 2010 All Rights Reserved <a href="http://www.devcurry.com/">DevCurry.com</a> by <a href="http://www.dotnetcurry.com/about.aspx">Suprotim Agarwal</a></p>
+</div>
+</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-2417460-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+<script type="text/javascript">
+if (window.jstiming) window.jstiming.load.tick('widgetJsBefore');
+</script><script type="text/javascript" src="./Difference Between ASP.NET WebForms and ASP.NET MVC_files/2861516469-widgets.js"></script>
+<script type="text/javascript">
+if (typeof(BLOG_attachCsiOnload) != 'undefined' && BLOG_attachCsiOnload != null) { window['blogger_templates_experiment_id'] = "templatesV1";BLOG_attachCsiOnload('item_'); }_WidgetManager._Init('http://www.blogger.com/rearrange?blogID=8980734269859237005','http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html','8980734269859237005');
+_WidgetManager._SetPageActionUrl('http://www.blogger.com/display?blogID=8980734269859237005','aFvbkL24GP1Soiy0wUeWG4C5Ht4:1291637812386','AOuZoY5h2Y1DidaWl3UFlzFDwQ-OTEOHvA:1291637812386');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'title': 'DevCurry', 'pageType': 'item', 'url': 'http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html', 'canonicalUrl': 'http://www.devcurry.com/2009/09/difference-between-aspnet-webforms-and.html', 'homepageUrl': 'http://www.devcurry.com/', 'enabledCommentProfileImages': true, 'searchLabel': '', 'searchQuery': '', 'pageName': 'Difference Between ASP.NET WebForms and ASP.NET MVC', 'pageTitle': 'DevCurry: Difference Between ASP.NET WebForms and ASP.NET MVC', 'encoding': 'UTF-8', 'locale': 'en', 'isPrivate': false, 'isMobile': false, 'mobileClass': '', 'languageDirection': 'ltr', 'feedLinks': '\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42DevCurry - Atom\42 href\75\42http://www.devcurry.com/feeds/posts/default\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/rss+xml\42 title\75\42DevCurry - RSS\42 href\75\42http://www.devcurry.com/feeds/posts/default?alt\75rss\42 /\76\n\74link rel\75\42service.post\42 type\75\42application/atom+xml\42 title\75\42DevCurry - Atom\42 href\75\42http://www.blogger.com/feeds/8980734269859237005/posts/default\42 /\76\n\74link rel\75\42EditURI\42 type\75\42application/rsd+xml\42 title\75\42RSD\42 href\75\42http://www.blogger.com/rsd.g?blogID\758980734269859237005\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42DevCurry - Atom\42 href\75\42http://www.devcurry.com/feeds/2610929328791374849/comments/default\42 /\76\n', 'meTag': '', 'openIdOpTag': '', 'imageSrcTag': '', 'latencyHeadScript': '\74script type\75\42text/javascript\42\76(function() { var a\75window;function c(b){this.t\75{};this.tick\75function(d,i,e){e\75e?e:(new Date).getTime();this.t[d]\75[e,i]};this.tick(\42start\42,null,b)}var f\75new c;a.jstiming\75{Timer:c,load:f};try{var g\75null;if(a.chrome\46\46a.chrome.csi)g\75Math.floor(a.chrome.csi().pageT);if(g\75\75null)if(a.gtbExternal)g\75a.gtbExternal.pageT();if(g\75\75null)if(a.external)g\75a.external.pageT;if(g)a.jstiming.pt\75g}catch(h){};a.tickAboveFold\75function(b){b\75b;var d\0750;if(b.offsetParent){do d+\75b.offsetTop;while(b\75b.offsetParent)}b\75d;b\74\075750\46\46a.jstiming.load.tick(\42aft\42)};var j\75false;function k(){if(!j){j\75true;a.jstiming.load.tick(\42firstScrollTime\42)}}a.addEventListener?a.addEventListener(\42scroll\42,k,false):a.attachEvent(\42onscroll\42,k);\n })();\74/script\076', 'mobileHeadScript': ''}}]);
+_WidgetManager._RegisterWidget('_LinkListView', new _WidgetInfo('LinkList34', 'header-tabs', null, document.getElementById('LinkList34'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_LabelView', new _WidgetInfo('Label34', 'lsidebar', null, document.getElementById('Label34'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML1', 'lsidebar', null, document.getElementById('HTML1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML37', 'sidebar', null, document.getElementById('HTML37'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML38', 'sidebar', null, document.getElementById('HTML38'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_FeedView', new _WidgetInfo('Feed1', 'sidebar', null, document.getElementById('Feed1'), {'title': 'Recent Posts', 'showItemDate': false, 'showItemAuthor': false, 'feedUrl': 'http://www.devcurry.com/feeds/posts/default', 'numItemsShow': 5, 'loadingMsg': 'Loading...', 'openLinksInNewWindow': false}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML39', 'sidebar', null, document.getElementById('HTML39'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML3', 'sidebar', null, document.getElementById('HTML3'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_FeedView', new _WidgetInfo('Feed2', 'sidebar', null, document.getElementById('Feed2'), {'title': 'Recent Comments', 'showItemDate': false, 'showItemAuthor': true, 'feedUrl': 'http://www.devcurry.com/feeds/comments/default', 'numItemsShow': 5, 'loadingMsg': 'Loading...', 'openLinksInNewWindow': false}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML51', 'header', null, document.getElementById('HTML51'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML2', 'rsidebar', null, document.getElementById('HTML2'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive2', 'rsidebar', null, document.getElementById('BlogArchive2'), {'languageDirection': 'ltr'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML60', 'rsidebar', null, document.getElementById('HTML60'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', null, document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'commentInteractionIframeUrl': 'http://www.blogger.com/comment-interaction-iframe.g?blogId\758980734269859237005', 'showBacklinks': true, 'postId': '2610929328791374849', 'mobile': false}, 'displayModeFull'));
+</script>
+
+</body></html>

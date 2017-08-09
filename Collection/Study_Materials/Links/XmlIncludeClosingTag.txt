@@ -1,0 +1,45 @@
+
+  XElement xelement = XElement.Parse(detailsXml.DocumentElement.OuterXml);
+                    IntroduceClosingBracket(xelement);
+
+        private static void IntroduceClosingBracket(XElement xelement)
+        {
+            foreach (var descendant in xelement.DescendantsAndSelf())
+            {
+                if (descendant.IsEmpty)
+                {
+                    descendant.SetValue(String.Empty);
+                }
+            }
+        }
+
+
+var formatOriginalXml = Functions.UnFormatXml(_originalDoc.OuterXml);
+            var formatModifiedXml = Functions.UnFormatXml(_xmlData.OuterXml);
+
+            var originalDoc = new XmlDocument();
+            originalDoc.LoadXml(formatOriginalXml);
+            var modifiedDoc = new XmlDocument();
+            modifiedDoc.LoadXml(formatModifiedXml);
+
+            XElement xDocFromList1 = XElement.Load(new XmlNodeReader(originalDoc.DocumentElement));
+            XElement xDocFromXml1 = XElement.Load(new XmlNodeReader(modifiedDoc.DocumentElement));
+
+            foreach (var emptyElem in from xelem in xDocFromList1.Descendants() where xelem.IsEmpty select xelem)
+            {
+                emptyElem.SetValue(string.Empty);
+            }
+
+            if (!XElement.DeepEquals(xDocFromList1, xDocFromXml1))
+            {
+                SaveChangesPrompted = true;
+                DialogResult result = MessageBox.Show("Do you want to close with unsaved changes?", "Alert", MessageBoxButtons.YesNo);
+                if (result == DialogResult.No)
+                {
+                    return false;
+                }
+            }
+
+
+            _originalDoc.Normalize();
+            _xmlData.Normalize();

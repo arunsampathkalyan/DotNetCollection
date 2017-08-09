@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0063)http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part1 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Intro to ASP.NET MVC: The Official Microsoft ASP.NET Site</title>
+  
+  
+  <link href="http://i2.asp.net/common/www-css/i/favicon.ico?cdn_id=2010-10-26-001" rel="shortcut icon">
+  <link href="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/main.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/titanoverrides.css" rel="stylesheet" type="text/css" media="screen">
+  
+  <script src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/jquery-1.4.2.min.js" type="text/javascript"></script>
+  <script src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/msc_all.js" type="text/javascript"></script>  
+  
+
+	
+	<link href="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/shCore.css" rel="stylesheet" type="text/css" media="screen">
+	<link href="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/shThemeDefault.css" rel="stylesheet" type="text/css" media="screen">
+
+	<script type="text/javascript" src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/shComposite.js"></script>
+	<script type="text/javascript">	    SyntaxHighlighter.defaults['gutter'] = false; SyntaxHighlighter.defaults['toolbar'] = true; SyntaxHighlighter.all();</script>
+
+    <script type="text/javascript">
+        function initTutorialTooltip() {
+            $("div.syntaxhighlighter").mouseover(function () {
+                ShowMscTooltip(this, 'To preserve the line breaks in a code block, place your mouse pointer within the block and double-click to select the block before you copy it.');
+            });
+            $("div.syntaxhighlighter").mouseout(function () {
+                HideMscTooltip();
+            });
+        }
+        window.setTimeout(initTutorialTooltip, 2000);
+    </script>
+
+
+
+
+
+</head>
+<body>
+<form method="post" action="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part1?" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUENTM4MQ9kFgJmD2QWAmYPZBYCZg9kFgJmD2QWAmYPZBYCZg9kFgICBRBkZBYCAg0PZBYCAgEPZBYCZg9kFgJmDxYCHgdWaXNpYmxlZ2RktqQmrcLHo0/KSomLABiV1Ib+w+Y=">
+</div>
+
+<div id="content_container" class="content_container">
+<div class="header_container">
+    <div class="header_top"><div class="header_top_right">&nbsp;</div></div>
+    
+    <div class="header_content">
+        <div class="header_content_right">
+            <a href="http://www.asp.net/" title="Home Page">
+                <img class="logo" style="border-width: 0px;" alt="" src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/logo.png" title="Microsoft ASP.NET">
+            </a>
+        <div id="WLSearchBoxDiv"><div id="WLSearchBoxPlaceholder"><input class="search_box" id="WLSearchBoxInput" name="WLSearchBoxInput" value="Search"><input class="search_button" id="WLSearchBoxButton" type="button" value="" name="WLSearchBoxButton"></div></div><div id="mainnav"><ul class="nav_main"><li class="first"><a href="http://www.asp.net/home">Home</a></li><li><a href="http://www.asp.net/get-started">Get Started</a></li><li><a href="http://www.asp.net/downloads">Downloads</a></li><li><a href="http://www.asp.net/web-forms">Web Forms</a></li><li class="active"><a href="http://www.asp.net/mvc">MVC</a></li><li><a href="http://www.asp.net/ajax">AJAX</a></li><li><a href="http://www.asp.net/community">Community</a></li><li><a href="http://wiki.asp.net/">Wiki</a></li><li><a href="http://forums.asp.net/">Forums</a></li></ul></div>            
+      <div class="nav_login_user"><ul><li class="first"><a href="http://login.asp.net/login/signin.aspx?ReturnUrl=http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part1">Sign In</a></li><li><a href="http://login.asp.net/login/createuser.aspx?ReturnUrl=http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part1">Join</a></li></ul></div>
+        </div>
+    </div>
+    <div class="header_breadcrumb_top">
+  <div class="header_breadcrumb_top_right"></div>
+</div>
+<div class="header_breadcrumb_content">
+  <div class="header_breadcrumb_content_right"><span><span><a href="http://www.asp.net/home">Home</a></span><span> › </span><span><a href="http://www.asp.net/mvc">ASP.NET MVC</a></span><span> › </span><span><a href="http://www.asp.net/mvc/tutorials">ASP.NET MVC Tutorials</a></span><span> › </span><span>Intro to ASP.NET MVC</span></span></div>
+</div>
+<div class="header_breadcrumb_bottom">
+  <div class="header_breadcrumb_bottom_right"></div>
+</div>
+</div>
+
+<div class="center top_banner"><iframe src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/adbanner(1).htm" width="728" height="90" scrolling="no" frameborder="0" marginheight="0" marginwidth="0">&nbsp;</iframe></div>
+
+
+<div class="columns_container">
+ <div class="columns_left">
+  <div class="columns_left_padding">
+
+
+
+<div class="heading_container"><div class="heading_right_top">&nbsp;</div>
+   <h1>Intro to ASP.NET MVC</h1>
+   
+</div>
+<div class="heading_bottom heading_bottom_connected"><span></span></div>
+<div class="rounded_box_top_connected"><span></span></div>
+<div class="rounded_box blue_rounded_box rounded_box_connected">
+     <div class="rounded_box_content">
+	
+	
+
+	<p class="first introduction"></p><p>This is a beginner tutorial that introduces the basics of ASP.NET 
+MVC. You’ll create a simple web application that reads and writes from a
+ database. Visit the <a href="http://www.asp.net/mvc">ASP.NET MVC learning center</a> to find other ASP.NET MVC tutorials and samples. </p><p></p>
+	
+	
+	<div class="pagination"><span class="light">« Previous Tutorial </span><span class="light"> | </span><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part2"> Next Tutorial »</a></div>
+
+     </div>
+     <div class="rounded_box_bottom"><span></span></div>
+</div>
+
+
+
+	
+
+	<p>Let's make our first ASP.NET MVC Web Application using <a href="http://www.microsoft.com/express/Web/">Visual Web Developer 2010 Express</a>. We'll make a little Movie list application that will let us create and list movies. </p>
+<h3>What You'll Build</h3>
+<p>Here are two screenshots of the application you'll build. You will have a simple table of movies with various columns.</p>
+<p><a href="http://i1.asp.net/common/www-css/i/mvcgettingstartedv5/Movie%20List%20-%20Windows%20Internet%20Explorer%20(12)_2.png?cdn_id=2010-09-09-001"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/Movie List - Windows Internet Explorer (12)_thumb.png" width="650" height="517" alt="Movie List - Windows Internet Explorer (12)" border="0" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px;
+            border-left-width: 0px"></a> </p>
+<p>And you'll have a Create Form so we can add movies to the list.</p>
+<p><a href="http://i1.asp.net/common/www-css/i/mvcgettingstartedv5/Create%20a%20Movie%20-%20Windows%20Internet%20Explorer%20(2)_2.png?cdn_id=2010-09-09-001"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/Create a Movie - Windows Internet Explorer (2)_thumb.png" width="532" height="517" alt="Create a Movie - Windows Internet Explorer (2)" border="0" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px;
+            border-left-width: 0px"></a> </p>
+<h3>Skills You'll Learn</h3>
+<p>This tutorial will teach you the basics of building an ASP.NET MVC Web Application using Visual Studio.  You'll learn:</p>
+<ul>
+<li>How to create a new ASP.NET MVC Project </li>
+<li>How to create a new Database with SQL Server </li>
+<li>How to create ASP.NET MVC Controllers and Views </li>
+<li>How to retrieve and display data </li>
+<li>How to edit data and enable data validation </li>
+<li>How to update the database schema </li>
+</ul>
+<h3>Get Started</h3>
+<p>Start by running Visual Web Developer 2010 Express (I'll call it "VWD" from now on) and select New Project from the Start Screen. </p>
+<p>Visual Web Developer is an IDE, or Integrated Developer Environment. Just like you use Microsoft Word to write documents, you'll use an IDE to create applications. There's a toolbar along the top showing various options available to you, as well as the menu you could also have used to Select File | New project. </p>
+<p><a href="http://i1.asp.net/common/www-css/i/mvcgettingstartedv5/Start%20Page%20-%20Microsoft%20Visual%20Web%20Developer%202010%20Express_2.png?cdn_id=2010-09-09-001"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/Start Page - Microsoft Visual Web Developer 2010 Express_thumb.png" width="650" height="477" alt="Microsoft Visual Web Developer 2010 Express" border="0" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px;
+            border-left-width: 0px"></a> </p>
+<h3>Creating Your First Application</h3>
+<p>You can create applications using Visual Basic or Visual C#. For now, Select Visual C# on the left, then pick "ASP.NET MVC 2 Web Application." Name your project "Movies" and click OK. </p>
+<p><a href="http://i1.asp.net/common/www-css/i/mvcgettingstartedv5/New%20Project_2.png?cdn_id=2010-09-09-001"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/New Project_thumb.png" width="650" height="456" alt="New Project" border="0" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px;
+            border-left-width: 0px"></a></p>
+<p>On the right-hand side is the Solution Explorer showing all the files and folders in your application. The big window in the middle is where you edit your code and spend most of your time. Visual Studio used a default template for the ASP.NET MVC project you just created, so you have a working application right now without doing anything! This is a simple "Hello World! project, and it is a good place to start for our application. </p>
+<p><a href="http://i1.asp.net/common/www-css/i/mvcgettingstartedv5/Movies%20-%20Microsoft%20Visual%20Web%20Developer%202010%20Express_4.png?cdn_id=2010-09-09-001"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/Movies - Microsoft Visual Web Developer 2010 Express_thumb_1.png" width="650" height="477" alt="Microsoft Visual Web Developer 2010 Express" border="0" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px;
+            border-left-width: 0px"></a> </p>
+<p>Select the "play" button to the toolbar. </p>
+<p><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/WindowClipping (17)_3.png" width="239" height="104" alt="Start Debugging" border="0" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px;
+        border-left-width: 0px"> </p>
+<p>It's a green arrow pointing to the right that will compile your program and start your application in a web browser.</p>
+<p><em>NOTE: You can instead press F5 on your keyboard, or select Debug-&gt;Start Debugging from the "Debug" menu.</em></p>
+<p>This will cause Visual Web Developer to start a development web-server and run our web application (there are no configuration or manual steps required to enable this).  It will then launch a browser and configure it to browse the application's home-page. Notice below that the address bar of the browser says “localhost”, and not something like example.com. That's because localhost always points to your own local computer - which in this case is running the application we just built.</p>
+<p><a href="http://i1.asp.net/common/www-css/i/mvcgettingstartedv5/Home%20Page%20-%20Windows%20Internet%20Explorer_2.png?cdn_id=2010-09-09-001"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/Home Page - Windows Internet Explorer_thumb.png" width="650" height="518" alt="Home Page" border="0" style="border-right-width: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px;
+            border-left-width: 0px"></a></p>
+<p>Out of the box this default template gives you two pages to visit and a basic login page. Let's change how this application works and learn a little bit about ASP.NET MVC in the process. Close your browser and lets change some code.</p>
+	<div class="pagination"><span class="light">« Previous Tutorial </span><span class="light"> | </span><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part2"> Next Tutorial »</a></div>
+	<div class="heading_container"><div class="heading_right_top">&nbsp;</div><h1>Comments (<span id="spanCommentCount">9</span>)</h1><a class="icon_rss_header" target="_blank" href="http://www.asp.net/rss/comments/25664">&nbsp;</a></div><div class="bucket_container"><div class="bucket_top"><span>&nbsp;</span></div><div class="bucket_content region_absminheight"><div><table width="100%" cellspacing="0" cellpadding="5"><tbody id="mscCommentOutput"><tr><td class="icon_contract"><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part1#" onclick="initComments();return false;"><strong>Show all 9 comments</strong></a></td></tr></tbody></table></div><div><p style="padding-left: 10px;">You must be logged in to leave a comment.&nbsp;<a href="http://login.asp.net/login/signin.aspx?ReturnUrl=http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part1">Click here</a> to log in.</p></div></div><div class="bucket_bottom"><span>&nbsp;</span></div></div><script type="text/javascript"> 
+  var umbCurrentNodeId = 25664;
+  function initComments() {
+	BindTemplateData("mscCommentTemplate","mscCommentOutput",
+	    "/base/MscComment/GetCommentsForDocument/25664", "initCommentsCallback");
+	$("#txtNewComment").val("");
+  }
+  function initCommentsCallback(json){
+	if( json != null ) { $("#spanCommentCount").html(json.length); }
+  }
+  function submitComment() {
+    var url = "/base/MscComment/CreateComment/" + umbCurrentNodeId + ""; 
+    var comment = $("#txtNewComment").val();
+    if (comment != "") {
+      $("#pCommentError").html("");
+      jQuery.post(url, { comment: $("#txtNewComment").val() }, function(data) { initComments(); });
+    }
+    else { 
+	$("#pCommentError").html("Comment is empty. Please enter comment and try submitting again.");
+    }
+  }
+
+</script>	
+
+
+
+      
+  </div>
+ </div>
+ <div class="columns_right">
+	
+	<div id="firstregion"><div class="heading_container"><div class="heading_right_top">&nbsp;</div><h2 id="mscTutorialSideBarTitle">Getting Started with MVC</h2></div><div class="heading_bottom heading_bottom_connected"><span>&nbsp;</span></div><div class="rounded_box_top_connected"><span>&nbsp;</span></div><div class="rounded_box blue_rounded_box rounded_box_connected"><div class="rounded_box_content sub_nav" id="mscTutorialSidebarVb" style="display:none"><ul><li class="active"><a href="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site.htm">Intro to ASP.NET MVC</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part2">Adding a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part3">Adding a View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part4">Creating a Database</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part5">Accessing your Model's Data from a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part6">Adding a Create Method and Create View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part7">Adding Validation to the Model</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part8">Adding a Column to the Model</a></li></ul></div><div class="rounded_box_content sub_nav" id="mscTutorialSidebarCs"><ul><li class="active"><a href="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site.htm">Intro to ASP.NET MVC</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part2">Adding a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part3">Adding a View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part4">Creating a Database</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part5">Accessing your Model's Data from a Controller</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part6">Adding a Create Method and Create View</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part7">Adding Validation to the Model</a></li><li><a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc-part8">Adding a Column to the Model</a></li></ul></div><div class="rounded_box_bottom"><span>&nbsp;</span></div></div></div><script type="text/javascript">
+      function swapTutorialSidebarLanguage() {
+      $("#mscTutorialSidebarVb").toggle();
+      $("#mscTutorialSidebarCs").toggle();
+      if ($("#mscTutorialSidebarCs").is(":visible")) {
+      $("#mscTutorialSideBarTitle").html("Getting Started with MVC");
+      $("#mscTutorialSideBarSwitchLang").html("Switch to Visual Basic tutorials");
+      }
+      else {
+      $("#mscTutorialSideBarTitle").html("Getting Started with MVC");
+      $("#mscTutorialSideBarSwitchLang").html("Switch to Visual C# tutorials");
+      }
+      }
+
+      </script>
+	
+	<div class="heading_container"><div class="heading_right_top">&nbsp;</div><h2>ASP.NET MVC Books</h2></div><div class="bucket_container"><div class="bucket_top"><span>&nbsp;</span></div><div class="bucket_content region_absminheight"><div class="clear">&nbsp;</div><p>Learn more about ASP.NET MVC 2 from these great books:</p><p>&nbsp;</p><div id="25018" class="category_item_book"><p class="image"><a class="no_border" href="http://www.amazon.com/gp/product/1430228865?ie=UTF8&tag=aspnettelligent-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=1430228865"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/ir" class="hidden" alt=""><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/1430228865.jpg" alt="$book/@nodeName"></a></p><p><a href="http://www.amazon.com/gp/product/1430228865?ie=UTF8&tag=aspnettelligent-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=1430228865"><strong>Pro ASP.NET MVC V2 Framework</strong></a><br>
+        by Steven Sanderson</p><div class="clear">
+        &nbsp;
+      </div></div><div id="25173" class="category_item_book"><p class="image"><a class="no_border" href="http://www.amazon.com/gp/product/0470643188?ie=UTF8&tag=aspnettelligent-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0470643188"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/ir" class="hidden" alt=""><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/0470643188.jpg" alt="$book/@nodeName"></a></p><p><a href="http://www.amazon.com/gp/product/0470643188?ie=UTF8&tag=aspnettelligent-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0470643188"><strong>Professional ASP.NET MVC 2</strong></a><br>
+        by Jon Galloway, Scott Hanselman</p><div class="clear">
+        &nbsp;
+      </div></div><div id="25174" class="category_item_book"><p class="image"><a class="no_border" href="http://www.amazon.com/gp/product/0735627142?ie=UTF8&tag=aspnettelligent-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0735627142"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/ir" class="hidden" alt=""><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/0735627142.jpg" alt="$book/@nodeName"></a></p><p><a href="http://www.amazon.com/gp/product/0735627142?ie=UTF8&tag=aspnettelligent-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0735627142"><strong>Programming ASP.NET MVC</strong></a><br>
+        by Dino Esposito</p><div class="clear">
+        &nbsp;
+      </div></div><div id="25175" class="category_item_book"><p class="image"><a class="no_border" href="http://www.amazon.com/gp/product/193518279X?ie=UTF8&tag=aspnettelligent-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=193518279X"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/ir" class="hidden" alt=""><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/193518279X.jpg" alt="$book/@nodeName"></a></p><p><a href="http://www.amazon.com/gp/product/193518279X?ie=UTF8&tag=aspnettelligent-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=193518279X"><strong>ASP.NET MVC 2 in Action</strong></a><br>
+        by Jeffrey Palermo</p><div class="clear">
+        &nbsp;
+      </div></div><div id="25176" class="category_item_book"><p class="image"><a class="no_border" href="http://www.amazon.com/gp/product/1934356530?ie=UTF8&tag=aspnettelligent-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=1934356530"><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/ir" class="hidden" alt=""><img src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/1934356530.jpg" alt="$book/@nodeName"></a></p><p><a href="http://www.amazon.com/gp/product/1934356530?ie=UTF8&tag=aspnettelligent-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=1934356530"><strong>Test Drive ASP.NET MVC</strong></a><br>
+        by Jonathan McCracken</p><div class="clear">
+        &nbsp;
+      </div></div><p class="more">
+          » <a href="http://www.asp.net/community/books/">More Books</a></p><div class="clear">&nbsp;</div></div><div class="bucket_bottom"><span>&nbsp;</span></div></div>	
+
+	<iframe width="300" height="283" scrolling="no" frameborder="0" style="border:none;margin:0" src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/adchain.htm"></iframe>
+	
+	
+	
+
+
+ </div>
+</div>     
+
+    <div style="clear:both">&nbsp;</div>
+    <div class="center bottom_banner"><iframe src="./Intro to ASP.NET MVC  The Official Microsoft ASP.NET Site_files/adbanner.htm" width="728" height="90" scrolling="no" frameborder="0" marginheight="0" marginwidth="0">&nbsp;</iframe>&nbsp;</div>
+    <div class="footer_container"> 
+        <div class="footer_content">
+        <p class="footer_links">
+            <a href="http://www.asp.net/feedback/">Contact</a> | 
+            <a href="http://www.neudesicmediagroup.com/Advertising.aspx?site=ASP">Advertise</a> |
+      <a href="http://umbraco.org/" target="_blank">Powered by Umbraco</a>
+    <br>
+            <a href="http://www.asp.net/Terms-Of-Use">Terms of Use</a> | 
+            <a href="http://www.microsoft.com/library/toolbar/3.0/trademarks/en-us.mspx">Trademarks</a> | 
+            <a href="http://www.asp.net/privacy/">Privacy Statement</a><br>
+            © 2010 Microsoft Corporation. All Rights Reserved.
+        </p>
+        <ul class="footer_site_logos">
+      <li class="footer_site_logos"><a href="http://msdn.microsoft.com/" class="footer_site_logos logo-footer-msdn"></a></li>           
+            <li class="footer_site_logos"><a href="http://www.silverlight.net/" class="footer_site_logos logo-footer-silverlight"></a></li>
+            <li class="footer_site_logos"><a href="http://channel9.msdn.com/" class="footer_site_logos logo-footer-ch9"></a></li>
+            <li class="footer_site_logos"><a href="http://www.iis.net/" class="footer_site_logos logo-footer-iis"></a></li>
+            <li class="footer_site_logos"><a href="http://visitmix.com/" class="footer_site_logos logo-footer-mix"></a></li>
+            <li class="footer_site_logos"><a href="http://windowsclient.net/" class="footer_site_logos logo-footer-wc"></a></li>
+        </ul>
+      </div>
+    </div>
+</div>
+
+                    <noscript>&lt;a href="http://www.omniture.com" title="Web Analytics"&gt;&lt;img
+                    src="http://msstonojsaspnet.112.2O7.net/b/ss/msstonojsaspnet/1/H.20.2--NS/0"
+                    height="1" width="1" border="0" alt="" /&gt;&lt;/a&gt;</noscript>
+<div style="position: absolute; display: none;" id="mscTooltip">
+  <div></div>
+</div>               
+
+
+    <script id="mscCommentTemplate" type="text/html">
+        <# 
+            for(var i=0; i < obj.length && obj[i] != null; i++)
+            {
+                var item = obj[i];             
+        #>
+        <tr>
+            <td valign="top" style="border-top: 1px solid black;width:105px;"><img style="border-width: 0px;" alt="<#= item.username #>" src="<#= item.avatar #>" /></td>
+            <td width="100%" valign="top" align="left" style="border-top: 1px solid black;">
+                <table style="table-layout:fixed;">
+                <tr>
+                    <# if( item.time.Hours > 0 || item.time.Minutes > 0 || item.time.Seconds > 0 ) { #>
+                        <p>Posted at <a href="javascript:SetPlayerTime('<#= item.time.Hours #>:<#= item.time.Minutes #>:<#= item.time.Seconds #>');"><#= ( item.time.Hours > 0 ) ? item.time.Hours + ":" : ""#><#= item.time.Minutes #>:<#= item.time.Seconds #></a> in the video</p>
+                    <# } #>
+                    <td style="padding-bottom: 5px;width:500px;">
+                        <a href="http://forums.asp.net/members/<#= item.username#>.aspx"><#= item.username #></a> : <font style="font-style: italic;">On <span><#= item.created #></span> said: </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td><div style="word-wrap:break-word;"><#= item.comment #></div></td>
+                </tr>
+                </table>
+            </td>
+        </tr>
+        <#
+            }
+        #>  
+    </script>
+
+
+
+
+
+
+
+</form>
+
+
+</body></html>

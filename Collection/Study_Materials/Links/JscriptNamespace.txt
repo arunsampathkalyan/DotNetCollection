@@ -1,0 +1,1 @@
+http://www.zachleat.com/web/namespacing-outside-of-the-yahoo-namespace/

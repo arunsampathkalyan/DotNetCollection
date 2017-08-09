@@ -1,0 +1,5 @@
+
+http://weblogs.asp.net/jasonconway/archive/2009/10/22/aliasing-and-localizing-routes-in-asp-net-mvc.aspx#comments
+https://weblogs.asp.net/scottgu/asp-net-mvc-framework-part-2-url-routing
+http://www.dotnettricks.com/learn/mvc/detailed-aspnet-mvc-pipeline
+

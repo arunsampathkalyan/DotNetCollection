@@ -1,0 +1,22 @@
+﻿<root>
+  <!-- update elem11 and the two child elements respectively -->
+  <lvl1 id="elem11" value="oval11" overrideMode="update">
+    <lvl2 name="elem21" value="oval21">otxt21</lvl2>
+    <lvl2 name="elem22" value="oval22">otxt22</lvl2>otxt1
+  </lvl1>
+  <!-- update elem12, since it has no children -->
+  <lvl1 id="elem12" value="oval12">otxt2</lvl1>
+  <!-- update children of elem13 but not the element itself, 
+         since the overrideMode is not specified -->
+  <lvl1 id="elem13" value="oval13(ignored)">
+    <lvl2 name="elem21" value="oval21"/>
+    <lvl2 name="elem22" value="oval22"/>
+    <lvl2 name="elem23" value="oval23"/>otxt3
+  </lvl1>
+  <!-- delete elem14 -->
+  <lvl1 id="elem14" overrideMode="delete"/>
+  <!-- replace elem15 with the following element -->
+  <lvl1 id="elem15" value="oval12" overrideMode="replace">
+    <lvl2 name="elem21" value="oval21"/>otxt5
+  </lvl1>
+</root>

@@ -1,0 +1,298 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="livetemplates.csharp.usevar">True</setting>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="D311C549-8075-43BB-ACCC-51FD29E0C0F9/f:Program.cs" caret="3180" fromTop="26" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="5948" fromTop="15" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="15" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="17204" fromTop="13" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="4" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="32" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="8" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="2557" fromTop="18" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="20" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="24" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="10" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="18" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="19" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="25" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="30" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="18" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="14593" fromTop="5" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="10994" fromTop="15" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="5256" fromTop="34" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="1827" fromTop="11" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="1887" fromTop="15" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="2029" fromTop="17" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="5103" fromTop="23" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="6889" fromTop="26" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="11896" fromTop="20" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="12419" fromTop="30" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="11376" fromTop="21" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="12002" fromTop="33" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="11166" fromTop="15" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="5474" fromTop="7" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="6312" fromTop="31" />
+      <File id="2B2A9A66-BB6E-4A8E-9498-0598868B985E/f:Program.cs" caret="6590" fromTop="18" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir IsNull="False">
+    </NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="private" priority="4" />
+      <Item value="string" priority="12" />
+      <Item value="var" priority="42" />
+      <Item value="new" priority="27" />
+      <Item value="ListNode" priority="0" />
+      <Item value="DocumentReference`0" priority="1" />
+      <Item value="DocumentReference" priority="0" />
+      <Item value="From" priority="0" />
+      <Item value="ListNode&lt;DocumentReference&gt;" priority="0" />
+      <Item value="public" priority="16" />
+      <Item value="node" priority="3" />
+      <Item value="if" priority="19" />
+      <Item value="List" priority="4" />
+      <Item value="Array`0" priority="0" />
+      <Item value="Console`0" priority="5" />
+      <Item value="Exception`0" priority="0" />
+      <Item value="source" priority="0" />
+      <Item value="references" priority="3" />
+      <Item value="using" priority="0" />
+      <Item value="System" priority="0" />
+      <Item value="Linq" priority="0" />
+      <Item value="r" priority="9" />
+      <Item value="HashSet" priority="3" />
+      <Item value="HashSet&lt;string&gt;" priority="1" />
+      <Item value="foreach" priority="19" />
+      <Item value="documentReference" priority="3" />
+      <Item value="int" priority="4" />
+      <Item value="class" priority="1" />
+      <Item value="T`0" priority="1" />
+      <Item value="TreeNode" priority="4" />
+      <Item value="this" priority="4" />
+      <Item value="value" priority="3" />
+      <Item value="void" priority="0" />
+      <Item value="child" priority="7" />
+      <Item value="true" priority="6" />
+      <Item value="return" priority="18" />
+      <Item value="index" priority="2" />
+      <Item value="Tree`0" priority="1" />
+      <Item value="params" priority="0" />
+      <Item value="Root" priority="0" />
+      <Item value="children" priority="0" />
+      <Item value="NullReferenceException`0" priority="0" />
+      <Item value="Tree&lt;int&gt;" priority="7" />
+      <Item value="Tree" priority="2" />
+      <Item value="TreeNode&lt;T&gt;" priority="0" />
+      <Item value="List&lt;TreeNode&lt;T&gt;&gt;" priority="0" />
+      <Item value="static" priority="5" />
+      <Item value="parents" priority="1" />
+      <Item value="null" priority="8" />
+      <Item value="ToList`1" priority="0" />
+      <Item value="Tree&lt;string&gt;" priority="0" />
+      <Item value="reference" priority="7" />
+      <Item value="Parents" priority="0" />
+      <Item value="Test" priority="0" />
+      <Item value="parent" priority="0" />
+      <Item value="TopoCycle`0" priority="0" />
+      <Item value="root" priority="1" />
+      <Item value="Node`0" priority="0" />
+      <Item value="AllNodes" priority="0" />
+      <Item value="n" priority="3" />
+      <Item value="ValueType`0" priority="1" />
+      <Item value="AllPaths" priority="0" />
+      <Item value="added" priority="0" />
+      <Item value="graph" priority="7" />
+      <Item value="bool" priority="4" />
+      <Item value="isParent" priority="2" />
+      <Item value="IEnumerable" priority="2" />
+      <Item value="false" priority="4" />
+      <Item value="n1" priority="0" />
+      <Item value="continue" priority="0" />
+      <Item value="selectNode" priority="0" />
+      <Item value="iscycleCreated" priority="0" />
+      <Item value="excludeDocuments" priority="0" />
+      <Item value="parentPath" priority="1" />
+      <Item value="documentReferenceEntity" priority="2" />
+      <Item value="To" priority="0" />
+      <Item value="parentNodes" priority="0" />
+      <Item value="parentChildNode" priority="6" />
+      <Item value="yield return" priority="3" />
+      <Item value="referencePath" priority="0" />
+      <Item value="Collection&lt;DocumentReference&gt;" priority="1" />
+      <Item value="refPath" priority="0" />
+      <Item value="CheckCycle`0" priority="0" />
+      <Item value="vertex" priority="1" />
+      <Item value="SectionVersion" priority="0" />
+      <Item value="RefToSectionVersion" priority="0" />
+      <Item value="const" priority="0" />
+      <Item value="Edges" priority="0" />
+      <Item value="key" priority="0" />
+      <Item value="else" priority="0" />
+      <Item value="_stack" priority="0" />
+      <Item value="break" priority="0" />
+      <Item value="Int16`0" priority="0" />
+      <Item value="previousPath" priority="0" />
+      <Item value="Vertex`0" priority="1" />
+      <Item value="temp" priority="0" />
+      <Item value="List&lt;Vertex&gt;" priority="0" />
+      <Item value="for" priority="2" />
+      <Item value="neighbor" priority="1" />
+      <Item value="neighbors" priority="0" />
+      <Item value="childs" priority="1" />
+      <Item value="NodePaths" priority="1" />
+      <Item value="nodePath" priority="1" />
+      <Item value="docreferences" priority="0" />
+      <Item value="nodePaths" priority="1" />
+      <Item value="childPaths" priority="0" />
+      <Item value="Last`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:GenericSinglyLinkedList.ListNode`1">
+      <Item value="Next" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:GenericSinglyLinkedList.Node">
+      <Item value="item" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Console">
+      <Item value="WriteLine`0" priority="4" />
+      <Item value="ReadLine`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.Stack`1">
+      <Item value="Peek`0" priority="0" />
+      <Item value="Count" priority="3" />
+      <Item value="Push`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:TopoCycle">
+      <Item value="CheckCycle`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.List`1">
+      <Item value="Where`1" priority="1" />
+      <Item value="Select`2" priority="3" />
+      <Item value="Distinct`1" priority="2" />
+      <Item value="Add`0" priority="4" />
+      <Item value="AddRange`0" priority="6" />
+      <Item value="Remove`0" priority="0" />
+      <Item value="Count`1" priority="0" />
+      <Item value="ElementAt`1" priority="0" />
+      <Item value="Concat`1" priority="0" />
+      <Item value="Count" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:GenericSinglyLinkedList.DocumentReference">
+      <Item value="From" priority="10" />
+      <Item value="To" priority="12" />
+      <Item value="IsParent" priority="0" />
+      <Item value="Equals`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.IEnumerable`1">
+      <Item value="ToList`1" priority="11" />
+      <Item value="Count`1" priority="2" />
+      <Item value="Select`2" priority="4" />
+      <Item value="FirstOrDefault`1" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.HashSet`1">
+      <Item value="Add`0" priority="5" />
+      <Item value="IntersectWith`0" priority="0" />
+      <Item value="Count" priority="2" />
+      <Item value="ToList`1" priority="2" />
+      <Item value="Any`1" priority="0" />
+      <Item value="Join`4" priority="0" />
+      <Item value="Union`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:GenericSinglyLinkedList.TreeNode`1">
+      <Item value="Value" priority="1" />
+      <Item value="_children" priority="1" />
+      <Item value="AddChildren`0" priority="0" />
+      <Item value="Parents" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:GenericSinglyLinkedList.Tree`1">
+      <Item value="Root" priority="1" />
+      <Item value="CreateTree`0" priority="0" />
+      <Item value="AddParent`0" priority="2" />
+      <Item value="AddChildren`0" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdjacencyMatrix.TopoCycle">
+      <Item value="CheckCycle`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdjacencyMatrix.Graph">
+      <Item value="CreateNode`0" priority="3" />
+      <Item value="GetNode`0" priority="0" />
+      <Item value="AllNodes" priority="1" />
+      <Item value="CreateVertex`0" priority="0" />
+      <Item value="AllVertices" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdjacencyMatrix.DocumentReference">
+      <Item value="To" priority="7" />
+      <Item value="From" priority="10" />
+      <Item value="IsParent" priority="5" />
+      <Item value="Equals`0" priority="0" />
+      <Item value="RefToSectionPath" priority="1" />
+      <Item value="RefToSectionVersion" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdjacencyMatrix.Node">
+      <Item value="Name" priority="4" />
+      <Item value="AddArc`0" priority="0" />
+      <Item value="Equals`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.String">
+      <Item value="Equals`0" priority="4" />
+      <Item value="Substring`0" priority="0" />
+      <Item value="Split`0" priority="0" />
+      <Item value="StartsWith`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdjacencyMatrix.Reference">
+      <Item value="Child" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.ObjectModel.Collection`1">
+      <Item value="Select`2" priority="0" />
+      <Item value="Remove`0" priority="2" />
+      <Item value="Add`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.String">
+      <Item value="Empty" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdjacencyMatrix.CheckCycle">
+      <Item value="Dfs`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdjacencyMatrix.CycleAlgorithm">
+      <Item value="TopologicalSort`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdjacencyMatrix.Vertex">
+      <Item value="Edges" priority="3" />
+      <Item value="Equals`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.Dictionary`2">
+      <Item value="ContainsKey`0" priority="0" />
+      <Item value="Add`0" priority="0" />
+      <Item value="Keys" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.Dictionary`2+KeyCollection">
+      <Item value="Where`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdjacencyMatrix.Edge">
+      <Item value="Parent" priority="0" />
+      <Item value="Child" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@AdjacencyMatrix.Graph">
+      <Item value="FindAllConnected`0" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+</Configuration>

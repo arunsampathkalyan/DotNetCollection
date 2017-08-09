@@ -1,0 +1,5 @@
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\FileAccess\FileAccess\bin\Debug\FileAccess.exe
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\FileAccess\FileAccess\bin\Debug\FileAccess.pdb
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\FileAccess\FileAccess\obj\x86\Debug\FileAccess.exe
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\FileAccess\FileAccess\obj\x86\Debug\FileAccess.pdb
+D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\FileAccess\FileAccess\obj\x86\Debug\FileAccess.csprojResolveAssemblyReference.cache

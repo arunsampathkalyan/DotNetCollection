@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "ControlFlowBinding";
+}
+
+<h2>ControlFlowBinding</h2>
+
+<script src="../../Ko/knockout-latest.js" type="text/javascript"></script>
+
+<ul data-bind="foreach: planets">
+    <li>
+        Planet: <b data-bind="text: name"> </b>
+        <div data-bind="if: capital">
+            Capital: <b data-bind="text: capital.cityName"> </b>
+        </div>
+    </li>
+</ul>
+
+<div data-bind="with:person">
+
+<p>
+    First Name : <span data-bind="text:firstName"></span>
+</p>
+
+<p>
+    Last Name : <span data-bind="text:lastName"></span>
+</p>
+
+</div>
+ 
+<script type="text/javascript">
+    ko.applyBindings({
+        planets: [
+            { name: 'Mercury', capital: null },
+            { name: 'Earth', capital: { cityName: 'Barnsley'} }
+        ],
+        person: {
+            firstName: 'logesh',
+            lastName:'shanmugam'
+        }
+    });
+</script>

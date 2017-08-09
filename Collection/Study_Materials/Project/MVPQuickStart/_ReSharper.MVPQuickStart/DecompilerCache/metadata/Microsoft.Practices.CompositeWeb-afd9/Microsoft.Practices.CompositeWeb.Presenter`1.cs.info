@@ -1,0 +1,15 @@
+R# version: 5.1.1753.4
+assembly Microsoft.Practices.CompositeWeb, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+  file D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Library\Microsoft.Practices.CompositeWeb.dll mtime 1/9/2016 9:50:29 AM
+  file D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\WebSites\MVPQuickStart\Bin\Microsoft.Practices.CompositeWeb.dll mtime 1/9/2016 9:50:29 AM
+referenced assembly mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+  file C:\Windows\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll mtime 7/8/2014 10:13:20 PM
+referenced assembly Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+  file D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\Library\Microsoft.Practices.ObjectBuilder.dll mtime 1/9/2016 9:50:29 AM
+  file D:\Karthik.sakkarai\karthik.sakkarai\Study_Materials\Project\MVPQuickStart\WebSites\MVPQuickStart\Bin\Microsoft.Practices.ObjectBuilder.dll mtime 1/9/2016 9:50:29 AM
+referenced assembly System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+  file C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Web.dll mtime 3/18/2010 2:01:26 PM
+referenced assembly System.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+  file C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.Configuration.dll mtime 3/20/2014 10:49:19 PM
+referenced assembly System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+  file C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.dll mtime 7/8/2014 10:13:21 PM

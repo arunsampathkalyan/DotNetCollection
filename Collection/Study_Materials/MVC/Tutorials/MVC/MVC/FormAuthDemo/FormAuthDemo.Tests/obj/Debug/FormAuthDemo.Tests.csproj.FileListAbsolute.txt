@@ -1,0 +1,8 @@
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FormAuthDemo\FormAuthDemo.Tests\bin\Debug\FormAuthDemo.Tests.dll.config
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FormAuthDemo\FormAuthDemo.Tests\bin\Debug\FormAuthDemo.Tests.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FormAuthDemo\FormAuthDemo.Tests\bin\Debug\FormAuthDemo.Tests.pdb
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FormAuthDemo\FormAuthDemo.Tests\bin\Debug\FormAuthDemo.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FormAuthDemo\FormAuthDemo.Tests\bin\Debug\FormAuthDemo.pdb
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FormAuthDemo\FormAuthDemo.Tests\obj\Debug\ResolveAssemblyReference.cache
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FormAuthDemo\FormAuthDemo.Tests\obj\Debug\FormAuthDemo.Tests.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FormAuthDemo\FormAuthDemo.Tests\obj\Debug\FormAuthDemo.Tests.pdb

@@ -1,0 +1,12 @@
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\bin\Debug\MvcContrib.TestHelper.XML
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\bin\Debug\MvcContrib.TestHelper.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\bin\Debug\MvcContrib.TestHelper.pdb
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\bin\Debug\MvcContrib.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\bin\Debug\Rhino.Mocks.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\bin\Debug\Microsoft.Web.Mvc.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\bin\Debug\Rhino.Mocks.xml
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\bin\Debug\MvcContrib.pdb
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\bin\Debug\MvcContrib.xml
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\obj\Debug\ResolveAssemblyReference.cache
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\obj\Debug\MvcContrib.TestHelper.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.TestHelper\MvcContrib.TestHelper\obj\Debug\MvcContrib.TestHelper.pdb

@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Subscribe";
+}
+
+<script src="../../Ko/knockout-latest.js" type="text/javascript"></script>
+
+<h2>Subscribe</h2>
+
+<p>
+    First Name :
+    <input data-bind="value:firstName"></input></p>
+<p>
+
+<script type="text/javascript">    
+
+    var viewModel = {
+        firstName: ko.observable("Logesh")        
+    };
+
+    viewModel.firstName.subscribe(function (newValue) {
+
+        alert("The first name is " + newValue);
+
+    });
+
+
+//    var subscription = viewModel.firstName.subscribe(function (newValue) {
+
+//        alert("The first name is " + newValue);
+//        
+//        subscription.dispose(); 
+
+//    });
+
+    ko.applyBindings(viewModel);
+
+
+</script>

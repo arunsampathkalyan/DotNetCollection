@@ -1,0 +1,8 @@
+https://www.codeproject.com/Articles/690340/Querying-SQL-Server-Part-I 
+https://www.codeproject.com/Articles/692269/Querying-SQL-Server-Part-II 
+
+https://www.codeproject.com/Articles/1113627/SQL-Server-Stored-Procedure-explained-with-Example 
+
+https://www.codeproject.com/Articles/1114325/Creating-a-simple-function-in-SQL-Server 
+
+https://www.codeproject.com/articles/25600/triggers-sql-server 

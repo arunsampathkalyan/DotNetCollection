@@ -1,0 +1,11 @@
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\bin\Debug\MvcContrib.StructureMap.XML
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\bin\Debug\MvcContrib.StructureMap.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\bin\Debug\MvcContrib.StructureMap.pdb
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\bin\Debug\MvcContrib.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\bin\Debug\StructureMap.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\bin\Debug\Microsoft.Web.Mvc.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\bin\Debug\MvcContrib.pdb
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\bin\Debug\MvcContrib.xml
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\obj\Debug\ResolveAssemblyReference.cache
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\obj\Debug\MvcContrib.StructureMap.dll
+E:\Bala Nattarasan\SaaS\MVCTutorials\MVCContrib.source\src\MvcContrib.StructureMap\obj\Debug\MvcContrib.StructureMap.pdb

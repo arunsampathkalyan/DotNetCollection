@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<info>
+<entry
+   kind="dir"
+   path="LatestVersion"
+   revision="915">
+<url>https://mvccontrib.googlecode.com/svn/trunk/LatestVersion</url>
+<repository>
+<root>https://mvccontrib.googlecode.com/svn</root>
+<uuid>eb32e4ba-b140-0410-9c0e-b965c4cb1785</uuid>
+</repository>
+<commit
+   revision="915">
+<author>eric.hexter</author>
+<date>2009-03-26T02:55:22.437186Z</date>
+</commit>
+</entry>
+</info>

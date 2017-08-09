@@ -1,0 +1,7 @@
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\IDataAccess\bin\Debug\IDataAccess.dll
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\IDataAccess\bin\Debug\IDataAccess.pdb
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\IDataAccess\bin\Debug\Model.dll
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\IDataAccess\bin\Debug\Model.pdb
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\IDataAccess\obj\Debug\IDataAccess.csprojResolveAssemblyReference.cache
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\IDataAccess\obj\Debug\IDataAccess.dll
+E:\D\Karthik.sakkarai\karthik.sakkarai\Study_Materials\BaseWebProjectLayer\IDataAccess\obj\Debug\IDataAccess.pdb

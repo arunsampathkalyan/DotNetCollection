@@ -1,0 +1,149 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="http://i1.asp.net/common/forums-css/common.css?cdn_id=03292010_1" media="all" type="text/css" />      
+    <link rel="stylesheet" href="http://i3.asp.net/common/forums-css/fan.css?cdn_id=03292010_1" media="screen" type="text/css" />      
+    <link rel="shortcut icon" href="http://i3.asp.net/common/www-css/i/favicon.ico?cdn_id=03292010_1" /> 
+                
+
+    <title>An Error Has Occurred - ASP.NET Forums</title>
+</head>
+<body class="forum">
+    <div class="content_container">
+        <div class="header_container">
+            <div class="header_top">
+                <div class="header_top_right">
+                </div>
+            </div>
+            <div class="header_content mix10">
+                <div class="header_content_right">
+                    <a title="Home" href="http://www.asp.net">
+                        <img alt="Microsoft ASP.net" src="http://i2.asp.net/common/header/logo.png?cdn_id=03292010_1"
+                            class="logo">
+                    </a>
+                    <ul class="nav_main">
+                        <li class="first"><a href="http://www.asp.net">Home</a></li>
+                        <li><a href="http://www.asp.net/get-started/">Get Started</a></li>
+                        <li><a href="http://www.asp.net/downloads/">Downloads</a></li>
+                        <li><a href="http://www.asp.net/web-forms/">Web Forms</a></li>
+                        <li><a href="http://www.asp.net/mvc/">MVC</a></li>
+                        <li><a href="http://www.asp.net/ajax/">AJAX</a></li>
+                        <li><a href="http://www.asp.net/community/">Community</a></li>
+                        <li><a href="http://wiki.asp.net/">Wiki</a></li>
+                        <li class="active"><a href="http://forums.asp.net">Forums</a></li>
+                        <li class="search">
+                            <div id="SearchBoxWrapper">
+                                <input type="text" onkeydown="if( typeof(KeyDownHandlerctl00_ctl00_bhcr_SearchForm1_ctl00_TitleBarSearchButton) == 'undefined' || KeyDownHandlerctl00_ctl00_bhcr_SearchForm1_ctl00_TitleBarSearchButton == null) return false; else return KeyDownHandlerctl00_ctl00_bhcr_SearchForm1_ctl00_TitleBarSearchButton(event);"
+                                    onblur="if(this.value=='') this.value=this.defaultValue;" onclick="if(this.defaultValue==this.value) this.value='';"
+                                    class="search_box" id="ctl00_ctl00_bhcr_SearchForm1_ctl00_TitleBarSearchText"
+                                    maxlength="64" name="ctl00$ctl00$bhcr$SearchForm1$ctl00$TitleBarSearchText">
+                            </div>
+                            <input type="submit" class="search_button" id="ctl00_ctl00_bhcr_SearchForm1_ctl00_TitleBarSearchButton"
+                                value="Search" name="ctl00$ctl00$bhcr$SearchForm1$ctl00$TitleBarSearchButton">
+                        </li>
+                    </ul>
+                    <div class="nav_login_user">
+                        <p>
+                            <a href="/login.aspx?ReturnUrl=%2fdefault.aspx">Sign in </a>| <a href="/user/CreateUser.aspx?ReturnUrl=">
+                                Join</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="header_breadcrumb_top">
+                <div class="header_breadcrumb_top_right">
+                </div>
+            </div>
+            <div class="header_breadcrumb_content">
+                <div class="header_breadcrumb_content_right">
+                    <a href="http://www.asp.net">Home</a> ›
+                    <div class="CommonBreadCrumbArea">
+                        <a href="/">ASP.NET Forums</a></div>
+                </div>
+            </div>
+            <div class="header_breadcrumb_bottom">
+                <div class="header_breadcrumb_bottom_right">
+                </div>
+            </div>
+        </div>
+        <!-- END HEADER & BREADCRUMB -->
+        <div id="CommonSidebarRight">
+        </div>
+        <div id="CommonSidebarLeft">
+        </div>
+        <div id="CommonContent">
+            <div id="CommonContentInner">
+                <div class="CommonMessageTitle" style="margin-left: auto; margin-right: auto;">
+                    <div class="CommonMessageTitleRight">
+                    </div>
+                    <h2>
+                        Sorry, an Error has Occurred</h2>
+                </div>
+                <div class="CommonMessageArea" style="margin-left: auto; margin-right: auto;">
+                    <div class="CommonMessageTop">
+                        <span></span>
+                    </div>
+                    <div class="CommonMessageContent">
+                        <p style="text-align: left; padding-top: 1em;">
+                            Unfortunately an error has occurred during the processing of your page request.
+                            If&nbsp;you were attempting to submit a new post, your post may not have been recorded.
+                            Please accept our apologies for the inconvenience.</p>
+                        <p style="text-align: left;">
+                            From here you may try one of the following options.</p>
+                        <ul style="margin-top: 0;">
+                            <li style="text-align: left;"><a href="javascript:history.go(-1);">Go back</a> and try
+                                again.</li>
+                            <li style="text-align: left; padding-top: 0.4em;">Use the <a href="http://forums.asp.net/search/">
+                                Search page</a> to locate helpful information.</li>
+                            <li style="text-align: left; padding-top: 0.4em;">Visit the <a href="http://www.asp.net/feedback/forums.aspx">
+                                Feedback page</a> and tell us what went wrong.</li>
+                            <li style="text-align: left; padding-top: 0.4em;">Return to the <a href="http://forums.asp.net/">
+                                Forums start page</a>.</li>
+                        </ul>
+                        <p style="text-align: left;">
+                            Please be assured that we log and review all errors. Even if you do not report this
+                            error, we will endeavor to correct&nbsp;it.</p>
+                    </div>
+                    <div class="CommonMessageBottom">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div align="center" style="padding-top:5px;padding-bottom:5px;">
+                    <iframe src="http://forums.asp.net/a/Banner.htm" width="468" height="60" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+                </div> -->
+        <div style="clear: both;">
+            <!-- clear -->
+        </div>
+        <div style="clear: both;">
+            <!-- clear -->
+        </div>
+        <div class="footer_container">
+            <div class="footer_content">
+                 <p class="footer_links">
+                       <a href="http://www.asp.net/feedback/">Contact</a> | 
+                       <a href="http://www.neudesicmediagroup.com/Advertising.aspx?site=ASP">Advertise</a>
+		            <br/>
+                        <a href="http://www.asp.net/Terms-Of-Use">Terms of Use</a> | 
+                        <a href="http://www.microsoft.com/library/toolbar/3.0/trademarks/en-us.mspx">Trademarks</a> | 
+                        <a href="http://www.asp.net/privacy/">Privacy Statement</a><br/>
+                        © 2010 Microsoft Corporation. All Rights Reserved.
+                    </p>
+                    <ul class="footer_site_logos">
+	                    <li class="footer_site_logos"><a href="http://msdn.microsoft.com/" class="footer_site_logos logo-footer-msdn"></a></li>           
+                        <li class="footer_site_logos"><a href="http://www.silverlight.net/" class="footer_site_logos logo-footer-silverlight"></a></li>
+                        <li class="footer_site_logos"><a href="http://channel9.msdn.com/" class="footer_site_logos logo-footer-ch9"></a></li>
+                        <li class="footer_site_logos"><a href="http://www.iis.net/" class="footer_site_logos logo-footer-iis"></a></li>
+                        <li class="footer_site_logos"><a href="http://visitmix.com/" class="footer_site_logos logo-footer-mix"></a></li>
+                        <li class="footer_site_logos"><a href="http://windowsclient.net/" class="footer_site_logos logo-footer-wc"></a></li>
+                    </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

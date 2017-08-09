@@ -1,0 +1,8 @@
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo.Tests\bin\Debug\FirstApplicationDemo.Tests.dll.config
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo.Tests\bin\Debug\FirstApplicationDemo.Tests.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo.Tests\bin\Debug\FirstApplicationDemo.Tests.pdb
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo.Tests\bin\Debug\FirstApplicationDemo.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo.Tests\bin\Debug\FirstApplicationDemo.pdb
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo.Tests\obj\Debug\ResolveAssemblyReference.cache
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo.Tests\obj\Debug\FirstApplicationDemo.Tests.dll
+E:\jabarullah.bhadurude\Projects\NxG\MVC\FirstApplicationDemo\FirstApplicationDemo.Tests\obj\Debug\FirstApplicationDemo.Tests.pdb
